@@ -1,0 +1,30 @@
+﻿using System.ComponentModel.DataAnnotations;
+using Base.Domain;
+
+namespace App.Domain.Logic;
+
+public class Product : BaseEntity
+{
+    [MaxLength(20)]
+    public string Unit { get; set; } = default!;
+    
+    public decimal Volume { get; set; } = default!;
+
+    [MaxLength(255)]
+    public string Code { get; set; } = default!;
+    
+    [MaxLength(128)]
+    public string Name { get; set; } = default!;
+    
+    public decimal Price { get; set; }
+    
+    public decimal Quantity { get; set; }
+    
+    public Guid ProductCategoryId { get; set; }
+    
+    public ProductCategory? ProductCategory { get; set; }
+    
+    public ICollection<ActionEntity>? Actions { get; set; }
+    
+    public ICollection<CurrentStock>? CurrentStocks { get; set; }
+}

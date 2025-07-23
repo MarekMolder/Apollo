@@ -1,0 +1,46 @@
+@model WebApp.ViewModels.InventoryCreateEditViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Inventory</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Inventory.Name" class="control-label"></label>
+                <input asp-for="Inventory.Name" class="form-control" />
+                <span asp-validation-for="Inventory.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Inventory.EndedAt" class="control-label"></label>
+                <input asp-for="Inventory.EndedAt" class="form-control" />
+                <span asp-validation-for="Inventory.EndedAt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Inventory.AddressId" class="control-label"></label>
+                <select asp-for="Inventory.AddressId" class ="form-control" asp-items="Model.AddressSelectList"></select>
+            </div>
+            <div class="form-group">
+                <label for="RolesInput" class="control-label">Allowed Roles (comma-separated)</label>
+                <input type="text" name="RolesInput" class="form-control" placeholder="e.g. admin,mustamäe" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

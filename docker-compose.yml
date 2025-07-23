@@ -1,0 +1,28 @@
+﻿version: '3.8'
+
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: contactbase
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  webapp:
+    build:
+      context: ./backend
+      dockerfile: ../Dockerfile
+    depends_on:
+      - postgres
+    ports:
+      - "8080:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=contactbase;Username=postgres;Password=postgres
+
+volumes:
+  pgdata:

@@ -1,0 +1,68 @@
+@model WebApp.ViewModels.ActionEntityCreateEditViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>ActionEntity</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ActionEntity.Quantity" class="control-label"></label>
+                <input asp-for="ActionEntity.Quantity" class="form-control" />
+                <span asp-validation-for="ActionEntity.Quantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActionEntity.Status" class="control-label"></label>
+                <input asp-for="ActionEntity.Status" class="form-control" />
+                <span asp-validation-for="ActionEntity.Status" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActionEntity.ActionTypeId" class="control-label"></label>
+                <select asp-for="ActionEntity.ActionTypeId" class="form-control" asp-items="Model.ActionTypeSelectList"></select>
+                <span asp-validation-for="ActionEntity.ActionTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActionEntity.ReasonId" class="control-label"></label>
+                <select asp-for="ActionEntity.ReasonId" class="form-control" asp-items="Model.ReasonSelectList"></select>
+                <span asp-validation-for="ActionEntity.ReasonId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActionEntity.SupplierId" class="control-label"></label>
+                <select asp-for="ActionEntity.SupplierId" class="form-control" asp-items="Model.SupplierSelectList"></select>
+                <span asp-validation-for="ActionEntity.SupplierId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActionEntity.ProductId" class="control-label"></label>
+                <select asp-for="ActionEntity.ProductId" class="form-control" asp-items="Model.ProductSelectList"></select>
+                <span asp-validation-for="ActionEntity.ProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActionEntity.StockAuditId" class="control-label"></label>
+                <select asp-for="ActionEntity.StockAuditId" class="form-control" asp-items="Model.StockAuditSelectList"></select>
+                <span asp-validation-for="ActionEntity.StockAuditId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ActionEntity.StorageRoomId" class="control-label"></label>
+                <select asp-for="ActionEntity.StorageRoomId" class="form-control" asp-items="Model.StorageRoomSelectList"></select>
+                <span asp-validation-for="ActionEntity.StorageRoomId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
