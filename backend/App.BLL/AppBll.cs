@@ -10,6 +10,7 @@ namespace App.BLL;
 
 public class AppBll: BaseBll<IAppUOW>, IAppBLL
 {
+    //test
     public AppBll(IAppUOW uow) : base(uow)
     {
     }
