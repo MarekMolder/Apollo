@@ -16,9 +16,6 @@ public class ActionEntityCreateEditViewModel
     
     [ValidateNever]
     public SelectList? ReasonSelectList { get; set; } = default!;
-
-    [ValidateNever]
-    public SelectList? StockAuditSelectList { get; set; } = default!;
     
     [ValidateNever]
     public SelectList? SupplierSelectList { get; set; } = default!;

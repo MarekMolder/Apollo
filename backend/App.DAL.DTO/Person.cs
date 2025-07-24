@@ -12,5 +12,4 @@ public class Person: IDomainId
     
     public ICollection<ActionEntity>? Actions { get; set; }
     
-    public ICollection<StockAudit>? StockAudits { get; set; }
 }

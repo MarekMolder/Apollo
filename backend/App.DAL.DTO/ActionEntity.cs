@@ -27,10 +27,6 @@ public class ActionEntity : IDomainId
     public Guid ProductId { get; set; }
     public Product? Product { get; set; }
     
-    
-    public Guid? StockAuditId { get; set; }
-    public StockAudit? StockAudit { get; set; }
-    
 
     public Guid StorageRoomId { get; set; }
     public StorageRoom? StorageRoom { get; set; }

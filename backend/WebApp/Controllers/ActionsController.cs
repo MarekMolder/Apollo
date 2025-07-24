@@ -66,11 +66,6 @@ namespace WebApp.Controllers
                     nameof(Reason.Description)
                 ),
 
-                StockAuditSelectList = new SelectList(await _bll.StockAuditService.AllAsync(User.GetUserId()),
-                    nameof(StockAudit.Id),
-                    nameof(StockAudit.Id)
-                ),
-
                 SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
                     nameof(Supplier.Id),
                     nameof(Supplier.Name)
@@ -105,8 +100,6 @@ namespace WebApp.Controllers
                 nameof(Product.Id), nameof(Product.Name), vm.ActionEntity.ProductId);
             vm.ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(User.GetUserId()),
                 nameof(Reason.Id), nameof(Reason.Description), vm.ActionEntity.ReasonId);
-            vm.StockAuditSelectList = new SelectList(await _bll.StockAuditService.AllAsync(User.GetUserId()),
-                nameof(StockAudit.Id),nameof(StockAudit.Id), vm.ActionEntity.StockAuditId);
             vm.SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
                 nameof(Supplier.Id), nameof(Supplier.Name), vm.ActionEntity.SupplierId);
             vm.StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
@@ -147,12 +140,6 @@ namespace WebApp.Controllers
                     nameof(Reason.Id),
                     nameof(Reason.Description),
                     actionEntity.ReasonId
-                ),
-
-                StockAuditSelectList = new SelectList(await _bll.StockAuditService.AllAsync(User.GetUserId()),
-                    nameof(StockAudit.Id),
-                    nameof(StockAudit.Id),
-                    actionEntity.StockAuditId
                 ),
 
                 SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
@@ -198,8 +185,6 @@ namespace WebApp.Controllers
                 nameof(Product.Id), nameof(Product.Name), vm.ActionEntity.ProductId);
             vm.ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(User.GetUserId()),
                 nameof(Reason.Id), nameof(Reason.Description), vm.ActionEntity.ReasonId);
-            vm.StockAuditSelectList = new SelectList(await _bll.StockAuditService.AllAsync(User.GetUserId()),
-                nameof(StockAudit.Id),nameof(StockAudit.Id), vm.ActionEntity.StockAuditId);
             vm.SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
                 nameof(Supplier.Id), nameof(Supplier.Name), vm.ActionEntity.SupplierId);
             vm.StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),

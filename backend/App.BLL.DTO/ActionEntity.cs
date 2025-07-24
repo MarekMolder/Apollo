@@ -33,10 +33,6 @@ public class ActionEntity : IDomainId
     
     
     
-    public Guid? StockAuditId { get; set; }
-    public StockAudit? StockAudit { get; set; }
-    
-    
     
     public Guid StorageRoomId { get; set; }
     public StorageRoom? StorageRoom { get; set; }

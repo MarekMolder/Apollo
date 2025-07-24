@@ -10,6 +10,4 @@ public class Person : BaseEntityUser<AppUser>
     public string PersonName { get; set; } = default!;
     
     public ICollection<ActionEntity>? Actions { get; set; }
-    
-    public ICollection<StockAudit>? StockAudits { get; set; }
 }

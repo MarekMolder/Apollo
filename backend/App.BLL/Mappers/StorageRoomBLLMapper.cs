@@ -6,7 +6,6 @@ namespace App.BLL.Mappers;
 
 public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, App.DAL.DTO.StorageRoom>
 {
-    private readonly StockAuditBLLMapper _stockAuditBllMapper = new();
     private readonly StorageRoomInInventoryBLLMapper _storageRoomInInventoryBllMapper = new();
     private readonly CurrentStockBLLMapper _currentStockBLLMapper = new();
     private readonly ActionEntityBLLMapper _actionEntityBLLMapper = new();
@@ -21,8 +20,6 @@ public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, App.DAL.DTO
             Name = entity.Name,
             Location = entity.Location,
             EndedAt = entity.EndedAt,
-            
-            StockAudits = entity.StockAudits?.Select(t => _stockAuditBllMapper.Map(t)).ToList()!,
             
             StorageRoomInInventories = entity.StorageRoomInInventories?.Select(t => _storageRoomInInventoryBllMapper.Map(t)).ToList()!,
             
@@ -44,8 +41,6 @@ public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, App.DAL.DTO
             Name = entity.Name,
             Location = entity.Location,
             EndedAt = entity.EndedAt,
-            
-            StockAudits = entity.StockAudits?.Select(t => _stockAuditBllMapper.Map(t)).ToList()!,
             
             StorageRoomInInventories = entity.StorageRoomInInventories?.Select(t => _storageRoomInInventoryBllMapper.Map(t)).ToList()!,
             

@@ -23,10 +23,4 @@ public class Inventory : IDomainId
     
     public List<string>? AllowedRoles { get; set; }
     
-    [InverseProperty("FromInventory")]
-    public ICollection<StockMovement>? FromStockMovements { get; set; }
-    
-    
-    [InverseProperty("ToInventory")]
-    public ICollection<StockMovement>? ToStockMovements { get; set; }
 }

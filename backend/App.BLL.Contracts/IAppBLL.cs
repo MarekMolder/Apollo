@@ -12,8 +12,6 @@ public interface IAppBLL : IBaseBLL
     IProductCategoryService ProductCategoryService { get; }
     IProductService ProductService { get; }
     IReasonService ReasonService { get; }
-    IStockAuditService StockAuditService { get; }
-    IStockMovementService StockMovementService { get; }
     IStorageRoomInInventoryService StorageRoomInInventoryService { get; }
     IStorageRoomService StorageRoomService { get; }
     ISupplierService SupplierService { get; }
