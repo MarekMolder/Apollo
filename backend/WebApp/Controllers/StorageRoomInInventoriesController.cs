@@ -1,15 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.DAL.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
 using App.BLL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApp.ViewModels;
 using IAppBLL = App.BLL.Contracts.IAppBLL;
 
@@ -53,7 +46,7 @@ namespace WebApp.Controllers
         // GET: StorageRoomInInventories/Create
         public async Task<IActionResult> Create()
         {
-            var vm = new StorageRoomInInventoryCreateEditViewModel()
+            var vm = new StorageRoomInInventoryCreateEditViewModel
             {
                 InventorySelectList = new SelectList(await _bll.InventoryService.AllAsync(User.GetUserId()),
                     nameof(Inventory.Id),
@@ -110,7 +103,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             
-            var vm = new StorageRoomInInventoryCreateEditViewModel()
+            var vm = new StorageRoomInInventoryCreateEditViewModel
             {
                 InventorySelectList = new SelectList(await _bll.InventoryService.AllAsync(User.GetUserId()),
                     nameof(Inventory.Id),

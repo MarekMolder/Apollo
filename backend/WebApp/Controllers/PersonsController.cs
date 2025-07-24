@@ -1,21 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
-using App.DAL.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.DAL.EF.Repositories;
 using App.BLL.DTO;
 using Base.Helpers;
-
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using WebApp.ViewModels;
-
 
 namespace WebApp.Controllers;
 
@@ -34,7 +22,7 @@ public class PersonsController : Controller
     public async Task<IActionResult> Index()
     {
         
-        var res = new PersonIndexViewModel()
+        var res = new PersonIndexViewModel
         {
             Persons = (await _bll.PersonService.AllAsync(User.GetUserId())).ToList(),
         };

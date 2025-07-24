@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Base.Contracts;
-
-namespace App.DTO.v1;
+﻿namespace App.DTO.v1;
 
 public class CurrentStockCreate
 {

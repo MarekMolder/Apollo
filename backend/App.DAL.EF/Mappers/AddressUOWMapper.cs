@@ -1,10 +1,9 @@
 ﻿using App.DAL.DTO;
 using Base.Contracts;
-using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class AddressUOWMapper: IMapper<App.DAL.DTO.Address, App.Domain.Logic.Address>
+public class AddressUOWMapper: IMapper<Address, Domain.Logic.Address>
 {
     private readonly InventoryUOWMapper _inventoryUOWMapper = new();
     private readonly SupplierUOWMapper _supplierUOWMapper = new();
@@ -12,7 +11,7 @@ public class AddressUOWMapper: IMapper<App.DAL.DTO.Address, App.Domain.Logic.Add
     {
         if (entity == null) return null;
         
-        var res = new Address()
+        var res = new Address
         {
             Id = entity.Id,
             StreetName = entity.StreetName,
@@ -35,7 +34,7 @@ public class AddressUOWMapper: IMapper<App.DAL.DTO.Address, App.Domain.Logic.Add
     {
         if (entity == null) return null;
         
-        var res = new Domain.Logic.Address()
+        var res = new Domain.Logic.Address
         {
             Id = entity.Id,
             StreetName = entity.StreetName,
@@ -58,7 +57,7 @@ public class AddressUOWMapper: IMapper<App.DAL.DTO.Address, App.Domain.Logic.Add
     {
         if (entity == null) return null;
 
-        return new Address()
+        return new Address
         {
             Id = entity.Id,
             StreetName = entity.StreetName,
@@ -76,7 +75,7 @@ public class AddressUOWMapper: IMapper<App.DAL.DTO.Address, App.Domain.Logic.Add
     {
         if (entity == null) return null;
 
-        return new Domain.Logic.Address()
+        return new Domain.Logic.Address
         {
             Id = entity.Id,
             StreetName = entity.StreetName,

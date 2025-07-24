@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class StorageRoomInInventoryAPIMapper : IMapper<App.DTO.v1.StorageRoomInInventory, App.BLL.DTO.StorageRoomInInventory>
+public class StorageRoomInInventoryAPIMapper : IMapper<StorageRoomInInventory, BLL.DTO.StorageRoomInInventory>
 {
-    public App.DTO.v1.StorageRoomInInventory? Map(App.BLL.DTO.StorageRoomInInventory? entity)
+    public StorageRoomInInventory? Map(BLL.DTO.StorageRoomInInventory? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.StorageRoomInInventory()
+        var res = new StorageRoomInInventory
         {
             Id = entity.Id,
             EndedAt = entity.EndedAt,
@@ -17,10 +17,10 @@ public class StorageRoomInInventoryAPIMapper : IMapper<App.DTO.v1.StorageRoomInI
         return res;
     }
 
-    public App.BLL.DTO.StorageRoomInInventory? Map(App.DTO.v1.StorageRoomInInventory? entity)
+    public BLL.DTO.StorageRoomInInventory? Map(StorageRoomInInventory? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.StorageRoomInInventory()
+        var res = new BLL.DTO.StorageRoomInInventory
         {
             Id = entity.Id,
             EndedAt = entity.EndedAt,
@@ -30,9 +30,9 @@ public class StorageRoomInInventoryAPIMapper : IMapper<App.DTO.v1.StorageRoomInI
         return res;
     }
     
-    public App.BLL.DTO.StorageRoomInInventory Map(App.DTO.v1.StorageRoomInInventoryCreate entity)
+    public BLL.DTO.StorageRoomInInventory Map(StorageRoomInInventoryCreate entity)
     {
-        var res = new App.BLL.DTO.StorageRoomInInventory()
+        var res = new BLL.DTO.StorageRoomInInventory
         {
             Id = Guid.NewGuid(),
             EndedAt = entity.EndedAt,

@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Base.BLL;
+﻿using Base.BLL;
 using Base.Contracts;
 using Base.DAL.Contracts;
 using Moq;
-using Xunit;
 
 namespace App.Tests.Unit.Base;
 

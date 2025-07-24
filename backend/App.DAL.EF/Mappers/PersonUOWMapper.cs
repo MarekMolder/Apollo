@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class PersonUOWMapper : IMapper<App.DAL.DTO.Person, App.Domain.Logic.Person>
+public class PersonUOWMapper : IMapper<Person, Domain.Logic.Person>
 {
     private readonly ActionEntityUOWMapper _actionEntityUOWMapper = new();
 
@@ -11,7 +11,7 @@ public class PersonUOWMapper : IMapper<App.DAL.DTO.Person, App.Domain.Logic.Pers
     {
         if (entity == null) return null;
 
-        var res = new Person()
+        var res = new Person
         {
             Id = entity.Id,
             PersonName = entity.PersonName,
@@ -23,7 +23,7 @@ public class PersonUOWMapper : IMapper<App.DAL.DTO.Person, App.Domain.Logic.Pers
     public Domain.Logic.Person? Map(Person? entity)
     {
         if (entity == null) return null;
-        var res = new Domain.Logic.Person()
+        var res = new Domain.Logic.Person
         {
             Id = entity.Id,
             PersonName = entity.PersonName,
@@ -36,7 +36,7 @@ public class PersonUOWMapper : IMapper<App.DAL.DTO.Person, App.Domain.Logic.Pers
     {
         if (entity == null) return null;
 
-        return new Person()
+        return new Person
         {
             Id = entity.Id,
             PersonName = entity.PersonName,
@@ -47,7 +47,7 @@ public class PersonUOWMapper : IMapper<App.DAL.DTO.Person, App.Domain.Logic.Pers
     {
         if (entity == null) return null;
 
-        return new Domain.Logic.Person()
+        return new Domain.Logic.Person
         {
             Id = entity.Id,
             PersonName = entity.PersonName,

@@ -2,8 +2,8 @@
 
 namespace App.BLL.Contracts;
 
-public interface IProductService : IBaseService<App.BLL.DTO.Product>
+public interface IProductService : IBaseService<DTO.Product>
 {
-    Task<IEnumerable<App.BLL.DTO.Product?>> GetEnrichedProducts();
+    Task<IEnumerable<DTO.Product?>> GetEnrichedProducts();
     
 }

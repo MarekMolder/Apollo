@@ -1,9 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using App.Domain.Logic;
-using App.Resources.Domain;
 using Base.Domain.Identity;
-using Microsoft.AspNetCore.Identity;
 
 namespace App.Domain.Identity;
 

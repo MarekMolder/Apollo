@@ -1,15 +1,11 @@
-﻿ using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.BLL.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using App.BLL.Contracts;
+using App.DTO.v1;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
@@ -24,8 +20,7 @@ namespace WebApp.ApiControllers
         private readonly ILogger<PersonsController> _logger;
         private readonly IAppBLL _bll;
 
-        private readonly App.DTO.v1.Mappers.PersonMapper _mapper =
-            new App.DTO.v1.Mappers.PersonMapper();
+        private readonly PersonMapper _mapper = new();
 
         /// <inheritdoc />
         public PersonsController(IAppBLL bll, ILogger<PersonsController> logger)
@@ -40,9 +35,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of persons</returns>
         [HttpGet]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(IEnumerable<App.DTO.v1.Person>), 200)]
+        [ProducesResponseType(typeof(IEnumerable<Person>), 200)]
         [ProducesResponseType(404)]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.Person>>> GetPersons()
+        public async Task<ActionResult<IEnumerable<Person>>> GetPersons()
         {
             var data = await _bll.PersonService.AllAsync(User.GetUserId());
             var res = data.Select(x => _mapper.Map(x)!).OrderBy(x => x.PersonName).ToList();
@@ -55,7 +50,7 @@ namespace WebApp.ApiControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.DTO.v1.Person>> GetPerson(Guid id)
+        public async Task<ActionResult<Person>> GetPerson(Guid id)
         {
             var person = await _bll.PersonService.FindAsync(id, User.GetUserId());
 
@@ -74,7 +69,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPerson(Guid id, App.DTO.v1.Person person)
+        public async Task<IActionResult> PutPerson(Guid id, Person person)
         {
             if (id != person.Id)
             {
@@ -93,7 +88,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<App.DTO.v1.Person>> PostPerson(App.DTO.v1.PersonCreate person)
+        public async Task<ActionResult<Person>> PostPerson(PersonCreate person)
         {
             var bllEntity = _mapper.Map(person);
             _bll.PersonService.Add(bllEntity, User.GetUserId());

@@ -1,10 +1,9 @@
-﻿using App.Resources.Domain;
+﻿using App.DAL.DTO;
 using Base.DAL.Contracts;
-using StorageRoom = App.Domain.Logic.StorageRoom;
 
 namespace App.DAL.Contracts;
 
-public interface IStorageRoomRepository: IBaseRepository<App.DAL.DTO.StorageRoom>
+public interface IStorageRoomRepository: IBaseRepository<StorageRoom>
 {
-    Task<IEnumerable<App.DAL.DTO.StorageRoom>> GetAllByInventoryIdAsync(Guid inventoryId);
+    Task<IEnumerable<StorageRoom>> GetAllByInventoryIdAsync(Guid inventoryId);
 }

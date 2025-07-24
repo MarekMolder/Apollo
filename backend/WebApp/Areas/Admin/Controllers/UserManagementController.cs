@@ -90,7 +90,7 @@ public class UserManagementController : Controller
 
         var url = HtmlEncoder.Default.Encode(callbackUrl!);
 
-        var vm = new PasswordLinkViewModel()
+        var vm = new PasswordLinkViewModel
         {
             AppUser = user,
             PasswordLink = url,

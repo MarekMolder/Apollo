@@ -3,9 +3,9 @@ using Base.Contracts;
 
 namespace App.DTO.v1.ApiMappers;
 
-public class EnrichedInventoryApiMapper : IMapper<ApiEntities.EnrichedInventory, App.BLL.DTO.Inventory>
+public class EnrichedInventoryApiMapper : IMapper<EnrichedInventory, BLL.DTO.Inventory>
 {
-    public EnrichedInventory? Map(App.BLL.DTO.Inventory? entity)
+    public EnrichedInventory? Map(BLL.DTO.Inventory? entity)
     {
         if (entity == null) return null;
 
@@ -26,7 +26,7 @@ public class EnrichedInventoryApiMapper : IMapper<ApiEntities.EnrichedInventory,
         };
     }
 
-    public App.BLL.DTO.Inventory? Map(EnrichedInventory? entity)
+    public BLL.DTO.Inventory? Map(EnrichedInventory? entity)
     {
         throw new NotImplementedException("Mapping from API to BLL is not required.");
     }

@@ -1,10 +1,9 @@
 ﻿using App.DAL.DTO;
 using Base.Contracts;
-using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class ProductUOWMapper: IMapper<App.DAL.DTO.Product, App.Domain.Logic.Product>
+public class ProductUOWMapper: IMapper<Product, Domain.Logic.Product>
 {
     private readonly ActionEntityUOWMapper _actionEntityUOWMapper = new();
     private readonly CurrentStockUOWMapper _currentStockUOWMapper = new();
@@ -12,7 +11,7 @@ public class ProductUOWMapper: IMapper<App.DAL.DTO.Product, App.Domain.Logic.Pro
     {
         if (entity == null) return null;
         
-        var res = new Product()
+        var res = new Product
         {
             Id = entity.Id,
             Unit = entity.Unit,
@@ -36,7 +35,7 @@ public class ProductUOWMapper: IMapper<App.DAL.DTO.Product, App.Domain.Logic.Pro
     {
                 if (entity == null) return null;
         
-        var res = new Domain.Logic.Product()
+        var res = new Domain.Logic.Product
         {
             Id = entity.Id,
             Unit = entity.Unit,
@@ -59,7 +58,7 @@ public class ProductUOWMapper: IMapper<App.DAL.DTO.Product, App.Domain.Logic.Pro
     {
         if (entity == null) return null;
 
-        return new Product()
+        return new Product
         {
             Id = entity.Id,
             Unit = entity.Unit,
@@ -76,7 +75,7 @@ public class ProductUOWMapper: IMapper<App.DAL.DTO.Product, App.Domain.Logic.Pro
     {
         if (entity == null) return null;
 
-        return new Domain.Logic.Product()
+        return new Domain.Logic.Product
         {
             Id = entity.Id,
             Unit = entity.Unit,

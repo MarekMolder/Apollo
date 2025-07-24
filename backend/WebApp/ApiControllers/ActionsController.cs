@@ -1,16 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
+using App.DTO.v1;
+using App.DTO.v1.ApiEntities;
 using App.DTO.v1.ApiMappers;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
@@ -24,8 +21,7 @@ namespace WebApp.ApiControllers
         private readonly ILogger<ActionsController> _logger;
         private readonly IAppBLL _bll;
         
-        private readonly App.DTO.v1.Mappers.ActionEntityAPIMapper _mapper =
-            new App.DTO.v1.Mappers.ActionEntityAPIMapper();
+        private readonly ActionEntityAPIMapper _mapper = new();
 
         private readonly EnrichedActionEntityApiMapper _enrichedActionEntityApiMapper = new();
 
@@ -41,9 +37,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
-        [ProducesResponseType( typeof( IEnumerable<App.DTO.v1.ActionEntity> ), 200 )]
+        [ProducesResponseType( typeof( IEnumerable<ActionEntity> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.ActionEntity>>> GetActions()
+        public async Task<ActionResult<IEnumerable<ActionEntity>>> GetActions()
         {
             var isAdmin = User.IsInRole("admin") || User.IsInRole("manager");
 
@@ -60,7 +56,7 @@ namespace WebApp.ApiControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.DTO.v1.ActionEntity>> GetActionEntity(Guid id)
+        public async Task<ActionResult<ActionEntity>> GetActionEntity(Guid id)
         {
             var actionEntity = await _bll.ActionEntityService.FindAsync(id);
 
@@ -76,10 +72,10 @@ namespace WebApp.ApiControllers
         /// Update person
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="person"></param>
+        /// <param name="actionEntity"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, App.DTO.v1.ActionEntity actionEntity)
+        public async Task<IActionResult> PutActionEntity(Guid id, ActionEntity actionEntity)
         {
             if (id != actionEntity.Id)
             {
@@ -95,10 +91,10 @@ namespace WebApp.ApiControllers
         /// <summary>
         /// Create new person
         /// </summary>
-        /// <param name="person"></param>
+        /// <param name="actionEntity"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<App.DTO.v1.ActionEntity>> PostActionEntity(App.DTO.v1.ActionEntity actionEntity)
+        public async Task<ActionResult<ActionEntity>> PostActionEntity(ActionEntity actionEntity)
         {
             var bllEntity = _mapper.Map(actionEntity);
             _bll.ActionEntityService.Add(bllEntity, User.GetUserId());
@@ -131,7 +127,7 @@ namespace WebApp.ApiControllers
         /// <param name="dto">New status</param>
         /// <returns></returns>
         [HttpPatch("{id}/status")]
-        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] App.DTO.v1.StatusUpdateDto dto)
+        public async Task<IActionResult> UpdateStatus(Guid id, [FromBody] StatusUpdateDto dto)
         {
             try
             {
@@ -148,8 +144,8 @@ namespace WebApp.ApiControllers
         }
         
         [HttpGet("enrichedAction/")]
-        [ProducesResponseType(typeof(IEnumerable<App.DTO.v1.ApiEntities.EnrichedActionEntity>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.ApiEntities.EnrichedActionEntity>>> GetEnrichedActionEntities()
+        [ProducesResponseType(typeof(IEnumerable<EnrichedActionEntity>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrichedActionEntity>>> GetEnrichedActionEntities()
         {
             var data = await _bll.ActionEntityService.GetEnrichedActionEntities();
 
@@ -169,9 +165,9 @@ namespace WebApp.ApiControllers
 
             var response = result.Select(r => new
             {
-                ProductId = r.ProductId,
-                ProductName = r.ProductName,
-                RemoveQuantity = r.RemoveQuantity
+                r.ProductId,
+                r.ProductName,
+                r.RemoveQuantity
             });
 
             return Ok(response);
@@ -189,8 +185,7 @@ namespace WebApp.ApiControllers
 
             var response = result.Select(r => new
             {
-                CreatedBy = r.CreatedBy,
-                TotalRemovedQuantity = r.TotalRemovedQuantity
+                r.CreatedBy, r.TotalRemovedQuantity
             });
 
             return Ok(response);

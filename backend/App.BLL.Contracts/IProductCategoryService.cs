@@ -2,7 +2,7 @@
 
 namespace App.BLL.Contracts;
 
-public interface IProductCategoryService : IBaseService<App.BLL.DTO.ProductCategory>
+public interface IProductCategoryService : IBaseService<DTO.ProductCategory>
 {
     
 }

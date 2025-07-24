@@ -1,5 +1,4 @@
-﻿using Base.Contracts;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace Base.Domain.Identity;
 

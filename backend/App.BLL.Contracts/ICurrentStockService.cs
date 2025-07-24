@@ -2,9 +2,9 @@
 
 namespace App.BLL.Contracts;
 
-public interface ICurrentStockService : IBaseService<App.BLL.DTO.CurrentStock>
+public interface ICurrentStockService : IBaseService<DTO.CurrentStock>
 {
-    Task<IEnumerable<App.BLL.DTO.CurrentStock?>> GetByStorageRoomIdAsync(Guid storageRoomId);
+    Task<IEnumerable<DTO.CurrentStock?>> GetByStorageRoomIdAsync(Guid storageRoomId);
     
     Task<List<(Guid ProductId, string ProductName, decimal Quantity)>> GetLowestStockProductsAsync(int count);
     

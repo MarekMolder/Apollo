@@ -2,7 +2,7 @@
 
 namespace App.BLL.Contracts;
 
-public interface IActionTypeEntityService : IBaseService<App.BLL.DTO.ActionTypeEntity>
+public interface IActionTypeEntityService : IBaseService<DTO.ActionTypeEntity>
 {
     
 }

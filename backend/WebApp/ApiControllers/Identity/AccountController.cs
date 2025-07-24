@@ -1,5 +1,4 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-using System.Net;
 using System.Security.Claims;
 using App.DAL.EF;
 using App.Domain.Identity;
@@ -27,7 +26,7 @@ public class AccountController : ControllerBase
     private readonly UserManager<AppUser> _userManager;
     private readonly ILogger<AccountController> _logger;
     private readonly SignInManager<AppUser> _signInManager;
-    private readonly Random _random = new Random();
+    private readonly Random _random = new();
     private readonly AppDbContext _context;
 
     private const string UserPassProblem = "User/Password problem";

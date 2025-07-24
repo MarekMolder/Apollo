@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class StorageRoomAPIMapper : IMapper<App.DTO.v1.StorageRoom, App.BLL.DTO.StorageRoom>
+public class StorageRoomAPIMapper : IMapper<StorageRoom, BLL.DTO.StorageRoom>
 {
-    public App.DTO.v1.StorageRoom? Map(App.BLL.DTO.StorageRoom? entity)
+    public StorageRoom? Map(BLL.DTO.StorageRoom? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.StorageRoom()
+        var res = new StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -17,10 +17,10 @@ public class StorageRoomAPIMapper : IMapper<App.DTO.v1.StorageRoom, App.BLL.DTO.
         return res;
     }
 
-    public App.BLL.DTO.StorageRoom? Map(App.DTO.v1.StorageRoom? entity)
+    public BLL.DTO.StorageRoom? Map(StorageRoom? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.StorageRoom()
+        var res = new BLL.DTO.StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -30,9 +30,9 @@ public class StorageRoomAPIMapper : IMapper<App.DTO.v1.StorageRoom, App.BLL.DTO.
         return res;
     }
     
-    public App.BLL.DTO.StorageRoom Map(App.DTO.v1.StorageRoomCreate entity)
+    public BLL.DTO.StorageRoom Map(StorageRoomCreate entity)
     {
-        var res = new App.BLL.DTO.StorageRoom()
+        var res = new BLL.DTO.StorageRoom
         {
             Id = Guid.NewGuid(),
             Name = entity.Name,

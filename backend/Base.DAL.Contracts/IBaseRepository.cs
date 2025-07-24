@@ -1,6 +1,4 @@
-﻿using System.Linq.Expressions;
-using Base.Contracts;
-using Base.Domain;
+﻿using Base.Contracts;
 
 namespace Base.DAL.Contracts;
 

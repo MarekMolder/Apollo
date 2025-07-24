@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using App.DTO.v1;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
@@ -22,8 +18,7 @@ namespace WebApp.ApiControllers
         private readonly ILogger<ProductCategoriesController> _logger;
         private readonly IAppBLL _bll;
         
-        private readonly App.DTO.v1.Mappers.ProductCategoryAPIMapper _mapper =
-            new App.DTO.v1.Mappers.ProductCategoryAPIMapper();
+        private readonly ProductCategoryAPIMapper _mapper = new();
 
         public ProductCategoriesController(IAppBLL bll, ILogger<ProductCategoriesController> logger)
         {
@@ -37,9 +32,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
-        [ProducesResponseType( typeof( IEnumerable<App.DTO.v1.ProductCategory> ), 200 )]
+        [ProducesResponseType( typeof( IEnumerable<ProductCategory> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.ProductCategory>>> GetActions()
+        public async Task<ActionResult<IEnumerable<ProductCategory>>> GetActions()
         {
             return (await _bll.ProductCategoryService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
         }
@@ -50,7 +45,7 @@ namespace WebApp.ApiControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.DTO.v1.ProductCategory>> GetActionEntity(Guid id)
+        public async Task<ActionResult<ProductCategory>> GetActionEntity(Guid id)
         {
             var productCategory = await _bll.ProductCategoryService.FindAsync(id);
 
@@ -69,7 +64,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, App.DTO.v1.ProductCategory productCategory)
+        public async Task<IActionResult> PutActionEntity(Guid id, ProductCategory productCategory)
         {
             if (id != productCategory.Id)
             {
@@ -88,7 +83,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<App.DTO.v1.ProductCategory>> PostActionEntity(App.DTO.v1.ProductCategory productCategory)
+        public async Task<ActionResult<ProductCategory>> PostActionEntity(ProductCategory productCategory)
         {
             var bllEntity = _mapper.Map(productCategory);
             _bll.ProductCategoryService.Add(bllEntity);

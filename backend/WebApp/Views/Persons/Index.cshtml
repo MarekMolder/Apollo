@@ -1,3 +1,4 @@
+@using Base.Resources
 @model WebApp.ViewModels.PersonIndexViewModel
 
 @{
@@ -8,7 +9,7 @@
 
 
 <p>
-    <a asp-action="Create">@Base.Resources.Common.CreateNew</a>
+    <a asp-action="Create">@Common.CreateNew</a>
 </p>
 <table class="table">
     <thead>
@@ -27,9 +28,9 @@
                 @Html.DisplayFor(modelItem => item.PersonName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">@Base.Resources.Common.Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">@Base.Resources.Common.Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">@Base.Resources.Common.Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">@Common.Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">@Common.Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">@Common.Delete</a>
             </td>
         </tr>
     }

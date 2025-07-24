@@ -6,12 +6,10 @@ using App.BLL.Contracts;
 using App.DAL.Contracts;
 using App.DAL.EF;
 using App.DAL.EF.DataSeeding;
-using App.DAL.EF.Repositories;
 using App.Domain.Identity;
 using Asp.Versioning;
 using Asp.Versioning.ApiExplorer;
 using Base.Contracts;
-using Base.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
@@ -86,7 +84,7 @@ builder.Services
         {
             options.RequireHttpsMetadata = false;
             //options.SaveToken = false;
-            options.TokenValidationParameters = new TokenValidationParameters()
+            options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidIssuer = builder.Configuration["JWTSecurity:Issuer"],
                 ValidAudience = builder.Configuration["JWTSecurity:Audience"],
@@ -146,7 +144,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader();
         policy.AllowAnyMethod();
         policy.AllowAnyOrigin();
-        policy.SetIsOriginAllowed((host) => true);
+        policy.SetIsOriginAllowed(host => true);
     });
 });
 
@@ -299,7 +297,7 @@ static void WaitDbConnection(AppDbContext ctx, ILogger<IApplicationBuilder> logg
             ctx.Database.CloseConnection();
             return;
         }
-        catch (Npgsql.PostgresException e)
+        catch (PostgresException e)
         {
             logger.LogWarning("Checked postgres db connection. Got: {}", e.Message);
 
@@ -310,7 +308,7 @@ static void WaitDbConnection(AppDbContext ctx, ILogger<IApplicationBuilder> logg
             }
 
             logger.LogWarning("Waiting for db connection. Sleep 1 sec");
-            System.Threading.Thread.Sleep(1000);
+            Thread.Sleep(1000);
         }
     }
 }

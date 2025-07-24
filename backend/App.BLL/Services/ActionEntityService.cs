@@ -1,29 +1,25 @@
-﻿using System.Runtime.InteropServices.Marshalling;
-using System.Security.AccessControl;
-using App.BLL.Contracts;
-using App.BLL.Mappers;
-using App.DAL.Contracts;
-using App.DAL.DTO;
+﻿using App.BLL.Contracts;
+using App.BLL.DTO;
 using App.BLL.DTO.Enums;
+using App.DAL.Contracts;
 using Base.BLL;
-using Base.BLL.Contracts;
 using Base.Contracts;
-using Base.DAL.Contracts;
+using CurrentStock = App.DAL.DTO.CurrentStock;
 
 namespace App.BLL.Services;
 
-public class ActionEntityService : BaseService<App.BLL.DTO.ActionEntity, App.DAL.DTO.ActionEntity, App.DAL.Contracts.IActionEntityRepository>, IActionEntityService
+public class ActionEntityService : BaseService<ActionEntity, DAL.DTO.ActionEntity, IActionEntityRepository>, IActionEntityService
 {
     private readonly IAppUOW _uow;
-    private readonly IMapper<App.DAL.DTO.CurrentStock, App.Domain.Logic.CurrentStock> _domainToDalMapperCurrentStock;
-    private readonly IMapper<DTO.ActionEntity, ActionEntity> _dalToBLLMapper;
-    private readonly IMapper<App.DAL.DTO.ActionEntity, App.Domain.Logic.ActionEntity> _domainToDalMapper;
+    private readonly IMapper<CurrentStock, Domain.Logic.CurrentStock> _domainToDalMapperCurrentStock;
+    private readonly IMapper<ActionEntity, DAL.DTO.ActionEntity> _dalToBLLMapper;
+    private readonly IMapper<DAL.DTO.ActionEntity, Domain.Logic.ActionEntity> _domainToDalMapper;
     
     public ActionEntityService(
         IAppUOW serviceUow, 
-        IMapper<DTO.ActionEntity, ActionEntity> mapper,
-        IMapper<App.DAL.DTO.CurrentStock, App.Domain.Logic.CurrentStock> domainToDalMapperCurrentStock,
-        IMapper<App.DAL.DTO.ActionEntity, App.Domain.Logic.ActionEntity> domainToDalMapper)
+        IMapper<ActionEntity, DAL.DTO.ActionEntity> mapper,
+        IMapper<CurrentStock, Domain.Logic.CurrentStock> domainToDalMapperCurrentStock,
+        IMapper<DAL.DTO.ActionEntity, Domain.Logic.ActionEntity> domainToDalMapper)
         : base(serviceUow, serviceUow.ActionEntityRepository, mapper)
     {
         _uow = serviceUow;
@@ -72,7 +68,7 @@ public class ActionEntityService : BaseService<App.BLL.DTO.ActionEntity, App.DAL
             }
             else
             {
-                var newStock = new App.DAL.DTO.CurrentStock
+                var newStock = new CurrentStock
                 {
                     Id = Guid.NewGuid(),
                     ProductId = productId,
@@ -86,7 +82,7 @@ public class ActionEntityService : BaseService<App.BLL.DTO.ActionEntity, App.DAL
         return true;
     }
 
-    public async Task<IEnumerable<App.BLL.DTO.ActionEntity?>> GetEnrichedActionEntities()
+    public async Task<IEnumerable<ActionEntity?>> GetEnrichedActionEntities()
     {
         var res = await ServiceRepository.GetEnrichedActionEntities();
         return res.Select(u => _dalToBLLMapper.Map(u));

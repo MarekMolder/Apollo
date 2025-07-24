@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class ProductCategoryAPIMapper : IMapper<App.DTO.v1.ProductCategory, App.BLL.DTO.ProductCategory>
+public class ProductCategoryAPIMapper : IMapper<ProductCategory, BLL.DTO.ProductCategory>
 {
-    public App.DTO.v1.ProductCategory? Map(App.BLL.DTO.ProductCategory? entity)
+    public ProductCategory? Map(BLL.DTO.ProductCategory? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.ProductCategory()
+        var res = new ProductCategory
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -16,10 +16,10 @@ public class ProductCategoryAPIMapper : IMapper<App.DTO.v1.ProductCategory, App.
         return res;
     }
 
-    public App.BLL.DTO.ProductCategory? Map(App.DTO.v1.ProductCategory? entity)
+    public BLL.DTO.ProductCategory? Map(ProductCategory? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.ProductCategory()
+        var res = new BLL.DTO.ProductCategory
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -28,9 +28,9 @@ public class ProductCategoryAPIMapper : IMapper<App.DTO.v1.ProductCategory, App.
         return res;
     }
     
-    public App.BLL.DTO.ProductCategory Map(App.DTO.v1.ProductCategoryCreate entity)
+    public BLL.DTO.ProductCategory Map(ProductCategoryCreate entity)
     {
-        var res = new App.BLL.DTO.ProductCategory()
+        var res = new BLL.DTO.ProductCategory
         {
             Id = Guid.NewGuid(),
             Name = entity.Name,

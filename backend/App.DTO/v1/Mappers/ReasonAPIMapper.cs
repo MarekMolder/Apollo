@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class ReasonAPIMapper : IMapper<App.DTO.v1.Reason, App.BLL.DTO.Reason>
+public class ReasonAPIMapper : IMapper<Reason, BLL.DTO.Reason>
 {
-    public App.DTO.v1.Reason? Map(App.BLL.DTO.Reason? entity)
+    public Reason? Map(BLL.DTO.Reason? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.Reason()
+        var res = new Reason
         {
             Id = entity.Id,
             Description = entity.Description,
@@ -16,10 +16,10 @@ public class ReasonAPIMapper : IMapper<App.DTO.v1.Reason, App.BLL.DTO.Reason>
         return res;
     }
 
-    public App.BLL.DTO.Reason? Map(App.DTO.v1.Reason? entity)
+    public BLL.DTO.Reason? Map(Reason? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.Reason()
+        var res = new BLL.DTO.Reason
         {
             Id = entity.Id,
             Description = entity.Description,
@@ -28,9 +28,9 @@ public class ReasonAPIMapper : IMapper<App.DTO.v1.Reason, App.BLL.DTO.Reason>
         return res;
     }
     
-    public App.BLL.DTO.Reason Map(App.DTO.v1.ReasonCreate entity)
+    public BLL.DTO.Reason Map(ReasonCreate entity)
     {
-        var res = new App.BLL.DTO.Reason()
+        var res = new BLL.DTO.Reason
         {
             Id = Guid.NewGuid(),
             Description = entity.Description,

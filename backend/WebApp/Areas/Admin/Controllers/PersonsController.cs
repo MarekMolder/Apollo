@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using App.DAL.EF;
+using App.Domain.Logic;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WebApp.Areas.Admin.Controllers
 {
@@ -60,7 +56,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PersonName,UserId,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] App.Domain.Logic.Person person)
+        public async Task<IActionResult> Create([Bind("PersonName,UserId,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] Person person)
         {
             if (ModelState.IsValid)
             {
@@ -95,7 +91,7 @@ namespace WebApp.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("PersonName,UserId,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] App.Domain.Logic.Person person)
+        public async Task<IActionResult> Edit(Guid id, [Bind("PersonName,UserId,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] Person person)
         {
             if (id != person.Id)
             {
@@ -115,10 +111,8 @@ namespace WebApp.Areas.Admin.Controllers
                     {
                         return NotFound();
                     }
-                    else
-                    {
-                        throw;
-                    }
+
+                    throw;
                 }
                 return RedirectToAction(nameof(Index));
             }

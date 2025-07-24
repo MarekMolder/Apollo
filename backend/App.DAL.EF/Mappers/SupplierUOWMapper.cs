@@ -1,17 +1,16 @@
 ﻿using App.DAL.DTO;
 using Base.Contracts;
-using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class SupplierUOWMapper: IMapper<App.DAL.DTO.Supplier, App.Domain.Logic.Supplier>
+public class SupplierUOWMapper: IMapper<Supplier, Domain.Logic.Supplier>
 {
     private readonly ActionEntityUOWMapper _actionEntityUOWMapper = new();
     public Supplier? Map(Domain.Logic.Supplier? entity)
     {
         if (entity == null) return null;
         
-        var res = new Supplier()
+        var res = new Supplier
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -31,7 +30,7 @@ public class SupplierUOWMapper: IMapper<App.DAL.DTO.Supplier, App.Domain.Logic.S
     {
         if (entity == null) return null;
         
-        var res = new Domain.Logic.Supplier()
+        var res = new Domain.Logic.Supplier
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -51,7 +50,7 @@ public class SupplierUOWMapper: IMapper<App.DAL.DTO.Supplier, App.Domain.Logic.S
     {
         if (entity == null) return null;
 
-        return new Supplier()
+        return new Supplier
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -65,7 +64,7 @@ public class SupplierUOWMapper: IMapper<App.DAL.DTO.Supplier, App.Domain.Logic.S
     {
         if (entity == null) return null;
 
-        return new Domain.Logic.Supplier()
+        return new Domain.Logic.Supplier
         {
             Id = entity.Id,
             Name = entity.Name,

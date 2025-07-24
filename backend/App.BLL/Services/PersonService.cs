@@ -1,13 +1,12 @@
 ﻿using App.BLL.Contracts;
+using App.BLL.DTO;
 using App.BLL.Mappers;
 using App.DAL.Contracts;
-using App.DTO.v1;
 using Base.BLL;
-using Base.Contracts;
 
 namespace App.BLL.Services;
 
-public class PersonService : BaseService<App.BLL.DTO.Person, App.DAL.DTO.Person, App.DAL.Contracts.IPersonRepository>, IPersonService
+public class PersonService : BaseService<Person, DAL.DTO.Person, IPersonRepository>, IPersonService
 {
     public PersonService(
         IAppUOW serviceUOW,

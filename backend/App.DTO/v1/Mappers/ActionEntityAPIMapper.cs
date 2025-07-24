@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class ActionEntityAPIMapper : IMapper<App.DTO.v1.ActionEntity, App.BLL.DTO.ActionEntity>
+public class ActionEntityAPIMapper : IMapper<ActionEntity, BLL.DTO.ActionEntity>
 {
-    public App.DTO.v1.ActionEntity? Map(App.BLL.DTO.ActionEntity? entity)
+    public ActionEntity? Map(BLL.DTO.ActionEntity? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.ActionEntity()
+        var res = new ActionEntity
         {
             Id = entity.Id,
             Quantity = entity.Quantity,
@@ -21,10 +21,10 @@ public class ActionEntityAPIMapper : IMapper<App.DTO.v1.ActionEntity, App.BLL.DT
         return res;
     }
 
-    public App.BLL.DTO.ActionEntity? Map(App.DTO.v1.ActionEntity? entity)
+    public BLL.DTO.ActionEntity? Map(ActionEntity? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.ActionEntity()
+        var res = new BLL.DTO.ActionEntity
         {
             Id = entity.Id,
             Quantity = entity.Quantity,
@@ -38,9 +38,9 @@ public class ActionEntityAPIMapper : IMapper<App.DTO.v1.ActionEntity, App.BLL.DT
         return res;
     }
     
-    public App.BLL.DTO.ActionEntity Map(App.DTO.v1.ActionEntityCreate entity)
+    public BLL.DTO.ActionEntity Map(ActionEntityCreate entity)
     {
-        var res = new App.BLL.DTO.ActionEntity()
+        var res = new BLL.DTO.ActionEntity
         {
             Id = Guid.NewGuid(),
             Quantity = entity.Quantity,

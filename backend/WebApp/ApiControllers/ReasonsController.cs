@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using App.DTO.v1;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
@@ -22,8 +18,7 @@ namespace WebApp.ApiControllers
         private readonly ILogger<ReasonsController> _logger;
         private readonly IAppBLL _bll;
         
-        private readonly App.DTO.v1.Mappers.ReasonAPIMapper _mapper =
-            new App.DTO.v1.Mappers.ReasonAPIMapper();
+        private readonly ReasonAPIMapper _mapper = new();
 
         public ReasonsController(IAppBLL bll, ILogger<ReasonsController> logger)
         {
@@ -37,9 +32,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
-        [ProducesResponseType( typeof( IEnumerable<App.DTO.v1.Reason> ), 200 )]
+        [ProducesResponseType( typeof( IEnumerable<Reason> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.Reason>>> GetActions()
+        public async Task<ActionResult<IEnumerable<Reason>>> GetActions()
         {
             return (await _bll.ReasonService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
         }
@@ -50,7 +45,7 @@ namespace WebApp.ApiControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.DTO.v1.Reason>> GetActionEntity(Guid id)
+        public async Task<ActionResult<Reason>> GetActionEntity(Guid id)
         {
             var reason = await _bll.ReasonService.FindAsync(id);
 
@@ -69,7 +64,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, App.DTO.v1.Reason reason)
+        public async Task<IActionResult> PutActionEntity(Guid id, Reason reason)
         {
             if (id != reason.Id)
             {
@@ -88,7 +83,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<App.DTO.v1.Reason>> PostActionEntity(App.DTO.v1.Reason reason)
+        public async Task<ActionResult<Reason>> PostActionEntity(Reason reason)
         {
             var bllEntity = _mapper.Map(reason);
             _bll.ReasonService.Add(bllEntity);

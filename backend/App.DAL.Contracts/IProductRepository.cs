@@ -1,9 +1,9 @@
-﻿using App.Domain.Logic;
+﻿using App.DAL.DTO;
 using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IProductRepository: IBaseRepository<App.DAL.DTO.Product>
+public interface IProductRepository: IBaseRepository<Product>
 {
-    Task<IEnumerable<App.DAL.DTO.Product?>> GetEnrichedProducts();
+    Task<IEnumerable<Product?>> GetEnrichedProducts();
 }

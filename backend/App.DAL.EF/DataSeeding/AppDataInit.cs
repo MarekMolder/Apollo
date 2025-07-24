@@ -28,7 +28,7 @@ public static class AppDataInit
 
             if (role != null) continue;
 
-            role = new AppRole()
+            role = new AppRole
             {
                 Id = id ?? Guid.NewGuid(),
                 Name = roleName,
@@ -47,7 +47,7 @@ public static class AppDataInit
             var user = userManager.FindByEmailAsync(userInfo.name).Result;
             if (user == null)
             {
-                user = new AppUser()
+                user = new AppUser
                 {
                     Id = userInfo.id ?? Guid.NewGuid(),
                     Email = userInfo.name,

@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.BLL.Contracts;
-using App.DAL.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.Domain.Logic;
+using App.BLL.DTO;
+using App.Domain.Enums;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using IAppBLL = App.BLL.Contracts.IAppBLL;
 
 namespace WebApp.Controllers
@@ -62,7 +55,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(App.BLL.DTO.ActionTypeEntity actionTypeEntity)
+        public async Task<IActionResult> Create(ActionTypeEntity actionTypeEntity)
         {
             if (ModelState.IsValid)
             {
@@ -104,7 +97,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, App.BLL.DTO.ActionTypeEntity actionTypeEntity)
+        public async Task<IActionResult> Edit(Guid id, ActionTypeEntity actionTypeEntity)
         {
             if (id != actionTypeEntity.Id)
             {
@@ -160,8 +153,8 @@ namespace WebApp.Controllers
         private void PopulateEnumSelectList()
         {
             ViewData["ActionTypeEnumList"] = new SelectList(
-                Enum.GetValues(typeof(App.Domain.Enums.ActionTypeEnum))
-                    .Cast<App.Domain.Enums.ActionTypeEnum>()
+                Enum.GetValues(typeof(ActionTypeEnum))
+                    .Cast<ActionTypeEnum>()
                     .Select(e => new SelectListItem
                     {
                         Value = ((int)e).ToString(),

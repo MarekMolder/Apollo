@@ -1,10 +1,9 @@
-﻿using App.Resources.Domain;
+﻿using App.DAL.DTO;
 using Base.DAL.Contracts;
-using Reason = App.Domain.Logic.Reason;
 
 namespace App.DAL.Contracts;
 
-public interface IReasonRepository: IBaseRepository<App.DAL.DTO.Reason>
+public interface IReasonRepository: IBaseRepository<Reason>
 {
     
 }

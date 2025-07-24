@@ -1,17 +1,16 @@
 ﻿using App.DAL.DTO;
 using Base.Contracts;
-using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class ReasonUOWMapper: IMapper<App.DAL.DTO.Reason, App.Domain.Logic.Reason>
+public class ReasonUOWMapper: IMapper<Reason, Domain.Logic.Reason>
 {
     private readonly ActionEntityUOWMapper _actionEntityUOWMapper = new();
     public Reason? Map(Domain.Logic.Reason? entity)
     {
         if (entity == null) return null;
         
-        var res = new Reason()
+        var res = new Reason
         {
             Id = entity.Id,
             Description = entity.Description,
@@ -26,7 +25,7 @@ public class ReasonUOWMapper: IMapper<App.DAL.DTO.Reason, App.Domain.Logic.Reaso
     {
         if (entity == null) return null;
         
-        var res = new Domain.Logic.Reason()
+        var res = new Domain.Logic.Reason
         {
             Id = entity.Id,
             Description = entity.Description,
@@ -41,7 +40,7 @@ public class ReasonUOWMapper: IMapper<App.DAL.DTO.Reason, App.Domain.Logic.Reaso
     {
         if (entity == null) return null;
 
-        return new Reason()
+        return new Reason
         {
             Id = entity.Id,
             Description = entity.Description,
@@ -53,7 +52,7 @@ public class ReasonUOWMapper: IMapper<App.DAL.DTO.Reason, App.Domain.Logic.Reaso
     {
         if (entity == null) return null;
 
-        return new Domain.Logic.Reason()
+        return new Domain.Logic.Reason
         {
             Id = entity.Id,
             Description = entity.Description,

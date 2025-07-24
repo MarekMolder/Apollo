@@ -1,8 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using App.BLL.DTO;
-using Base.Contracts;
-
-namespace App.DTO.v1;
+﻿namespace App.DTO.v1;
 
 public class ActionEntityCreate
 {

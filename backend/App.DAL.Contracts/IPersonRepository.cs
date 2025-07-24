@@ -1,7 +1,8 @@
-﻿using Base.DAL.Contracts;
+﻿using App.DAL.DTO;
+using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IPersonRepository: IBaseRepository<App.DAL.DTO.Person>
+public interface IPersonRepository: IBaseRepository<Person>
 {
 }

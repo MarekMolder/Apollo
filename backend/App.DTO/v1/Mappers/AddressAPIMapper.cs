@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class AddressAPIMapper : IMapper<App.DTO.v1.Address, App.BLL.DTO.Address>
+public class AddressAPIMapper : IMapper<Address, BLL.DTO.Address>
 {
-    public App.DTO.v1.Address? Map(App.BLL.DTO.Address? entity)
+    public Address? Map(BLL.DTO.Address? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.Address()
+        var res = new Address
         {
             Id = entity.Id,
             StreetName = entity.StreetName,
@@ -22,10 +22,10 @@ public class AddressAPIMapper : IMapper<App.DTO.v1.Address, App.BLL.DTO.Address>
         return res;
     }
 
-    public App.BLL.DTO.Address? Map(App.DTO.v1.Address? entity)
+    public BLL.DTO.Address? Map(Address? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.Address()
+        var res = new BLL.DTO.Address
         {
             Id = entity.Id,
             StreetName = entity.StreetName,
@@ -40,9 +40,9 @@ public class AddressAPIMapper : IMapper<App.DTO.v1.Address, App.BLL.DTO.Address>
         return res;
     }
     
-    public App.BLL.DTO.Address Map(App.DTO.v1.AddressCreate entity)
+    public BLL.DTO.Address Map(AddressCreate entity)
     {
-        var res = new App.BLL.DTO.Address()
+        var res = new BLL.DTO.Address
         {
             Id = Guid.NewGuid(),
             StreetName = entity.StreetName,

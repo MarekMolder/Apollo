@@ -1,7 +1,4 @@
-@using Microsoft.AspNetCore.Localization
 @using Microsoft.Extensions.Options
-@using Microsoft.AspNetCore.Builder
-@using System.Threading
 @inject IOptions<RequestLocalizationOptions> LocalizationOptions
 @{
     var cultureItems = LocalizationOptions.Value.SupportedUICultures!

@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class InventoryAPIMapper : IMapper<App.DTO.v1.Inventory, App.BLL.DTO.Inventory>
+public class InventoryAPIMapper : IMapper<Inventory, BLL.DTO.Inventory>
 {
-    public App.DTO.v1.Inventory? Map(App.BLL.DTO.Inventory? entity)
+    public Inventory? Map(BLL.DTO.Inventory? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.Inventory()
+        var res = new Inventory
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -18,10 +18,10 @@ public class InventoryAPIMapper : IMapper<App.DTO.v1.Inventory, App.BLL.DTO.Inve
         return res;
     }
 
-    public App.BLL.DTO.Inventory? Map(App.DTO.v1.Inventory? entity)
+    public BLL.DTO.Inventory? Map(Inventory? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.Inventory()
+        var res = new BLL.DTO.Inventory
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -32,9 +32,9 @@ public class InventoryAPIMapper : IMapper<App.DTO.v1.Inventory, App.BLL.DTO.Inve
         return res;
     }
     
-    public App.BLL.DTO.Inventory Map(App.DTO.v1.InventoryCreate entity)
+    public BLL.DTO.Inventory Map(InventoryCreate entity)
     {
-        var res = new App.BLL.DTO.Inventory()
+        var res = new BLL.DTO.Inventory
         {
             Id = Guid.NewGuid(),
             Name = entity.Name,

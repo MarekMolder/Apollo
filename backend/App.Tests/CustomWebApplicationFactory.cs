@@ -1,5 +1,4 @@
-﻿using System;
-using App.DAL.EF;
+﻿using App.DAL.EF;
 using App.Domain.Identity;
 using App.Tests.Helpers;
 using Microsoft.AspNetCore.Hosting;

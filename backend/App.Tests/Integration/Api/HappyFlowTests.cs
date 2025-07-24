@@ -1,10 +1,8 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Threading.Tasks;
 using App.DTO.v1;
 using App.DTO.v1.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Xunit;
 
 namespace App.Tests.Integration.Api;
 

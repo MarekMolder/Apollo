@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Address = App.DTO.v1.Address;
 
 namespace WebApp.ApiControllers
@@ -23,8 +18,7 @@ namespace WebApp.ApiControllers
         private readonly ILogger<AddressesController> _logger;
         private readonly IAppBLL _bll;
         
-        private readonly App.DTO.v1.Mappers.AddressAPIMapper _mapper =
-            new App.DTO.v1.Mappers.AddressAPIMapper();
+        private readonly AddressAPIMapper _mapper = new();
 
         public AddressesController(IAppBLL bll, ILogger<AddressesController> logger)
         {
@@ -38,9 +32,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
-        [ProducesResponseType( typeof( IEnumerable<App.DTO.v1.Address> ), 200 )]
+        [ProducesResponseType( typeof( IEnumerable<Address> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.Address>>> GetActions()
+        public async Task<ActionResult<IEnumerable<Address>>> GetActions()
         {
             return (await _bll.AddressService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
         }
@@ -51,7 +45,7 @@ namespace WebApp.ApiControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.DTO.v1.Address>> GetActionEntity(Guid id)
+        public async Task<ActionResult<Address>> GetActionEntity(Guid id)
         {
             var address = await _bll.AddressService.FindAsync(id);
 
@@ -70,7 +64,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, App.DTO.v1.Address address)
+        public async Task<IActionResult> PutActionEntity(Guid id, Address address)
         {
             if (id != address.Id)
             {
@@ -89,7 +83,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<App.DTO.v1.Address>> PostActionEntity(App.DTO.v1.Address address)
+        public async Task<ActionResult<Address>> PostActionEntity(Address address)
         {
             var bllEntity = _mapper.Map(address);
             _bll.AddressService.Add(bllEntity);
