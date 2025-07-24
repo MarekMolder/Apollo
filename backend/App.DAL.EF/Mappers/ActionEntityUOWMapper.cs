@@ -32,9 +32,6 @@ public class ActionEntityUOWMapper : IMapper<App.DAL.DTO.ActionEntity, App.Domai
             ProductId = entity.ProductId,
             Product = ProductUOWMapper.MapSimple(entity.Product),
             
-            StockAuditId = entity.StockAuditId,
-            StockAudit = StockAuditUOWMapper.MapSimple(entity.StockAudit),
-            
             StorageRoomId = entity.StorageRoomId,
             StorageRoom = StorageRoomUOWMapper.MapSimple(entity.StorageRoom),
             
@@ -64,9 +61,6 @@ public class ActionEntityUOWMapper : IMapper<App.DAL.DTO.ActionEntity, App.Domai
             ProductId = entity.ProductId,
             Product = ProductUOWMapper.MapSimple(entity.Product),
             
-            StockAuditId = entity.StockAuditId,
-            StockAudit = StockAuditUOWMapper.MapSimple(entity.StockAudit),
-            
             StorageRoomId = entity.StorageRoomId,
             StorageRoom = StorageRoomUOWMapper.MapSimple(entity.StorageRoom),
         };
@@ -86,7 +80,6 @@ public class ActionEntityUOWMapper : IMapper<App.DAL.DTO.ActionEntity, App.Domai
             ReasonId = entity.ReasonId,
             SupplierId = entity.SupplierId,
             ProductId = entity.ProductId,
-            StockAuditId = entity.StockAuditId,
             StorageRoomId = entity.StorageRoomId,
         };
     }
@@ -104,7 +97,6 @@ public class ActionEntityUOWMapper : IMapper<App.DAL.DTO.ActionEntity, App.Domai
             ReasonId = entity.ReasonId,
             SupplierId = entity.SupplierId,
             ProductId = entity.ProductId,
-            StockAuditId = entity.StockAuditId,
             StorageRoomId = entity.StorageRoomId,
         };
     }

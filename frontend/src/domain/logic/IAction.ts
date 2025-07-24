@@ -7,6 +7,5 @@ export interface IAction extends IDomainId {
   reasonId: string | null;
   supplierId: string | null;
   productId: string | null;
-  stockAuditId: string | null;
   storageRoomId: string | null;
 }

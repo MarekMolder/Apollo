@@ -22,7 +22,6 @@ public class EnrichedActionEntityApiMapper : IMapper<ApiEntities.EnrichedActionE
             SupplierName = entity.Supplier?.Name ?? "Unknown",
             ProductId = entity.ProductId,
             ProductName = entity.Product?.Name ?? "Unknown",
-            StockAuditId = entity.StockAuditId,
             StorageRoomId = entity.StorageRoomId,
             StorageRoomName = entity.StorageRoom?.Name ?? "Unknown",
         };

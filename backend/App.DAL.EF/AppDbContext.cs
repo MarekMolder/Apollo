@@ -1,10 +1,12 @@
-﻿using App.Domain;
+﻿using System.Text.Json;
+using App.Domain;
 using App.Domain.Identity;
 using App.Domain.Logic;
 using Base.Contracts;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
 using Action = System.Action;
 
@@ -21,8 +23,6 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<Reason> Reasons { get; set; }
-    public DbSet<StockAudit> StockAudits { get; set; }
-    public DbSet<StockMovement> StockMovements { get; set; }
     public DbSet<StorageRoom> StorageRooms { get; set; }
     public DbSet<StorageRoomInInventory> StorageRoomInInventories { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
@@ -74,7 +74,16 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
         
         modelBuilder.Entity<Inventory>()
             .Property(i => i.AllowedRoles)
-            .HasColumnType("jsonb");
+            .HasConversion(
+                v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),
+                v => JsonSerializer.Deserialize<List<string>>(v, (JsonSerializerOptions?)null) ?? new List<string>())
+            .HasColumnType("jsonb")
+            .Metadata.SetValueComparer(
+                new ValueComparer<List<string>>(
+                    (c1, c2) => c1.SequenceEqual(c2),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v != null ? v.GetHashCode() : 0)),
+                    c => c.ToList()
+                ));
     }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

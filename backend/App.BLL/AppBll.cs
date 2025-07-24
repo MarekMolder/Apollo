@@ -46,14 +46,6 @@ public class AppBll: BaseBll<IAppUOW>, IAppBLL
     public  IReasonService ReasonService => 
         _reasonService ??= new ReasonService(BLLUOW, new ReasonBLLMapper());
     
-    private IStockAuditService? _stockAuditService;
-    public  IStockAuditService StockAuditService => 
-        _stockAuditService ??= new StockAuditService(BLLUOW, new StockAuditBLLMapper());
-    
-    private IStockMovementService? _stockMovementService;
-    public  IStockMovementService StockMovementService => 
-        _stockMovementService ??= new StockMovementService(BLLUOW, new StockMovementBLLMapper());
-    
     private IStorageRoomInInventoryService? _storageRoomInInventoryService;
     public  IStorageRoomInInventoryService StorageRoomInInventoryService => 
         _storageRoomInInventoryService ??= new StorageRoomInInventoryService(BLLUOW, new StorageRoomInInventoryBLLMapper());

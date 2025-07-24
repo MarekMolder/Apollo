@@ -12,8 +12,6 @@ public interface IAppUOW : IBaseUOW
     IProductCategoryRepository ProductCategoryRepository { get; }
     IProductRepository ProductRepository { get; }
     IReasonRepository ReasonRepository { get; }
-    IStockAuditRepository StockAuditRepository { get; }
-    IStockMovementRepository StockMovementRepository { get; }
     IStorageRoomInInventoryRepository StorageRoomInInventoryRepository { get; }
     IStorageRoomRepository StorageRoomRepository { get; }
     ISupplierRepository SupplierRepository { get; }

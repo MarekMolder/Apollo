@@ -26,9 +26,9 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.1"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1"/>
-        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="9.0.1" />
-        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="9.0.0" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.1" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="8.1.1" />
     </ItemGroup>
 
@@ -174,6 +174,16 @@
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\ProductInStorageRooms\Details.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\ProductInStorageRooms\Edit.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\ProductInStorageRooms\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockAudits\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockAudits\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockAudits\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockAudits\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockAudits\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockMovements\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockMovements\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockMovements\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockMovements\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockMovements\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -217,16 +227,6 @@
       <AdditionalFiles Include="Areas\Admin\Views\Reasons\Details.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Reasons\Edit.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Reasons\Index.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockAudits\Create.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockAudits\Delete.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockAudits\Details.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockAudits\Edit.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockAudits\Index.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockMovements\Create.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockMovements\Delete.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockMovements\Details.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockMovements\Edit.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StockMovements\Index.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\StorageRoomInInventories\Create.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\StorageRoomInInventories\Delete.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\StorageRoomInInventories\Details.cshtml" />
@@ -277,16 +277,6 @@
       <AdditionalFiles Include="Views\Reasons\Details.cshtml" />
       <AdditionalFiles Include="Views\Reasons\Edit.cshtml" />
       <AdditionalFiles Include="Views\Reasons\Index.cshtml" />
-      <AdditionalFiles Include="Views\StockAudits\Create.cshtml" />
-      <AdditionalFiles Include="Views\StockAudits\Delete.cshtml" />
-      <AdditionalFiles Include="Views\StockAudits\Details.cshtml" />
-      <AdditionalFiles Include="Views\StockAudits\Edit.cshtml" />
-      <AdditionalFiles Include="Views\StockAudits\Index.cshtml" />
-      <AdditionalFiles Include="Views\StockMovements\Create.cshtml" />
-      <AdditionalFiles Include="Views\StockMovements\Delete.cshtml" />
-      <AdditionalFiles Include="Views\StockMovements\Details.cshtml" />
-      <AdditionalFiles Include="Views\StockMovements\Edit.cshtml" />
-      <AdditionalFiles Include="Views\StockMovements\Index.cshtml" />
       <AdditionalFiles Include="Views\StorageRoomInInventories\Create.cshtml" />
       <AdditionalFiles Include="Views\StorageRoomInInventories\Delete.cshtml" />
       <AdditionalFiles Include="Views\StorageRoomInInventories\Details.cshtml" />

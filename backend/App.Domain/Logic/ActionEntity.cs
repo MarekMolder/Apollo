@@ -27,10 +27,6 @@ public class ActionEntity : BaseEntityUser<AppUser>
     
     public Product? Product { get; set; }
     
-    public Guid? StockAuditId { get; set; }
-    
-    public StockAudit? StockAudit { get; set; }
-    
     public Guid StorageRoomId { get; set; }
 
     public StorageRoom? StorageRoom { get; set; }

@@ -16,7 +16,6 @@ public class ActionEntityAPIMapper : IMapper<App.DTO.v1.ActionEntity, App.BLL.DT
             ReasonId = entity.ReasonId,
             SupplierId = entity.SupplierId,
             ProductId = entity.ProductId,
-            StockAuditId = entity.StockAuditId,
             StorageRoomId = entity.StorageRoomId,
         };
         return res;
@@ -34,7 +33,6 @@ public class ActionEntityAPIMapper : IMapper<App.DTO.v1.ActionEntity, App.BLL.DT
             ReasonId = entity.ReasonId,
             SupplierId = entity.SupplierId,
             ProductId = entity.ProductId,
-            StockAuditId = entity.StockAuditId,
             StorageRoomId = entity.StorageRoomId,
         };
         return res;
@@ -51,7 +49,6 @@ public class ActionEntityAPIMapper : IMapper<App.DTO.v1.ActionEntity, App.BLL.DT
             ReasonId = entity.ReasonId,
             SupplierId = entity.SupplierId,
             ProductId = entity.ProductId,
-            StockAuditId = entity.StockAuditId,
             StorageRoomId = entity.StorageRoomId,
         };
         return res;

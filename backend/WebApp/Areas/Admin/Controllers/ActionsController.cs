@@ -25,7 +25,7 @@ namespace WebApp.Areas_Admin_Controllers
         // GET: Actions
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Actions.Include(a => a.ActionType).Include(a => a.Product).Include(a => a.Reason).Include(a => a.StockAudit).Include(a => a.Supplier).Include(a => a.User);
+            var appDbContext = _context.Actions.Include(a => a.ActionType).Include(a => a.Product).Include(a => a.Reason).Include(a => a.Supplier).Include(a => a.User);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -41,7 +41,6 @@ namespace WebApp.Areas_Admin_Controllers
                 .Include(a => a.ActionType)
                 .Include(a => a.Product)
                 .Include(a => a.Reason)
-                .Include(a => a.StockAudit)
                 .Include(c => c.StorageRoom)
                 .Include(a => a.Supplier)
                 .Include(a => a.User)
@@ -60,7 +59,6 @@ namespace WebApp.Areas_Admin_Controllers
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "CreatedBy");
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Code");
             ViewData["ReasonId"] = new SelectList(_context.Reasons, "Id", "CreatedBy");
-            ViewData["StockAuditId"] = new SelectList(_context.StockAudits, "Id", "CreatedBy");
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "CreatedBy");
             ViewData["StorageRoomId"] = new SelectList(_context.StorageRooms, "Id", "CreatedBy");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName");
@@ -84,7 +82,6 @@ namespace WebApp.Areas_Admin_Controllers
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "CreatedBy", actionEntity.ActionTypeId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Code", actionEntity.ProductId);
             ViewData["ReasonId"] = new SelectList(_context.Reasons, "Id", "CreatedBy", actionEntity.ReasonId);
-            ViewData["StockAuditId"] = new SelectList(_context.StockAudits, "Id", "CreatedBy", actionEntity.StockAuditId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "CreatedBy", actionEntity.SupplierId);
             ViewData["StorageRoomId"] = new SelectList(_context.StorageRooms, "Id", "CreatedBy", actionEntity.StorageRoomId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", actionEntity.UserId);
@@ -107,7 +104,6 @@ namespace WebApp.Areas_Admin_Controllers
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "CreatedBy", actionEntity.ActionTypeId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Code", actionEntity.ProductId);
             ViewData["ReasonId"] = new SelectList(_context.Reasons, "Id", "CreatedBy", actionEntity.ReasonId);
-            ViewData["StockAuditId"] = new SelectList(_context.StockAudits, "Id", "CreatedBy", actionEntity.StockAuditId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "CreatedBy", actionEntity.SupplierId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", actionEntity.UserId);
             ViewData["StorageRoomId"] = new SelectList(_context.StorageRooms, "Id", "CreatedBy", actionEntity.StorageRoomId);
@@ -149,7 +145,6 @@ namespace WebApp.Areas_Admin_Controllers
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "CreatedBy", actionEntity.ActionTypeId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Code", actionEntity.ProductId);
             ViewData["ReasonId"] = new SelectList(_context.Reasons, "Id", "CreatedBy", actionEntity.ReasonId);
-            ViewData["StockAuditId"] = new SelectList(_context.StockAudits, "Id", "CreatedBy", actionEntity.StockAuditId);
             ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "CreatedBy", actionEntity.SupplierId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", actionEntity.UserId);
             ViewData["StorageRoomId"] = new SelectList(_context.StorageRooms, "Id", "CreatedBy", actionEntity.StorageRoomId);
@@ -168,7 +163,6 @@ namespace WebApp.Areas_Admin_Controllers
                 .Include(a => a.ActionType)
                 .Include(a => a.Product)
                 .Include(a => a.Reason)
-                .Include(a => a.StockAudit)
                 .Include(a => a.Supplier)
                 .Include(a => a.User)
                 .Include(c => c.StorageRoom)

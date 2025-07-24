@@ -6,7 +6,6 @@ namespace App.DAL.EF.Mappers;
 
 public class StorageRoomUOWMapper: IMapper<App.DAL.DTO.StorageRoom, App.Domain.Logic.StorageRoom>
 {
-    private readonly StockAuditUOWMapper _stockAuditUOWMapper = new();
     private readonly StorageRoomInInventoryUOWMapper _storageRoomInInventoryUOWMapper = new();
     private readonly CurrentStockUOWMapper _currentStockUOWMapper = new();
     private readonly ActionEntityUOWMapper _actionEntityUOWMapper = new();
@@ -20,8 +19,6 @@ public class StorageRoomUOWMapper: IMapper<App.DAL.DTO.StorageRoom, App.Domain.L
             Name = entity.Name,
             Location = entity.Location,
             EndedAt = entity.EndedAt,
-            
-            StockAudits = entity.StockAudits?.Select(t => _stockAuditUOWMapper.Map(t)).ToList()!,
             
             StorageRoomInInventories = entity.StorageRoomInInventories?.Select(t => _storageRoomInInventoryUOWMapper.Map(t)).ToList()!,
             
@@ -43,8 +40,6 @@ public class StorageRoomUOWMapper: IMapper<App.DAL.DTO.StorageRoom, App.Domain.L
             Name = entity.Name,
             Location = entity.Location,
             EndedAt = entity.EndedAt,
-            
-            StockAudits = entity.StockAudits?.Select(t => _stockAuditUOWMapper.Map(t)).ToList()!,
             
             StorageRoomInInventories = entity.StorageRoomInInventories?.Select(t => _storageRoomInInventoryUOWMapper.Map(t)).ToList()!,
             

@@ -84,7 +84,6 @@ const filteredData = computed(() => {
             <th>{{ $t('Reason') }}</th>
             <th>{{ $t('Supplier') }}</th>
             <th>{{ $t('Product') }}</th>
-            <th>Stock&nbsp;Audit</th>
             <th>{{ $t('StorageRoom') }}</th>
             <th class="text-center" colspan="2">{{ $t('Actions') }}</th>
           </tr>
@@ -98,7 +97,6 @@ const filteredData = computed(() => {
             <td class="reason-cell">{{ item.reasonDescription }}</td>
             <td>{{ item.supplierName }}</td>
             <td>{{ item.productName }}</td>
-            <td>{{ item.stockAuditId }}</td>
             <td>{{ item.storageRoomName }}</td>
             <td class="action-buttons">
               <button @click="updateStatus(item.id, 'Accepted')" class="btn-success" :aria-label="$t('Accept')">

@@ -7,7 +7,6 @@ namespace App.BLL.Mappers;
 public class PersonBLLMapper : IMapper<App.BLL.DTO.Person, App.DAL.DTO.Person>
 {
     private readonly ActionEntityBLLMapper _actionEntityBLLMapper = new();
-    private readonly StockAuditBLLMapper _stockAuditBLLMapper = new();
     
     public Person? Map(DTO.Person? entity)
     {
@@ -18,7 +17,6 @@ public class PersonBLLMapper : IMapper<App.BLL.DTO.Person, App.DAL.DTO.Person>
             Id = entity.Id,
             PersonName = entity.PersonName,
             Actions = entity.Actions?.Select(t => _actionEntityBLLMapper.Map(t)).ToList()!,
-            StockAudits = entity.StockAudits?.Select(t => _stockAuditBLLMapper.Map(t)).ToList()!,
         };
         return res;    
     }
@@ -31,7 +29,6 @@ public class PersonBLLMapper : IMapper<App.BLL.DTO.Person, App.DAL.DTO.Person>
             Id = entity.Id,
             PersonName = entity.PersonName,
             Actions = entity.Actions?.Select(t => _actionEntityBLLMapper.Map(t)).ToList()!,
-            StockAudits = entity.StockAudits?.Select(t => _stockAuditBLLMapper.Map(t)).ToList()!,
         };
         return res;
         

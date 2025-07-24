@@ -11,7 +11,6 @@ export interface IActionEnriched extends IDomainId {
   supplierName: string | null;
   productId: string;
   productName: string;
-  stockAuditId: string | null;
   storageRoomId: string;
   storageRoomName: string;
 }
