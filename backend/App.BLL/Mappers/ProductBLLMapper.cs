@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class ProductBLLMapper : IMapper<App.BLL.DTO.Product, App.DAL.DTO.Product>
+public class ProductBLLMapper : IMapper<App.BLL.DTO.Product, Product>
 {
     private readonly ActionEntityBLLMapper _actionEntityBLLMapper = new();
     private readonly CurrentStockBLLMapper _currentStockBLLMapper = new();

@@ -1,8 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Base.Contracts;
 
 namespace Base.Domain;
-
-using Base.Contracts;
 
 public abstract class BaseEntity : BaseEntity<Guid>, IDomainId
 {

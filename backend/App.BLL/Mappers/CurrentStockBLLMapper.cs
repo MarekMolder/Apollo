@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class CurrentStockBLLMapper : IMapper<App.BLL.DTO.CurrentStock, App.DAL.DTO.CurrentStock>
+public class CurrentStockBLLMapper : IMapper<App.BLL.DTO.CurrentStock, CurrentStock>
 {
     public CurrentStock? Map(DTO.CurrentStock? entity)
     {

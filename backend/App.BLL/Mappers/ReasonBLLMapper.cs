@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class ReasonBLLMapper : IMapper<App.BLL.DTO.Reason, App.DAL.DTO.Reason>
+public class ReasonBLLMapper : IMapper<App.BLL.DTO.Reason, Reason>
 {
     private readonly ActionEntityBLLMapper _actionEntityBLLMapper = new();
     public Reason? Map(DTO.Reason? entity)

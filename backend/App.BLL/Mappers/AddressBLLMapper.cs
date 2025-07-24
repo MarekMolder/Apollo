@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class AddressBLLMapper : IMapper<App.BLL.DTO.Address, App.DAL.DTO.Address>
+public class AddressBLLMapper : IMapper<App.BLL.DTO.Address, Address>
 {
     private readonly InventoryBLLMapper _inventoryBllMapper = new();
     private readonly SupplierBLLMapper _supplierBllMapper = new();

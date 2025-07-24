@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class PersonBLLMapper : IMapper<App.BLL.DTO.Person, App.DAL.DTO.Person>
+public class PersonBLLMapper : IMapper<App.BLL.DTO.Person, Person>
 {
     private readonly ActionEntityBLLMapper _actionEntityBLLMapper = new();
     

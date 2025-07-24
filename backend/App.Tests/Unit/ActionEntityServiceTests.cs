@@ -11,8 +11,8 @@ public class ActionEntityServiceTests
     private readonly Mock<IActionEntityRepository> _mockActionRepo;
     private readonly Mock<ICurrentStockRepository> _mockStockRepo;
     private readonly Mock<IMapper<App.BLL.DTO.ActionEntity, App.DAL.DTO.ActionEntity>> _mockMapperBll;
-    private readonly Mock<IMapper<App.DAL.DTO.ActionEntity, App.Domain.Logic.ActionEntity>> _mockMapperDomain;
-    private readonly Mock<IMapper<App.DAL.DTO.CurrentStock, App.Domain.Logic.CurrentStock>> _mockStockMapper;
+    private readonly Mock<IMapper<App.DAL.DTO.ActionEntity, Domain.Logic.ActionEntity>> _mockMapperDomain;
+    private readonly Mock<IMapper<App.DAL.DTO.CurrentStock, Domain.Logic.CurrentStock>> _mockStockMapper;
 
     private readonly ActionEntityService _service;
 
@@ -22,8 +22,8 @@ public class ActionEntityServiceTests
         _mockActionRepo = new Mock<IActionEntityRepository>();
         _mockStockRepo = new Mock<ICurrentStockRepository>();
         _mockMapperBll = new Mock<IMapper<App.BLL.DTO.ActionEntity, App.DAL.DTO.ActionEntity>>();
-        _mockMapperDomain = new Mock<IMapper<App.DAL.DTO.ActionEntity, App.Domain.Logic.ActionEntity>>();
-        _mockStockMapper = new Mock<IMapper<App.DAL.DTO.CurrentStock, App.Domain.Logic.CurrentStock>>();
+        _mockMapperDomain = new Mock<IMapper<App.DAL.DTO.ActionEntity, Domain.Logic.ActionEntity>>();
+        _mockStockMapper = new Mock<IMapper<App.DAL.DTO.CurrentStock, Domain.Logic.CurrentStock>>();
 
         _mockUow.SetupGet(x => x.ActionEntityRepository).Returns(_mockActionRepo.Object);
         _mockUow.SetupGet(x => x.CurrentStockRepository).Returns(_mockStockRepo.Object);
@@ -41,7 +41,7 @@ public class ActionEntityServiceTests
     {
         // Arrange
         var fakeId = Guid.NewGuid();
-        _mockActionRepo.Setup(r => r.FindAsync(fakeId)).ReturnsAsync((App.Domain.Logic.ActionEntity?)null);
+        _mockActionRepo.Setup(r => r.FindAsync(fakeId)).ReturnsAsync((Domain.Logic.ActionEntity?)null);
 
         // Act
         var result = await _service.UpdateStatusAsync(fakeId, "Accepted");
@@ -55,7 +55,7 @@ public class ActionEntityServiceTests
     {
         // Arrange
         var fakeId = Guid.NewGuid();
-        var fakeAction = new App.Domain.Logic.ActionEntity { Id = fakeId };
+        var fakeAction = new Domain.Logic.ActionEntity { Id = fakeId };
 
         _mockActionRepo.Setup(r => r.FindAsync(fakeId)).ReturnsAsync(fakeAction);
 
@@ -74,7 +74,7 @@ public class ActionEntityServiceTests
 
         var actionType = new App.BLL.DTO.ActionTypeEntity()
         {
-            Code = App.BLL.DTO.Enums.ActionTypeEnum.Add
+            Code = BLL.DTO.Enums.ActionTypeEnum.Add
         };
 
         var bllAction = new App.BLL.DTO.ActionEntity
@@ -88,7 +88,7 @@ public class ActionEntityServiceTests
 
         var dalAction = new App.DAL.DTO.ActionEntity();
 
-        var fakeAction = new App.Domain.Logic.ActionEntity
+        var fakeAction = new Domain.Logic.ActionEntity
         {
             Id = fakeId,
             ProductId = productId,
@@ -102,7 +102,7 @@ public class ActionEntityServiceTests
         _mockMapperDomain.Setup(m => m.Map(fakeAction)).Returns(dalAction);
         _mockMapperBll.Setup(m => m.Map(dalAction)).Returns(bllAction);
 
-        _mockStockRepo.Setup(r => r.FindByProductAndStorageAsync(productId, storageId)).ReturnsAsync((App.Domain.Logic.CurrentStock?)null);
+        _mockStockRepo.Setup(r => r.FindByProductAndStorageAsync(productId, storageId)).ReturnsAsync((Domain.Logic.CurrentStock?)null);
 
         App.DAL.DTO.CurrentStock? createdStock = null;
         _mockStockRepo
@@ -131,7 +131,7 @@ public class ActionEntityServiceTests
 
         var actionType = new App.BLL.DTO.ActionTypeEntity()
         {
-            Code = App.BLL.DTO.Enums.ActionTypeEnum.Remove
+            Code = BLL.DTO.Enums.ActionTypeEnum.Remove
         };
 
         var bllAction = new App.BLL.DTO.ActionEntity
@@ -145,7 +145,7 @@ public class ActionEntityServiceTests
 
         var dalAction = new App.DAL.DTO.ActionEntity();
 
-        var fakeAction = new App.Domain.Logic.ActionEntity
+        var fakeAction = new Domain.Logic.ActionEntity
         {
             Id = fakeId,
             ProductId = productId,
@@ -159,7 +159,7 @@ public class ActionEntityServiceTests
         _mockMapperDomain.Setup(m => m.Map(fakeAction)).Returns(dalAction);
         _mockMapperBll.Setup(m => m.Map(dalAction)).Returns(bllAction);
         
-        var currentStock = new App.Domain.Logic.CurrentStock
+        var currentStock = new Domain.Logic.CurrentStock
         {
             ProductId = productId,
             StorageRoomId = storageId,
@@ -205,7 +205,7 @@ public class ActionEntityServiceTests
 
         var actionType = new App.BLL.DTO.ActionTypeEntity()
         {
-            Code = App.BLL.DTO.Enums.ActionTypeEnum.Add
+            Code = BLL.DTO.Enums.ActionTypeEnum.Add
         };
 
         var bllAction = new App.BLL.DTO.ActionEntity
@@ -219,7 +219,7 @@ public class ActionEntityServiceTests
 
         var dalAction = new App.DAL.DTO.ActionEntity();
 
-        var fakeAction = new App.Domain.Logic.ActionEntity
+        var fakeAction = new Domain.Logic.ActionEntity
         {
             Id = fakeId,
             ProductId = productId,
@@ -267,7 +267,7 @@ public class ActionEntityServiceTests
 
         var dalAction = new App.DAL.DTO.ActionEntity();
 
-        var fakeAction = new App.Domain.Logic.ActionEntity
+        var fakeAction = new Domain.Logic.ActionEntity
         {
             Id = fakeId,
             ProductId = productId,
@@ -282,7 +282,7 @@ public class ActionEntityServiceTests
         _mockMapperBll.Setup(m => m.Map(dalAction)).Returns(bllAction);
 
         _mockStockRepo.Setup(r => r.FindByProductAndStorageAsync(productId, storageId))
-            .ReturnsAsync(new App.Domain.Logic.CurrentStock());
+            .ReturnsAsync(new Domain.Logic.CurrentStock());
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() =>

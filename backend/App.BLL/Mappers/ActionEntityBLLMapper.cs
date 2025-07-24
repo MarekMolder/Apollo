@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class ActionEntityBLLMapper : IMapper<App.BLL.DTO.ActionEntity, App.DAL.DTO.ActionEntity>
+public class ActionEntityBLLMapper : IMapper<App.BLL.DTO.ActionEntity, ActionEntity>
 {
     
     public ActionEntity? Map(DTO.ActionEntity? entity)

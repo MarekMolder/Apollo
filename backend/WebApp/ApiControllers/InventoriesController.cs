@@ -2,7 +2,7 @@ using System.Security.Claims;
 using App.BLL.Contracts;
 using App.DTO.v1;
 using App.DTO.v1.ApiEntities;
-using App.DTO.v1.ApiMappers;
+using App.DTO.v1.ApiMapper;
 using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
