@@ -1,20 +1,15 @@
 ﻿using App.DAL.DTO;
-using App.Resources.Domain;
 using Base.Contracts;
-using Base.DAL.Contracts;
-using Product = App.DAL.DTO.Product;
-using Reason = App.DAL.DTO.Reason;
-using Supplier = App.DAL.DTO.Supplier;
 
 namespace App.DAL.EF.Mappers;
 
-public class ActionEntityUOWMapper : IMapper<App.DAL.DTO.ActionEntity, App.Domain.Logic.ActionEntity>
+public class ActionEntityUOWMapper : IMapper<ActionEntity, Domain.Logic.ActionEntity>
 {
     public ActionEntity? Map(Domain.Logic.ActionEntity? entity)
     {
         if (entity == null) return null;
 
-        var res = new ActionEntity()
+        var res = new ActionEntity
         {
             Id = entity.Id,
             Quantity = entity.Quantity,
@@ -43,7 +38,7 @@ public class ActionEntityUOWMapper : IMapper<App.DAL.DTO.ActionEntity, App.Domai
     {
         if (entity == null) return null;
 
-        var res = new Domain.Logic.ActionEntity()
+        var res = new Domain.Logic.ActionEntity
         {
             Id = entity.Id,
             Quantity = entity.Quantity,
@@ -71,7 +66,7 @@ public class ActionEntityUOWMapper : IMapper<App.DAL.DTO.ActionEntity, App.Domai
     {
         if (entity == null) return null;
 
-        return new ActionEntity()
+        return new ActionEntity
         {
             Id = entity.Id,
             Quantity = entity.Quantity,
@@ -88,7 +83,7 @@ public class ActionEntityUOWMapper : IMapper<App.DAL.DTO.ActionEntity, App.Domai
     {
         if (entity == null) return null;
 
-        return new Domain.Logic.ActionEntity()
+        return new Domain.Logic.ActionEntity
         {
             Id = entity.Id,
             Quantity = entity.Quantity,

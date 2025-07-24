@@ -2,7 +2,7 @@
 
 namespace App.BLL.Contracts;
 
-public interface IStorageRoomInInventoryService : IBaseService<App.BLL.DTO.StorageRoomInInventory>
+public interface IStorageRoomInInventoryService : IBaseService<DTO.StorageRoomInInventory>
 {
     
 }

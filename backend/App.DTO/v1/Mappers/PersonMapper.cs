@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class PersonMapper: IMapper<App.DTO.v1.Person, App.BLL.DTO.Person>
+public class PersonMapper: IMapper<Person, BLL.DTO.Person>
 {
-    public App.DTO.v1.Person? Map(BLL.DTO.Person? entity)
+    public Person? Map(BLL.DTO.Person? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.Person()
+        var res = new Person
         {
             Id = entity.Id,
             PersonName = entity.PersonName
@@ -15,10 +15,10 @@ public class PersonMapper: IMapper<App.DTO.v1.Person, App.BLL.DTO.Person>
         return res;
     }
 
-    public App.BLL.DTO.Person? Map(App.DTO.v1.Person? entity)
+    public BLL.DTO.Person? Map(Person? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.Person()
+        var res = new BLL.DTO.Person
         {
             Id = entity.Id,
             PersonName = entity.PersonName
@@ -26,9 +26,9 @@ public class PersonMapper: IMapper<App.DTO.v1.Person, App.BLL.DTO.Person>
         return res;
     }
     
-    public App.BLL.DTO.Person Map(App.DTO.v1.PersonCreate entity)
+    public BLL.DTO.Person Map(PersonCreate entity)
     {
-        var res = new App.BLL.DTO.Person()
+        var res = new BLL.DTO.Person
         {
             Id = Guid.NewGuid(),
             PersonName = entity.PersonName

@@ -2,7 +2,6 @@
 using App.BLL.Mappers;
 using App.BLL.Services;
 using App.DAL.Contracts;
-using App.DAL.EF;
 using App.DAL.EF.Mappers;
 using Base.BLL;
 

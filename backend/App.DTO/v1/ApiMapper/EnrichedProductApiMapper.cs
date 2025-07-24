@@ -3,9 +3,9 @@ using Base.Contracts;
 
 namespace App.DTO.v1.ApiMappers;
 
-public class EnrichedProductApiMapper : IMapper<ApiEntities.EnrichedProduct, App.BLL.DTO.Product>
+public class EnrichedProductApiMapper : IMapper<EnrichedProduct, BLL.DTO.Product>
 {
-    public EnrichedProduct? Map(App.BLL.DTO.Product? entity)
+    public EnrichedProduct? Map(BLL.DTO.Product? entity)
     {
         if (entity == null) return null;
 
@@ -23,7 +23,7 @@ public class EnrichedProductApiMapper : IMapper<ApiEntities.EnrichedProduct, App
         };
     }
 
-    public App.BLL.DTO.Product? Map(EnrichedProduct? entity)
+    public BLL.DTO.Product? Map(EnrichedProduct? entity)
     {
         throw new NotImplementedException("Mapping from API to BLL is not required.");
     }

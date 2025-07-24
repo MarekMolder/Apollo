@@ -1,16 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using App.BLL.Contracts;
-using App.DAL.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using App.DAL.EF;
-using App.DAL.DTO;
+using App.BLL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using IAppBLL = App.BLL.Contracts.IAppBLL;
 
 namespace WebApp.Controllers
@@ -61,7 +52,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(App.BLL.DTO.Address address)
+        public async Task<IActionResult> Create(Address address)
         {
             if (ModelState.IsValid)
             {
@@ -96,7 +87,7 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, App.BLL.DTO.Address address)
+        public async Task<IActionResult> Edit(Guid id, Address address)
         {
             if (id != address.Id)
             {

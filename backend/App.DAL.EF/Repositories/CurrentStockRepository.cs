@@ -1,24 +1,23 @@
-﻿using System.Linq.Expressions;
-using App.DAL.Contracts;
+﻿using App.DAL.Contracts;
+using App.DAL.DTO;
 using App.DAL.EF.Mappers;
-using App.Domain.Logic;
 using Base.DAL.EF;
 using Microsoft.EntityFrameworkCore;
 
 namespace App.DAL.EF.Repositories;
 
-public class CurrentStockRepository: BaseRepository<App.DAL.DTO.CurrentStock, App.Domain.Logic.CurrentStock>, ICurrentStockRepository
+public class CurrentStockRepository: BaseRepository<CurrentStock, Domain.Logic.CurrentStock>, ICurrentStockRepository
 {
     public CurrentStockRepository(DbContext repositoryDbContext) : base(repositoryDbContext, new CurrentStockUOWMapper())
     {
     }
-    public async Task<CurrentStock?> FindByProductAndStorageAsync(Guid productId, Guid storageRoomId)
+    public async Task<Domain.Logic.CurrentStock?> FindByProductAndStorageAsync(Guid productId, Guid storageRoomId)
     {
         return await RepositoryDbSet
             .FirstOrDefaultAsync(c => c.ProductId == productId && c.StorageRoomId == storageRoomId);
     }
     
-    public async Task<IEnumerable<App.DAL.DTO.CurrentStock?>> GetByStorageRoomIdAsync(Guid storageRoomId)
+    public async Task<IEnumerable<CurrentStock?>> GetByStorageRoomIdAsync(Guid storageRoomId)
     {
         var domainEntities = await RepositoryDbSet
             .Include(x => x.Product)
@@ -36,9 +35,9 @@ public class CurrentStockRepository: BaseRepository<App.DAL.DTO.CurrentStock, Ap
             .Take(count)
             .Select(cs => new
             {
-                ProductId = cs.ProductId,
+                cs.ProductId,
                 ProductName = cs.Product!.Name,
-                Quantity = cs.Quantity
+                cs.Quantity
             })
             .ToListAsync();
 

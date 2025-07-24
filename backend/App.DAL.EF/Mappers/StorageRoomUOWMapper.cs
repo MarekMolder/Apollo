@@ -1,10 +1,9 @@
 ﻿using App.DAL.DTO;
 using Base.Contracts;
-using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class StorageRoomUOWMapper: IMapper<App.DAL.DTO.StorageRoom, App.Domain.Logic.StorageRoom>
+public class StorageRoomUOWMapper: IMapper<StorageRoom, Domain.Logic.StorageRoom>
 {
     private readonly StorageRoomInInventoryUOWMapper _storageRoomInInventoryUOWMapper = new();
     private readonly CurrentStockUOWMapper _currentStockUOWMapper = new();
@@ -13,7 +12,7 @@ public class StorageRoomUOWMapper: IMapper<App.DAL.DTO.StorageRoom, App.Domain.L
     {
         if (entity == null) return null;
         
-        var res = new StorageRoom()
+        var res = new StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -34,7 +33,7 @@ public class StorageRoomUOWMapper: IMapper<App.DAL.DTO.StorageRoom, App.Domain.L
     {
                 if (entity == null) return null;
         
-        var res = new Domain.Logic.StorageRoom()
+        var res = new Domain.Logic.StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -54,7 +53,7 @@ public class StorageRoomUOWMapper: IMapper<App.DAL.DTO.StorageRoom, App.Domain.L
     {
         if (entity == null) return null;
 
-        return new StorageRoom()
+        return new StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -66,7 +65,7 @@ public class StorageRoomUOWMapper: IMapper<App.DAL.DTO.StorageRoom, App.Domain.L
     {
         if (entity == null) return null;
 
-        return new Domain.Logic.StorageRoom()
+        return new Domain.Logic.StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,

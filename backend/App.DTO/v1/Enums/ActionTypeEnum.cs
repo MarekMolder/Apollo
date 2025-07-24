@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace App.DTO.v1.Enums;
+﻿namespace App.DTO.v1.Enums;
 
 public enum ActionTypeEnum
 {

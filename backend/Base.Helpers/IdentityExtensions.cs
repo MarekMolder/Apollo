@@ -14,7 +14,7 @@ public static class IdentityExtensions
         return userId;
     }
 
-    private static readonly JwtSecurityTokenHandler JWTSecurityTokenHandler = new JwtSecurityTokenHandler();
+    private static readonly JwtSecurityTokenHandler JWTSecurityTokenHandler = new();
 
     public static string GenerateJwt(
         IEnumerable<Claim> claims,

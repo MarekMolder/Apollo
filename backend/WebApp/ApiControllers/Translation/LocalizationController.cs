@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Collections;
+﻿using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
 using Asp.Versioning;
-using Microsoft.Extensions.Logging;
+using Base.Resources;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers.Translation;
 
@@ -80,7 +80,7 @@ public class LocalizationController : ControllerBase
         if (resource.Equals("common", StringComparison.OrdinalIgnoreCase) ||
             resource.StartsWith("Base", StringComparison.OrdinalIgnoreCase))
         {
-            return ("Base.Resources.common", typeof(Base.Resources.ResourceAnchor).Assembly);
+            return ("Base.Resources.common", typeof(ResourceAnchor).Assembly);
         }
 
         return ($"App.Resources.Domain.{resource}", typeof(App.Resources.ResourceAnchor).Assembly);

@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ActionTypeEntity = App.DTO.v1.ActionTypeEntity;
 
 namespace WebApp.ApiControllers
@@ -24,8 +19,7 @@ namespace WebApp.ApiControllers
         private readonly ILogger<ActionTypesController> _logger;
         private readonly IAppBLL _bll;
         
-        private readonly App.DTO.v1.Mappers.ActionTypeEntityAPIMapper _mapper =
-            new App.DTO.v1.Mappers.ActionTypeEntityAPIMapper();
+        private readonly ActionTypeEntityAPIMapper _mapper = new();
 
         public ActionTypesController(IAppBLL bll, ILogger<ActionTypesController> logger)
         {
@@ -39,9 +33,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
-        [ProducesResponseType( typeof( IEnumerable<App.DTO.v1.ActionTypeEntity> ), 200 )]
+        [ProducesResponseType( typeof( IEnumerable<ActionTypeEntity> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.ActionTypeEntity>>> GetActions()
+        public async Task<ActionResult<IEnumerable<ActionTypeEntity>>> GetActions()
         {
             return (await _bll.ActionTypeEntityService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
         }
@@ -52,7 +46,7 @@ namespace WebApp.ApiControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.DTO.v1.ActionTypeEntity>> GetActionEntity(Guid id)
+        public async Task<ActionResult<ActionTypeEntity>> GetActionEntity(Guid id)
         {
             var actionTypeEntity = await _bll.ActionTypeEntityService.FindAsync(id);
 
@@ -71,7 +65,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, App.DTO.v1.ActionTypeEntity actionTypeEntity)
+        public async Task<IActionResult> PutActionEntity(Guid id, ActionTypeEntity actionTypeEntity)
         {
             if (id != actionTypeEntity.Id)
             {
@@ -90,7 +84,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<App.DTO.v1.ActionTypeEntity>> PostActionEntity(App.DTO.v1.ActionTypeEntity actionTypeEntity)
+        public async Task<ActionResult<ActionTypeEntity>> PostActionEntity(ActionTypeEntity actionTypeEntity)
         {
             var bllEntity = _mapper.Map(actionTypeEntity);
             _bll.ActionTypeEntityService.Add(bllEntity);

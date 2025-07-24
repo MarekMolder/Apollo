@@ -22,7 +22,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         {
             options.SwaggerDoc(
                 description.GroupName,
-                new OpenApiInfo()
+                new OpenApiInfo
                 {
                     Title = $"API {description.ApiVersion}",
                     Version = description.ApiVersion.ToString(),
@@ -31,7 +31,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
             );
         }
 
-        // use fqn for dto descriptoins
+        // use fqn for dto descriptions
         options.CustomSchemaIds(t => t.FullName);
 
 
@@ -40,7 +40,7 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
         options.IncludeXmlComments(xmlPath);
 
-        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+        options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
         {
             Description =
                 "foo bar",
@@ -50,12 +50,12 @@ public class ConfigureSwaggerOptions : IConfigureOptions<SwaggerGenOptions>
             Scheme = "Bearer"
         });
 
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
         {
             {
-                new OpenApiSecurityScheme()
+                new OpenApiSecurityScheme
                 {
-                    Reference = new OpenApiReference()
+                    Reference = new OpenApiReference
                     {
                         Type = ReferenceType.SecurityScheme,
                         Id = "Bearer"

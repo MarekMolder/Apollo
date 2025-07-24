@@ -1,9 +1,9 @@
-﻿using App.Domain.Logic;
+﻿using App.DAL.DTO;
 using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IProductCategoryRepository: IBaseRepository<App.DAL.DTO.ProductCategory>
+public interface IProductCategoryRepository: IBaseRepository<ProductCategory>
 {
     
 }

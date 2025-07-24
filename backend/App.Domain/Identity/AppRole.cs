@@ -1,5 +1,4 @@
 ﻿using Base.Domain.Identity;
-using Microsoft.AspNetCore.Identity;
 
 namespace App.Domain.Identity;
 

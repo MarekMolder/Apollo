@@ -1,22 +1,19 @@
 ﻿using App.BLL.Contracts;
-using App.BLL.Mappers;
+using App.BLL.DTO;
 using App.DAL.Contracts;
-using App.DAL.DTO;
 using Base.BLL;
-using Base.BLL.Contracts;
 using Base.Contracts;
-using Base.DAL.Contracts;
 
 namespace App.BLL.Services;
 
-public class InventoryService : BaseService<App.BLL.DTO.Inventory, App.DAL.DTO.Inventory, App.DAL.Contracts.IInventoryRepository>, IInventoryService
+public class InventoryService : BaseService<Inventory, DAL.DTO.Inventory, IInventoryRepository>, IInventoryService
 {
-    private readonly IMapper<DTO.Inventory, Inventory> _dalToBLLMapper;
-    public InventoryService(IAppUOW serviceUow, IMapper<DTO.Inventory, Inventory> mapper) : base(serviceUow, serviceUow.InventoryRepository, mapper)
+    private readonly IMapper<Inventory, DAL.DTO.Inventory> _dalToBLLMapper;
+    public InventoryService(IAppUOW serviceUow, IMapper<Inventory, DAL.DTO.Inventory> mapper) : base(serviceUow, serviceUow.InventoryRepository, mapper)
     {
         _dalToBLLMapper = mapper;
     }
-    public async Task<IEnumerable<App.BLL.DTO.Inventory?>> GetEnrichedInventories()
+    public async Task<IEnumerable<Inventory?>> GetEnrichedInventories()
     {
         var res = await ServiceRepository.GetEnrichedInventories();
         return res.Select(u => _dalToBLLMapper.Map(u));

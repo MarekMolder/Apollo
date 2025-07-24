@@ -1,10 +1,8 @@
-using App.BLL.Contracts;
-using App.DAL.Contracts;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using App.DAL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApp.ViewModels;
 using IAppBLL = App.BLL.Contracts.IAppBLL;
 
@@ -49,7 +47,7 @@ namespace WebApp.Controllers
         // GET: Actions/Create
         public async Task<IActionResult> Create()
         {
-            var vm = new ActionEntityCreateEditViewModel()
+            var vm = new ActionEntityCreateEditViewModel
             {
                 ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(User.GetUserId()),
                     nameof(ActionTypeEntity.Id),
@@ -122,7 +120,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             
-            var vm = new ActionEntityCreateEditViewModel()
+            var vm = new ActionEntityCreateEditViewModel
             {
                 ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(User.GetUserId()),
                     nameof(ActionTypeEntity.Id),

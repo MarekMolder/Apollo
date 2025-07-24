@@ -1,15 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
+using App.DTO.v1;
+using App.DTO.v1.ApiEntities;
 using App.DTO.v1.ApiMappers;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers;
 
@@ -23,7 +21,7 @@ public class InventoriesController : ControllerBase
     private readonly ILogger<InventoriesController> _logger;
     private readonly IAppBLL _bll;
 
-    private readonly App.DTO.v1.Mappers.InventoryAPIMapper _mapper = new();
+    private readonly InventoryAPIMapper _mapper = new();
     private readonly EnrichedInventoryApiMapper _enrichedMapper = new();
 
     public InventoriesController(IAppBLL bll, ILogger<InventoriesController> logger)
@@ -55,8 +53,8 @@ public class InventoriesController : ControllerBase
     // ----------------------------------------------------------------
     [HttpGet]
     [Produces("application/json")]
-    [ProducesResponseType(typeof(IEnumerable<App.DTO.v1.Inventory>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<App.DTO.v1.Inventory>>> GetInventories()
+    [ProducesResponseType(typeof(IEnumerable<Inventory>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<Inventory>>> GetInventories()
     {
         var userRoles = GetCurrentUserRoles();
 
@@ -76,8 +74,8 @@ public class InventoriesController : ControllerBase
     //  GET /inventories/enrichedInventories
     // ----------------------------------------------------------------
     [HttpGet("enrichedInventories")]
-    [ProducesResponseType(typeof(IEnumerable<App.DTO.v1.ApiEntities.EnrichedInventory>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<App.DTO.v1.ApiEntities.EnrichedInventory>>> GetEnrichedInventories()
+    [ProducesResponseType(typeof(IEnumerable<EnrichedInventory>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<EnrichedInventory>>> GetEnrichedInventories()
     {
         var userRoles = GetCurrentUserRoles();
 
@@ -97,7 +95,7 @@ public class InventoriesController : ControllerBase
     //  Ülejäänud meetodid jäid samaks (lühendatud)
     // ----------------------------------------------------------------
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<App.DTO.v1.Inventory>> GetInventory(Guid id)
+    public async Task<ActionResult<Inventory>> GetInventory(Guid id)
     {
         var inv = await _bll.InventoryService.FindAsync(id);
         if (inv == null) return NotFound();
@@ -110,7 +108,7 @@ public class InventoriesController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> PutInventory(Guid id, App.DTO.v1.Inventory dto)
+    public async Task<IActionResult> PutInventory(Guid id, Inventory dto)
     {
         if (id != dto.Id) return BadRequest();
         await _bll.InventoryService.UpdateAsync(_mapper.Map(dto)!);
@@ -119,7 +117,7 @@ public class InventoriesController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<App.DTO.v1.Inventory>> PostInventory(App.DTO.v1.Inventory dto)
+    public async Task<ActionResult<Inventory>> PostInventory(Inventory dto)
     {
         var bllEntity = _mapper.Map(dto);
         _bll.InventoryService.Add(bllEntity);

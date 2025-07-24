@@ -75,5 +75,5 @@ public class LangStr : Dictionary<string, string>
     public static implicit operator string(LangStr? langStr) => langStr?.ToString() ?? "null";
 
     // LangStr xxx = "foobar";
-    public static implicit operator LangStr(string value) => new LangStr(value);
+    public static implicit operator LangStr(string value) => new(value);
 }

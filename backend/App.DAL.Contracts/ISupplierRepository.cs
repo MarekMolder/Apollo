@@ -1,9 +1,9 @@
-﻿using App.Domain.Logic;
+﻿using App.DAL.DTO;
 using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface ISupplierRepository: IBaseRepository<App.DAL.DTO.Supplier>
+public interface ISupplierRepository: IBaseRepository<Supplier>
 {
-    Task<IEnumerable<App.DAL.DTO.Supplier?>> GetEnrichedSuppliers();
+    Task<IEnumerable<Supplier?>> GetEnrichedSuppliers();
 }

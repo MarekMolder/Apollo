@@ -2,7 +2,7 @@
 
 namespace App.BLL.Contracts;
 
-public interface IPersonService: IBaseService<App.BLL.DTO.Person>
+public interface IPersonService: IBaseService<DTO.Person>
 {
     
 }

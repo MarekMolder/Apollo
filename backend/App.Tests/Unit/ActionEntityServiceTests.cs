@@ -1,12 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using App.BLL.Services;
-using App.BLL.DTO;
-using App.BLL.DTO.Enums;
+﻿using App.BLL.Services;
 using App.DAL.Contracts;
 using Base.Contracts;
 using Moq;
-using Xunit;
 
 namespace App.Tests.Unit;
 

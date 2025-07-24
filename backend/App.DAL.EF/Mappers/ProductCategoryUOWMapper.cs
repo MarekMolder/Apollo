@@ -1,17 +1,16 @@
 ﻿using App.DAL.DTO;
 using Base.Contracts;
-using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class ProductCategoryUOWMapper: IMapper<App.DAL.DTO.ProductCategory, App.Domain.Logic.ProductCategory>
+public class ProductCategoryUOWMapper: IMapper<ProductCategory, Domain.Logic.ProductCategory>
 {
     private readonly ProductUOWMapper _productUOWMapper = new();
     public ProductCategory? Map(Domain.Logic.ProductCategory? entity)
     {
         if (entity == null) return null;
         
-        var res = new ProductCategory()
+        var res = new ProductCategory
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -28,7 +27,7 @@ public class ProductCategoryUOWMapper: IMapper<App.DAL.DTO.ProductCategory, App.
     {
         if (entity == null) return null;
         
-        var res = new Domain.Logic.ProductCategory()
+        var res = new Domain.Logic.ProductCategory
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -42,7 +41,7 @@ public class ProductCategoryUOWMapper: IMapper<App.DAL.DTO.ProductCategory, App.
     {
         if (entity == null) return null;
 
-        return new ProductCategory()
+        return new ProductCategory
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -54,7 +53,7 @@ public class ProductCategoryUOWMapper: IMapper<App.DAL.DTO.ProductCategory, App.
     {
         if (entity == null) return null;
 
-        return new Domain.Logic.ProductCategory()
+        return new Domain.Logic.ProductCategory
         {
             Id = entity.Id,
             Name = entity.Name,

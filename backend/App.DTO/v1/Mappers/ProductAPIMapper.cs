@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class ProductAPIMapper : IMapper<App.DTO.v1.Product, App.BLL.DTO.Product>
+public class ProductAPIMapper : IMapper<Product, BLL.DTO.Product>
 {
-    public App.DTO.v1.Product? Map(App.BLL.DTO.Product? entity)
+    public Product? Map(BLL.DTO.Product? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.Product()
+        var res = new Product
         {
             Id = entity.Id,
             Unit = entity.Unit,
@@ -21,10 +21,10 @@ public class ProductAPIMapper : IMapper<App.DTO.v1.Product, App.BLL.DTO.Product>
         return res;
     }
 
-    public App.BLL.DTO.Product? Map(App.DTO.v1.Product? entity)
+    public BLL.DTO.Product? Map(Product? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.Product()
+        var res = new BLL.DTO.Product
         {
             Id = entity.Id,
             Unit = entity.Unit,
@@ -38,9 +38,9 @@ public class ProductAPIMapper : IMapper<App.DTO.v1.Product, App.BLL.DTO.Product>
         return res;
     }
     
-    public App.BLL.DTO.Product Map(App.DTO.v1.ProductCreate entity)
+    public BLL.DTO.Product Map(ProductCreate entity)
     {
-        var res = new App.BLL.DTO.Product()
+        var res = new BLL.DTO.Product
         {
             Id = Guid.NewGuid(),
             Unit = entity.Unit,

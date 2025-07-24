@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Http.Json;
 using App.DTO.v1.Identity;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Xunit.Extensions.Ordering;
 
 namespace App.Tests.Integration.Api;
 

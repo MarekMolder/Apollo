@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using App.Domain;
 using App.Domain.Identity;
 using App.Domain.Logic;
 using Base.Contracts;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Logging;
-using Action = System.Action;
 
 namespace App.DAL.EF;
 
@@ -86,7 +84,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
                 ));
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
     {
         var addedEntries = ChangeTracker.Entries()
             .Where(e => e is { Entity: IDomainMeta });

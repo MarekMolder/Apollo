@@ -1,6 +1,5 @@
 using App.BLL.DTO;
 
-
 namespace WebApp.ViewModels;
 
 public class PersonIndexViewModel

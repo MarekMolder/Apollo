@@ -2,7 +2,7 @@
 
 namespace App.BLL.Contracts;
 
-public interface IStorageRoomService : IBaseService<App.BLL.DTO.StorageRoom>
+public interface IStorageRoomService : IBaseService<DTO.StorageRoom>
 {
-    Task<IEnumerable<App.BLL.DTO.StorageRoom>> GetAllByInventoryIdAsync(Guid inventoryId);
+    Task<IEnumerable<DTO.StorageRoom>> GetAllByInventoryIdAsync(Guid inventoryId);
 }

@@ -2,7 +2,7 @@
 
 namespace App.BLL.Contracts;
 
-public interface IInventoryService : IBaseService<App.BLL.DTO.Inventory>
+public interface IInventoryService : IBaseService<DTO.Inventory>
 {
-    Task<IEnumerable<App.BLL.DTO.Inventory?>> GetEnrichedInventories();
+    Task<IEnumerable<DTO.Inventory?>> GetEnrichedInventories();
 }

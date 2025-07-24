@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using App.DTO.v1;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
@@ -23,8 +19,7 @@ namespace WebApp.ApiControllers
         private readonly ILogger<StorageRoomsController> _logger;
         private readonly IAppBLL _bll;
         
-        private readonly App.DTO.v1.Mappers.StorageRoomAPIMapper _mapper =
-            new App.DTO.v1.Mappers.StorageRoomAPIMapper();
+        private readonly StorageRoomAPIMapper _mapper = new();
 
         public StorageRoomsController(IAppBLL bll, ILogger<StorageRoomsController> logger)
         {
@@ -38,9 +33,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
-        [ProducesResponseType( typeof( IEnumerable<App.DTO.v1.StorageRoom> ), 200 )]
+        [ProducesResponseType( typeof( IEnumerable<StorageRoom> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.StorageRoom>>> GetActions()
+        public async Task<ActionResult<IEnumerable<StorageRoom>>> GetActions()
         {
             return (await _bll.StorageRoomService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
         }
@@ -51,7 +46,7 @@ namespace WebApp.ApiControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.DTO.v1.StorageRoom>> GetActionEntity(Guid id)
+        public async Task<ActionResult<StorageRoom>> GetActionEntity(Guid id)
         {
             var storageRoom = await _bll.StorageRoomService.FindAsync(id);
 
@@ -70,7 +65,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, App.DTO.v1.StorageRoom storageRoom)
+        public async Task<IActionResult> PutActionEntity(Guid id, StorageRoom storageRoom)
         {
             if (id != storageRoom.Id)
             {
@@ -89,7 +84,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<App.DTO.v1.StorageRoom>> PostActionEntity(App.DTO.v1.StorageRoom storageRoom)
+        public async Task<ActionResult<StorageRoom>> PostActionEntity(StorageRoom storageRoom)
         {
             var bllEntity = _mapper.Map(storageRoom);
             _bll.StorageRoomService.Add(bllEntity);
@@ -122,9 +117,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of storage rooms</returns>
         [HttpGet("inventory/{inventoryId}")]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(IEnumerable<App.DTO.v1.StorageRoom>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<StorageRoom>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.StorageRoom>>> GetByInventory(Guid inventoryId)
+        public async Task<ActionResult<IEnumerable<StorageRoom>>> GetByInventory(Guid inventoryId)
         {
             var result = await _bll.StorageRoomService.GetAllByInventoryIdAsync(inventoryId);
     
@@ -134,10 +129,10 @@ namespace WebApp.ApiControllers
         }
         
         [HttpGet("byinventory/{inventoryId:guid}")]
-        [ProducesResponseType(typeof(IEnumerable<App.DTO.v1.StorageRoom>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<StorageRoom>), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.StorageRoom>>> GetByInventory2(Guid inventoryId)
+        public async Task<ActionResult<IEnumerable<StorageRoom>>> GetByInventory2(Guid inventoryId)
         {
             // 1) leia inventar
             var inv = await _bll.InventoryService.FindAsync(inventoryId);

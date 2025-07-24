@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Base.Domain;
+﻿using Base.Domain;
 
 namespace App.Domain.Logic;
 

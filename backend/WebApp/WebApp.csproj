@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <UserSecretsId>aspnet-StockManagement-c1fb5ad4-12be-4a03-a0d6-03cda11a4b57</UserSecretsId>
         <RootNamespace>WebApp</RootNamespace>
+        <NoWarn>CS1591</NoWarn>
     </PropertyGroup>
 
     <PropertyGroup>

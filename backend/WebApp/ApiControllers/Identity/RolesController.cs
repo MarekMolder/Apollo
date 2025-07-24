@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
-using App.DAL.EF;
+﻿using App.DAL.EF;
 using App.Domain.Identity;
 using App.DTO.v1.Identity;
 using Asp.Versioning;

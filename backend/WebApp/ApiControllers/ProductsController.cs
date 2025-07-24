@@ -1,15 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
+using App.DTO.v1;
+using App.DTO.v1.ApiEntities;
 using App.DTO.v1.ApiMappers;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
@@ -23,8 +20,7 @@ namespace WebApp.ApiControllers
         private readonly ILogger<ProductsController> _logger;
         private readonly IAppBLL _bll;
         
-        private readonly App.DTO.v1.Mappers.ProductAPIMapper _mapper =
-            new App.DTO.v1.Mappers.ProductAPIMapper();
+        private readonly ProductAPIMapper _mapper = new();
         
         private readonly EnrichedProductApiMapper _enrichedProductApiMapper = new();
 
@@ -40,9 +36,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
-        [ProducesResponseType( typeof( IEnumerable<App.DTO.v1.Product> ), 200 )]
+        [ProducesResponseType( typeof( IEnumerable<Product> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.Product>>> GetActions()
+        public async Task<ActionResult<IEnumerable<Product>>> GetActions()
         {
             return (await _bll.ProductService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
         }
@@ -53,7 +49,7 @@ namespace WebApp.ApiControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.DTO.v1.Product>> GetActionEntity(Guid id)
+        public async Task<ActionResult<Product>> GetActionEntity(Guid id)
         {
             var product = await _bll.ProductService.FindAsync(id);
 
@@ -72,7 +68,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, App.DTO.v1.Product product)
+        public async Task<IActionResult> PutActionEntity(Guid id, Product product)
         {
             if (id != product.Id)
             {
@@ -91,7 +87,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<App.DTO.v1.Product>> PostActionEntity(App.DTO.v1.Product product)
+        public async Task<ActionResult<Product>> PostActionEntity(Product product)
         {
             var bllEntity = _mapper.Map(product);
             _bll.ProductService.Add(bllEntity);
@@ -118,8 +114,8 @@ namespace WebApp.ApiControllers
         }
         
         [HttpGet("enrichedProducts/")]
-        [ProducesResponseType(typeof(IEnumerable<App.DTO.v1.ApiEntities.EnrichedProduct>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.ApiEntities.EnrichedProduct>>> GetEnrichedProduct()
+        [ProducesResponseType(typeof(IEnumerable<EnrichedProduct>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrichedProduct>>> GetEnrichedProduct()
         {
             var data = await _bll.ProductService.GetEnrichedProducts();
 

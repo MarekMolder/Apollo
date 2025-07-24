@@ -1,16 +1,15 @@
 ﻿using App.DAL.DTO;
 using Base.Contracts;
-using Base.DAL.Contracts;
 
 namespace App.DAL.EF.Mappers;
 
-public class StorageRoomInInventoryUOWMapper: IMapper<App.DAL.DTO.StorageRoomInInventory, App.Domain.Logic.StorageRoomInInventory>
+public class StorageRoomInInventoryUOWMapper: IMapper<StorageRoomInInventory, Domain.Logic.StorageRoomInInventory>
 {
     public StorageRoomInInventory? Map(Domain.Logic.StorageRoomInInventory? entity)
     {
         if (entity == null) return null;
         
-        var res = new StorageRoomInInventory()
+        var res = new StorageRoomInInventory
         {
             Id = entity.Id,
             EndedAt = entity.EndedAt, 
@@ -29,7 +28,7 @@ public class StorageRoomInInventoryUOWMapper: IMapper<App.DAL.DTO.StorageRoomInI
     {
         if (entity == null) return null;
         
-        var res = new Domain.Logic.StorageRoomInInventory()
+        var res = new Domain.Logic.StorageRoomInInventory
         {
             Id = entity.Id,
             EndedAt = entity.EndedAt, 

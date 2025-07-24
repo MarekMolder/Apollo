@@ -1,9 +1,9 @@
-﻿using App.Domain.Logic;
+﻿using App.DAL.DTO;
 using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IAddressRepository: IBaseRepository<App.DAL.DTO.Address>
+public interface IAddressRepository: IBaseRepository<Address>
 {
     
 }

@@ -2,7 +2,7 @@
 
 namespace App.BLL.Contracts;
 
-public interface IAddressService : IBaseService<App.BLL.DTO.Address>
+public interface IAddressService : IBaseService<DTO.Address>
 {
     
 }

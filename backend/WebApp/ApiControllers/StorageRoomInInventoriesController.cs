@@ -1,14 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using App.BLL.Contracts;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using App.DTO.v1;
+using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
@@ -22,8 +18,7 @@ namespace WebApp.ApiControllers
         private readonly ILogger<StorageRoomInInventoriesController> _logger;
         private readonly IAppBLL _bll;
         
-        private readonly App.DTO.v1.Mappers.StorageRoomInInventoryAPIMapper _mapper =
-            new App.DTO.v1.Mappers.StorageRoomInInventoryAPIMapper();
+        private readonly StorageRoomInInventoryAPIMapper _mapper = new();
 
         public StorageRoomInInventoriesController(IAppBLL bll, ILogger<StorageRoomInInventoriesController> logger)
         {
@@ -37,9 +32,9 @@ namespace WebApp.ApiControllers
         /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
-        [ProducesResponseType( typeof( IEnumerable<App.DTO.v1.StorageRoomInInventory> ), 200 )]
+        [ProducesResponseType( typeof( IEnumerable<StorageRoomInInventory> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<App.DTO.v1.StorageRoomInInventory>>> GetActions()
+        public async Task<ActionResult<IEnumerable<StorageRoomInInventory>>> GetActions()
         {
             return (await _bll.StorageRoomInInventoryService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
         }
@@ -50,7 +45,7 @@ namespace WebApp.ApiControllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<App.DTO.v1.StorageRoomInInventory>> GetActionEntity(Guid id)
+        public async Task<ActionResult<StorageRoomInInventory>> GetActionEntity(Guid id)
         {
             var storageRoomInInventory = await _bll.StorageRoomInInventoryService.FindAsync(id);
 
@@ -69,7 +64,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, App.DTO.v1.StorageRoomInInventory storageRoomInInventory)
+        public async Task<IActionResult> PutActionEntity(Guid id, StorageRoomInInventory storageRoomInInventory)
         {
             if (id != storageRoomInInventory.Id)
             {
@@ -88,7 +83,7 @@ namespace WebApp.ApiControllers
         /// <param name="person"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<App.DTO.v1.StorageRoomInInventory>> PostActionEntity(App.DTO.v1.StorageRoomInInventory storageRoomInInventory)
+        public async Task<ActionResult<StorageRoomInInventory>> PostActionEntity(StorageRoomInInventory storageRoomInInventory)
         {
             var bllEntity = _mapper.Map(storageRoomInInventory);
             _bll.StorageRoomInInventoryService.Add(bllEntity);

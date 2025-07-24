@@ -2,12 +2,12 @@
 
 namespace App.DTO.v1.Mappers;
 
-public class CurrentStockAPIMapper : IMapper<App.DTO.v1.CurrentStock, App.BLL.DTO.CurrentStock>
+public class CurrentStockAPIMapper : IMapper<CurrentStock, BLL.DTO.CurrentStock>
 {
-    public App.DTO.v1.CurrentStock? Map(App.BLL.DTO.CurrentStock? entity)
+    public CurrentStock? Map(BLL.DTO.CurrentStock? entity)
     {
         if (entity == null) return null;
-        var res = new App.DTO.v1.CurrentStock()
+        var res = new CurrentStock
         {
             Id = entity.Id,
             Quantity = entity.Quantity,
@@ -18,10 +18,10 @@ public class CurrentStockAPIMapper : IMapper<App.DTO.v1.CurrentStock, App.BLL.DT
         return res;
     }
 
-    public App.BLL.DTO.CurrentStock? Map(App.DTO.v1.CurrentStock? entity)
+    public BLL.DTO.CurrentStock? Map(CurrentStock? entity)
     {
         if (entity == null) return null;
-        var res = new App.BLL.DTO.CurrentStock()
+        var res = new BLL.DTO.CurrentStock
         {
             Id = entity.Id,
             Quantity = entity.Quantity,
@@ -32,9 +32,9 @@ public class CurrentStockAPIMapper : IMapper<App.DTO.v1.CurrentStock, App.BLL.DT
         return res;
     }
     
-    public App.BLL.DTO.CurrentStock Map(App.DTO.v1.CurrentStockCreate entity)
+    public BLL.DTO.CurrentStock Map(CurrentStockCreate entity)
     {
-        var res = new App.BLL.DTO.CurrentStock()
+        var res = new BLL.DTO.CurrentStock
         {
             Id = Guid.NewGuid(),
             Quantity = entity.Quantity,

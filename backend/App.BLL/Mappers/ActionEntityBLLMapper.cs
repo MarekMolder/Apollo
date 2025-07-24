@@ -1,7 +1,5 @@
 ﻿using App.DAL.DTO;
-using Base.BLL.Contracts;
 using Base.Contracts;
-using ActionTypeEntity = App.BLL.DTO.ActionTypeEntity;
 
 namespace App.BLL.Mappers;
 

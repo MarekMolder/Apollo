@@ -3,9 +3,9 @@ using Base.Contracts;
 
 namespace App.DTO.v1.ApiMappers;
 
-public class EnrichedCurrentStockApiMapper : IMapper<ApiEntities.EnrichedCurrentStock, App.BLL.DTO.CurrentStock>
+public class EnrichedCurrentStockApiMapper : IMapper<EnrichedCurrentStock, BLL.DTO.CurrentStock>
 {
-    public EnrichedCurrentStock? Map(App.BLL.DTO.CurrentStock? entity)
+    public EnrichedCurrentStock? Map(BLL.DTO.CurrentStock? entity)
     {
         if (entity == null) return null;
 
@@ -21,7 +21,7 @@ public class EnrichedCurrentStockApiMapper : IMapper<ApiEntities.EnrichedCurrent
         };
     }
 
-    public App.BLL.DTO.CurrentStock? Map(EnrichedCurrentStock? entity)
+    public BLL.DTO.CurrentStock? Map(EnrichedCurrentStock? entity)
     {
         throw new NotImplementedException("Mapping from API to BLL is not required.");
     }

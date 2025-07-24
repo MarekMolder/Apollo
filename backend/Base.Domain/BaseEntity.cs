@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Base.Contracts;
 
 namespace Base.Domain;
 
