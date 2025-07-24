@@ -14,7 +14,7 @@ public class ActionTypeEntity : IDomainId
     
     public DateTime? EndedAt { get; set; }
     
-    public App.BLL.DTO.Enums.ActionTypeEnum Code { get; set; }
+    public Enums.ActionTypeEnum Code { get; set; }
     
     
     public ICollection<ActionEntity>? Actions { get; set; }

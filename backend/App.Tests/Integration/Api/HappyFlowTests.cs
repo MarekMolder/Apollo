@@ -78,8 +78,8 @@ public class HappyFlowTests : IClassFixture<CustomWebApplicationFactory<Program>
         Assert.NotNull(createdStorage);
 
         // 5. Create ActionType (Add + Remove)
-        var actionTypeAdd = new ActionTypeEntity { Id = Guid.NewGuid(), Code = App.DTO.v1.Enums.ActionTypeEnum.Add, Name = "Add" };
-        var actionTypeRemove = new ActionTypeEntity { Id = Guid.NewGuid(), Code = App.DTO.v1.Enums.ActionTypeEnum.Remove, Name = "Remove" };
+        var actionTypeAdd = new ActionTypeEntity { Id = Guid.NewGuid(), Code = DTO.v1.Enums.ActionTypeEnum.Add, Name = "Add" };
+        var actionTypeRemove = new ActionTypeEntity { Id = Guid.NewGuid(), Code = DTO.v1.Enums.ActionTypeEnum.Remove, Name = "Remove" };
 
         await _client.PostAsJsonAsync("/api/v1/actiontypes", actionTypeAdd);
         await _client.PostAsJsonAsync("/api/v1/actiontypes", actionTypeRemove);
@@ -87,8 +87,8 @@ public class HappyFlowTests : IClassFixture<CustomWebApplicationFactory<Program>
         // 6. Get created ActionTypeIds
         var typesResp = await _client.GetAsync("/api/v1/actiontypes");
         var types = await typesResp.Content.ReadFromJsonAsync<List<ActionTypeEntity>>();
-        var addTypeId = types!.First(x => x.Code == App.DTO.v1.Enums.ActionTypeEnum.Add).Id;
-        var removeTypeId = types!.First(x => x.Code == App.DTO.v1.Enums.ActionTypeEnum.Remove).Id;
+        var addTypeId = types!.First(x => x.Code == DTO.v1.Enums.ActionTypeEnum.Add).Id;
+        var removeTypeId = types!.First(x => x.Code == DTO.v1.Enums.ActionTypeEnum.Remove).Id;
         Assert.NotEqual(Guid.Empty, addTypeId);
         Assert.NotEqual(Guid.Empty, removeTypeId);
         

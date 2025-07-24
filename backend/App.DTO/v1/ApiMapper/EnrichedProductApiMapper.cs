@@ -1,7 +1,7 @@
 ﻿using App.DTO.v1.ApiEntities;
 using Base.Contracts;
 
-namespace App.DTO.v1.ApiMappers;
+namespace App.DTO.v1.ApiMapper;
 
 public class EnrichedProductApiMapper : IMapper<EnrichedProduct, BLL.DTO.Product>
 {

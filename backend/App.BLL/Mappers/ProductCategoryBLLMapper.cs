@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class ProductCategoryBLLMapper : IMapper<App.BLL.DTO.ProductCategory, App.DAL.DTO.ProductCategory>
+public class ProductCategoryBLLMapper : IMapper<App.BLL.DTO.ProductCategory, ProductCategory>
 {
     private readonly ProductBLLMapper _productBLLMapper = new();
     public ProductCategory? Map(DTO.ProductCategory? entity)

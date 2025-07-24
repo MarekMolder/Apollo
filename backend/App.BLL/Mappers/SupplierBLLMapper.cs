@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class SupplierBLLMapper : IMapper<App.BLL.DTO.Supplier, App.DAL.DTO.Supplier>
+public class SupplierBLLMapper : IMapper<App.BLL.DTO.Supplier, Supplier>
 {
     private readonly ActionEntityBLLMapper _actionEntityBLLMapper = new();
     public Supplier? Map(DTO.Supplier? entity)

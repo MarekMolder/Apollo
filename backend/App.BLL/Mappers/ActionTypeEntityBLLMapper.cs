@@ -3,14 +3,14 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class ActionTypeEntityBLLMapper : IMapper<App.BLL.DTO.ActionTypeEntity, App.DAL.DTO.ActionTypeEntity>
+public class ActionTypeEntityBLLMapper : IMapper<App.BLL.DTO.ActionTypeEntity, ActionTypeEntity>
 {
     private readonly ActionEntityBLLMapper _actionEntityBLLMapper = new();
-    public App.DAL.DTO.ActionTypeEntity? Map(BLL.DTO.ActionTypeEntity? entity)
+    public ActionTypeEntity? Map(BLL.DTO.ActionTypeEntity? entity)
     {
         if (entity == null) return null;
         
-        var res = new App.DAL.DTO.ActionTypeEntity()
+        var res = new ActionTypeEntity()
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -21,7 +21,7 @@ public class ActionTypeEntityBLLMapper : IMapper<App.BLL.DTO.ActionTypeEntity, A
         return res;
     }
 
-    public BLL.DTO.ActionTypeEntity? Map(App.DAL.DTO.ActionTypeEntity? entity)
+    public BLL.DTO.ActionTypeEntity? Map(ActionTypeEntity? entity)
     {
         if (entity == null) return null;
         
@@ -30,13 +30,13 @@ public class ActionTypeEntityBLLMapper : IMapper<App.BLL.DTO.ActionTypeEntity, A
             Id = entity.Id,
             Name = entity.Name,
             EndedAt = entity.EndedAt,
-            Code = (App.BLL.DTO.Enums.ActionTypeEnum)(int)entity.Code,
+            Code = (DTO.Enums.ActionTypeEnum)(int)entity.Code,
             Actions = entity.Actions?.Select(t => _actionEntityBLLMapper.Map(t)).ToList()!
         };
         return res;
     }
     
-    public static App.DAL.DTO.ActionTypeEntity? MapSimple(BLL.DTO.ActionTypeEntity? entity)
+    public static ActionTypeEntity? MapSimple(BLL.DTO.ActionTypeEntity? entity)
     {
         if (entity == null) return null;
 
@@ -49,7 +49,7 @@ public class ActionTypeEntityBLLMapper : IMapper<App.BLL.DTO.ActionTypeEntity, A
         };
     }
     
-    public static DTO.ActionTypeEntity? MapSimple(App.DAL.DTO.ActionTypeEntity? entity)
+    public static DTO.ActionTypeEntity? MapSimple(ActionTypeEntity? entity)
     {
         if (entity == null) return null;
 
@@ -58,7 +58,7 @@ public class ActionTypeEntityBLLMapper : IMapper<App.BLL.DTO.ActionTypeEntity, A
             Id = entity.Id,
             Name = entity.Name,
             EndedAt = entity.EndedAt,
-            Code = (App.BLL.DTO.Enums.ActionTypeEnum)(int)entity.Code
+            Code = (DTO.Enums.ActionTypeEnum)(int)entity.Code
         };
     }
     

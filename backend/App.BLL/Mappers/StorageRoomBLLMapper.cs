@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.BLL.Mappers;
 
-public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, App.DAL.DTO.StorageRoom>
+public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, StorageRoom>
 {
     private readonly StorageRoomInInventoryBLLMapper _storageRoomInInventoryBllMapper = new();
     private readonly CurrentStockBLLMapper _currentStockBLLMapper = new();
