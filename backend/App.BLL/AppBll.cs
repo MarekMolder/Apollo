@@ -56,8 +56,4 @@ public class AppBll: BaseBll<IAppUOW>, IAppBLL
     private ISupplierService? _supplierService;
     public  ISupplierService SupplierService => 
         _supplierService ??= new SupplierService(BLLUOW, new SupplierBLLMapper());
-    
-    private IPersonService? _personService;
-    public  IPersonService PersonService => 
-        _personService ??= new PersonService(BLLUOW, new PersonBLLMapper());
 }

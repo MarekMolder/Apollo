@@ -56,8 +56,4 @@ public class AppUOW : BaseUOW<AppDbContext>, IAppUOW
     private ISupplierRepository? _supplierRepository;
     public  ISupplierRepository SupplierRepository => 
         _supplierRepository ??= new SupplierRepository(UOWDbContext);
-    
-    private IPersonRepository? _personRepository;
-    public IPersonRepository PersonRepository =>
-        _personRepository ??= new PersonRepository(UOWDbContext);
 }

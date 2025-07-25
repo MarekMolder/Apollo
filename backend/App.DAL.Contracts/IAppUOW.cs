@@ -15,6 +15,4 @@ public interface IAppUOW : IBaseUOW
     IStorageRoomInInventoryRepository StorageRoomInInventoryRepository { get; }
     IStorageRoomRepository StorageRoomRepository { get; }
     ISupplierRepository SupplierRepository { get; }
-    IPersonRepository PersonRepository { get; }
-    
 }

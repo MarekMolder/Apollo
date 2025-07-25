@@ -185,6 +185,11 @@
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockMovements\Details.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockMovements\Edit.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\StockMovements\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Persons\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Persons\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Persons\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Persons\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Persons\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

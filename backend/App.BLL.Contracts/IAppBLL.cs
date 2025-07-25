@@ -15,5 +15,4 @@ public interface IAppBLL : IBaseBLL
     IStorageRoomInInventoryService StorageRoomInInventoryService { get; }
     IStorageRoomService StorageRoomService { get; }
     ISupplierService SupplierService { get; }
-    IPersonService PersonService { get; }
 }
