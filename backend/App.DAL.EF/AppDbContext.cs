@@ -17,12 +17,10 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
     public DbSet<ActionTypeEntity> ActionTypes { get; set; }
     public DbSet<Address> Addresses { get; set; }
     public DbSet<CurrentStock> CurrentStocks { get; set; }
-    public DbSet<Inventory> Inventories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<Reason> Reasons { get; set; }
     public DbSet<StorageRoom> StorageRooms { get; set; }
-    public DbSet<StorageRoomInInventory> StorageRoomInInventories { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     
     public DbSet<Person> Persons { get; set; }
@@ -70,7 +68,7 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
             .WithMany(r => r.UserRoles)
             .HasForeignKey(a => a.RoleId);
         
-        modelBuilder.Entity<Inventory>()
+        modelBuilder.Entity<StorageRoom>()
             .Property(i => i.AllowedRoles)
             .HasConversion(
                 v => JsonSerializer.Serialize(v, (JsonSerializerOptions?)null),

@@ -14,7 +14,7 @@ import type { ISupplier } from '@/domain/logic/ISupplier';
 import type { IActionType } from '@/domain/logic/IActionType';
 import { useUserDataStore } from '@/stores/userDataStore';
 import type {IStorageRoom} from "@/domain/logic/IStorageRoom.ts";
-import {InventoryService} from "@/services/mvcServices/InventoryService.ts";
+import type {IStorageRoomEnriched} from "@/domain/logic/IStorageRoomEnriched.ts";
 
 const actionService = new ActionService();
 const actionTypeService = new ActionTypeService();
@@ -22,7 +22,6 @@ const reasonService = new ReasonService();
 const supplierService = new SupplierService();
 const productService = new ProductService();
 const storageRoomService = new StorageRoomService();
-const inventoryService   = new InventoryService();
 
 const store = useUserDataStore();
 
@@ -48,18 +47,13 @@ const actionTypes = ref<IActionType[]>([]);
 const reasons = ref<IReason[]>([]);
 const products = ref<IProduct[]>([]);
 const suppliers = ref<ISupplier[]>([]);
-const storageRooms = ref<IStorageRoom[]>([]);
+const storageRooms = ref<IStorageRoomEnriched[]>([]);
 
 onMounted(async () => {
-  const invRes = await inventoryService.getEnrichedInventories();
-  const visibleInventories = invRes.data ?? [];
+  const invRes = await storageRoomService.getEnrichedStorageRooms();
+  const visibleStorageRooms = invRes.data ?? [];
 
-  const rooms: IStorageRoom[] = [];
-  for (const inv of visibleInventories) {
-    const res = await storageRoomService.getByInventoryId(inv.id);
-    rooms.push(...(res.data ?? []));
-  }
-  storageRooms.value = rooms;
+  storageRooms.value = visibleStorageRooms;
 
   actionTypes.value = (await actionTypeService.getAllAsync()).data || [];
   reasons.value = (await reasonService.getAllAsync()).data || [];

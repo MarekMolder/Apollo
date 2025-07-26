@@ -10,20 +10,14 @@ public class StorageRoom : IDomainId
     [MaxLength(128)]
     public string Name { get; set; } = default!;
     
+    public Guid AddressId { get; set; }
+    public Address? Address { get; set; }
     
-    [MaxLength(255)]
-    public string Location { get; set; } = default!;
-    
+    public List<string>? AllowedRoles { get; set; }
     
     public DateTime? EndedAt { get; set; }
     
-    
-    public ICollection<StorageRoomInInventory>? StorageRoomInInventories { get; set; }
-    
-    
     public ICollection<CurrentStock>? CurrentStocks { get; set; }
-    
-    
     
     public ICollection<ActionEntity>? Actions { get; set; }
 }

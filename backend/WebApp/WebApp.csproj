@@ -190,6 +190,16 @@
       <_ContentIncludedByDefault Remove="Views\Persons\Details.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Persons\Edit.cshtml" />
       <_ContentIncludedByDefault Remove="Views\Persons\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StorageRoomInInventories\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StorageRoomInInventories\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StorageRoomInInventories\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StorageRoomInInventories\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\StorageRoomInInventories\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Inventories\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Inventories\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Inventories\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Inventories\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Inventories\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>
@@ -213,11 +223,6 @@
       <AdditionalFiles Include="Areas\Admin\Views\CurrentStocks\Details.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\CurrentStocks\Edit.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\CurrentStocks\Index.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\Inventories\Create.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\Inventories\Delete.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\Inventories\Details.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\Inventories\Edit.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\Inventories\Index.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\ProductCategories\Create.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\ProductCategories\Delete.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\ProductCategories\Details.cshtml" />
@@ -233,11 +238,6 @@
       <AdditionalFiles Include="Areas\Admin\Views\Reasons\Details.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Reasons\Edit.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\Reasons\Index.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StorageRoomInInventories\Create.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StorageRoomInInventories\Delete.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StorageRoomInInventories\Details.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StorageRoomInInventories\Edit.cshtml" />
-      <AdditionalFiles Include="Areas\Admin\Views\StorageRoomInInventories\Index.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\StorageRooms\Create.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\StorageRooms\Delete.cshtml" />
       <AdditionalFiles Include="Areas\Admin\Views\StorageRooms\Details.cshtml" />
@@ -263,11 +263,6 @@
       <AdditionalFiles Include="Views\CurrentStocks\Details.cshtml" />
       <AdditionalFiles Include="Views\CurrentStocks\Edit.cshtml" />
       <AdditionalFiles Include="Views\CurrentStocks\Index.cshtml" />
-      <AdditionalFiles Include="Views\Inventories\Create.cshtml" />
-      <AdditionalFiles Include="Views\Inventories\Delete.cshtml" />
-      <AdditionalFiles Include="Views\Inventories\Details.cshtml" />
-      <AdditionalFiles Include="Views\Inventories\Edit.cshtml" />
-      <AdditionalFiles Include="Views\Inventories\Index.cshtml" />
       <AdditionalFiles Include="Views\ProductCategories\Create.cshtml" />
       <AdditionalFiles Include="Views\ProductCategories\Delete.cshtml" />
       <AdditionalFiles Include="Views\ProductCategories\Details.cshtml" />
@@ -283,11 +278,6 @@
       <AdditionalFiles Include="Views\Reasons\Details.cshtml" />
       <AdditionalFiles Include="Views\Reasons\Edit.cshtml" />
       <AdditionalFiles Include="Views\Reasons\Index.cshtml" />
-      <AdditionalFiles Include="Views\StorageRoomInInventories\Create.cshtml" />
-      <AdditionalFiles Include="Views\StorageRoomInInventories\Delete.cshtml" />
-      <AdditionalFiles Include="Views\StorageRoomInInventories\Details.cshtml" />
-      <AdditionalFiles Include="Views\StorageRoomInInventories\Edit.cshtml" />
-      <AdditionalFiles Include="Views\StorageRoomInInventories\Index.cshtml" />
       <AdditionalFiles Include="Views\StorageRooms\Create.cshtml" />
       <AdditionalFiles Include="Views\StorageRooms\Delete.cshtml" />
       <AdditionalFiles Include="Views\StorageRooms\Details.cshtml" />

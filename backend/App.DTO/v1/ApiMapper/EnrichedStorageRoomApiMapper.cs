@@ -3,9 +3,9 @@ using Base.Contracts;
 
 namespace App.DTO.v1.ApiMapper;
 
-public class EnrichedInventoryApiMapper : IMapper<EnrichedInventory, BLL.DTO.Inventory>
+public class EnrichedStorageRoomApiMapper : IMapper<EnrichedStorageRoom, BLL.DTO.StorageRoom>
 {
-    public EnrichedInventory? Map(BLL.DTO.Inventory? entity)
+    public EnrichedStorageRoom? Map(BLL.DTO.StorageRoom? entity)
     {
         if (entity == null) return null;
 
@@ -15,7 +15,7 @@ public class EnrichedInventoryApiMapper : IMapper<EnrichedInventory, BLL.DTO.Inv
             ? $"{(string.IsNullOrWhiteSpace(address.Name) ? "" : address.Name + ", ")}{address.StreetName} {address.BuildingNr}{(address.UnitNr != null ? "-" + address.UnitNr : "")}, {address.PostalCode} {address.City}, {address.Province}, {address.Country}"
             : "Unknown";
 
-        return new EnrichedInventory
+        return new EnrichedStorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
@@ -26,7 +26,7 @@ public class EnrichedInventoryApiMapper : IMapper<EnrichedInventory, BLL.DTO.Inv
         };
     }
 
-    public BLL.DTO.Inventory? Map(EnrichedInventory? entity)
+    public BLL.DTO.StorageRoom? Map(EnrichedStorageRoom? entity)
     {
         throw new NotImplementedException("Mapping from API to BLL is not required.");
     }

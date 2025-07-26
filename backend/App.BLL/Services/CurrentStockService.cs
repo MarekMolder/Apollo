@@ -27,9 +27,9 @@ public class CurrentStockService : BaseService<CurrentStock, DAL.DTO.CurrentStoc
         return _uow.CurrentStockRepository.GetLowestStockProductsAsync(count);
     }
     
-    public Task<decimal> GetTotalInventoryWorthAsync(Guid? inventoryId = null)
+    public Task<decimal> GetTotalStorageRoomWorthAsync(Guid? storageRoomId = null)
     {
-        return _uow.CurrentStockRepository.GetTotalInventoryWorthAsync(inventoryId);
+        return _uow.CurrentStockRepository.GetTotalStorageRoomWorthAsync(storageRoomId);
     }
 
 }

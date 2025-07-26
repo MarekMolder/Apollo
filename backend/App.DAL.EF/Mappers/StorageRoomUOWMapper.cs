@@ -5,7 +5,6 @@ namespace App.DAL.EF.Mappers;
 
 public class StorageRoomUOWMapper: IMapper<StorageRoom, Domain.Logic.StorageRoom>
 {
-    private readonly StorageRoomInInventoryUOWMapper _storageRoomInInventoryUOWMapper = new();
     private readonly CurrentStockUOWMapper _currentStockUOWMapper = new();
     private readonly ActionEntityUOWMapper _actionEntityUOWMapper = new();
     public StorageRoom? Map(Domain.Logic.StorageRoom? entity)
@@ -16,10 +15,11 @@ public class StorageRoomUOWMapper: IMapper<StorageRoom, Domain.Logic.StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
-            Location = entity.Location,
-            EndedAt = entity.EndedAt,
+            AddressId = entity.AddressId,
+            Address = AddressUOWMapper.MapSimple(entity.Address),
             
-            StorageRoomInInventories = entity.StorageRoomInInventories?.Select(t => _storageRoomInInventoryUOWMapper.Map(t)).ToList()!,
+            AllowedRoles = entity.AllowedRoles?.ToList(),
+            EndedAt = entity.EndedAt,
             
             CurrentStocks = entity.CurrentStocks?.Select(t => _currentStockUOWMapper.Map(t)).ToList()!,
             
@@ -37,10 +37,11 @@ public class StorageRoomUOWMapper: IMapper<StorageRoom, Domain.Logic.StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
-            Location = entity.Location,
-            EndedAt = entity.EndedAt,
+            AddressId = entity.AddressId,
+            Address = AddressUOWMapper.MapSimple(entity.Address),
             
-            StorageRoomInInventories = entity.StorageRoomInInventories?.Select(t => _storageRoomInInventoryUOWMapper.Map(t)).ToList()!,
+            AllowedRoles = entity.AllowedRoles?.ToList(),
+            EndedAt = entity.EndedAt,
             
             CurrentStocks = entity.CurrentStocks?.Select(t => _currentStockUOWMapper.Map(t)).ToList()!,
             
@@ -58,6 +59,8 @@ public class StorageRoomUOWMapper: IMapper<StorageRoom, Domain.Logic.StorageRoom
             Id = entity.Id,
             Name = entity.Name,
             EndedAt = entity.EndedAt,
+            AddressId = entity.AddressId,
+            AllowedRoles = entity.AllowedRoles?.ToList()
         };
     }
 
@@ -70,6 +73,8 @@ public class StorageRoomUOWMapper: IMapper<StorageRoom, Domain.Logic.StorageRoom
             Id = entity.Id,
             Name = entity.Name,
             EndedAt = entity.EndedAt,
+            AddressId = entity.AddressId,
+            AllowedRoles = entity.AllowedRoles?.ToList()
         };
     }
 }

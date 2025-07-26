@@ -12,7 +12,6 @@ import Suppliers from "@/views/SupplierView/Suppliers.vue";
 import CreateSupplier from "@/views/SupplierView/CreateSupplier.vue";
 import EditSupplier from "@/views/SupplierView/EditSupplier.vue";
 import StorageRooms from "@/views/InventoryView/StorageRooms.vue";
-import Inventories from "@/views/InventoryView/Inventories.vue";
 import CurrentStock from "@/views/InventoryView/CurrentStock.vue";
 import EditCurrentstock from "@/views/InventoryView/EditCurrentstock.vue";
 import CreateCurrentStock from "@/views/InventoryView/CreateCurrentStock.vue";
@@ -40,8 +39,7 @@ const routes = [
   { path: "/suppliers", name: "Suppliers", component: Suppliers },
   { path: "/createsupplier", name: "CreateSupplier", component: CreateSupplier },
   { path: "/editsupplier/:id", name: "EditSupplier", component: EditSupplier },
-  { path: "/storagerooms/:inventoryId", name: "StorageRooms", component: StorageRooms },
-  { path: "/inventories", name: "Inventories", component: Inventories },
+  { path: "/storagerooms", name: "StorageRooms", component: StorageRooms },
   { path: "/currentstock/:storageRoomId", name: "CurrentStock", component: CurrentStock },
   { path: "/editcurrentstock/:id", name: "EditCurrentStock", component: EditCurrentstock },
   { path: "/createcurrentStock", name: "CreateCurrentStock", component: CreateCurrentStock },
@@ -71,8 +69,7 @@ router.beforeEach((to, from, next) => {
     "/suppliers",
     "/createsupplier",
     "/editsupplier/:id",
-    "/inventories",
-    "/storagerooms/:inventoryId",
+    "/storagerooms",
     "/currentstock/:storageRoomId",
     "/editcurrentstock/:id",
     "/createcurrentStock",

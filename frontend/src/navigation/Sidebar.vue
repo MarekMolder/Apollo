@@ -36,9 +36,9 @@ const isOpen = ref(false);
         <span>{{ $t('Requests') }}</span>
       </RouterLink>
 
-      <RouterLink v-if="isAdmin" to="/inventories" class="sidebar-link" :class="{ open: isOpen }">
+      <RouterLink v-if="isAdmin" to="/storagerooms" class="sidebar-link" :class="{ open: isOpen }">
         <i class="bi bi-building"></i>
-        <span>{{ $t('Inventory') }}</span>
+        <span>{{ $t('StorageRooms') }}</span>
       </RouterLink>
 
       <RouterLink v-if="isAdmin" to="/products" class="sidebar-link" :class="{ open: isOpen }">

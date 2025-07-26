@@ -2,6 +2,7 @@ using App.DAL.EF;
 using App.Domain.Logic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace WebApp.Areas_Admin_Controllers
@@ -44,6 +45,7 @@ namespace WebApp.Areas_Admin_Controllers
         // GET: StorageRooms/Create
         public IActionResult Create()
         {
+            ViewData["AddressId"] = new SelectList(_context.Addresses, "Id", "City");
             return View();
         }
 
@@ -52,7 +54,7 @@ namespace WebApp.Areas_Admin_Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Location,EndedAt,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] StorageRoom storageRoom)
+        public async Task<IActionResult> Create([Bind("Name,EndedAt,AddressId,AllowedUsers,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] StorageRoom storageRoom)
         {
             if (ModelState.IsValid)
             {
@@ -61,6 +63,7 @@ namespace WebApp.Areas_Admin_Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AddressId"] = new SelectList(_context.Addresses, "Id", "City", storageRoom.AddressId);
             return View(storageRoom);
         }
 
@@ -77,6 +80,7 @@ namespace WebApp.Areas_Admin_Controllers
             {
                 return NotFound();
             }
+            ViewData["AddressId"] = new SelectList(_context.Addresses, "Id", "City", storageRoom.AddressId);
             return View(storageRoom);
         }
 
@@ -85,7 +89,7 @@ namespace WebApp.Areas_Admin_Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Name,Location,EndedAt,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] StorageRoom storageRoom)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Name,EndedAt,AddressId,AllowedUsers,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] StorageRoom storageRoom)
         {
             if (id != storageRoom.Id)
             {
@@ -127,7 +131,7 @@ namespace WebApp.Areas_Admin_Controllers
             {
                 return NotFound();
             }
-
+            ViewData["AddressId"] = new SelectList(_context.Addresses, "Id", "City", storageRoom.AddressId);
             return View(storageRoom);
         }
 

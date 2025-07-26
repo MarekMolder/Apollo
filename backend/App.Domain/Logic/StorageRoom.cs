@@ -8,13 +8,13 @@ public class StorageRoom : BaseEntity
     [MaxLength(128)]
     public string Name { get; set; } = default!;
     
-    [MaxLength(255)]
-    public string Location { get; set; } = default!;
+    public Guid AddressId { get; set; }
     
+    public Address? Address { get; set; }
+    
+    public List<string> AllowedRoles { get; set; } = new();
     
     public DateTime? EndedAt { get; set; }
-    
-    public ICollection<StorageRoomInInventory>? StorageRoomInInventories { get; set; }
     
     public ICollection<CurrentStock>? CurrentStocks { get; set; }
     

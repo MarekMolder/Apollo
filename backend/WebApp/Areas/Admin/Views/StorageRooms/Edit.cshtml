@@ -18,9 +18,13 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
+                <label asp-for="AddressId" class="control-label"></label>
+                <select asp-for="AddressId" class="form-control" asp-items="ViewBag.AddressId"></select>
+                <span asp-validation-for="AddressId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label for="RolesInput" class="control-label">Allowed Roles (comma-separated)</label>
+                <input type="text" name="RolesInput" class="form-control" value="@string.Join(",", Model.AllowedRoles)" />
             </div>
             <div class="form-group">
                 <label asp-for="EndedAt" class="control-label"></label>

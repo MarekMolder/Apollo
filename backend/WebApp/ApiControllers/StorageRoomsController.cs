@@ -1,6 +1,8 @@
 using System.Security.Claims;
 using App.BLL.Contracts;
 using App.DTO.v1;
+using App.DTO.v1.ApiEntities;
+using App.DTO.v1.ApiMapper;
 using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -20,6 +22,7 @@ namespace WebApp.ApiControllers
         private readonly IAppBLL _bll;
         
         private readonly StorageRoomAPIMapper _mapper = new();
+        private readonly EnrichedStorageRoomApiMapper _enrichedMapper = new();
 
         public StorageRoomsController(IAppBLL bll, ILogger<StorageRoomsController> logger)
         {
@@ -27,36 +30,76 @@ namespace WebApp.ApiControllers
             _logger = logger;
         }
 
-        /// <summary>
-        /// Get all persons for current user
-        /// </summary>
-        /// <returns>List of persons</returns>
-        [HttpGet]
-        [Produces( "application/json" )]
-        [ProducesResponseType( typeof( IEnumerable<StorageRoom> ), 200 )]
-        [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<StorageRoom>>> GetActions()
-        {
-            return (await _bll.StorageRoomService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
-        }
+    // ----------------------------------------------------------------
+    //  HELPER – loe kasutaja rollid JA LOGI need välja
+    // ----------------------------------------------------------------
+    private List<string> GetCurrentUserRoles()
+    {
+        var roles = User.Claims
+            .Where(c => c.Type == ClaimTypes.Role || c.Type == "role")
+            .Select(c => c.Value)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToList();
 
-        /// <summary>
-        /// Get person by id - owned by current user
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpGet("{id}")]
-        public async Task<ActionResult<StorageRoom>> GetActionEntity(Guid id)
-        {
-            var storageRoom = await _bll.StorageRoomService.FindAsync(id);
+        _logger.LogInformation("▶ JWT roles for user {User}: {Roles}",
+            User.Identity?.Name ?? "anonymous",
+            roles.Count == 0 ? "(none)" : string.Join(", ", roles));
 
-            if (storageRoom == null)
-            {
-                return NotFound();
-            }
+        return roles;
+    }
 
-            return _mapper.Map(storageRoom)!;
-        }
+    // ----------------------------------------------------------------
+    //  GET /inventories
+    // ----------------------------------------------------------------
+    [HttpGet]
+    [Produces("application/json")]
+    [ProducesResponseType(typeof(IEnumerable<StorageRoom>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<StorageRoom>>> GetStorageRooms()
+    {
+        var userRoles = GetCurrentUserRoles();
+
+        var all = (await _bll.StorageRoomService.AllAsync()).ToList();
+
+        var filtered = all
+            .Where(i => i.AllowedRoles != null && i.AllowedRoles.Intersect(userRoles).Any())
+            .ToList();
+
+        return filtered.Select(i => _mapper.Map(i)!).ToList();
+    }
+
+    // ----------------------------------------------------------------
+    //  GET /inventories/enrichedInventories
+    // ----------------------------------------------------------------
+    [HttpGet("enrichedStorageRooms")]
+    [ProducesResponseType(typeof(IEnumerable<EnrichedStorageRoom>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<EnrichedStorageRoom>>> GetEnrichedStorageRooms()
+    {
+        var userRoles = GetCurrentUserRoles();
+
+        var all = (await _bll.StorageRoomService.GetEnrichedStorageRooms()).ToList();
+
+        var filtered = all
+            .Where(i => i!.AllowedRoles != null && i.AllowedRoles.Intersect(userRoles).Any())
+            .ToList();
+
+        return Ok(filtered.Select(i => _enrichedMapper.Map(i)!));
+    }
+
+    // ----------------------------------------------------------------
+    //  Ülejäänud meetodid jäid samaks (lühendatud)
+    // ----------------------------------------------------------------
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<StorageRoom>> GetInventory(Guid id)
+    {
+        var inv = await _bll.StorageRoomService.FindAsync(id);
+        if (inv == null) return NotFound();
+
+        if (inv.AllowedRoles == null ||
+            !inv.AllowedRoles.Intersect(GetCurrentUserRoles()).Any())
+            return Forbid();     // nähtav vaid lubatud rollidele
+
+        return _mapper.Map(inv)!;
+    }
 
         /// <summary>
         /// Update person
@@ -109,48 +152,5 @@ namespace WebApp.ApiControllers
             await _bll.SaveChangesAsync();
             return NoContent();
         }
-        
-        /// <summary>
-        /// Get all storage rooms that belong to an inventory
-        /// </summary>
-        /// <param name="inventoryId">Inventory ID</param>
-        /// <returns>List of storage rooms</returns>
-        [HttpGet("inventory/{inventoryId}")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(IEnumerable<StorageRoom>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<StorageRoom>>> GetByInventory(Guid inventoryId)
-        {
-            var result = await _bll.StorageRoomService.GetAllByInventoryIdAsync(inventoryId);
-    
-            if (!result.Any()) return NotFound("No storage rooms found for this inventory.");
-
-            return Ok(result.Select(x => _mapper.Map(x)!));
-        }
-        
-        [HttpGet("byinventory/{inventoryId:guid}")]
-        [ProducesResponseType(typeof(IEnumerable<StorageRoom>), StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status403Forbidden)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<StorageRoom>>> GetByInventory2(Guid inventoryId)
-        {
-            // 1) leia inventar
-            var inv = await _bll.InventoryService.FindAsync(inventoryId);
-            if (inv == null) return NotFound();
-
-            // 2) kas kasutaja roll kattub inventari AllowedRoles’iga?
-            var userRoles = User.Claims
-                .Where(c => c.Type is ClaimTypes.Role or "role")
-                .Select(c => c.Value)
-                .ToList();
-
-            if (inv.AllowedRoles == null || !inv.AllowedRoles.Intersect(userRoles).Any())
-                return Forbid();
-
-            // 3) ruumid
-            var rooms = await _bll.StorageRoomService.GetAllByInventoryIdAsync(inventoryId);
-            return Ok(rooms.Select(r => _mapper.Map(r)!));
-        }
-
     }
 }

@@ -13,16 +13,12 @@ public class StorageRoomRepository: BaseRepository<DTO.StorageRoom, StorageRoom>
     {
         _ctx = ctx;
     }
-    
-    public async Task<IEnumerable<DTO.StorageRoom>> GetAllByInventoryIdAsync(Guid inventoryId)
+    public async Task<IEnumerable<DTO.StorageRoom?>> GetEnrichedStorageRooms()
     {
-        var domainEntities = await _ctx.StorageRoomInInventories
-            .Where(x => x.InventoryId == inventoryId)
-            .Include(x => x.StorageRoom)
-            .Select(x => x.StorageRoom)
+        var domainEntities = await RepositoryDbSet
+            .Include(a => a.Address)
             .ToListAsync();
 
-        return domainEntities.Select(e => Mapper.Map(e)!);
+        return domainEntities.Select(e => Mapper.Map(e));
     }
-    
 }

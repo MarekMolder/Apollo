@@ -11,5 +11,5 @@ public interface ICurrentStockRepository: IBaseRepository<CurrentStock>
     
     Task<List<(Guid ProductId, string ProductName, decimal Quantity)>> GetLowestStockProductsAsync(int count);
     
-    Task<decimal> GetTotalInventoryWorthAsync(Guid? inventoryId = null);
+    Task<decimal> GetTotalStorageRoomWorthAsync(Guid? storageRoomId = null);
 }

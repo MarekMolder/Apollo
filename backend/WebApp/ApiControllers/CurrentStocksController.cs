@@ -145,9 +145,9 @@ namespace WebApp.ApiControllers
         /// <returns>Total value in EUR</returns>
         [HttpGet("totalWorth")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetTotalInventoryWorth([FromQuery] Guid? inventoryId)
+        public async Task<IActionResult> GetTotalStorageRoomWorth([FromQuery] Guid? storageroomId)
         {
-            var total = await _bll.CurrentStockService.GetTotalInventoryWorthAsync(inventoryId);
+            var total = await _bll.CurrentStockService.GetTotalStorageRoomWorthAsync(storageroomId);
             return Ok(total);
         }
     }

@@ -13,9 +13,9 @@ public class StorageRoomService : BaseService<StorageRoom, DAL.DTO.StorageRoom, 
     {
         _dalToBLLMapper = mapper;
     }
-    public async Task<IEnumerable<StorageRoom>> GetAllByInventoryIdAsync(Guid inventoryId)
+    public async Task<IEnumerable<StorageRoom?>> GetEnrichedStorageRooms()
     {
-        var domainEntities = await ServiceRepository.GetAllByInventoryIdAsync(inventoryId);
-        return domainEntities.Select(e => _dalToBLLMapper.Map(e)!);
+        var res = await ServiceRepository.GetEnrichedStorageRooms();
+        return res.Select(u => _dalToBLLMapper.Map(u));
     }
 }

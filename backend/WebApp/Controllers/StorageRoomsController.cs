@@ -2,6 +2,8 @@ using App.BLL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using WebApp.ViewModels;
 using IAppBLL = App.BLL.Contracts.IAppBLL;
 
 namespace WebApp.Controllers
@@ -42,9 +44,17 @@ namespace WebApp.Controllers
         }
 
         // GET: StorageRooms/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            var vm = new StorageRoomCreateEditViewModel
+            {
+                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+                    nameof(Address.Id),
+                    nameof(Address.Name)
+                ),
+            };
+            
+            return View(vm);
         }
 
         // POST: StorageRooms/Create
@@ -52,21 +62,31 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(StorageRoom storageRoom)
+        public async Task<IActionResult> Create(StorageRoomCreateEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
-                if (storageRoom.EndedAt.HasValue)
-                { 
-                    storageRoom.EndedAt = DateTime.SpecifyKind(storageRoom.EndedAt.Value, DateTimeKind.Utc);
+                if (vm.StorageRoom.EndedAt.HasValue)
+                {
+                    vm.StorageRoom.EndedAt = DateTime.SpecifyKind(vm.StorageRoom.EndedAt.Value, DateTimeKind.Utc);
                 }
                 
-                _bll.StorageRoomService.Add(storageRoom);
+                if (!string.IsNullOrWhiteSpace(vm.RolesInput))
+                {
+                    vm.StorageRoom.AllowedRoles = vm.RolesInput
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                        .ToList();
+                }
+                
+                _bll.StorageRoomService.Add(vm.StorageRoom);
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(storageRoom);
+            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+                nameof(Address.Id), nameof(Address.Name), vm.StorageRoom.AddressId);
+
+            return View(vm);
         }
 
         // GET: StorageRooms/Edit/5
@@ -77,14 +97,25 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-
-            var entity = await _bll.StorageRoomService.FindAsync(id.Value, User.GetUserId());
-            if (entity == null)
+            var inventory = await _bll.StorageRoomService.FindAsync(id.Value, User.GetUserId());
+            if (inventory == null)
             {
                 return NotFound();
             }
-
-            return View(entity);
+            
+            var vm = new StorageRoomCreateEditViewModel
+            {
+                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+                    nameof(Address.Id),
+                    nameof(Address.Name),
+                    inventory.AddressId
+                ),
+                
+                StorageRoom = inventory,
+                
+                RolesInput = inventory.AllowedRoles != null ? string.Join(",", inventory.AllowedRoles) : ""
+            };
+            return View(vm);
         }
 
         // POST: StorageRooms/Edit/5
@@ -92,21 +123,40 @@ namespace WebApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, StorageRoom storageRoom)
+        public async Task<IActionResult> Edit(Guid id, StorageRoomCreateEditViewModel vm)
         {
-            if (id != storageRoom.Id)
+            if (id != vm.StorageRoom.Id)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                _bll.StorageRoomService.Update(storageRoom);
+                if (vm.StorageRoom.EndedAt.HasValue)
+                {
+                    vm.StorageRoom.EndedAt = DateTime.SpecifyKind(vm.StorageRoom.EndedAt.Value, DateTimeKind.Utc);
+                }
+                
+                if (!string.IsNullOrWhiteSpace(vm.RolesInput))
+                {
+                    vm.StorageRoom.AllowedRoles = vm.RolesInput
+                        .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                        .ToList();
+                }
+                else
+                {
+                    vm.StorageRoom.AllowedRoles = new List<string>();
+                }
+                
+                _bll.StorageRoomService.Update(vm.StorageRoom);
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(storageRoom);
+            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+                nameof(Address.Id), nameof(Address.Name), vm.StorageRoom.AddressId);
+
+            return View(vm);
         }
 
         // GET: StorageRooms/Delete/5

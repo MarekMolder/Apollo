@@ -34,7 +34,7 @@ public class Address : IDomainId
     public int? UnitNr { get; set; }
     
     
-    public ICollection<Inventory>? Inventories { get; set; }
+    public ICollection<StorageRoom>? StorageRooms { get; set; }
     
     
     public ICollection<Supplier>? Suppliers { get; set; }

@@ -5,7 +5,6 @@ namespace App.BLL.Mappers;
 
 public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, StorageRoom>
 {
-    private readonly StorageRoomInInventoryBLLMapper _storageRoomInInventoryBllMapper = new();
     private readonly CurrentStockBLLMapper _currentStockBLLMapper = new();
     private readonly ActionEntityBLLMapper _actionEntityBLLMapper = new();
     
@@ -17,10 +16,11 @@ public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
-            Location = entity.Location,
-            EndedAt = entity.EndedAt,
+            AddressId = entity.AddressId,
+            Address = AddressBLLMapper.MapSimple(entity.Address),
             
-            StorageRoomInInventories = entity.StorageRoomInInventories?.Select(t => _storageRoomInInventoryBllMapper.Map(t)).ToList()!,
+            AllowedRoles = entity.AllowedRoles?.ToList(),
+            EndedAt = entity.EndedAt,
             
             CurrentStocks = entity.CurrentStocks?.Select(t => _currentStockBLLMapper.Map(t)).ToList()!,
             
@@ -38,10 +38,11 @@ public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, StorageRoom
         {
             Id = entity.Id,
             Name = entity.Name,
-            Location = entity.Location,
-            EndedAt = entity.EndedAt,
+            AddressId = entity.AddressId,
+            Address = AddressBLLMapper.MapSimple(entity.Address),
             
-            StorageRoomInInventories = entity.StorageRoomInInventories?.Select(t => _storageRoomInInventoryBllMapper.Map(t)).ToList()!,
+            AllowedRoles = entity.AllowedRoles?.ToList(),
+            EndedAt = entity.EndedAt,
             
             CurrentStocks = entity.CurrentStocks?.Select(t => _currentStockBLLMapper.Map(t)).ToList()!,
             
@@ -60,6 +61,8 @@ public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, StorageRoom
             Id = entity.Id,
             Name = entity.Name,
             EndedAt = entity.EndedAt,
+            AddressId = entity.AddressId,
+            AllowedRoles = entity.AllowedRoles?.ToList()
         };
     }
     
@@ -72,6 +75,8 @@ public class StorageRoomBLLMapper : IMapper<App.BLL.DTO.StorageRoom, StorageRoom
             Id = entity.Id,
             Name = entity.Name,
             EndedAt = entity.EndedAt,
+            AddressId = entity.AddressId,
+            AllowedRoles = entity.AllowedRoles?.ToList()
         };
     }
 }
