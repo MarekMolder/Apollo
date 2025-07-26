@@ -8,11 +8,9 @@ public interface IAppBLL : IBaseBLL
     IActionTypeEntityService ActionTypeEntityService { get; }
     IAddressService AddressService { get; }
     ICurrentStockService CurrentStockService { get; }
-    IInventoryService InventoryService { get; }
     IProductCategoryService ProductCategoryService { get; }
     IProductService ProductService { get; }
     IReasonService ReasonService { get; }
-    IStorageRoomInInventoryService StorageRoomInInventoryService { get; }
     IStorageRoomService StorageRoomService { get; }
     ISupplierService SupplierService { get; }
 }

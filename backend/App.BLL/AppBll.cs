@@ -29,10 +29,6 @@ public class AppBll: BaseBll<IAppUOW>, IAppBLL
     public  ICurrentStockService CurrentStockService => 
         _currentStockService ??= new CurrentStockService(BLLUOW, new CurrentStockBLLMapper());
     
-    private IInventoryService? _inventoryService;
-    public  IInventoryService InventoryService => 
-        _inventoryService ??= new InventoryService(BLLUOW, new InventoryBLLMapper());
-    
     private IProductCategoryService? _productCategoryService;
     public  IProductCategoryService ProductCategoryService => 
         _productCategoryService ??= new ProductCategoryService(BLLUOW, new ProductCategoryBLLMapper());
@@ -44,10 +40,6 @@ public class AppBll: BaseBll<IAppUOW>, IAppBLL
     private IReasonService? _reasonService;
     public  IReasonService ReasonService => 
         _reasonService ??= new ReasonService(BLLUOW, new ReasonBLLMapper());
-    
-    private IStorageRoomInInventoryService? _storageRoomInInventoryService;
-    public  IStorageRoomInInventoryService StorageRoomInInventoryService => 
-        _storageRoomInInventoryService ??= new StorageRoomInInventoryService(BLLUOW, new StorageRoomInInventoryBLLMapper());
     
     private IStorageRoomService? _storageRoomService;
     public  IStorageRoomService StorageRoomService => 

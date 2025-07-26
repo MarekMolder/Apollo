@@ -44,19 +44,17 @@ public class CurrentStockRepository: BaseRepository<CurrentStock, Domain.Logic.C
         return result.Select(x => (x.ProductId, x.ProductName, x.Quantity)).ToList();
     }
     
-    public async Task<decimal> GetTotalInventoryWorthAsync(Guid? inventoryId = null)
+    public async Task<decimal> GetTotalStorageRoomWorthAsync(Guid? storageRoomId = null)
     {
         var baseQuery = RepositoryDbSet
             .Include(cs => cs.Product)
             .Include(cs => cs.StorageRoom)
-            .ThenInclude(sr => sr!.StorageRoomInInventories)
             .AsQueryable();
 
-        if (inventoryId != null)
+        if (storageRoomId != null)
         {
             baseQuery = baseQuery.Where(cs =>
-                cs.StorageRoom!.StorageRoomInInventories!
-                    .Any(sri => sri.InventoryId == inventoryId));
+                cs.StorageRoom != null && cs.StorageRoom.Id == storageRoomId);
         }
 
         return await baseQuery

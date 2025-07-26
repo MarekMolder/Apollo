@@ -3,7 +3,7 @@ using Base.Contracts;
 
 namespace App.DTO.v1.ApiEntities;
 
-public class EnrichedInventory : IDomainId
+public class EnrichedStorageRoom : IDomainId
 {
     public Guid Id { get; set; }
     

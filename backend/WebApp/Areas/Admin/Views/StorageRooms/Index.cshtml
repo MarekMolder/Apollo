@@ -16,7 +16,10 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                @Html.DisplayNameFor(model => model.Address)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AllowedRoles)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.EndedAt)
@@ -46,7 +49,17 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Location)
+                @Html.DisplayFor(modelItem => item.Address!.City)
+            </td>
+            <td>
+                @if (item.AllowedRoles != null && item.AllowedRoles.Any())
+                {
+                    @string.Join(", ", item.AllowedRoles)
+                }
+                else
+                {
+                    <span class="text-muted">No roles</span>
+                }
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.EndedAt)

@@ -29,10 +29,6 @@ public class AppUOW : BaseUOW<AppDbContext>, IAppUOW
     public  ICurrentStockRepository CurrentStockRepository => 
         _currentStockRepository ??= new CurrentStockRepository(UOWDbContext);
     
-    private IInventoryRepository? _inventoryRepository;
-    public  IInventoryRepository InventoryRepository => 
-        _inventoryRepository ??= new InventoryRepository(UOWDbContext);
-    
     private IProductCategoryRepository? _productCategoryRepository;
     public  IProductCategoryRepository ProductCategoryRepository => 
         _productCategoryRepository ??= new ProductCategoryRepository(UOWDbContext);
@@ -44,10 +40,6 @@ public class AppUOW : BaseUOW<AppDbContext>, IAppUOW
     private IReasonRepository? _reasonRepository;
     public  IReasonRepository ReasonRepository => 
         _reasonRepository ??= new ReasonRepository(UOWDbContext);
-    
-    private IStorageRoomInInventoryRepository? _storageRoomInInventoryRepository;
-    public  IStorageRoomInInventoryRepository StorageRoomInInventoryRepository => 
-        _storageRoomInInventoryRepository ??= new StorageRoomInInventoryRepository(UOWDbContext);
     
     private IStorageRoomRepository? _storageRoomRepository;
     public  IStorageRoomRepository StorageRoomRepository => 

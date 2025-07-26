@@ -52,6 +52,13 @@ public class HappyFlowTests : IClassFixture<CustomWebApplicationFactory<Program>
         var createdCategory = await categoryResp.Content.ReadFromJsonAsync<ProductCategory>();
         Assert.True(categoryResp.IsSuccessStatusCode);
         Assert.NotNull(createdCategory);
+        
+        // 3. Create address
+        var address = new Address() { Id = Guid.NewGuid(), StreetName = "Tammsaare tee", BuildingNr = 2, PostalCode = "13567", City = "Tallinn", Province = "Mustamäe", Country = "Eesti", Name = "Mustamäe keskus" };
+        var addressResp = await _client.PostAsJsonAsync("/api/v1/addresses", address);
+        var createdAddress = await addressResp.Content.ReadFromJsonAsync<Address>();
+        Assert.True(addressResp.IsSuccessStatusCode);
+        Assert.NotNull(createdAddress);
 
         // 3. Create product
         var product = new Product
@@ -71,7 +78,7 @@ public class HappyFlowTests : IClassFixture<CustomWebApplicationFactory<Program>
         Assert.NotNull(createdProduct);
 
         // 4. Create storage room
-        var storage = new StorageRoom { Id = Guid.NewGuid(), Name = "Main Room", Location = "3. korrus" };
+        var storage = new StorageRoom { Id = Guid.NewGuid(), Name = "Main Room", AddressId = createdAddress.Id, AllowedRoles = ["admin", "mustamäe"] };
         var storageResp = await _client.PostAsJsonAsync("/api/v1/storagerooms", storage);
         var createdStorage = await storageResp.Content.ReadFromJsonAsync<StorageRoom>();
         Assert.True(storageResp.IsSuccessStatusCode);

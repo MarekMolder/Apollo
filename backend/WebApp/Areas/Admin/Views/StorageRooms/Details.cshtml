@@ -17,10 +17,28 @@
             @Html.DisplayFor(model => model.Name)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
+            @Html.DisplayNameFor(model => model.Address)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
+            @Html.DisplayFor(model => model.Address!.City)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.AllowedRoles)
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.AllowedRoles != null && Model.AllowedRoles.Any())
+            {
+                <ul>
+                    @foreach (var role in Model.AllowedRoles)
+                    {
+                        <li>@role</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <span class="text-muted">No roles assigned</span>
+            }
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.EndedAt)

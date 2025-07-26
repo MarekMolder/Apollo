@@ -5,7 +5,7 @@ namespace App.DAL.EF.Mappers;
 
 public class AddressUOWMapper: IMapper<Address, Domain.Logic.Address>
 {
-    private readonly InventoryUOWMapper _inventoryUOWMapper = new();
+    private readonly StorageRoomUOWMapper _storageRoomUowMapper = new();
     private readonly SupplierUOWMapper _supplierUOWMapper = new();
     public Address? Map(Domain.Logic.Address? entity)
     {
@@ -22,7 +22,7 @@ public class AddressUOWMapper: IMapper<Address, Domain.Logic.Address>
             Country = entity.Country,
             Name = entity.Name,
             UnitNr = entity.UnitNr,
-            Inventories = entity.Inventories?.Select(t => _inventoryUOWMapper.Map(t)).ToList()!,
+            StorageRooms = entity.StorageRooms?.Select(t => _storageRoomUowMapper.Map(t)).ToList()!,
             
             Suppliers = entity.Suppliers?.Select(t => _supplierUOWMapper.Map(t)).ToList()!,
             
@@ -45,7 +45,7 @@ public class AddressUOWMapper: IMapper<Address, Domain.Logic.Address>
             Country = entity.Country,
             Name = entity.Name,
             UnitNr = entity.UnitNr,
-            Inventories = entity.Inventories?.Select(t => _inventoryUOWMapper.Map(t)).ToList()!,
+            StorageRooms = entity.StorageRooms?.Select(t => _storageRoomUowMapper.Map(t)).ToList()!,
             
             Suppliers = entity.Suppliers?.Select(t => _supplierUOWMapper.Map(t)).ToList()!,
             

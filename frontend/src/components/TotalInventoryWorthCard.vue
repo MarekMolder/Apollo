@@ -1,34 +1,34 @@
 ﻿<script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { CurrentStockService } from '@/services/mvcServices/CurrentStockService'
-import { InventoryService } from '@/services/mvcServices/InventoryService'
-import type {IInventory} from "@/domain/logic/IInventory.ts";
+import {StorageRoomService} from "@/services/mvcServices/StorageRoomService.ts";
+import type {IStorageRoom} from "@/domain/logic/IStorageRoom.ts";
 
 const currentStockService = new CurrentStockService()
-const inventoryService = new InventoryService()
+const storageRoomService = new StorageRoomService()
 
-const inventories = ref<{ id: string; name: string }[]>([])
-const selectedInventory = ref<string | ''>('')
+const storageRooms = ref<{ id: string; name: string }[]>([])
+const selectedStorageRoom = ref<string | ''>('')
 const total = ref<number | null>(null)
 
 const fetchInventories = async () => {
-  const result = await inventoryService.getAllAsync()
+  const result = await storageRoomService.getAllAsync()
   if (result.data) {
-    inventories.value = result.data.map((i: IInventory) => ({
+    storageRooms.value = result.data.map((i: IStorageRoom) => ({
       id: i.id,
       name: i.name
     }))
   } else {
-    inventories.value = []
+    storageRooms.value = []
   }
 }
 
 const fetchTotalWorth = async () => {
-  if (!selectedInventory.value) {
+  if (!selectedStorageRoom.value) {
     total.value = null
     return
   }
-  total.value = await currentStockService.getTotalWorth(selectedInventory.value)
+  total.value = await currentStockService.getTotalWorth(selectedStorageRoom.value)
 }
 
 onMounted(fetchInventories)
@@ -36,10 +36,10 @@ onMounted(fetchInventories)
 
 <template>
   <div class="inventory-worth-card">
-    <h2>💼 {{ $t('Select Inventory') }}</h2>
-    <select v-model="selectedInventory" @change="fetchTotalWorth">
+    <h2>💼 {{ $t('Select StorageRoom') }}</h2>
+    <select v-model="selectedStorageRoom" @change="fetchTotalWorth">
       <option disabled value="">{{ $t('Choose') }}</option>
-      <option v-for="inv in inventories" :key="inv.id" :value="inv.id">
+      <option v-for="inv in storageRooms" :key="inv.id" :value="inv.id">
         {{ inv.name }}
       </option>
     </select>
@@ -47,7 +47,7 @@ onMounted(fetchInventories)
     <div v-if="total !== null" class="amount">
       {{ $t('Total Worth') }}: <strong>€{{ total.toFixed(2) }}</strong>
     </div>
-    <div v-else class="empty">{{ $t('Select an inventory to see total worth') }}</div>
+    <div v-else class="empty">{{ $t('Select an storageRoom to see total worth') }}</div>
   </div>
 </template>
 

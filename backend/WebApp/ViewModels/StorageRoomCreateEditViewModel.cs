@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace WebApp.ViewModels;
 
-public class InventoryCreateEditViewModel
+public class StorageRoomCreateEditViewModel
 {
-    public Inventory Inventory { get; set; } = default!;
+    public StorageRoom StorageRoom { get; set; } = default!;
 
     [ValidateNever]
     public SelectList AddressSelectList { get; set; } = default!;

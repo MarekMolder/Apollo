@@ -5,7 +5,7 @@ namespace App.BLL.Mappers;
 
 public class AddressBLLMapper : IMapper<App.BLL.DTO.Address, Address>
 {
-    private readonly InventoryBLLMapper _inventoryBllMapper = new();
+    private readonly StorageRoomBLLMapper _storageRoomBllMapper = new();
     private readonly SupplierBLLMapper _supplierBllMapper = new();
     
     public Address? Map(DTO.Address? entity)
@@ -24,7 +24,7 @@ public class AddressBLLMapper : IMapper<App.BLL.DTO.Address, Address>
             Name = entity.Name,
             UnitNr = entity.UnitNr,
             
-            Inventories = entity.Inventories?.Select(t => _inventoryBllMapper.Map(t)).ToList()!,
+            StorageRooms = entity.StorageRooms?.Select(t => _storageRoomBllMapper.Map(t)).ToList()!,
             
             Suppliers = entity.Suppliers?.Select(t => _supplierBllMapper.Map(t)).ToList()!,
         };
@@ -47,7 +47,7 @@ public class AddressBLLMapper : IMapper<App.BLL.DTO.Address, Address>
             Name = entity.Name,
             UnitNr = entity.UnitNr,
             
-            Inventories = entity.Inventories?.Select(t => _inventoryBllMapper.Map(t)).ToList()!,
+            StorageRooms = entity.StorageRooms?.Select(t => _storageRoomBllMapper.Map(t)).ToList()!,
             
             Suppliers = entity.Suppliers?.Select(t => _supplierBllMapper.Map(t)).ToList()!,
             
