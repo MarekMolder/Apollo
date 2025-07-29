@@ -41,23 +41,31 @@ const doLogin = async () => {
 </script>
 
 <template>
-  <main class="login-container">
-    <div class="login-card">
-      <img src="@/assets/apollo-logo.png" class="logo" alt="Apollo logo" />
-      <form @submit.prevent="doLogin">
-        <div class="input-field">
-          <label for="email">{{ $t('Email') }}</label>
-          <input type="email" v-model="email" required />
-        </div>
-        <div class="input-field">
-          <label for="password">{{ $t('Password') }}</label>
-          <input type="password" v-model="password" required />
-        </div>
-        <button type="submit" class="login-btn">{{ $t('Login') }}</button>
-      </form>
-    </div>
-  </main>
+  <div class="min-h-screen bg-blue-500 flex items-center justify-center">
+    <h1 class="text-white text-4xl font-bold">
+      Tailwind töötab! 🎉
+    </h1>
+  </div>
 </template>
+
+<!--<template>-->
+<!--  <main class="login-container">-->
+<!--    <div class="login-card">-->
+<!--      <img src="@/assets/apollo-logo.png" class="logo" alt="Apollo logo" />-->
+<!--      <form @submit.prevent="doLogin">-->
+<!--        <div class="input-field">-->
+<!--          <label for="email">{{ $t('Email') }}</label>-->
+<!--          <input type="email" v-model="email" required />-->
+<!--        </div>-->
+<!--        <div class="input-field">-->
+<!--          <label for="password">{{ $t('Password') }}</label>-->
+<!--          <input type="password" v-model="password" required />-->
+<!--        </div>-->
+<!--        <button type="submit" class="login-btn">{{ $t('Login') }}</button>-->
+<!--      </form>-->
+<!--    </div>-->
+<!--  </main>-->
+<!--</template>-->
 
 <style scoped>
 .login-container {
