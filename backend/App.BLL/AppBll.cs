@@ -48,4 +48,12 @@ public class AppBll: BaseBll<IAppUOW>, IAppBLL
     private ISupplierService? _supplierService;
     public  ISupplierService SupplierService => 
         _supplierService ??= new SupplierService(BLLUOW, new SupplierBLLMapper());
+    
+    private IMonthlyStatisticsService? _monthlyStatisticsService;
+    public  IMonthlyStatisticsService MonthlyStatisticsService => 
+        _monthlyStatisticsService ??= new MonthlyStatisticsService(BLLUOW, new MonthlyStatisticsBLLMapper());
+    
+    private IRecipeComponentService? _recipeComponentService;
+    public  IRecipeComponentService RecipeComponentService => 
+        _recipeComponentService ??= new RecipeComponentService(BLLUOW, new RecipeComponentBLLMapper());
 }

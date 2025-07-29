@@ -20,4 +20,6 @@ public class ProductCreate
     public decimal Quantity { get; set; }
     
     public Guid ProductCategoryId { get; set; }
+    
+    public bool IsComponent { get; set; } = false;
 }

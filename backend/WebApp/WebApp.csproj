@@ -200,6 +200,16 @@
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\Inventories\Details.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\Inventories\Edit.cshtml" />
       <_ContentIncludedByDefault Remove="Areas\Admin\Views\Inventories\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Recipes\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Recipes\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Recipes\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Recipes\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Areas\Admin\Views\Recipes\Index.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Recipes\Create.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Recipes\Delete.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Recipes\Details.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Recipes\Edit.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Recipes\Index.cshtml" />
     </ItemGroup>
 
     <ItemGroup>

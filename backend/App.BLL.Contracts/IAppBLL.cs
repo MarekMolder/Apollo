@@ -13,4 +13,6 @@ public interface IAppBLL : IBaseBLL
     IReasonService ReasonService { get; }
     IStorageRoomService StorageRoomService { get; }
     ISupplierService SupplierService { get; }
+    IMonthlyStatisticsService MonthlyStatisticsService { get; }
+    IRecipeComponentService RecipeComponentService { get; }
 }

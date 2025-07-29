@@ -23,7 +23,9 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
     public DbSet<StorageRoom> StorageRooms { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
     
-    public DbSet<Person> Persons { get; set; }
+    public DbSet<MonthlyStatistics> MonthlyStatistics { get; set; }
+    
+    public DbSet<RecipeComponent> RecipeComponents { get; set; }
 
     public DbSet<AppRefreshToken> RefreshTokens { get; set; } = default!;
     

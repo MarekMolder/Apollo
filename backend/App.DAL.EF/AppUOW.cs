@@ -48,4 +48,12 @@ public class AppUOW : BaseUOW<AppDbContext>, IAppUOW
     private ISupplierRepository? _supplierRepository;
     public  ISupplierRepository SupplierRepository => 
         _supplierRepository ??= new SupplierRepository(UOWDbContext);
+    
+    private IMonthlyStatisticsRepository? _monthlyStatisticsRepository;
+    public  IMonthlyStatisticsRepository MonthlyStatisticsRepository => 
+        _monthlyStatisticsRepository ??= new MonthlyStatisticsRepository(UOWDbContext);
+    
+    private IRecipeComponentRepository? _recipeComponentRepository;
+    public  IRecipeComponentRepository RecipeComponentRepository => 
+        _recipeComponentRepository ??= new RecipeComponentRepositoryRepository(UOWDbContext);
 }
