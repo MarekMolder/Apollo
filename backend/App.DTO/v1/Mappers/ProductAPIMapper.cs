@@ -17,6 +17,7 @@ public class ProductAPIMapper : IMapper<Product, BLL.DTO.Product>
             Price = entity.Price,
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
+            IsComponent = entity.IsComponent,
         };
         return res;
     }
@@ -34,6 +35,7 @@ public class ProductAPIMapper : IMapper<Product, BLL.DTO.Product>
             Price = entity.Price,
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
+            IsComponent = entity.IsComponent,
         };
         return res;
     }
@@ -50,6 +52,7 @@ public class ProductAPIMapper : IMapper<Product, BLL.DTO.Product>
             Price = entity.Price,
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
+            IsComponent = entity.IsComponent,
         };
         return res;
     }

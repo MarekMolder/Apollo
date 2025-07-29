@@ -30,6 +30,8 @@ public class Product : IDomainId
     
     public ProductCategory? ProductCategory { get; set; }
     
+    public bool IsComponent { get; set; } = false;
+    
     public ICollection<ActionEntity>? Actions { get; set; }
     
     public ICollection<CurrentStock>? CurrentStocks { get; set; }

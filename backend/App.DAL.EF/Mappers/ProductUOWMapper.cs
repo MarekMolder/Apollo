@@ -24,6 +24,8 @@ public class ProductUOWMapper: IMapper<Product, Domain.Logic.Product>
             ProductCategoryId = entity.ProductCategoryId,
             ProductCategory = ProductCategoryUOWMapper.MapSimple(entity.ProductCategory),
             
+            IsComponent = entity.IsComponent,
+            
             Actions = entity.Actions?.Select(t => _actionEntityUOWMapper.Map(t)).ToList()!,
             
             CurrentStocks = entity.CurrentStocks?.Select(t => _currentStockUOWMapper.Map(t)).ToList()!,
@@ -48,6 +50,8 @@ public class ProductUOWMapper: IMapper<Product, Domain.Logic.Product>
             ProductCategoryId = entity.ProductCategoryId,
             ProductCategory = ProductCategoryUOWMapper.MapSimple(entity.ProductCategory),
             
+            IsComponent = entity.IsComponent,
+            
             Actions = entity.Actions?.Select(t => _actionEntityUOWMapper.Map(t)).ToList()!,
             
             CurrentStocks = entity.CurrentStocks?.Select(t => _currentStockUOWMapper.Map(t)).ToList()!,
@@ -68,6 +72,7 @@ public class ProductUOWMapper: IMapper<Product, Domain.Logic.Product>
             Price = entity.Price,
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
+            IsComponent = entity.IsComponent,
         };
     }
 
@@ -85,6 +90,7 @@ public class ProductUOWMapper: IMapper<Product, Domain.Logic.Product>
             Price = entity.Price,
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
+            IsComponent = entity.IsComponent,
         };
     }
 }

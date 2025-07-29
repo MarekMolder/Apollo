@@ -1,4 +1,4 @@
-﻿~~~sh
+﻿  ~~~sh
 dotnet ef migrations add --project App.DAL.EF --startup-project WebApp --context AppDbContext addedVolume
 
 dotnet ef migrations --project App.DAL.EF --startup-project WebApp remove
@@ -27,6 +27,9 @@ dotnet aspnet-codegenerator controller -name StockMovementsController -actions -
 dotnet aspnet-codegenerator controller -name StorageRoomsController -actions -m App.Domain.Logic.StorageRoom -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 dotnet aspnet-codegenerator controller -name StorageRoomInInventoriesController -actions -m App.Domain.Logic.StorageRoomInInventory -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
 dotnet aspnet-codegenerator controller -name SuppliersController -actions -m App.Domain.Logic.Supplier -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
+
+dotnet aspnet-codegenerator controller -name MonthlyStatisticsController -actions -m App.Domain.Logic.MonthlyStatistics -dc AppDbContext -outDir Areas/Admin/Controllers --useDefaultLayout --useAsyncActions --referenceScriptLibraries -f
+
 ~~~
 
 Api controllers

@@ -1,0 +1,51 @@
+@model WebApp.ViewModels.MonthlyStatisticsCreateEditViewModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>MonthlyStatistic</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MonthlyStatistics.ProductId" class="control-label"></label>
+                <select asp-for="MonthlyStatistics.ProductId" class ="form-control" asp-items="Model.ProductSelectList"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MonthlyStatistics.TotalRemovedQuantity" class="control-label"></label>
+                <input asp-for="MonthlyStatistics.TotalRemovedQuantity" class="form-control" />
+                <span asp-validation-for="MonthlyStatistics.TotalRemovedQuantity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MonthlyStatistics.StorageRoomId" class="control-label"></label>
+                <select asp-for="MonthlyStatistics.StorageRoomId" class ="form-control" asp-items="Model.StorageRoomSelectList"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MonthlyStatistics.Year" class="control-label"></label>
+                <input asp-for="MonthlyStatistics.Year" class="form-control" />
+                <span asp-validation-for="MonthlyStatistics.Year" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MonthlyStatistics.Month" class="control-label"></label>
+                <input asp-for="MonthlyStatistics.Month" class="form-control" />
+                <span asp-validation-for="MonthlyStatistics.Month" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

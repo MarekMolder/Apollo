@@ -25,6 +25,8 @@ public class ProductBLLMapper : IMapper<App.BLL.DTO.Product, Product>
             ProductCategoryId = entity.ProductCategoryId,
             ProductCategory = ProductCategoryBLLMapper.MapSimple(entity.ProductCategory),
             
+            IsComponent = entity.IsComponent,
+            
             Actions = entity.Actions?.Select(t => _actionEntityBLLMapper.Map(t)).ToList()!,
             
             CurrentStocks = entity.CurrentStocks?.Select(t => _currentStockBLLMapper.Map(t)).ToList()!,
@@ -49,6 +51,8 @@ public class ProductBLLMapper : IMapper<App.BLL.DTO.Product, Product>
             ProductCategoryId = entity.ProductCategoryId,
             ProductCategory = ProductCategoryBLLMapper.MapSimple(entity.ProductCategory),
             
+            IsComponent = entity.IsComponent,
+            
             Actions = entity.Actions?.Select(t => _actionEntityBLLMapper.Map(t)).ToList()!,
             
             CurrentStocks = entity.CurrentStocks?.Select(t => _currentStockBLLMapper.Map(t)).ToList()!,
@@ -70,6 +74,7 @@ public class ProductBLLMapper : IMapper<App.BLL.DTO.Product, Product>
             Price = entity.Price,
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
+            IsComponent = entity.IsComponent,
         };
     }
     
@@ -87,6 +92,7 @@ public class ProductBLLMapper : IMapper<App.BLL.DTO.Product, Product>
             Price = entity.Price,
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
+            IsComponent = entity.IsComponent,
         };
     }
 }

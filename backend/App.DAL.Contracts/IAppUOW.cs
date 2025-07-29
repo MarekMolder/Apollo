@@ -13,4 +13,6 @@ public interface IAppUOW : IBaseUOW
     IReasonRepository ReasonRepository { get; }
     IStorageRoomRepository StorageRoomRepository { get; }
     ISupplierRepository SupplierRepository { get; }
+    IMonthlyStatisticsRepository MonthlyStatisticsRepository { get; }
+    IRecipeComponentRepository RecipeComponentRepository { get; }
 }
