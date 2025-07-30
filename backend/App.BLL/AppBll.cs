@@ -15,7 +15,7 @@ public class AppBll: BaseBll<IAppUOW>, IAppBLL
 
     private IActionEntityService? _actionEntityService;
     public IActionEntityService ActionEntityService => 
-        _actionEntityService ??= new ActionEntityService(BLLUOW, new ActionEntityBLLMapper(), new CurrentStockUOWMapper(), new ActionEntityUOWMapper());
+        _actionEntityService ??= new ActionEntityService(BLLUOW, new ActionEntityBLLMapper(), new MonthlyStatisticsUOWMapper(), new ActionEntityUOWMapper());
     
     private IActionTypeEntityService? _actionTypeEntityService;
     public  IActionTypeEntityService ActionTypeEntityService => 

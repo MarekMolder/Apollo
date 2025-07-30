@@ -5,25 +5,26 @@ using App.DAL.Contracts;
 using Base.BLL;
 using Base.Contracts;
 using CurrentStock = App.DAL.DTO.CurrentStock;
+using MonthlyStatistics = App.DAL.DTO.MonthlyStatistics;
 
 namespace App.BLL.Services;
 
 public class ActionEntityService : BaseService<ActionEntity, DAL.DTO.ActionEntity, IActionEntityRepository>, IActionEntityService
 {
     private readonly IAppUOW _uow;
-    private readonly IMapper<CurrentStock, Domain.Logic.CurrentStock> _domainToDalMapperCurrentStock;
+    private readonly IMapper<DAL.DTO.MonthlyStatistics, Domain.Logic.MonthlyStatistics> _domainToDalMapperMonthlyStatistics;
     private readonly IMapper<ActionEntity, DAL.DTO.ActionEntity> _dalToBLLMapper;
     private readonly IMapper<DAL.DTO.ActionEntity, Domain.Logic.ActionEntity> _domainToDalMapper;
     
     public ActionEntityService(
         IAppUOW serviceUow, 
         IMapper<ActionEntity, DAL.DTO.ActionEntity> mapper,
-        IMapper<CurrentStock, Domain.Logic.CurrentStock> domainToDalMapperCurrentStock,
+        IMapper<MonthlyStatistics, Domain.Logic.MonthlyStatistics> domainToDalMapperMonthlyStatistics,
         IMapper<DAL.DTO.ActionEntity, Domain.Logic.ActionEntity> domainToDalMapper)
         : base(serviceUow, serviceUow.ActionEntityRepository, mapper)
     {
         _uow = serviceUow;
-        _domainToDalMapperCurrentStock = domainToDalMapperCurrentStock;
+        _domainToDalMapperMonthlyStatistics = domainToDalMapperMonthlyStatistics;
         _dalToBLLMapper = mapper;
         _domainToDalMapper = domainToDalMapper;
     }
@@ -49,10 +50,10 @@ public class ActionEntityService : BaseService<ActionEntity, DAL.DTO.ActionEntit
             var productId = bllAction.ProductId;
             var storageRoomId = bllAction.StorageRoomId;
 
-            var currentStock = await _uow.CurrentStockRepository
+            var monthlyStatistics = await _uow.MonthlyStatisticsRepository
                 .FindByProductAndStorageAsync(productId, storageRoomId);
             
-            var mappedCurrentStock = _domainToDalMapperCurrentStock.Map(currentStock);
+            var mappedMonthlyStatistics = _domainToDalMapperMonthlyStatistics.Map(monthlyStatistics);
             
             decimal quantityChange = bllAction.ActionType!.Code switch
             {
@@ -61,21 +62,23 @@ public class ActionEntityService : BaseService<ActionEntity, DAL.DTO.ActionEntit
                 _ => throw new InvalidOperationException("Unknown action type")
             };
 
-            if (mappedCurrentStock != null)
+            if (mappedMonthlyStatistics != null)
             {
-                mappedCurrentStock.Quantity += quantityChange;
-                await _uow.CurrentStockRepository.UpdateAsync(mappedCurrentStock);
+                mappedMonthlyStatistics.TotalRemovedQuantity += quantityChange;
+                await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedMonthlyStatistics);
             }
             else
             {
-                var newStock = new CurrentStock
+                var newMonthlyStatistics = new DAL.DTO.MonthlyStatistics
                 {
                     Id = Guid.NewGuid(),
                     ProductId = productId,
                     StorageRoomId = storageRoomId,
-                    Quantity = quantityChange
+                    TotalRemovedQuantity = quantityChange,
+                    Year = DateTime.Today.Year,
+                    Month = DateTime.Today.Month,
                 };
-                await _uow.CurrentStockRepository.AddAsync(newStock);
+                await _uow.MonthlyStatisticsRepository.AddAsync(newMonthlyStatistics);
             }
         }
 

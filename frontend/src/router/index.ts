@@ -24,6 +24,7 @@ import CreateRolePage from "@/views/AccountView/CreateRolePage.vue";
 import UserListWithRoles from "@/views/AccountView/UserListWithRoles.vue";
 import Home from "@/views/Home.vue";
 import {User} from "lucide-vue-next";
+import MonthlyStatistics from "@/views/InventoryView/MonthlyStatistics.vue";
 
 const routes = [
   { path: "/home", name: "Home", component: Home },
@@ -41,6 +42,7 @@ const routes = [
   { path: "/editsupplier/:id", name: "EditSupplier", component: EditSupplier },
   { path: "/storagerooms", name: "StorageRooms", component: StorageRooms },
   { path: "/currentstock/:storageRoomId", name: "CurrentStock", component: CurrentStock },
+  { path: "/monthlyStatistics/:storageRoomId", name: "MonthlyStatistics", component: MonthlyStatistics },
   { path: "/editcurrentstock/:id", name: "EditCurrentStock", component: EditCurrentstock },
   { path: "/createcurrentStock", name: "CreateCurrentStock", component: CreateCurrentStock },
   { path: "/users/:id", name: "UserDetails", component: UserDetailsView },
@@ -71,6 +73,7 @@ router.beforeEach((to, from, next) => {
     "/editsupplier/:id",
     "/storagerooms",
     "/currentstock/:storageRoomId",
+    "/monthlyStatistics/:storageRoomId",
     "/editcurrentstock/:id",
     "/createcurrentStock",
     "/users/:id",

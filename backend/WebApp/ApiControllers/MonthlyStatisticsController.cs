@@ -1,5 +1,7 @@
 using App.BLL.Contracts;
 using App.DTO.v1;
+using App.DTO.v1.ApiEntities;
+using App.DTO.v1.ApiMapper;
 using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,6 +21,8 @@ namespace WebApp.ApiControllers
         private readonly IAppBLL _bll;
         
         private readonly MonthlyStatisticsAPIMapper _mapper = new();
+        
+        private readonly EnrichedMonthlyStatisticsAPIMapper _enrichedMonthlyStatisticsAPIMapper = new();
 
         public MonthlyStatisticsController(IAppBLL bll, ILogger<MonthlyStatisticsController> logger)
         {
@@ -110,13 +114,22 @@ namespace WebApp.ApiControllers
         }
         
         [HttpGet("bystorageroom/{id}")]
-        [ProducesResponseType(typeof(IEnumerable<MonthlyStatistics>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<MonthlyStatistics>>> GetByStorageRoom(Guid id)
+        [ProducesResponseType(typeof(IEnumerable<EnrichedMonthlyStatistics>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrichedMonthlyStatistics>>> GetByStorageRoom(Guid id)
         {
             var stocks = await _bll.MonthlyStatisticsService.GetByStorageRoomIdAsync(id);
             var res = stocks.Select(x => _mapper.Map(x)!);
             return Ok(res);
-            
+        }
+        
+        [HttpGet("enrichedMonthlyStatistics/")]
+        [ProducesResponseType(typeof(IEnumerable<EnrichedMonthlyStatistics>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrichedMonthlyStatistics>>> GetEnrichedMonthlyStatistics()
+        {
+            var data = await _bll.MonthlyStatisticsService.GetEnrichedMonthlyStatistics();
+
+            var res = data.Select(u => _enrichedMonthlyStatisticsAPIMapper.Map(u)!).ToList();
+            return Ok(res);
         }
     }
 }
