@@ -57,7 +57,8 @@ onMounted(async () => {
 
   actionTypes.value = (await actionTypeService.getAllAsync()).data || [];
   reasons.value = (await reasonService.getAllAsync()).data || [];
-  products.value = (await productService.getAllAsync()).data || [];
+  const allProducts = (await productService.getAllAsync()).data || [];
+  products.value = allProducts.filter(p => !p.isComponent);
   suppliers.value = (await supplierService.getAllAsync()).data || [];
 
   if (!isAdmin.value) {

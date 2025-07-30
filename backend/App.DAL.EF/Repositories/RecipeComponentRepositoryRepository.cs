@@ -11,4 +11,11 @@ public class RecipeComponentRepositoryRepository: BaseRepository<RecipeComponent
     public RecipeComponentRepositoryRepository(DbContext repositoryDbContext) : base(repositoryDbContext, new RecipeComponentUOWMapper())
     {
     }
+    
+    public async Task<List<Domain.Logic.RecipeComponent>> GetComponentsByRecipeProductIdAsync(Guid productId)
+    {
+        return await RepositoryDbSet
+            .Where(rc => rc.ProductRecipeId == productId)
+            .ToListAsync();
+    }
 }

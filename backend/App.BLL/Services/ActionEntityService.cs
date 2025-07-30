@@ -5,29 +5,30 @@ using App.DAL.Contracts;
 using Base.BLL;
 using Base.Contracts;
 using CurrentStock = App.DAL.DTO.CurrentStock;
+using MonthlyStatistics = App.DAL.DTO.MonthlyStatistics;
 
 namespace App.BLL.Services;
 
 public class ActionEntityService : BaseService<ActionEntity, DAL.DTO.ActionEntity, IActionEntityRepository>, IActionEntityService
 {
     private readonly IAppUOW _uow;
-    private readonly IMapper<CurrentStock, Domain.Logic.CurrentStock> _domainToDalMapperCurrentStock;
+    private readonly IMapper<DAL.DTO.MonthlyStatistics, Domain.Logic.MonthlyStatistics> _domainToDalMapperMonthlyStatistics;
     private readonly IMapper<ActionEntity, DAL.DTO.ActionEntity> _dalToBLLMapper;
     private readonly IMapper<DAL.DTO.ActionEntity, Domain.Logic.ActionEntity> _domainToDalMapper;
     
     public ActionEntityService(
         IAppUOW serviceUow, 
         IMapper<ActionEntity, DAL.DTO.ActionEntity> mapper,
-        IMapper<CurrentStock, Domain.Logic.CurrentStock> domainToDalMapperCurrentStock,
+        IMapper<MonthlyStatistics, Domain.Logic.MonthlyStatistics> domainToDalMapperMonthlyStatistics,
         IMapper<DAL.DTO.ActionEntity, Domain.Logic.ActionEntity> domainToDalMapper)
         : base(serviceUow, serviceUow.ActionEntityRepository, mapper)
     {
         _uow = serviceUow;
-        _domainToDalMapperCurrentStock = domainToDalMapperCurrentStock;
+        _domainToDalMapperMonthlyStatistics = domainToDalMapperMonthlyStatistics;
         _dalToBLLMapper = mapper;
         _domainToDalMapper = domainToDalMapper;
     }
-    
+
     public virtual async Task<bool> UpdateStatusAsync(Guid id, string newStatus)
     {
         var action = await _uow.ActionEntityRepository.FindAsync(id);
@@ -40,45 +41,55 @@ public class ActionEntityService : BaseService<ActionEntity, DAL.DTO.ActionEntit
 
         var dalAction = _domainToDalMapper.Map(action);
         var bllAction = _dalToBLLMapper.Map(dalAction);
-            
+
         await UpdateAsync(bllAction);
-        
-        
+
+
         if (newStatus == "Accepted")
         {
             var productId = bllAction.ProductId;
-            var storageRoomId = bllAction.StorageRoomId;
 
-            var currentStock = await _uow.CurrentStockRepository
-                .FindByProductAndStorageAsync(productId, storageRoomId);
-            
-            var mappedCurrentStock = _domainToDalMapperCurrentStock.Map(currentStock);
-            
-            decimal quantityChange = bllAction.ActionType!.Code switch
-            {
-                ActionTypeEnum.Add => bllAction.Quantity,
-                ActionTypeEnum.Remove => -bllAction.Quantity,
-                _ => throw new InvalidOperationException("Unknown action type")
-            };
+            // Leia retsepti komponendid, kui neid on
+            var recipeComponents = await _uow.RecipeComponentRepository
+                .GetComponentsByRecipeProductIdAsync(productId); // <-- Tee see uus meetod repo-sse
 
-            if (mappedCurrentStock != null)
+            if (recipeComponents != null && recipeComponents.Any())
             {
-                mappedCurrentStock.Quantity += quantityChange;
-                await _uow.CurrentStockRepository.UpdateAsync(mappedCurrentStock);
-            }
-            else
-            {
-                var newStock = new CurrentStock
+                // Kui on tegemist retseptitootega, tee iga komponendi jaoks uus maha kandmise action
+                foreach (var component in recipeComponents)
                 {
-                    Id = Guid.NewGuid(),
-                    ProductId = productId,
-                    StorageRoomId = storageRoomId,
-                    Quantity = quantityChange
-                };
-                await _uow.CurrentStockRepository.AddAsync(newStock);
+                    var componentQuantity =
+                        bllAction.Quantity * component.Amount / 1m; // eeldame et Amount on "per unit"
+
+                    // Värskenda ka MonthlyStatistics iga komponendi kohta
+                    var compStat = await _uow.MonthlyStatisticsRepository
+                        .FindByProductAndStorageAsync(component.ComponentProductId, bllAction.StorageRoomId);
+
+                    if (compStat != null)
+                    {
+                        var mappedCompStat = _domainToDalMapperMonthlyStatistics.Map(compStat);
+                        mappedCompStat!.TotalRemovedQuantity += componentQuantity;
+                        await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedCompStat);
+                    }
+                    else
+                    {
+                        var newStat = new DAL.DTO.MonthlyStatistics
+                        {
+                            Id = Guid.NewGuid(),
+                            ProductId = component.ComponentProductId,
+                            StorageRoomId = bllAction.StorageRoomId,
+                            TotalRemovedQuantity = -componentQuantity,
+                            Year = DateTime.Today.Year,
+                            Month = DateTime.Today.Month,
+                        };
+                        await _uow.MonthlyStatisticsRepository.AddAsync(newStat);
+                    }
+                }
+
+                // Retsepti enda kohta ei tee maha kandmist – exit siit ära
+                return true;
             }
         }
-
         return true;
     }
 

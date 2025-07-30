@@ -22,4 +22,10 @@ public class MonthlyStatisticsService : BaseService<MonthlyStatistics, DAL.DTO.M
         var res = await ServiceRepository.GetByStorageRoomIdAsync(storageRoomId);
         return res.Select(u => _dalToBLLMapper.Map(u));
     }
+    
+    public async Task<IEnumerable<MonthlyStatistics?>> GetEnrichedMonthlyStatistics()
+    {
+        var res = await ServiceRepository.GetEnrichedMonthlyStatistics();
+        return res.Select(u => _dalToBLLMapper.Map(u));
+    }
 }

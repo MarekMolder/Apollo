@@ -22,7 +22,7 @@ const fetchPageData = async () => {
 onMounted(fetchPageData);
 
 const goToCurrentStock = (storageRoomId: string) => {
-  router.push(`/currentstock/${storageRoomId}`);
+  router.push(`/monthlyStatistics/${storageRoomId}`);
 };
 
 const filteredStorageRooms= computed(() =>
