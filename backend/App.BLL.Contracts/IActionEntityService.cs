@@ -2,10 +2,28 @@
 
 namespace App.BLL.Contracts;
 
-public interface IActionEntityService : IBaseService<DTO.ActionEntity>
+/// <summary>
+/// Business logic contract for managing ActionEntity operations.
+/// </summary>
+public interface IActionEntityService : IBaseService<BLL.DTO.ActionEntity>
 {
+    /// <summary>
+    /// Updates the status of an ActionEntity (e.g. to "Accepted" or "Declined").
+    /// </summary>
     Task<bool> UpdateStatusAsync(Guid id, string newStatus);
-    Task<IEnumerable<DTO.ActionEntity?>> GetEnrichedActionEntities();
+    
+    /// <summary>
+    /// Retrieves ActionEntities enriched with related data.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.ActionEntity?>> GetEnrichedActionEntities();
+    
+    /// <summary>
+    /// Returns a list of products that have had the highest total quantity removed.
+    /// </summary>
     Task<IEnumerable<(Guid ProductId, string ProductName, decimal RemoveQuantity)>> GetTopRemovedProductsAsync();
+    
+    /// <summary>
+    /// Returns a list of users who have removed the highest total quantity of products.
+    /// </summary>
     Task<IEnumerable<(string CreatedBy, decimal TotalRemovedQuantity)>> GetTopUsersByRemovedQuantityAsync();
 }

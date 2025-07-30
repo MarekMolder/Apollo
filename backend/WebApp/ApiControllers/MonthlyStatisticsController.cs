@@ -18,13 +18,13 @@ namespace WebApp.ApiControllers
     public class MonthlyStatisticsController : ControllerBase
     {
         private readonly ILogger<MonthlyStatisticsController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly MonthlyStatisticsAPIMapper _mapper = new();
+        private readonly MonthlyStatisticsApiMapper _mapper = new();
         
-        private readonly EnrichedMonthlyStatisticsAPIMapper _enrichedMonthlyStatisticsAPIMapper = new();
+        private readonly EnrichedMonthlyStatisticsApiMapper _enrichedMonthlyStatisticsAPIMapper = new();
 
-        public MonthlyStatisticsController(IAppBLL bll, ILogger<MonthlyStatisticsController> logger)
+        public MonthlyStatisticsController(IAppBll bll, ILogger<MonthlyStatisticsController> logger)
         {
             _bll = bll;
             _logger = logger;

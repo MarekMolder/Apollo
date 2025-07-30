@@ -10,7 +10,7 @@ public class BaseService<TBllEntity, TDalEntity, TDalRepository> : BaseService<T
     where TDalRepository: class, IBaseRepository<TDalEntity>
 
 {
-    public BaseService(IBaseUOW serviceUOW, TDalRepository serviceRepository, IMapper<TBllEntity, TDalEntity, Guid> mapper) : base(serviceUOW, serviceRepository, mapper)
+    public BaseService(IBaseUOW serviceUOW, TDalRepository serviceRepository, IMapper<TBllEntity, TDalEntity, Guid> mapperMonthlyStatistics) : base(serviceUOW, serviceRepository, mapperMonthlyStatistics)
     {
     }
 }
@@ -23,14 +23,14 @@ public class BaseService<TBllEntity, TDalEntity, TDalRepository, TKey>: IBaseSer
 {
     protected IBaseUOW ServiceUOW;
     protected TDalRepository ServiceRepository;
-    protected IMapper<TBllEntity, TDalEntity, TKey> Mapper;
+    protected IMapper<TBllEntity, TDalEntity, TKey> MapperMonthlyStatistics;
 
 
-    public BaseService(IBaseUOW serviceUOW, TDalRepository serviceRepository, IMapper<TBllEntity, TDalEntity, TKey> mapper)
+    public BaseService(IBaseUOW serviceUOW, TDalRepository serviceRepository, IMapper<TBllEntity, TDalEntity, TKey> mapperMonthlyStatistics)
     {
         ServiceUOW = serviceUOW;
         ServiceRepository = serviceRepository;
-        Mapper = mapper;
+        MapperMonthlyStatistics = mapperMonthlyStatistics;
     }
     
     
@@ -38,51 +38,51 @@ public class BaseService<TBllEntity, TDalEntity, TDalRepository, TKey>: IBaseSer
     public virtual IEnumerable<TBllEntity> All(TKey? userId = default)
     {
         var entities = ServiceRepository.All(userId);
-        return entities.Select(e => Mapper.Map(e)!).ToList(); 
+        return entities.Select(e => MapperMonthlyStatistics.Map(e)!).ToList(); 
     }
 
     public virtual async Task<IEnumerable<TBllEntity>> AllAsync(TKey? userId = default)
     {
         var entities = await ServiceRepository.AllAsync(userId);
-        return entities.Select(e => Mapper.Map(e)!).ToList(); 
+        return entities.Select(e => MapperMonthlyStatistics.Map(e)!).ToList(); 
     }
 
     public virtual TBllEntity? Find(TKey id, TKey? userId = default)
     {
         var entity = ServiceRepository.Find(id, userId);
-        return Mapper.Map(entity);
+        return MapperMonthlyStatistics.Map(entity);
     }
 
     public virtual async Task<TBllEntity?> FindAsync(TKey id, TKey? userId = default)
     {
         var entity = await ServiceRepository.FindAsync(id, userId);
-        return Mapper.Map(entity);
+        return MapperMonthlyStatistics.Map(entity);
     }
 
     public virtual void Add(TBllEntity entity, TKey? userId = default)
     {
-        var dalEntity = Mapper.Map(entity);
+        var dalEntity = MapperMonthlyStatistics.Map(entity);
         ServiceRepository.Add(dalEntity!, userId);
     }
 
     public virtual async Task AddAsync(TBllEntity entity, TKey? userId = default)
     {
-        var dalEntity = Mapper.Map(entity);
+        var dalEntity = MapperMonthlyStatistics.Map(entity);
         await ServiceRepository.AddAsync(dalEntity!, userId);
     }
 
     public virtual TBllEntity? Update(TBllEntity entity, TKey? userId = default)
     {
-        var dalEntity = Mapper.Map(entity);
+        var dalEntity = MapperMonthlyStatistics.Map(entity);
         var updatedEntity = ServiceRepository.Update(dalEntity!, userId);
-        return Mapper.Map(updatedEntity);
+        return MapperMonthlyStatistics.Map(updatedEntity);
     }
     
     public virtual async Task<TBllEntity?> UpdateAsync(TBllEntity entity, TKey? userId = default)
     {
-        var dalEntity = Mapper.Map(entity);
+        var dalEntity = MapperMonthlyStatistics.Map(entity);
         var updatedEntity = await ServiceRepository.UpdateAsync(dalEntity!, userId);
-        return Mapper.Map(updatedEntity);
+        return MapperMonthlyStatistics.Map(updatedEntity);
     }
 
     public virtual void Remove(TBllEntity entity, TKey? userId = default)

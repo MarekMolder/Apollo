@@ -21,7 +21,7 @@ namespace WebApp.Areas_Admin_Controllers
         // GET: Actions
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Actions.Include(a => a.ActionType).Include(a => a.Product).Include(a => a.Reason).Include(a => a.Supplier).Include(a => a.User);
+            var appDbContext = _context.Actions.Include(a => a.ActionType).Include(a => a.Product).Include(a => a.Reason).Include(a => a.User);
             return View(await appDbContext.ToListAsync());
         }
 
@@ -38,7 +38,6 @@ namespace WebApp.Areas_Admin_Controllers
                 .Include(a => a.Product)
                 .Include(a => a.Reason)
                 .Include(c => c.StorageRoom)
-                .Include(a => a.Supplier)
                 .Include(a => a.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (actionEntity == null)
@@ -55,7 +54,6 @@ namespace WebApp.Areas_Admin_Controllers
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "CreatedBy");
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Code");
             ViewData["ReasonId"] = new SelectList(_context.Reasons, "Id", "CreatedBy");
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "CreatedBy");
             ViewData["StorageRoomId"] = new SelectList(_context.StorageRooms, "Id", "CreatedBy");
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName");
             return View();
@@ -66,7 +64,7 @@ namespace WebApp.Areas_Admin_Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Quantity,Status,ActionTypeId,ReasonId,SupplierId,ProductId,StockAuditId,UserId,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] ActionEntity actionEntity)
+        public async Task<IActionResult> Create([Bind("Quantity,Status,ActionTypeId,ReasonId,ProductId,StockAuditId,UserId,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] ActionEntity actionEntity)
         {
             if (ModelState.IsValid)
             {
@@ -78,7 +76,6 @@ namespace WebApp.Areas_Admin_Controllers
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "CreatedBy", actionEntity.ActionTypeId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Code", actionEntity.ProductId);
             ViewData["ReasonId"] = new SelectList(_context.Reasons, "Id", "CreatedBy", actionEntity.ReasonId);
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "CreatedBy", actionEntity.SupplierId);
             ViewData["StorageRoomId"] = new SelectList(_context.StorageRooms, "Id", "CreatedBy", actionEntity.StorageRoomId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", actionEntity.UserId);
             return View(actionEntity);
@@ -100,7 +97,6 @@ namespace WebApp.Areas_Admin_Controllers
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "CreatedBy", actionEntity.ActionTypeId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Code", actionEntity.ProductId);
             ViewData["ReasonId"] = new SelectList(_context.Reasons, "Id", "CreatedBy", actionEntity.ReasonId);
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "CreatedBy", actionEntity.SupplierId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", actionEntity.UserId);
             ViewData["StorageRoomId"] = new SelectList(_context.StorageRooms, "Id", "CreatedBy", actionEntity.StorageRoomId);
             return View(actionEntity);
@@ -111,7 +107,7 @@ namespace WebApp.Areas_Admin_Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Quantity,Status,ActionTypeId,ReasonId,SupplierId,ProductId,StockAuditId,UserId,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] ActionEntity actionEntity)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Quantity,Status,ActionTypeId,ReasonId,ProductId,StockAuditId,UserId,Id,CreatedBy,CreatedAt,ChangedBy,ChangedAt,SysNotes")] ActionEntity actionEntity)
         {
             if (id != actionEntity.Id)
             {
@@ -139,7 +135,6 @@ namespace WebApp.Areas_Admin_Controllers
             ViewData["ActionTypeId"] = new SelectList(_context.ActionTypes, "Id", "CreatedBy", actionEntity.ActionTypeId);
             ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Code", actionEntity.ProductId);
             ViewData["ReasonId"] = new SelectList(_context.Reasons, "Id", "CreatedBy", actionEntity.ReasonId);
-            ViewData["SupplierId"] = new SelectList(_context.Suppliers, "Id", "CreatedBy", actionEntity.SupplierId);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "FirstName", actionEntity.UserId);
             ViewData["StorageRoomId"] = new SelectList(_context.StorageRooms, "Id", "CreatedBy", actionEntity.StorageRoomId);
             return View(actionEntity);
@@ -157,7 +152,6 @@ namespace WebApp.Areas_Admin_Controllers
                 .Include(a => a.ActionType)
                 .Include(a => a.Product)
                 .Include(a => a.Reason)
-                .Include(a => a.Supplier)
                 .Include(a => a.User)
                 .Include(c => c.StorageRoom)
                 .FirstOrDefaultAsync(m => m.Id == id);

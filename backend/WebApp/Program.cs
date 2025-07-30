@@ -65,8 +65,8 @@ else
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
-builder.Services.AddScoped<IAppUOW, AppUOW>();
-builder.Services.AddScoped<IAppBLL, AppBll>();
+builder.Services.AddScoped<IAppUOW, AppUow>();
+builder.Services.AddScoped<IAppBll, AppBll>();
 
 
 builder.Services.AddIdentity<AppUser, AppRole>(o =>

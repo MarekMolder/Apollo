@@ -1,19 +1,19 @@
+using App.BLL.Contracts;
 using App.DAL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApp.ViewModels;
-using IAppBLL = App.BLL.Contracts.IAppBLL;
 
 namespace WebApp.Controllers
 {
     [Authorize]
     public class ActionsController : Controller
     {
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        public ActionsController(IAppBLL bll)
+        public ActionsController(IAppBll bll)
         {
             _bll = bll;
         }
@@ -63,11 +63,6 @@ namespace WebApp.Controllers
                     nameof(Reason.Id),
                     nameof(Reason.Description)
                 ),
-
-                SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
-                    nameof(Supplier.Id),
-                    nameof(Supplier.Name)
-                ),
                 
                 StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
                 nameof(StorageRoom.Id),
@@ -98,8 +93,6 @@ namespace WebApp.Controllers
                 nameof(Product.Id), nameof(Product.Name), vm.ActionEntity.ProductId);
             vm.ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(User.GetUserId()),
                 nameof(Reason.Id), nameof(Reason.Description), vm.ActionEntity.ReasonId);
-            vm.SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
-                nameof(Supplier.Id), nameof(Supplier.Name), vm.ActionEntity.SupplierId);
             vm.StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
                 nameof(StorageRoom.Id), nameof(StorageRoom.Name), vm.ActionEntity.StorageRoomId);
 
@@ -139,12 +132,7 @@ namespace WebApp.Controllers
                     nameof(Reason.Description),
                     actionEntity.ReasonId
                 ),
-
-                SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
-                    nameof(Supplier.Id),
-                    nameof(Supplier.Name),
-                    actionEntity.SupplierId
-                ),
+                
                 StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
                     nameof(StorageRoom.Id),
                     nameof(StorageRoom.Name),
@@ -183,8 +171,6 @@ namespace WebApp.Controllers
                 nameof(Product.Id), nameof(Product.Name), vm.ActionEntity.ProductId);
             vm.ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(User.GetUserId()),
                 nameof(Reason.Id), nameof(Reason.Description), vm.ActionEntity.ReasonId);
-            vm.SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
-                nameof(Supplier.Id), nameof(Supplier.Name), vm.ActionEntity.SupplierId);
             vm.StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
                 nameof(StorageRoom.Id), nameof(StorageRoom.Name), vm.ActionEntity.StorageRoomId);
 

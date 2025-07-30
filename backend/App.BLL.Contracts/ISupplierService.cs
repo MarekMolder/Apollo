@@ -2,7 +2,13 @@
 
 namespace App.BLL.Contracts;
 
-public interface ISupplierService : IBaseService<DTO.Supplier>
+/// <summary>
+/// Business logic contract for managing Supplier operations.
+/// </summary>
+public interface ISupplierService : IBaseService<BLL.DTO.Supplier>
 {
-    Task<IEnumerable<DTO.Supplier?>> GetEnrichedSuppliers();
+    /// <summary>
+    /// Retrieves Supplier enriched with related data.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.Supplier?>> GetEnrichedSuppliers();
 }

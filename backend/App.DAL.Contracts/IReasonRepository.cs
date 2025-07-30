@@ -1,9 +1,11 @@
-﻿using App.DAL.DTO;
-using Base.DAL.Contracts;
+﻿using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IReasonRepository: IBaseRepository<Reason>
+/// <summary>
+/// Repository interface for handling data access related to Reasons.
+/// </summary>
+public interface IReasonRepository: IBaseRepository<DAL.DTO.Reason>
 {
     
 }

@@ -1,23 +1,29 @@
 ﻿using App.BLL.Contracts;
-using App.BLL.DTO;
 using App.DAL.Contracts;
 using Base.BLL;
 using Base.Contracts;
 
 namespace App.BLL.Services;
 
-public class ProductService : BaseService<Product, DAL.DTO.Product, IProductRepository>, IProductService
+/// <summary>
+/// Business logic service for managing Products.
+/// Provides access to enriched product data for UI or reporting.
+/// </summary>
+public class ProductService : BaseService<BLL.DTO.Product, DAL.DTO.Product, IProductRepository>, IProductService
 {
-    private readonly IMapper<Product, DAL.DTO.Product> _dalToBLLMapper;
-    public ProductService(IAppUOW serviceUow, IMapper<Product, DAL.DTO.Product> mapper) : base(serviceUow, serviceUow.ProductRepository, mapper)
+    // Maps between DAL.DTO and BLL.DTO ActionEntity
+    private readonly IMapper<BLL.DTO.Product, DAL.DTO.Product> _dalBllMapperProducts;
+    public ProductService(IAppUOW serviceUow, IMapper<BLL.DTO.Product, DAL.DTO.Product> bllMapperProduct) : base(serviceUow, serviceUow.ProductRepository, bllMapperProduct)
     {
-        _dalToBLLMapper = mapper;
+        _dalBllMapperProducts = bllMapperProduct;
     }
     
-    public async Task<IEnumerable<Product?>> GetEnrichedProducts()
+    /// <summary>
+    /// Returns Products enriched with related data (joins from DB).
+    /// </summary>
+    public async Task<IEnumerable<BLL.DTO.Product?>> GetEnrichedProducts()
     {
         var res = await ServiceRepository.GetEnrichedProducts();
-        return res.Select(u => _dalToBLLMapper.Map(u));
+        return res.Select(u => _dalBllMapperProducts.Map(u));
     }
-    
 }

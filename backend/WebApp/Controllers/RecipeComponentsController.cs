@@ -12,9 +12,9 @@ namespace WebApp.Controllers{
     [Authorize(Roles = "admin")]
     public class RecipeComponentsController : Controller
     {
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
 
-        public RecipeComponentsController(IAppBLL bll)
+        public RecipeComponentsController(IAppBll bll)
         {
             _bll = bll;
         }

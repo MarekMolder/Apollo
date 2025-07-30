@@ -1,17 +1,29 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Base.Contracts;
+﻿using Base.Contracts;
 
 namespace App.DAL.DTO;
 
+/// <summary>
+/// Represents a category to which products belong (e.g., Beverages, Snacks, Cleaning Supplies).
+/// </summary>
 public class ProductCategory : IDomainId
 {
+    /// <summary>
+    /// Unique identifier of the product category.
+    /// </summary>
     public Guid Id { get; set; }
     
-    [MaxLength(128)]
+    /// <summary>
+    /// Name of the category (e.g., "Drinks", "Food").
+    /// </summary>
     public string Name { get; set; } = default!;
     
-    
+    /// <summary>
+    /// Optional end date indicating when the category became inactive.
+    /// </summary
     public DateTime? EndedAt { get; set; }
     
-    public ICollection<Product>? Products { get; set; }
+    /// <summary>
+    /// Collection of products that belong to this category.
+    /// </summary>
+    public ICollection<DAL.DTO.Product>? Products { get; set; }
 }

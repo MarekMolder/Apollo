@@ -18,11 +18,11 @@ namespace WebApp.ApiControllers
     public class RecipeComponentController : ControllerBase
     {
         private readonly ILogger<RecipeComponentController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly RecipeComponentAPIMapper _mapper = new();
+        private readonly RecipeComponentApiMapper _mapper = new();
 
-        public RecipeComponentController(IAppBLL bll, ILogger<RecipeComponentController> logger)
+        public RecipeComponentController(IAppBll bll, ILogger<RecipeComponentController> logger)
         {
             _bll = bll;
             _logger = logger;

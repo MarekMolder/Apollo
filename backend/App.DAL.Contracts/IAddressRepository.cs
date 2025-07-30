@@ -1,9 +1,11 @@
-﻿using App.DAL.DTO;
-using Base.DAL.Contracts;
+﻿using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IAddressRepository: IBaseRepository<Address>
+/// <summary>
+/// Repository interface for handling data access related to Addresses.
+/// </summary>
+public interface IAddressRepository: IBaseRepository<DAL.DTO.Address>
 {
     
 }

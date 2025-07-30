@@ -2,8 +2,18 @@ using Base.BLL.Contracts;
 
 namespace App.BLL.Contracts;
 
-public interface IMonthlyStatisticsService : IBaseService<DTO.MonthlyStatistics>
+/// <summary>
+/// Business logic contract for managing MonthlyStatistics operations.
+/// </summary>
+public interface IMonthlyStatisticsService : IBaseService<BLL.DTO.MonthlyStatistics>
 {
-    Task<IEnumerable<DTO.MonthlyStatistics?>> GetByStorageRoomIdAsync(Guid storageRoomId);
-    Task<IEnumerable<DTO.MonthlyStatistics?>> GetEnrichedMonthlyStatistics();
+    /// <summary>
+    /// Retrieves MonthlyStatistics entries filtered by the specified storage room.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.MonthlyStatistics?>> GetByStorageRoomIdAsync(Guid storageRoomId);
+    
+    /// <summary>
+    /// Retrieves MonthlyStatistics enriched with related data.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.MonthlyStatistics?>> GetEnrichedMonthlyStatistics();
 }

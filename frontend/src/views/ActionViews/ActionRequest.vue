@@ -82,7 +82,6 @@ const filteredData = computed(() => {
             <th>{{ $t('Quantity') }}</th>
             <th>{{ $t('Action Type') }}</th>
             <th>{{ $t('Reason') }}</th>
-            <th>{{ $t('Supplier') }}</th>
             <th>{{ $t('Product') }}</th>
             <th>{{ $t('StorageRoom') }}</th>
             <th class="text-center" colspan="2">{{ $t('Actions') }}</th>
@@ -95,7 +94,6 @@ const filteredData = computed(() => {
             <td>{{ item.quantity }}</td>
             <td>{{ item.actionTypeName }}</td>
             <td class="reason-cell">{{ item.reasonDescription }}</td>
-            <td>{{ item.supplierName }}</td>
             <td>{{ item.productName }}</td>
             <td>{{ item.storageRoomName }}</td>
             <td class="action-buttons">

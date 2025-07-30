@@ -19,13 +19,13 @@ namespace WebApp.ApiControllers
     public class ActionsController : ControllerBase
     {
         private readonly ILogger<ActionsController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly ActionEntityAPIMapper _mapper = new();
+        private readonly ActionEntityApiMapper _mapper = new();
 
         private readonly EnrichedActionEntityApiMapper _enrichedActionEntityApiMapper = new();
 
-        public ActionsController(IAppBLL bll, ILogger<ActionsController> logger)
+        public ActionsController(IAppBll bll, ILogger<ActionsController> logger)
         {
             _bll = bll;
             _logger = logger;

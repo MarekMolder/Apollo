@@ -19,7 +19,6 @@ import type {IStorageRoomEnriched} from "@/domain/logic/IStorageRoomEnriched.ts"
 const actionService = new ActionService();
 const actionTypeService = new ActionTypeService();
 const reasonService = new ReasonService();
-const supplierService = new SupplierService();
 const productService = new ProductService();
 const storageRoomService = new StorageRoomService();
 
@@ -38,7 +37,6 @@ const action = ref<IAction>({
   status: 'Pending',
   actionTypeId: '',
   reasonId: '',
-  supplierId: '',
   productId: '',
   storageRoomId: '',
 });
@@ -46,7 +44,6 @@ const action = ref<IAction>({
 const actionTypes = ref<IActionType[]>([]);
 const reasons = ref<IReason[]>([]);
 const products = ref<IProduct[]>([]);
-const suppliers = ref<ISupplier[]>([]);
 const storageRooms = ref<IStorageRoomEnriched[]>([]);
 
 onMounted(async () => {
@@ -59,7 +56,6 @@ onMounted(async () => {
   reasons.value = (await reasonService.getAllAsync()).data || [];
   const allProducts = (await productService.getAllAsync()).data || [];
   products.value = allProducts.filter(p => !p.isComponent);
-  suppliers.value = (await supplierService.getAllAsync()).data || [];
 
   if (!isAdmin.value) {
     const discard = actionTypes.value.find(a => a.name.toLowerCase() === 'maha kandmine');
@@ -130,16 +126,6 @@ const isMahakandmine = computed(() => selectedActionType.value?.name.toLowerCase
             <option disabled value="">-- {{ $t('Select') }} {{ $t('Reason') }} --</option>
             <option v-for="reason in reasons" :key="reason.id" :value="reason.id">
               {{ reason.description }}
-            </option>
-          </select>
-        </template>
-
-        <template v-if="isTellimine">
-          <label for="supplier">{{ $t('Supplier') }}</label>
-          <select id="supplier" v-model="action.supplierId">
-            <option disabled value="">-- {{ $t('Select') }} {{ $t('Supplier') }} --</option>
-            <option v-for="supplier in suppliers" :key="supplier.id" :value="supplier.id">
-              {{ supplier.name }}
             </option>
           </select>
         </template>
