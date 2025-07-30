@@ -41,108 +41,42 @@ const doLogin = async () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-blue-500 flex items-center justify-center">
-    <h1 class="text-white text-4xl font-bold">
-      Tailwind töötab! 🎉
-    </h1>
-  </div>
+  <main class="flex items-center justify-center min-h-[calc(100vh-150px)] p-8">
+    <div class="bg-black text-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+      <img src="@/assets/apollo-logo.png" alt="Apollo logo" class="mx-auto mb-6 w-40" />
+
+      <form @submit.prevent="doLogin" class="space-y-5">
+        <div>
+          <label for="email" class="block mb-1 font-semibold">{{ $t('Email') }}</label>
+          <input
+            type="email"
+            id="email"
+            v-model="email"
+            required
+            class="w-full px-4 py-2 rounded-lg bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        <div>
+          <label for="password" class="block mb-1 font-semibold">{{ $t('Password') }}</label>
+          <input
+            type="password"
+            id="password"
+            v-model="password"
+            required
+            class="w-full px-4 py-2 rounded-lg bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+        </div>
+
+        <button
+          type="submit"
+          class="w-full py-3 rounded-lg font-bold text-black bg-gradient-to-r from-yellow-500 to-yellow-300 hover:from-yellow-600 hover:to-yellow-400 transition"
+        >
+          {{ $t('Login') }}
+        </button>
+
+        <p v-if="error" class="text-red-500 text-sm mt-2 text-center">{{ error }}</p>
+      </form>
+    </div>
+  </main>
 </template>
-
-<!--<template>-->
-<!--  <main class="login-container">-->
-<!--    <div class="login-card">-->
-<!--      <img src="@/assets/apollo-logo.png" class="logo" alt="Apollo logo" />-->
-<!--      <form @submit.prevent="doLogin">-->
-<!--        <div class="input-field">-->
-<!--          <label for="email">{{ $t('Email') }}</label>-->
-<!--          <input type="email" v-model="email" required />-->
-<!--        </div>-->
-<!--        <div class="input-field">-->
-<!--          <label for="password">{{ $t('Password') }}</label>-->
-<!--          <input type="password" v-model="password" required />-->
-<!--        </div>-->
-<!--        <button type="submit" class="login-btn">{{ $t('Login') }}</button>-->
-<!--      </form>-->
-<!--    </div>-->
-<!--  </main>-->
-<!--</template>-->
-
-<style scoped>
-.login-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 150px);
-  padding: 2rem;
-}
-
-.login-card {
-  background: black;
-  padding: 2rem;
-  border-radius: 20px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-  width: 100%;
-  max-width: 400px;
-  box-sizing: border-box;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 1.5rem auto;
-  width: 150px;
-}
-
-.input-field {
-  margin-bottom: 1.25rem;
-}
-
-.input-field label {
-  display: block;
-  margin-bottom: 0.3rem;
-  color: white;
-  font-weight: 600;
-}
-
-.input-field input {
-  width: 100%;
-  padding: 0.6rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 1rem;
-  background: #f4f4f4;
-  box-sizing: border-box;
-}
-
-.login-btn {
-  width: 100%;
-  padding: 0.75rem;
-  border-radius: 8px;
-  border: none;
-  background: linear-gradient(to right, #ff9900, #ffcc33);
-  font-weight: bold;
-  color: black;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.login-btn:hover {
-  background: linear-gradient(to right, #ffa500, #f0e68c);
-}
-
-@media (max-width: 480px) {
-  .card-bg {
-    padding: 1.25rem;
-    border-radius: 12px;
-  }
-
-  .logo {
-    width: 80px;
-    margin-bottom: 1rem;
-  }
-
-  .login-btn {
-    font-size: 1rem;
-    padding: 0.6rem;
-  }
-}
-</style>
