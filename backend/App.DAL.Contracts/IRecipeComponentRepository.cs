@@ -6,4 +6,5 @@ namespace App.DAL.Contracts;
 
 public interface IRecipeComponentRepository: IBaseRepository<RecipeComponent>
 {
+    Task<List<Domain.Logic.RecipeComponent>> GetComponentsByRecipeProductIdAsync(Guid id);
 }

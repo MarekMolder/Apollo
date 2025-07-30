@@ -8,4 +8,5 @@ export interface IProduct extends IDomainId {
   price: number;
   quantity: number;
   productCategoryId: string;
+  isComponent: boolean;
 }

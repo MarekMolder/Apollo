@@ -28,7 +28,7 @@ public class ActionEntityService : BaseService<ActionEntity, DAL.DTO.ActionEntit
         _dalToBLLMapper = mapper;
         _domainToDalMapper = domainToDalMapper;
     }
-    
+
     public virtual async Task<bool> UpdateStatusAsync(Guid id, string newStatus)
     {
         var action = await _uow.ActionEntityRepository.FindAsync(id);
@@ -41,47 +41,55 @@ public class ActionEntityService : BaseService<ActionEntity, DAL.DTO.ActionEntit
 
         var dalAction = _domainToDalMapper.Map(action);
         var bllAction = _dalToBLLMapper.Map(dalAction);
-            
+
         await UpdateAsync(bllAction);
-        
-        
+
+
         if (newStatus == "Accepted")
         {
             var productId = bllAction.ProductId;
-            var storageRoomId = bllAction.StorageRoomId;
 
-            var monthlyStatistics = await _uow.MonthlyStatisticsRepository
-                .FindByProductAndStorageAsync(productId, storageRoomId);
-            
-            var mappedMonthlyStatistics = _domainToDalMapperMonthlyStatistics.Map(monthlyStatistics);
-            
-            decimal quantityChange = bllAction.ActionType!.Code switch
-            {
-                ActionTypeEnum.Add => bllAction.Quantity,
-                ActionTypeEnum.Remove => -bllAction.Quantity,
-                _ => throw new InvalidOperationException("Unknown action type")
-            };
+            // Leia retsepti komponendid, kui neid on
+            var recipeComponents = await _uow.RecipeComponentRepository
+                .GetComponentsByRecipeProductIdAsync(productId); // <-- Tee see uus meetod repo-sse
 
-            if (mappedMonthlyStatistics != null)
+            if (recipeComponents != null && recipeComponents.Any())
             {
-                mappedMonthlyStatistics.TotalRemovedQuantity += quantityChange;
-                await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedMonthlyStatistics);
-            }
-            else
-            {
-                var newMonthlyStatistics = new DAL.DTO.MonthlyStatistics
+                // Kui on tegemist retseptitootega, tee iga komponendi jaoks uus maha kandmise action
+                foreach (var component in recipeComponents)
                 {
-                    Id = Guid.NewGuid(),
-                    ProductId = productId,
-                    StorageRoomId = storageRoomId,
-                    TotalRemovedQuantity = quantityChange,
-                    Year = DateTime.Today.Year,
-                    Month = DateTime.Today.Month,
-                };
-                await _uow.MonthlyStatisticsRepository.AddAsync(newMonthlyStatistics);
+                    var componentQuantity =
+                        bllAction.Quantity * component.Amount / 1m; // eeldame et Amount on "per unit"
+
+                    // Värskenda ka MonthlyStatistics iga komponendi kohta
+                    var compStat = await _uow.MonthlyStatisticsRepository
+                        .FindByProductAndStorageAsync(component.ComponentProductId, bllAction.StorageRoomId);
+
+                    if (compStat != null)
+                    {
+                        var mappedCompStat = _domainToDalMapperMonthlyStatistics.Map(compStat);
+                        mappedCompStat!.TotalRemovedQuantity += componentQuantity;
+                        await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedCompStat);
+                    }
+                    else
+                    {
+                        var newStat = new DAL.DTO.MonthlyStatistics
+                        {
+                            Id = Guid.NewGuid(),
+                            ProductId = component.ComponentProductId,
+                            StorageRoomId = bllAction.StorageRoomId,
+                            TotalRemovedQuantity = -componentQuantity,
+                            Year = DateTime.Today.Year,
+                            Month = DateTime.Today.Month,
+                        };
+                        await _uow.MonthlyStatisticsRepository.AddAsync(newStat);
+                    }
+                }
+
+                // Retsepti enda kohta ei tee maha kandmist – exit siit ära
+                return true;
             }
         }
-
         return true;
     }
 
