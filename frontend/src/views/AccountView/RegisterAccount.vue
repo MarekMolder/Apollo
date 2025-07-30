@@ -47,13 +47,15 @@ const doRegister = async () => {
 </script>
 
 <template>
-  <main class="flex justify-center items-center py-24 px-8 min-h-[50vh] font-['Segoe_UI'] text-white">
+  <main
+    class="flex justify-center items-center h-full px-4 sm:px-8 py-24 font-['Segoe_UI'] text-white"
+  >
     <div
-      class="w-full max-w-[500px] bg-[rgba(20,20,20,0.85)] backdrop-blur-md rounded-[16px] p-10 shadow-[0_8px_24px_rgba(255,170,51, 0.2)] border border-[rgba(255,170,51,0.5)] flex flex-col gap-4"
+      class="w-full max-w-[500px] bg-[rgba(20,20,20,0.85)] backdrop-blur-md rounded-[16px] p-6 sm:p-8 md:p-10 shadow-[0_8px_24px_rgba(255,170,51,0.4)] flex flex-col gap-4"
     >
       <RouterLink
         to="/"
-        class="text-[#ffaa33] text-[2.2rem] font-bold text-center mb-4 drop-shadow-[0_0_6px_rgba(255,170,51,0.6)] no-underline"
+        class="text-[#ffaa33] text-3xl sm:text-4xl font-bold text-center mb-4 drop-shadow-[0_0_6px_rgba(255,170,51,0.6)] no-underline"
       >
         Apollo
       </RouterLink>
@@ -82,7 +84,7 @@ const doRegister = async () => {
             type="text"
             id="firstName"
             required
-            class="w-full px-3 py-[0.6rem] rounded-[8px] bg-[#2a2a2a] text-white text-[1rem] border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
+            class="w-full px-3 py-2 rounded-lg bg-[#2a2a2a] text-white text-base border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
           />
         </div>
 
@@ -95,7 +97,7 @@ const doRegister = async () => {
             type="text"
             id="lastName"
             required
-            class="w-full px-3 py-[0.6rem] rounded-[8px] bg-[#2a2a2a] text-white text-[1rem] border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
+            class="w-full px-3 py-2 rounded-lg bg-[#2a2a2a] text-white text-base border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
           />
         </div>
 
@@ -108,7 +110,7 @@ const doRegister = async () => {
             type="email"
             id="email"
             required
-            class="w-full px-3 py-[0.6rem] rounded-[8px] bg-[#2a2a2a] text-white text-[1rem] border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
+            class="w-full px-3 py-2 rounded-lg bg-[#2a2a2a] text-white text-base border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
           />
         </div>
 
@@ -121,13 +123,13 @@ const doRegister = async () => {
             type="password"
             id="password"
             required
-            class="w-full px-3 py-[0.6rem] rounded-[8px] bg-[#2a2a2a] text-white text-[1rem] border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
+            class="w-full px-3 py-2 rounded-lg bg-[#2a2a2a] text-white text-base border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
           />
         </div>
 
         <button
           type="submit"
-          class="mt-4 bg-gradient-to-r from-[#ff8c00] to-[#ffa500] text-white font-bold py-[0.75rem] rounded-[8px] text-[1.05rem] transition hover:from-[#ffa500] hover:to-[#ffcc00] hover:scale-[1.02]"
+          class="mt-4 bg-gradient-to-r from-[#ff8c00] to-[#ffa500] text-white font-bold py-3 rounded-lg text-base transition hover:from-[#ffa500] hover:to-[#ffcc00] hover:scale-105"
         >
           {{ $t('Register') }}
         </button>
@@ -135,3 +137,4 @@ const doRegister = async () => {
     </div>
   </main>
 </template>
+
