@@ -1,9 +1,14 @@
-﻿using App.DAL.DTO;
-using Base.DAL.Contracts;
+﻿using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IStorageRoomRepository: IBaseRepository<StorageRoom>
+/// <summary>
+/// Repository interface for handling data access related to StorageRooms.
+/// </summary>
+public interface IStorageRoomRepository: IBaseRepository<DAL.DTO.StorageRoom>
 {
-    Task<IEnumerable<StorageRoom?>> GetEnrichedStorageRooms();
+    /// <summary>
+    /// Retrieves StorageRoom enriched with related data.
+    /// </summary>
+    Task<IEnumerable<DAL.DTO.StorageRoom?>> GetEnrichedStorageRooms();
 }

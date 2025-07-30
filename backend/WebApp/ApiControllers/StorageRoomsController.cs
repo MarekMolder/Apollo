@@ -19,12 +19,12 @@ namespace WebApp.ApiControllers
     public class StorageRoomsController : ControllerBase
     {
         private readonly ILogger<StorageRoomsController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly StorageRoomAPIMapper _mapper = new();
+        private readonly StorageRoomApiMapper _mapper = new();
         private readonly EnrichedStorageRoomApiMapper _enrichedMapper = new();
 
-        public StorageRoomsController(IAppBLL bll, ILogger<StorageRoomsController> logger)
+        public StorageRoomsController(IAppBll bll, ILogger<StorageRoomsController> logger)
         {
             _bll = bll;
             _logger = logger;

@@ -14,9 +14,9 @@ namespace WebApp.Controllers
     [Authorize(Roles = "admin")]
     public class MonthlyStatisticsController : Controller
     {
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
 
-        public MonthlyStatisticsController(IAppBLL bll)
+        public MonthlyStatisticsController(IAppBll bll)
         {
             _bll = bll;
         }

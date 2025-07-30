@@ -16,11 +16,11 @@ namespace WebApp.ApiControllers
     public class ProductCategoriesController : ControllerBase
     {
         private readonly ILogger<ProductCategoriesController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly ProductCategoryAPIMapper _mapper = new();
+        private readonly ProductCategoryApiMapper _mapper = new();
 
-        public ProductCategoriesController(IAppBLL bll, ILogger<ProductCategoriesController> logger)
+        public ProductCategoriesController(IAppBll bll, ILogger<ProductCategoriesController> logger)
         {
             _bll = bll;
             _logger = logger;

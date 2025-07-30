@@ -4,22 +4,40 @@ using Microsoft.EntityFrameworkCore;
 
 namespace App.DAL.EF.DataSeeding;
 
+/// <summary>
+/// Contains utility methods for initializing application data, roles, users, and database migrations.
+/// </summary>
 public static class AppDataInit
 {
+    /// <summary>
+    /// Seeds application-specific data (e.g., custom entities).
+    /// Currently empty — extend as needed.
+    /// </summary>
      public static void SeedAppData(AppDbContext context)
     {
     }
 
+    /// <summary>
+    /// Applies all pending EF Core migrations to the database.
+    /// </summary>
     public static void MigrateDatabase(AppDbContext context)
     {
         context.Database.Migrate();
     }
 
+    /// <summary>
+    /// Deletes the existing database if it exists.
+    /// Useful for resetting the development environment.
+    /// </summary>
     public static void DeleteDatabase(AppDbContext context)
     {
         context.Database.EnsureDeleted();
     }
 
+    /// <summary>
+    /// Seeds initial identity roles and users defined in InitialData.
+    /// Ensures each role exists and each user is created with proper roles assigned.
+    /// </summary>
     public static void SeedIdentity(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager)
     {
         foreach (var (roleName, id) in InitialData.Roles)
@@ -40,7 +58,6 @@ public static class AppDataInit
                 throw new ApplicationException("Role creation failed!");
             }
         }
-
 
         foreach (var userInfo in InitialData.Users)
         {
@@ -86,5 +103,4 @@ public static class AppDataInit
             }
         }
     }
-   
 }

@@ -1,19 +1,19 @@
+using App.BLL.Contracts;
 using App.BLL.DTO;
 using App.Domain.Enums;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using IAppBLL = App.BLL.Contracts.IAppBLL;
 
 namespace WebApp.Controllers
 {
     [Authorize]
     public class ActionTypesController : Controller
     {
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        public ActionTypesController(IAppBLL bll)
+        public ActionTypesController(IAppBll bll)
         {
             _bll = bll;
         }

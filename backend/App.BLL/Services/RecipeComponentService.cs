@@ -6,9 +6,12 @@ using Base.BLL;
 
 namespace App.BLL.Services;
 
-public class RecipeComponentService : BaseService<RecipeComponent, DAL.DTO.RecipeComponent, IRecipeComponentRepository>, IRecipeComponentService
+/// <summary>
+/// Business logic service for managing RecipeComponents.
+/// </summary>
+public class RecipeComponentService : BaseService<BLL.DTO.RecipeComponent, DAL.DTO.RecipeComponent, IRecipeComponentRepository>, IRecipeComponentService
 {
-    public RecipeComponentService(IAppUOW serviceUow, RecipeComponentBLLMapper bllMapper) : base(serviceUow, serviceUow.RecipeComponentRepository, bllMapper)
+    public RecipeComponentService(IAppUOW serviceUow, RecipeComponentBllMapper bllMapperRecipeComponents) : base(serviceUow, serviceUow.RecipeComponentRepository, bllMapperRecipeComponents)
     {
     }
 }

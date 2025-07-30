@@ -2,7 +2,13 @@
 
 namespace App.BLL.Contracts;
 
-public interface IStorageRoomService : IBaseService<DTO.StorageRoom>
+/// <summary>
+/// Business logic contract for managing StorageRoom operations.
+/// </summary>
+public interface IStorageRoomService : IBaseService<BLL.DTO.StorageRoom>
 {
-    Task<IEnumerable<DTO.StorageRoom?>> GetEnrichedStorageRooms();
+    /// <summary>
+    /// Retrieves StorageRoom enriched with related data.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.StorageRoom?>> GetEnrichedStorageRooms();
 }

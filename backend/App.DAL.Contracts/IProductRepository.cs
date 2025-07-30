@@ -1,9 +1,14 @@
-﻿using App.DAL.DTO;
-using Base.DAL.Contracts;
+﻿using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IProductRepository: IBaseRepository<Product>
+/// <summary>
+/// Repository interface for handling data access related to Products.
+/// </summary>
+public interface IProductRepository: IBaseRepository<DAL.DTO.Product>
 {
-    Task<IEnumerable<Product?>> GetEnrichedProducts();
+    /// <summary>
+    /// Retrieves Products enriched with related data.
+    /// </summary>
+    Task<IEnumerable<DAL.DTO.Product?>> GetEnrichedProducts();
 }

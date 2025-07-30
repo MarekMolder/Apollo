@@ -18,13 +18,13 @@ namespace WebApp.ApiControllers
     public class SuppliersController : ControllerBase
     {
         private readonly ILogger<SuppliersController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly SupplierAPIMapper _mapper = new();
+        private readonly SupplierApiMapper _mapper = new();
         
         private readonly EnrichedSupplierApiMapper _enrichedSupplierApiMapper = new();
 
-        public SuppliersController(IAppBLL bll, ILogger<SuppliersController> logger)
+        public SuppliersController(IAppBll bll, ILogger<SuppliersController> logger)
         {
             _bll = bll;
             _logger = logger;

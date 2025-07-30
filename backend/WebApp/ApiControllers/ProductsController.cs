@@ -18,13 +18,13 @@ namespace WebApp.ApiControllers
     public class ProductsController : ControllerBase
     {
         private readonly ILogger<ProductsController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly ProductAPIMapper _mapper = new();
+        private readonly ProductApiMapper _mapper = new();
         
         private readonly EnrichedProductApiMapper _enrichedProductApiMapper = new();
 
-        public ProductsController(IAppBLL bll, ILogger<ProductsController> logger)
+        public ProductsController(IAppBll bll, ILogger<ProductsController> logger)
         {
             _bll = bll;
             _logger = logger;

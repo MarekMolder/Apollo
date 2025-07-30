@@ -16,11 +16,11 @@ namespace WebApp.ApiControllers
     public class ReasonsController : ControllerBase
     {
         private readonly ILogger<ReasonsController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly ReasonAPIMapper _mapper = new();
+        private readonly ReasonApiMapper _mapper = new();
 
-        public ReasonsController(IAppBLL bll, ILogger<ReasonsController> logger)
+        public ReasonsController(IAppBll bll, ILogger<ReasonsController> logger)
         {
             _bll = bll;
             _logger = logger;

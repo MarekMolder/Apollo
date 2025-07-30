@@ -1,9 +1,11 @@
-﻿using App.DAL.DTO;
-using Base.DAL.Contracts;
+﻿using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IActionTypeEntityRepository: IBaseRepository<ActionTypeEntity>
+/// <summary>
+/// Repository interface for handling data access related to ActionTypeEntities.
+/// </summary>
+public interface IActionTypeEntityRepository: IBaseRepository<DAL.DTO.ActionTypeEntity>
 {
     
 }

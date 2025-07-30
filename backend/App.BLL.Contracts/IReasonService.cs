@@ -2,7 +2,10 @@
 
 namespace App.BLL.Contracts;
 
-public interface IReasonService : IBaseService<DTO.Reason>
+/// <summary>
+/// Business logic contract for managing Reason operations.
+/// </summary>
+public interface IReasonService : IBaseService<BLL.DTO.Reason>
 {
     
 }

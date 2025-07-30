@@ -16,11 +16,11 @@ namespace WebApp.ApiControllers
     public class AddressesController : ControllerBase
     {
         private readonly ILogger<AddressesController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly AddressAPIMapper _mapper = new();
+        private readonly AddressApiMapper _mapper = new();
 
-        public AddressesController(IAppBLL bll, ILogger<AddressesController> logger)
+        public AddressesController(IAppBll bll, ILogger<AddressesController> logger)
         {
             _bll = bll;
             _logger = logger;

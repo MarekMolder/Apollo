@@ -1,17 +1,17 @@
+using App.BLL.Contracts;
 using App.BLL.DTO;
 using Base.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using IAppBLL = App.BLL.Contracts.IAppBLL;
 
 namespace WebApp.Controllers
 {
     [Authorize]
     public class ProductCategoriesController : Controller
     {
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
 
-        public ProductCategoriesController(IAppBLL bll)
+        public ProductCategoriesController(IAppBll bll)
         {
             _bll = bll;
         }

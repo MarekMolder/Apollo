@@ -1,11 +1,24 @@
-using App.DAL.DTO;
 using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IMonthlyStatisticsRepository: IBaseRepository<MonthlyStatistics>
+/// <summary>
+/// Repository interface for handling data access related to MonthlyStatistcs.
+/// </summary>
+public interface IMonthlyStatisticsRepository: IBaseRepository<DAL.DTO.MonthlyStatistics>
 {
-    Task<IEnumerable<MonthlyStatistics?>> GetByStorageRoomIdAsync(Guid storageRoomId);
+    /// <summary>
+    /// Retrieves MonthlyStatistics entries filtered by the specified storage room.
+    /// </summary>
+    Task<IEnumerable<DAL.DTO.MonthlyStatistics?>> GetByStorageRoomIdAsync(Guid storageRoomId);
+    
+    /// <summary>
+    /// Finds a MonthlyStatistics domain model by product and storage room combination.
+    /// </summary>
     Task<Domain.Logic.MonthlyStatistics?> FindByProductAndStorageAsync(Guid productId, Guid storageRoomId);
-    Task<IEnumerable<MonthlyStatistics?>> GetEnrichedMonthlyStatistics();
+    
+    /// <summary>
+    /// Retrieves MonthlyStatistics enriched with related data.
+    /// </summary>
+    Task<IEnumerable<DAL.DTO.MonthlyStatistics?>> GetEnrichedMonthlyStatistics();
 }

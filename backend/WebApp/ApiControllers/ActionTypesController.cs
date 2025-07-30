@@ -17,11 +17,11 @@ namespace WebApp.ApiControllers
     public class ActionTypesController : ControllerBase
     {
         private readonly ILogger<ActionTypesController> _logger;
-        private readonly IAppBLL _bll;
+        private readonly IAppBll _bll;
         
-        private readonly ActionTypeEntityAPIMapper _mapper = new();
+        private readonly ActionTypeEntityApiMapper _mapper = new();
 
-        public ActionTypesController(IAppBLL bll, ILogger<ActionTypesController> logger)
+        public ActionTypesController(IAppBll bll, ILogger<ActionTypesController> logger)
         {
             _bll = bll;
             _logger = logger;

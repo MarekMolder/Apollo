@@ -3,8 +3,15 @@ using Base.Contracts;
 
 namespace App.DTO.v1.ApiMapper;
 
+/// <summary>
+/// Maps between DTO V1 and BLL DTO Supplier objects.
+/// Includes both full and simplified mapping logic.
+/// </summary>
 public class EnrichedSupplierApiMapper : IMapper<EnrichedSupplier, BLL.DTO.Supplier>
 {
+    /// <summary>
+    /// Maps a full BLL DTO Supplier to a DTO V1 Supplier, including related objects.
+    /// </summary>
     public EnrichedSupplier? Map(BLL.DTO.Supplier? entity)
     {
         if (entity == null) return null;
@@ -30,5 +37,4 @@ public class EnrichedSupplierApiMapper : IMapper<EnrichedSupplier, BLL.DTO.Suppl
     {
         throw new NotImplementedException("Mapping from API to BLL is not required.");
     }
-    
 }

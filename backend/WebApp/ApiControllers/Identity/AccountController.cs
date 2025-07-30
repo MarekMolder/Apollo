@@ -51,7 +51,7 @@ public class AccountController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<JWTResponse>> Login(LoginInfo loginInfo, int? jwtExpiresInSeconds, int? refreshTokenExpiresInSeconds)
+    public async Task<ActionResult<JwtResponse>> Login(LoginInfo loginInfo, int? jwtExpiresInSeconds, int? refreshTokenExpiresInSeconds)
     {
         // verify user
         var appUser = await _userManager.FindByEmailAsync(loginInfo.Email);
@@ -104,13 +104,13 @@ public class AccountController : ControllerBase
             GetExpirationDateTime(jwtExpiresInSeconds, SettingsJWTExpiresInSeconds)
         );
 
-        return Ok(new JWTResponse { JWT = jwt, RefreshToken = refreshToken.RefreshToken, Email = appUser.Email, Roles = roles, UserId = appUser.Id, FirstName = appUser.FirstName, LastName = appUser.LastName, Username = appUser.UserName });
+        return Ok(new JwtResponse { Jwt = jwt, RefreshToken = refreshToken.RefreshToken, Email = appUser.Email, Roles = roles, UserId = appUser.Id, FirstName = appUser.FirstName, LastName = appUser.LastName, Username = appUser.UserName });
     }
 
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Authorize(Roles = "admin,manager")]
-    public async Task<ActionResult<JWTResponse>> Register(Register registerModel, int? jwtExpiresInSeconds, int? refreshTokenExpiresInSeconds)
+    public async Task<ActionResult<JwtResponse>> Register(Register registerModel, int? jwtExpiresInSeconds, int? refreshTokenExpiresInSeconds)
     {
         var existingUser = await _userManager.FindByEmailAsync(registerModel.Email);
         if (existingUser != null)
@@ -161,7 +161,7 @@ public class AccountController : ControllerBase
             GetExpirationDateTime(jwtExpiresInSeconds, SettingsJWTExpiresInSeconds)
         );
 
-        return Ok(new JWTResponse { JWT = jwt, RefreshToken = refreshToken.RefreshToken, Email = appUser.Email, Roles = roles, UserId = appUser.Id, FirstName = appUser.FirstName, LastName = appUser.LastName, Username = appUser.UserName });
+        return Ok(new JwtResponse { Jwt = jwt, RefreshToken = refreshToken.RefreshToken, Email = appUser.Email, Roles = roles, UserId = appUser.Id, FirstName = appUser.FirstName, LastName = appUser.LastName, Username = appUser.UserName });
     }
 
     /// <summary>
@@ -172,11 +172,11 @@ public class AccountController : ControllerBase
     /// <param name="refreshTokenExpiresInSeconds">Optional custom expiration for refresh token</param>
     [Produces("application/json")]
     [Consumes("application/json")]
-    [ProducesResponseType(typeof(JWTResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(JwtResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(Message), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
     [HttpPost]
-    public async Task<ActionResult<JWTResponse>> RenewRefreshToken(RefreshTokenModel refreshTokenModel, int? jwtExpiresInSeconds, int? refreshTokenExpiresInSeconds)
+    public async Task<ActionResult<JwtResponse>> RenewRefreshToken(RefreshTokenModel refreshTokenModel, int? jwtExpiresInSeconds, int? refreshTokenExpiresInSeconds)
     {
         JwtSecurityToken jwtToken;
         try
@@ -254,9 +254,9 @@ public class AccountController : ControllerBase
             await _context.SaveChangesAsync();
         }
 
-        var response = new JWTResponse
+        var response = new JwtResponse
         {
-            JWT = jwt,
+            Jwt = jwt,
             RefreshToken = refreshToken.RefreshToken,
             UserId = appUser.Id,
             Email = appUser.Email,

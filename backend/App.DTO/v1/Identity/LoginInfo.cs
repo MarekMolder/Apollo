@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace App.DTO.v1.Identity;
 
-namespace App.DTO.v1.Identity;
-
+/// <summary>
+/// Data Transfer Object (DTO) representing login credentials for user authentication.
+/// </summary>
 public class LoginInfo
 {
-    [MaxLength(128)]
     public string Email { get; set; } = default!;
-    
-    [MaxLength(128)]
     public string Password { get; set; } = default!;
 }

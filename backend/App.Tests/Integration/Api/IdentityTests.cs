@@ -36,12 +36,12 @@ public class IdentityTests: IClassFixture<CustomWebApplicationFactory<Program>>
         var loginResponse = await _client.PostAsJsonAsync("/api/v1/account/login", adminLogin);
         loginResponse.EnsureSuccessStatusCode();
 
-        var adminJwt = await loginResponse.Content.ReadFromJsonAsync<JWTResponse>();
+        var adminJwt = await loginResponse.Content.ReadFromJsonAsync<JwtResponse>();
         Assert.NotNull(adminJwt);
 
         // Set Authorization header
         _client.DefaultRequestHeaders.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", adminJwt!.JWT);
+            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", adminJwt!.Jwt);
 
         // Arrange
         var registrationData = new Register
@@ -57,9 +57,9 @@ public class IdentityTests: IClassFixture<CustomWebApplicationFactory<Program>>
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var responseData = await response.Content.ReadFromJsonAsync<JWTResponse>();
+        var responseData = await response.Content.ReadFromJsonAsync<JwtResponse>();
         Assert.NotNull(responseData);
-        Assert.True(responseData.JWT.Length > 128);
+        Assert.True(responseData.Jwt.Length > 128);
         Assert.True(responseData.RefreshToken.Length == Guid.NewGuid().ToString().Length);
     }
 
@@ -79,9 +79,9 @@ public class IdentityTests: IClassFixture<CustomWebApplicationFactory<Program>>
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var responseData = await response.Content.ReadFromJsonAsync<JWTResponse>();
+        var responseData = await response.Content.ReadFromJsonAsync<JwtResponse>();
         Assert.NotNull(responseData);
-        Assert.True(responseData.JWT.Length > 128);
+        Assert.True(responseData.Jwt.Length > 128);
         Assert.True(responseData.RefreshToken.Length == Guid.NewGuid().ToString().Length);
     }
 
@@ -100,13 +100,13 @@ public class IdentityTests: IClassFixture<CustomWebApplicationFactory<Program>>
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var responseData = await response.Content.ReadFromJsonAsync<JWTResponse>();
+        var responseData = await response.Content.ReadFromJsonAsync<JwtResponse>();
         Assert.NotNull(responseData);
-        Assert.True(responseData.JWT.Length > 128);
+        Assert.True(responseData.Jwt.Length > 128);
         Assert.True(responseData.RefreshToken.Length == Guid.NewGuid().ToString().Length);
         
         
-        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", responseData.JWT);
+        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", responseData.Jwt);
         
         var getResponse = await _client.GetAsync("/api/v1/persons");
         getResponse.EnsureSuccessStatusCode();
@@ -134,13 +134,13 @@ public class IdentityTests: IClassFixture<CustomWebApplicationFactory<Program>>
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var responseData = await response.Content.ReadFromJsonAsync<JWTResponse>();
+        var responseData = await response.Content.ReadFromJsonAsync<JwtResponse>();
         Assert.NotNull(responseData);
-        Assert.True(responseData.JWT.Length > 128);
+        Assert.True(responseData.Jwt.Length > 128);
         Assert.True(responseData.RefreshToken.Length == Guid.NewGuid().ToString().Length);
         
         
-        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", responseData.JWT);
+        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", responseData.Jwt);
         
         var getResponse = await _client.GetAsync("/api/v1/persons");
         getResponse.EnsureSuccessStatusCode();
@@ -169,13 +169,13 @@ public class IdentityTests: IClassFixture<CustomWebApplicationFactory<Program>>
 
         // Assert
         response.EnsureSuccessStatusCode();
-        var responseData = await response.Content.ReadFromJsonAsync<JWTResponse>();
+        var responseData = await response.Content.ReadFromJsonAsync<JwtResponse>();
         Assert.NotNull(responseData);
-        Assert.True(responseData.JWT.Length > 128);
+        Assert.True(responseData.Jwt.Length > 128);
         Assert.True(responseData.RefreshToken.Length == Guid.NewGuid().ToString().Length);
         
         
-        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", responseData.JWT);
+        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", responseData.Jwt);
         
         var getResponse = await _client.GetAsync("/api/v1/persons");
         getResponse.EnsureSuccessStatusCode();
@@ -191,15 +191,15 @@ public class IdentityTests: IClassFixture<CustomWebApplicationFactory<Program>>
         // Refresh JWT
         var refreshResponse = await _client.PostAsJsonAsync("/api/v1/account/RenewRefreshToken", new RefreshTokenModel()
         {
-            Jwt = responseData.JWT,
+            Jwt = responseData.Jwt,
             RefreshToken = responseData.RefreshToken
         });
         
-        var refreshedResponseData = await refreshResponse.Content.ReadFromJsonAsync<JWTResponse>();
+        var refreshedResponseData = await refreshResponse.Content.ReadFromJsonAsync<JwtResponse>();
         Assert.NotNull(refreshedResponseData);
         
         
-        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", refreshedResponseData.JWT);
+        _client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", refreshedResponseData.Jwt);
         
         var getResponse2 = await _client.GetAsync("/api/v1/persons");
         getResponse2.EnsureSuccessStatusCode();
