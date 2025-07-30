@@ -15,7 +15,7 @@ const lastName = ref('');
 const error = ref<string | null>(null);
 const success = ref<string | null>(null);
 
-const isAdmin = store.role === 'admin';
+const isAdmin = store.role === 'admin'; 
 
 const doRegister = async () => {
   error.value = null;
@@ -47,152 +47,91 @@ const doRegister = async () => {
 </script>
 
 <template>
-  <main class="register-wrapper">
-    <div class="register-box">
-      <RouterLink class="custom-logo" to="/">Apollo</RouterLink>
+  <main class="flex justify-center items-center py-24 px-8 min-h-[50vh] font-['Segoe_UI'] text-white">
+    <div
+      class="w-full max-w-[500px] bg-[rgba(20,20,20,0.85)] backdrop-blur-md rounded-[16px] p-10 shadow-[0_8px_24px_rgba(255,170,51, 0.2)] border border-[rgba(255,170,51,0.5)] flex flex-col gap-4"
+    >
+      <RouterLink
+        to="/"
+        class="text-[#ffaa33] text-[2.2rem] font-bold text-center mb-4 drop-shadow-[0_0_6px_rgba(255,170,51,0.6)] no-underline"
+      >
+        Apollo
+      </RouterLink>
 
-      <div v-if="error" class="alert alert-warning">
+      <div
+        v-if="error"
+        class="text-center bg-[rgba(255,80,80,0.2)] text-[#ff6b6b] border border-[rgba(255,80,80,0.4)] font-bold text-sm p-3 rounded"
+      >
         {{ error }}
       </div>
 
-      <div v-if="success" class="alert alert-success">
+      <div
+        v-if="success"
+        class="text-center bg-[rgba(80,255,160,0.2)] text-[#80ffaa] border border-[rgba(80,255,160,0.4)] font-bold text-sm p-3 rounded"
+      >
         {{ success }}
       </div>
 
-      <form @submit.prevent="doRegister">
-        <label for="firstName">{{ $t('Firstname') }}</label>
-        <input v-model="firstName" type="text" id="firstName" required />
+      <form @submit.prevent="doRegister" class="flex flex-col gap-4">
+        <div>
+          <label for="firstName" class="font-semibold mb-1 block text-[#f0f0f0]">
+            {{ $t('Firstname') }}
+          </label>
+          <input
+            v-model="firstName"
+            type="text"
+            id="firstName"
+            required
+            class="w-full px-3 py-[0.6rem] rounded-[8px] bg-[#2a2a2a] text-white text-[1rem] border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
+          />
+        </div>
 
-        <label for="lastName">{{ $t('Lastname') }}</label>
-        <input v-model="lastName" type="text" id="lastName" required />
+        <div>
+          <label for="lastName" class="font-semibold mb-1 block text-[#f0f0f0]">
+            {{ $t('Lastname') }}
+          </label>
+          <input
+            v-model="lastName"
+            type="text"
+            id="lastName"
+            required
+            class="w-full px-3 py-[0.6rem] rounded-[8px] bg-[#2a2a2a] text-white text-[1rem] border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
+          />
+        </div>
 
-        <label for="email">{{ $t('Email') }}</label>
-        <input v-model="email" type="email" id="email" required />
+        <div>
+          <label for="email" class="font-semibold mb-1 block text-[#f0f0f0]">
+            {{ $t('Email') }}
+          </label>
+          <input
+            v-model="email"
+            type="email"
+            id="email"
+            required
+            class="w-full px-3 py-[0.6rem] rounded-[8px] bg-[#2a2a2a] text-white text-[1rem] border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
+          />
+        </div>
 
-        <label for="password">{{ $t('Password') }}</label>
-        <input v-model="password" type="password" id="password" required />
+        <div>
+          <label for="password" class="font-semibold mb-1 block text-[#f0f0f0]">
+            {{ $t('Password') }}
+          </label>
+          <input
+            v-model="password"
+            type="password"
+            id="password"
+            required
+            class="w-full px-3 py-[0.6rem] rounded-[8px] bg-[#2a2a2a] text-white text-[1rem] border-none outline-none transition focus:bg-[#1a1a1a] focus:border-orange-400"
+          />
+        </div>
 
-        <button type="submit" class="register-button">{{ $t('Register') }}</button>
+        <button
+          type="submit"
+          class="mt-4 bg-gradient-to-r from-[#ff8c00] to-[#ffa500] text-white font-bold py-[0.75rem] rounded-[8px] text-[1.05rem] transition hover:from-[#ffa500] hover:to-[#ffcc00] hover:scale-[1.02]"
+        >
+          {{ $t('Register') }}
+        </button>
       </form>
     </div>
   </main>
 </template>
-
-<style scoped>
-.register-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 6rem 2rem;
-  min-height: 50vh;
-  font-family: 'Segoe UI', sans-serif;
-  color: white;
-}
-
-.register-box {
-  background: rgba(20, 20, 20, 0.85);
-  backdrop-filter: blur(8px);
-  border-radius: 16px;
-  padding: 2.5rem;
-  width: 100%;
-  max-width: 500px;
-  box-shadow: 0 8px 24px rgba(255, 170, 51, 0.2);
-  border: 1px solid rgba(255, 170, 51, 0.5);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.custom-logo {
-  color: #ffaa33;
-  font-size: 2.2rem;
-  font-weight: bold;
-  text-align: center;
-  text-decoration: none;
-  margin-bottom: 1rem;
-  text-shadow: 0 0 6px rgba(255, 170, 51, 0.6);
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-label {
-  font-weight: 600;
-  margin-bottom: 0.2rem;
-  color: #f0f0f0;
-}
-
-input {
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  border-radius: 8px;
-  border: none;
-  background-color: #2a2a2a;
-  color: white;
-  font-size: 1rem;
-  transition: background 0.3s, border 0.3s;
-}
-
-input:focus {
-  outline: none;
-  background: #1a1a1a;
-  border: 1px solid orange;
-}
-
-.register-button {
-  margin-top: 1rem;
-  background: linear-gradient(to right, #ff8c00, #ffa500);
-  border: none;
-  padding: 0.75rem;
-  border-radius: 8px;
-  color: white;
-  font-weight: bold;
-  font-size: 1.05rem;
-  cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
-}
-
-.register-button:hover {
-  background: linear-gradient(to right, #ffa500, #ffcc00);
-  transform: scale(1.02);
-}
-
-.alert,
-.alert-success {
-  text-align: center;
-  padding: 0.75rem;
-  font-weight: bold;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  font-size: 0.95rem;
-}
-
-.alert {
-  background-color: rgba(255, 80, 80, 0.2);
-  color: #ff6b6b;
-  border: 1px solid rgba(255, 80, 80, 0.4);
-}
-
-.alert-success {
-  background-color: rgba(80, 255, 160, 0.2);
-  color: #80ffaa;
-  border: 1px solid rgba(80, 255, 160, 0.4);
-}
-
-@media (max-width: 600px) {
-  .register-box {
-    padding: 2rem;
-  }
-
-  .custom-logo {
-    font-size: 2rem;
-  }
-
-  .register-button {
-    font-size: 1rem;
-  }
-}
-</style>
