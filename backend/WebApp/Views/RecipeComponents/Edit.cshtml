@@ -24,7 +24,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="RecipeComponent.Amount" class="control-label"></label>
-                <input asp-for="RecipeComponent.Amount" class="form-control" step="0,01" inputmode="decimal" type="text" />
+                <input asp-for="RecipeComponent.Amount" class="form-control" type="number" step="any" />
                 <span asp-validation-for="RecipeComponent.Amount" class="text-danger"></span>
             </div>
             <div class="form-group">

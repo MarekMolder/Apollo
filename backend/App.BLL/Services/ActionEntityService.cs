@@ -78,7 +78,7 @@ public class ActionEntityService : BaseService<ActionEntity, DAL.DTO.ActionEntit
                             Id = Guid.NewGuid(),
                             ProductId = component.ComponentProductId,
                             StorageRoomId = bllAction.StorageRoomId,
-                            TotalRemovedQuantity = -componentQuantity,
+                            TotalRemovedQuantity = componentQuantity,
                             Year = DateTime.Today.Year,
                             Month = DateTime.Today.Month,
                         };
