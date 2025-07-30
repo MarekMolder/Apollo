@@ -41,42 +41,53 @@ const doLogin = async () => {
 </script>
 
 <template>
-  <main class="flex items-center justify-center min-h-[calc(100vh-150px)] p-8">
-    <div class="bg-black text-white p-8 rounded-2xl shadow-xl w-full max-w-md">
-      <img src="@/assets/apollo-logo.png" alt="Apollo logo" class="mx-auto mb-6 w-40" />
+  <main class="flex items-center justify-center h-full px-4 sm:px-8">
 
+    <!-- Kaart -->
+    <div class="bg-black text-white w-full max-w-sm sm:max-w-md md:max-w-lg p-6 sm:p-8 rounded-2xl shadow-xl">
+      
+      <!-- Logo -->
+      <img src="@/assets/apollo-logo.png" alt="Apollo logo" class="mx-auto mb-6 w-32 sm:w-40" />
+
+      <!-- Login vorm -->
       <form @submit.prevent="doLogin" class="space-y-5">
+        
+        <!-- Email -->
         <div>
-          <label for="email" class="block mb-1 font-semibold">{{ $t('Email') }}</label>
+          <label for="email" class="block mb-1 text-sm sm:text-base font-semibold">{{ $t('Email') }}</label>
           <input
             type="email"
             id="email"
             v-model="email"
             required
-            class="w-full px-4 py-2 rounded-lg bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            class="w-full px-4 py-2 rounded-lg bg-gray-100 text-black text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
 
+        <!-- Password -->
         <div>
-          <label for="password" class="block mb-1 font-semibold">{{ $t('Password') }}</label>
+          <label for="password" class="block mb-1 text-sm sm:text-base font-semibold">{{ $t('Password') }}</label>
           <input
             type="password"
             id="password"
             v-model="password"
             required
-            class="w-full px-4 py-2 rounded-lg bg-gray-100 text-black focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            class="w-full px-4 py-2 rounded-lg bg-gray-100 text-black text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-yellow-400"
           />
         </div>
 
+        <!-- Submit -->
         <button
           type="submit"
-          class="w-full py-3 rounded-lg font-bold text-black bg-gradient-to-r from-yellow-500 to-yellow-300 hover:from-yellow-600 hover:to-yellow-400 transition"
+          class="w-full py-3 rounded-lg font-bold text-black text-sm sm:text-base bg-gradient-to-r from-yellow-500 to-yellow-300 hover:from-yellow-600 hover:to-yellow-400 transition"
         >
           {{ $t('Login') }}
         </button>
 
+        <!-- Error -->
         <p v-if="error" class="text-red-500 text-sm mt-2 text-center">{{ error }}</p>
       </form>
     </div>
   </main>
 </template>
+
