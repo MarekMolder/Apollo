@@ -6,7 +6,7 @@ namespace App.BLL.Contracts;
 /// Business Logic Layer (BLL) facade interface.
 /// Provides access to all business services used in the application.
 /// </summary>
-public interface IAppBll : IBaseBLL
+public interface IAppBll : IBaseBll
 {
     //ActionEntity Service
     IActionEntityService ActionEntityService { get; }

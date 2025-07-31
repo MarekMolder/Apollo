@@ -2,20 +2,31 @@
 
 namespace Base.Domain.Identity;
 
-public abstract class BaseUserRole<TUser, TRole> : BaseUserRole<Guid, TUser, TRole> //, IDomainId
-    where TUser : class //BaseUser<TRole>
-    where TRole : class //BaseRole<TUser>
+/// <summary>
+/// Abstract base class for the user-role relationship using <see cref="Guid"/> as the primary key.
+/// </summary>
+public abstract class BaseUserRole<TUser, TRole> : BaseUserRole<Guid, TUser, TRole>
+    where TUser : class
+    where TRole : class
 {
 }
 
-public abstract class BaseUserRole<TKey, TUser, TRole> : IdentityUserRole<TKey> //, IDomainId<TKey>
+/// <summary>
+/// Abstract generic base class for the user-role relationship.
+/// Extends <see cref="IdentityUserRole{TKey}"/> to include navigation properties for user and role.
+/// </summary>
+public abstract class BaseUserRole<TKey, TUser, TRole> : IdentityUserRole<TKey>
     where TKey : IEquatable<TKey>
-    where TUser : class //BaseUser<TKey, BaseUserRole<TKey, TUser, TRole>>
-    where TRole : class //BaseRole<TKey, BaseUserRole<TKey, TUser, TRole>>
+    where TUser : class
+    where TRole : class
 {
-    // TODO - this causes problems with Role manager
-    //public TKey Id { get; set; } = default!;
-
+    /// <summary>
+    /// Navigation property to the associated user.
+    /// </summary>
     public TUser? User { get; set; }
+    
+    /// <summary>
+    /// Navigation property to the associated role.
+    /// </summary>
     public TRole? Role { get; set; }
 }
