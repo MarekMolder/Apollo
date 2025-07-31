@@ -8,44 +8,52 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers.Translation;
 
+/// <summary>
+/// Controller for providing localized translation resources.
+/// </summary>
 [ApiVersion("1.0")]
 [Route("api/v{version:apiVersion}/[controller]/[action]")]
 [ApiController]
 public class LocalizationController : ControllerBase
 {
     private readonly ILogger<LocalizationController> _logger;
-
+    
     public LocalizationController(ILogger<LocalizationController> logger)
     {
         _logger = logger;
     }
 
+    /// <summary>
+    /// Retrieves translation key-value pairs for the given language and resource name.
+    /// </summary>
+    /// <param name="language">Language code (e.g. en, et, ru).</param>
+    /// <param name="resource">Name of the resource file.</param>
+    /// <returns>Dictionary of translations.</returns>
     [HttpGet]
     public IActionResult Get(string language, string resource)
     {
         try
         {
-            _logger.LogInformation("Requesting translations for: resource={Resource}, language={Language}", resource, language);
+            _logger.LogInformation("Requesting translations: resource={Resource}, language={Language}", resource, language);
 
             var culture = new CultureInfo(language);
-
             var resolved = ResolveResourceInfo(resource);
+            
             if (resolved == null)
             {
-                _logger.LogWarning("Unable to resolve assembly for resource '{Resource}'", resource);
+                _logger.LogWarning("Could not resolve resource '{Resource}'", resource);
                 return NotFound(new { error = "Resource not found." });
             }
 
             var (resourceName, assembly) = resolved.Value;
-
-            _logger.LogInformation("Resolved resource = {ResourceName}, Assembly = {AssemblyName}", resourceName, assembly.GetName().Name);
-
+            _logger.LogInformation("Resolved resource: {ResourceName} in assembly: {Assembly}", resourceName, assembly.GetName().Name);
+            
             var manager = new ResourceManager(resourceName, assembly);
             var resourceSet = manager.GetResourceSet(culture, true, true);
 
             if (resourceSet == null)
             {
-                _logger.LogWarning("ResourceSet was null for resource '{Resource}' and culture '{Culture}'", resourceName, culture.Name);
+                _logger.LogWarning("No ResourceSet found for resource='{Resource}' and culture='{Culture}'", resourceName, culture.Name);
                 return NotFound(new { error = "Resource not found." });
             }
 
@@ -55,24 +63,31 @@ public class LocalizationController : ControllerBase
                 translations[entry.Key.ToString()!] = entry.Value?.ToString() ?? "";
             }
 
+            _logger.LogInformation("Loaded {Count} translations from {ResourceName}", translations.Count, resourceName);
             return Ok(translations);
         }
         catch (CultureNotFoundException)
         {
+            _logger.LogWarning("Invalid culture code received: {Language}", language);
             return BadRequest(new { error = "Invalid language code." });
         }
         catch (MissingManifestResourceException ex)
         {
-            _logger.LogError(ex, "MissingManifestResourceException");
+            _logger.LogError(ex, "MissingManifestResourceException for resource: {Resource}", resource);
             return NotFound(new { error = "Resource not found." });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error loading translations");
+            _logger.LogError(ex, "Unhandled exception while retrieving translations");
             return StatusCode(500, new { error = "Internal error" });
         }
     }
 
+    /// <summary>
+    /// Resolves the full resource name and corresponding assembly for a given resource key.
+    /// </summary>
+    /// <param name="resource">Resource identifier.</param>
+    /// <returns>Tuple of resource name and assembly, or null if not found.</returns>
     private (string ResourceName, Assembly Assembly)? ResolveResourceInfo(string resource)
     {
         if (string.IsNullOrWhiteSpace(resource)) return null;

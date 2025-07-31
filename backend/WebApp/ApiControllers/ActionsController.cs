@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
+    /// <summary>
+    /// Api controller for managing ActionEntity records.
+    /// </summary>
     [ApiVersion( "1.0" )]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
@@ -18,8 +21,9 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "admin,manager,tootaja")]
     public class ActionsController : ControllerBase
     {
-        private readonly ILogger<ActionsController> _logger;
         private readonly IAppBll _bll;
+        
+        private readonly ILogger<ActionsController> _logger;
         
         private readonly ActionEntityApiMapper _mapper = new();
 
@@ -32,9 +36,8 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Get all persons for current user
+        /// Gets all actions. Returns all if admin/manager, or own actions if regular user.
         /// </summary>
-        /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
         [ProducesResponseType( typeof( IEnumerable<ActionEntity> ), 200 )]
@@ -42,45 +45,46 @@ namespace WebApp.ApiControllers
         public async Task<ActionResult<IEnumerable<ActionEntity>>> GetActions()
         {
             var isAdmin = User.IsInRole("admin") || User.IsInRole("manager");
-
+            _logger.LogInformation("Fetching actions for user {UserId} (isAdmin: {IsAdmin})", User.GetUserId(), isAdmin);
+            
             var actions = isAdmin
-                ? await _bll.ActionEntityService.AllAsync() // admin näeb kõiki
-                : await _bll.ActionEntityService.AllAsync(User.GetUserId()); // tavakasutaja ainult enda
+                ? await _bll.ActionEntityService.AllAsync()
+                : await _bll.ActionEntityService.AllAsync(User.GetUserId());
 
             return actions.Select(x => _mapper.Map(x)!).ToList();
         }
 
         /// <summary>
-        /// Get person by id - owned by current user
+        /// Gets one action by ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<ActionEntity>> GetActionEntity(Guid id)
         {
+            _logger.LogInformation("Getting action with ID {Id}", id);
             var actionEntity = await _bll.ActionEntityService.FindAsync(id);
 
             if (actionEntity == null)
             {
+                _logger.LogWarning("Action with ID {Id} not found", id);
                 return NotFound();
             }
 
             return _mapper.Map(actionEntity)!;
         }
-
+        
         /// <summary>
-        /// Update person
+        /// Updates an existing action.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="actionEntity"></param>
-        /// <returns></returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutActionEntity(Guid id, ActionEntity actionEntity)
         {
             if (id != actionEntity.Id)
             {
+                _logger.LogWarning("PutActionEntity failed: ID mismatch (URL: {Id}, Body: {EntityId})", id, actionEntity.Id);
                 return BadRequest();
             }
+
+            _logger.LogInformation("Updating action {Id} by user {UserId}", id, User.GetUserId());
 
             await _bll.ActionEntityService.UpdateAsync(_mapper.Map(actionEntity)!, User.GetUserId());
             await _bll.SaveChangesAsync();
@@ -89,13 +93,13 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Create new person
+        /// Creates a new action.
         /// </summary>
-        /// <param name="actionEntity"></param>
-        /// <returns></returns>
         [HttpPost]
         public async Task<ActionResult<ActionEntity>> PostActionEntity(ActionEntity actionEntity)
         {
+            _logger.LogInformation("Creating new action for user {UserId}", User.GetUserId());
+
             var bllEntity = _mapper.Map(actionEntity);
             _bll.ActionEntityService.Add(bllEntity, User.GetUserId());
             await _bll.SaveChangesAsync();
@@ -108,13 +112,13 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Delete person by id - owned by current user
+        /// Deletes an action by ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteActionEntity(Guid id)
         {
+            _logger.LogInformation("Deleting action {Id} by user {UserId}", id, User.GetUserId());
+
             await _bll.ActionEntityService.RemoveAsync(id, User.GetUserId());
             await _bll.SaveChangesAsync();
             return NoContent();
@@ -131,36 +135,48 @@ namespace WebApp.ApiControllers
         {
             try
             {
+                _logger.LogInformation("Updating status of action {Id} to {Status}", id, dto.Status);
                 var updated = await _bll.ActionEntityService.UpdateStatusAsync(id, dto.Status);
-                if (!updated) return NotFound();
+                if (!updated)
+                {
+                    _logger.LogWarning("Action with ID {Id} not found for status update", id);
+                    return NotFound();
+                }
 
                 await _bll.SaveChangesAsync();
                 return Ok(new { message = $"Status updated to {dto.Status}" });
             }
             catch (ArgumentException ex)
             {
+                _logger.LogWarning("Invalid status update for action {Id}: {Message}", id, ex.Message);
                 return BadRequest(ex.Message);
             }
         }
         
+        /// <summary>
+        /// Gets enriched view of all actions with related data.
+        /// </summary>
         [HttpGet("enrichedAction/")]
         [ProducesResponseType(typeof(IEnumerable<EnrichedActionEntity>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<EnrichedActionEntity>>> GetEnrichedActionEntities()
         {
-            var data = await _bll.ActionEntityService.GetEnrichedActionEntities();
+            _logger.LogInformation("Fetching enriched action data");
 
+            var data = await _bll.ActionEntityService.GetEnrichedActionEntities();
             var res = data.Select(u => _enrichedActionEntityApiMapper.Map(u)!).ToList();
+            
             return Ok(res);
         }
         
         /// <summary>
-        /// Get top 5 most frequently removed products (Accepted & Remove actions)
+        /// Gets top 5 most frequently removed products.
         /// </summary>
-        /// <returns>List of product name, ID, and removal count</returns>
         [HttpGet("problematicProducts")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<object>>> GetTopRemovedProducts()
         {
+            _logger.LogInformation("Fetching top removed products");
+
             var result = await _bll.ActionEntityService.GetTopRemovedProductsAsync();
 
             var response = result.Select(r => new
@@ -174,13 +190,14 @@ namespace WebApp.ApiControllers
         }
         
         /// <summary>
-        /// Get top 5 users who removed the most products (sum of quantity)
+        /// Gets top 5 users who removed the most products.
         /// </summary>
-        /// <returns>List of users and total quantity removed</returns>
         [HttpGet("topUsersByRemove")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<object>>> GetTopUsersByRemovedQuantity()
         {
+            _logger.LogInformation("Fetching top users by removed product quantity");
+
             var result = await _bll.ActionEntityService.GetTopUsersByRemovedQuantityAsync();
 
             var response = result.Select(r => new
@@ -190,6 +207,5 @@ namespace WebApp.ApiControllers
 
             return Ok(response);
         }
-        
     }
 }

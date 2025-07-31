@@ -8,28 +8,40 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
+    /// <summary>
+    /// Controller for managing suppliers.
+    /// </summary>
     [Authorize]
     public class SuppliersController : Controller
     {
         private readonly IAppBll _bll;
-
-        public SuppliersController(IAppBll bll)
+        
+        private readonly ILogger<SuppliersController> _logger;
+        
+        public SuppliersController(IAppBll bll, ILogger<SuppliersController> logger)
         {
             _bll = bll;
+            _logger = logger;
         }
 
-        // GET: Suppliers
+        /// <summary>
+        /// Displays list of all suppliers.
+        /// </summary>
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation("Fetching all suppliers for user {UserId}", User.GetUserId());
             var res = await _bll.SupplierService.AllAsync(User.GetUserId());
             return View(res);
         }
 
-        // GET: Suppliers/Details/5
+        /// <summary>
+        /// Displays details for a specific supplier.
+        /// </summary>
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
+                _logger.LogWarning("Details called with null ID");
                 return NotFound();
             }
 
@@ -37,15 +49,20 @@ namespace WebApp.Controllers
             
             if (entity == null)
             {
+                _logger.LogWarning("Supplier with ID {Id} not found", id);
                 return NotFound();
             }
 
             return View(entity);
         }
 
-        // GET: Suppliers/Create
+        /// <summary>
+        /// Shows form to create a new supplier.
+        /// </summary>
         public async Task<IActionResult> Create()
         {
+            _logger.LogInformation("Opening create form for supplier");
+
             var vm = new SupplierCreateEditViewModel
             {
                 AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
@@ -57,37 +74,43 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
-        // POST: Suppliers/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Processes the creation of a new supplier.
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(SupplierCreateEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
+                _logger.LogInformation("Creating new supplier for user {UserId}", User.GetUserId());
                 _bll.SupplierService.Add(vm.Supplier);
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
+            _logger.LogWarning("Invalid model state while creating supplier");
             vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
                 nameof(Address.Id), nameof(Address.Name), vm.Supplier.AddressId);
             
             return View(vm);
         }
 
-        // GET: Suppliers/Edit/5
+        /// <summary>
+        /// Shows form to edit an existing supplier.
+        /// </summary>
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
+                _logger.LogWarning("Edit called with null ID");
                 return NotFound();
             }
 
             var supplier = await _bll.SupplierService.FindAsync(id.Value, User.GetUserId());
             if (supplier == null)
             {
+                _logger.LogWarning("Supplier with ID {Id} not found", id);
                 return NotFound();
             }
             
@@ -103,36 +126,42 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
-        // POST: Suppliers/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Processes the update of an existing supplier.
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, SupplierCreateEditViewModel vm)
         {
             if (id != vm.Supplier.Id)
             {
+                _logger.LogWarning("Edit mismatch ID {PostedId} vs {EntityId}", id, vm.Supplier.Id);
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
+                _logger.LogInformation("Updating supplier with ID {Id} for user {UserId}", id, User.GetUserId());
                 _bll.SupplierService.Update(vm.Supplier);
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
+            _logger.LogWarning("Invalid model state while editing supplier {Id}", id);
             vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
                 nameof(Address.Id), nameof(Address.Name), vm.Supplier.AddressId);
 
             return View(vm);
         }
 
-        // GET: Suppliers/Delete/5
+        /// <summary>
+        /// Shows confirmation view to delete a supplier.
+        /// </summary>
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
+                _logger.LogWarning("Delete called with null ID");
                 return NotFound();
             }
 
@@ -140,21 +169,24 @@ namespace WebApp.Controllers
 
             if (supplier == null)
             {
+                _logger.LogWarning("Supplier with ID {Id} not found", id);
                 return NotFound();
             }
 
             return View(supplier);
         }
 
-        // POST: Suppliers/Delete/5
+        /// <summary>
+        /// Processes confirmed deletion of a supplier.
+        /// </summary>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+            _logger.LogInformation("Deleting supplier with ID {Id} for user {UserId}", id, User.GetUserId());
             await _bll.SupplierService.RemoveAsync(id, User.GetUserId());
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        
     }
 }
