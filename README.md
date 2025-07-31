@@ -1,6 +1,6 @@
-﻿# 🏷️ Inventory Stock Management System
+﻿# 🏷️ Product Write-Off and Statistics Tool
 
-A modular **full-stack warehouse and inventory management system**, built with:
+A modular **tool focused on: writing off products from stock and viewing monthly statistics of write-offs**, built with:
 
 - 🔧 **ASP.NET Core (C#)** – Backend API & Authentication
 - 🌐 **Vue 3 + Vite** – Frontend UI
@@ -29,7 +29,7 @@ A modular **full-stack warehouse and inventory management system**, built with:
 
 ### 🔧 Prerequisites
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/)
+- [.NET 8 SDK](https://dotnet.microsoft.com/)
 - [Node.js + npm](https://nodejs.org/)
 - Docker + Docker Compose
 
@@ -131,8 +131,8 @@ Covers:
 
 ## 📄 License
 
-This project is for **educational and personal use only**.  
-Not licensed for commercial or public deployment.
+This project is developed for internal company use and is **currently licensed for use only by the author.**
+Commercial use, distribution, or public deployment is not permitted without explicit permission.
 
 ---
 

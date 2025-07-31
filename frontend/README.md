@@ -1,6 +1,6 @@
 # 📦 Inventory Frontend (Vue 3 + Vite)
 
-This is the frontend for the Inventory Stock Management System. It is built with **Vue 3**, **Vite**, and **TypeScript**, and communicates with the backend ASP.NET Core API over HTTP.
+This is the frontend for the Stock Write-off tracker. It is built with **Vue 3**, **Vite**, and **TypeScript**, and communicates with the backend ASP.NET Core API over HTTP.
 
 ---
 

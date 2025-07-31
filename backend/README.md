@@ -1,10 +1,9 @@
-﻿# StockManagement System
+﻿# 🧾 Stock Write-Off Tracker
 
-**StockManagement** is a web-based inventory tracking system built with C# and ASP.NET Core.  
+Stock Write-off tracker is a focused web-based tool built with C# and ASP.NET Core,
+designed to record product write-offs and view monthly statistics.
 
-It was created as a personal side project to explore backend development, database integration, and clean architectural patterns.
-
-The system is designed to help manage and monitor stock levels in a warehouse environment.
+Originally developed for internal company use, the project explores backend development, database integration, and modular clean architecture practices.
 
 ---
 
@@ -48,7 +47,7 @@ This project can be run either locally (with manual setup) or fully via Docker.
 
 #### Prerequisites
 
-- [.NET 9.0 SDK](https://dotnet.microsoft.com/)
+- [.NET 8.0 SDK](https://dotnet.microsoft.com/)
 - PostgreSQL database running on port 5432
 - IDE: Visual Studio / JetBrains Rider / VS Code
 
@@ -118,30 +117,25 @@ The system supports full inventory and stock management, including user roles, d
     - Admins have full CRUD access to all resources
 
 - **Warehouse & Inventory Management**
-    - Manage storage rooms, inventory sessions, and current stock
-    - Link products to specific storage rooms and inventories
-    - Track and audit all inventory changes
+    - Manage storage rooms and monthly write-offs
+    - Link products to specific storage rooms
+    - Track and audit all storageRoom changes
 
 - **Product & Supplier Registry**
     - Create and manage products and categories
     - View and assign suppliers
 
 - **Stock Actions & Approval**
-    - Actions (e.g., write-offs, restocks) can be proposed
-    - Each action requires approval before updating the current stock
+    - Actions (e.g., write-offs) can be proposed
+    - Each action requires approval before updating the monthly statistics
     - Reasons can be attached to stock movements for traceability
-
-- **Auditing & Logging**
-    - Inventory audits are supported through `StockAudit` and `StockMovement`
-    - All operations are trackable and tied to user actions
 
 ### 📊 Managed Entities
 
-- `Product`, `ProductCategory`
+- `Product`, `ProductCategory`, `RecipeComponent`
 - `Supplier`, `Address`
-- `CurrentStock`, `Inventory`, `StorageRoom`, `StorageRoomInInventory`
-- `StockAudit`, `StockMovement`, `Reason`
-- `Action`, `ActionType`, `ApprovalRequest`
+- `MonthlyStatistics`, `StorageRoom`,
+- `Action`, `ActionType`, `Reason`
 
 ---
 
@@ -283,8 +277,9 @@ ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=contactbas
 
 ## 📄 License
 
-This project is **not licensed for commercial use**.
+This project is not licensed for commercial use or public distribution.
 
-It is created for **educational purposes**, private experimentation, and portfolio demonstration only.
+It was developed for internal use within a company context and for the author's own learning and portfolio purposes.
+Usage is currently restricted to the author only.
 
-If you'd like to use parts of this project in your own work, please reach out to the author for permission.
+If you wish to reuse any part of this project, please contact the author to request permission.
