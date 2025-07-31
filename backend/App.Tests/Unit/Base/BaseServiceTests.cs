@@ -21,7 +21,7 @@ public class BaseServiceTests
 {
     private readonly Mock<IMapper<BllTestEntity, DalTestEntity, Guid>> _mockMapper;
     private readonly Mock<IBaseRepository<DalTestEntity, Guid>> _mockRepo;
-    private readonly Mock<IBaseUOW> _mockUow;
+    private readonly Mock<IBaseUow> _mockUow;
 
     private readonly BaseService<BllTestEntity, DalTestEntity, IBaseRepository<DalTestEntity, Guid>, Guid> _service;
 
@@ -29,7 +29,7 @@ public class BaseServiceTests
     {
         _mockRepo = new Mock<IBaseRepository<DalTestEntity, Guid>>();
         _mockMapper = new Mock<IMapper<BllTestEntity, DalTestEntity, Guid>>();
-        _mockUow = new Mock<IBaseUOW>();
+        _mockUow = new Mock<IBaseUow>();
 
         _service = new BaseService<BllTestEntity, DalTestEntity, IBaseRepository<DalTestEntity, Guid>, Guid>(
             _mockUow.Object,

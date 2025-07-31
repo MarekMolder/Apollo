@@ -1,8 +1,11 @@
 ﻿namespace Base.Domain;
 
+/// <summary>
+/// A multilingual string implementation that supports language-specific values.
+/// Inherits from <see cref="Dictionary{TKey, TValue}"/> where key is the language code (e.g. "en", "et").
+/// </summary>
 public class LangStr : Dictionary<string, string>
 {
-    // TODO: use app conf param
     private const string DefaultCulture = "en";
 
     // s["en"] = "foo";
@@ -27,14 +30,16 @@ public class LangStr : Dictionary<string, string>
 
         var neutralCulture = culture.Split('-')[0];
         this[neutralCulture] = value;
-        
-        // check for default culture also. if not set - do so
+
         if (!ContainsKey(DefaultCulture))
         {
             this[DefaultCulture] = value;
         }
     }
 
+    /// <summary>
+    /// Returns the translation for the current or specified culture.
+    /// </summary>
     public string? Translate(string? culture = null)
     {
         if (Count == 0) return null;
@@ -59,6 +64,9 @@ public class LangStr : Dictionary<string, string>
         return null;
     }
 
+    /// <summary>
+    /// Sets the translation for the current or specified culture.
+    /// </summary>
     public void SetTranslation(string value, string? culture = null)
     {
         culture = culture?.Trim() ?? Thread.CurrentThread.CurrentUICulture.Name;
@@ -66,14 +74,15 @@ public class LangStr : Dictionary<string, string>
         this[neutralCulture] = value;
     }
 
+    /// <summary>
+    /// Returns the default string representation (localized to current culture or fallback).
+    /// </summary>
     public override string ToString()
     {
         return Translate() ?? "????";
     }
-
-    // string xxx = new LangStr("foo","et-EE"); xxx == "foo";
+    
     public static implicit operator string(LangStr? langStr) => langStr?.ToString() ?? "null";
-
-    // LangStr xxx = "foobar";
+    
     public static implicit operator LangStr(string value) => new(value);
 }

@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Base.DAL.EF;
 
+/// <summary>
+/// Generic base repository implementation for entities using GUID as primary key.
+/// </summary>
 public class BaseRepository<TDalEntity, TDomainEntity> : BaseRepository<TDalEntity, TDomainEntity, Guid>, IBaseRepository<TDalEntity>
     where TDalEntity : class, IDomainId
     where TDomainEntity : class, IDomainId
@@ -16,6 +19,10 @@ public class BaseRepository<TDalEntity, TDomainEntity> : BaseRepository<TDalEnti
     }
 }
 
+/// <summary>
+/// Generic base repository implementation for entities with custom key types.
+/// Handles mapping, user filtering, and LangStr support.
+/// </summary>
 public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<TDalEntity, TKey>
     where TDalEntity : class, IDomainId<TKey>
     where TDomainEntity : class, IDomainId<TKey>
@@ -32,7 +39,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         RepositoryDbSet = RepositoryDbContext.Set<TDomainEntity>();
     }
 
-
+    /// <summary>
+    /// Constructs a queryable data set with optional user filtering.
+    /// </summary>
      protected virtual IQueryable<TDomainEntity> GetQuery(TKey? userId = default!)
     {
         var query = RepositoryDbSet.AsQueryable();
@@ -45,6 +54,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         return query;
     }
 
+    /// <summary>
+    /// Retrieves all mapped entities.
+    /// </summary>
     public virtual IEnumerable<TDalEntity> All(TKey? userId = default!)
     {
         return GetQuery(userId)
@@ -52,6 +64,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
             .Select(e => Mapper.Map(e)!);
     }
 
+    /// <summary>
+    /// Asynchronously retrieves all mapped entities.
+    /// </summary>
     public virtual async Task<IEnumerable<TDalEntity>> AllAsync(TKey? userId = default!)
     {
         return (await GetQuery(userId)
@@ -59,6 +74,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
             .Select(e => Mapper.Map(e)!);
     }
 
+    /// <summary>
+    /// Finds a specific entity by ID.
+    /// </summary>
     public virtual TDalEntity? Find(TKey id, TKey? userId = default!)
     {
         var query = GetQuery(userId);
@@ -66,6 +84,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         return Mapper.Map(res);
     }
 
+    /// <summary>
+    /// Asynchronously finds a specific entity by ID.
+    /// </summary>
     public virtual async Task<TDalEntity?> FindAsync(TKey id, TKey? userId = default!)
     {
         var query = GetQuery(userId);
@@ -73,6 +94,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         return Mapper.Map(res);
     }
 
+    /// <summary>
+    /// Adds a new entity to the context.
+    /// </summary>
     public virtual void Add(TDalEntity entity, TKey? userId = default!)
     {
         var dbEntity = Mapper.Map(entity);
@@ -85,6 +109,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         RepositoryDbSet.Add(dbEntity!);
     }
 
+    /// <summary>
+    /// Asynchronously adds a new entity to the context.
+    /// </summary>
     public virtual async Task AddAsync(TDalEntity entity, TKey? userId = default)
     {
         var dbEntity = Mapper.Map(entity);
@@ -97,6 +124,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         await RepositoryDbSet.AddAsync(dbEntity!);
     }
 
+    /// <summary>
+    /// Updates an existing entity.
+    /// </summary>
     public virtual TDalEntity? Update(TDalEntity entity, TKey? userId = default!)
     {
         var domainEntity = Mapper.Map(entity)!;
@@ -130,6 +160,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         return Mapper.Map(RepositoryDbSet.Update(domainEntity).Entity)!;
     }
 
+    /// <summary>
+    /// Asynchronously updates an existing entity.
+    /// </summary>
     public virtual async Task<TDalEntity?> UpdateAsync(TDalEntity entity, TKey? userId = default!)
     {
         var domainEntity = Mapper.Map(entity)!;
@@ -177,11 +210,17 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
                !EqualityComparer<TKey>.Default.Equals(userId, default);
     }
 
+    /// <summary>
+    /// Removes an entity by object reference.
+    /// </summary>
     public virtual void Remove(TDalEntity entity, TKey? userId = default!)
     {
         Remove(entity.Id, userId);
     }
 
+    /// <summary>
+    /// Removes an entity by ID.
+    /// </summary>
     public virtual void Remove(TKey id, TKey? userId)
     {
         var query = GetQuery(userId);
@@ -193,6 +232,9 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         }
     }
 
+    /// <summary>
+    /// Asynchronously removes an entity by ID.
+    /// </summary>
     public virtual async Task RemoveAsync(TKey id, TKey? userId = default!)
     {
         var query = GetQuery(userId);
@@ -204,18 +246,27 @@ public class BaseRepository<TDalEntity, TDomainEntity, TKey> : IBaseRepository<T
         }
     }
 
+    /// <summary>
+    /// Checks if an entity exists by ID.
+    /// </summary>
     public virtual bool Exists(TKey id, TKey? userId = default)
     {
         var query = GetQuery(userId);
         return query.Any(e => e.Id.Equals(id));
     }
 
+    /// <summary>
+    /// Asynchronously checks if an entity exists by ID.
+    /// </summary>
     public virtual async Task<bool> ExistsAsync(TKey id, TKey? userId = default)
     {
         var query = GetQuery(userId);
         return await query.AnyAsync(e => e.Id.Equals(id));
     }
 
+    /// <summary>
+    /// Returns the first entity matching the specified predicate.
+    /// </summary>
     public virtual async Task<TDalEntity?> FirstOrDefaultAsync(Expression<Func<TDomainEntity, bool>> predicate)
     {
         var entity = await RepositoryDbSet.FirstOrDefaultAsync(predicate);

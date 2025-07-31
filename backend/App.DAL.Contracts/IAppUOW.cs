@@ -2,7 +2,7 @@
 
 namespace App.DAL.Contracts;
 
-public interface IAppUOW : IBaseUOW
+public interface IAppUOW : IBaseUow
 {
     IActionEntityRepository ActionEntityRepository { get; }
     IActionTypeEntityRepository ActionTypeEntityRepository { get; }
