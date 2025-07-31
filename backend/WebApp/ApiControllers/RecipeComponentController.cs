@@ -1,7 +1,5 @@
 using App.BLL.Contracts;
 using App.DTO.v1;
-using App.DTO.v1.ApiEntities;
-using App.DTO.v1.ApiMapper;
 using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,6 +8,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
+    /// <summary>
+    /// Api controller for managing recipe components.
+    /// </summary>
     [ApiVersion( "1.0" )]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
@@ -17,8 +18,9 @@ namespace WebApp.ApiControllers
     [Authorize(Roles = "admin,manager")]
     public class RecipeComponentController : ControllerBase
     {
-        private readonly ILogger<RecipeComponentController> _logger;
         private readonly IAppBll _bll;
+        
+        private readonly ILogger<RecipeComponentController> _logger;
         
         private readonly RecipeComponentApiMapper _mapper = new();
 
@@ -29,30 +31,32 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Get all persons for current user
+        /// Get all recipe components.
         /// </summary>
-        /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
         [ProducesResponseType( typeof( IEnumerable<RecipeComponent> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<RecipeComponent>>> GetActions()
+        public async Task<ActionResult<IEnumerable<RecipeComponent>>> GetRecipeComponents()
         {
-            return (await _bll.RecipeComponentService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
-        }
+            _logger.LogInformation("Fetching all recipe components");
+            var result = (await _bll.RecipeComponentService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
+            
+            _logger.LogInformation("Returned {Count} recipe components", result.Count);
+            return result;        }
 
         /// <summary>
-        /// Get person by id - owned by current user
+        /// Get recipe component by ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<RecipeComponent>> GetActionEntity(Guid id)
+        public async Task<ActionResult<RecipeComponent>> GetRecipeComponent(Guid id)
         {
+            _logger.LogInformation("Fetching recipe component with ID {Id}", id);
             var recipeComponent = await _bll.RecipeComponentService.FindAsync(id);
 
             if (recipeComponent == null)
             {
+                _logger.LogWarning("Recipe component with ID {Id} not found", id);
                 return NotFound();
             }
 
@@ -60,19 +64,18 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Update person
+        /// Update recipe component.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="person"></param>
-        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, RecipeComponent recipeComponent)
+        public async Task<IActionResult> PutRecipeComponent(Guid id, RecipeComponent recipeComponent)
         {
             if (id != recipeComponent.Id)
             {
+                _logger.LogWarning("PutRecipeComponent failed: ID mismatch (URL: {Id}, Body: {EntityId})", id, recipeComponent.Id);
                 return BadRequest();
             }
 
+            _logger.LogInformation("Updating recipe component with ID {Id}", id);
             await _bll.RecipeComponentService.UpdateAsync(_mapper.Map(recipeComponent)!);
             await _bll.SaveChangesAsync();
 
@@ -80,16 +83,17 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Create new person
+        /// Create new recipe component.
         /// </summary>
-        /// <param name="person"></param>
-        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<RecipeComponent>> PostActionEntity(RecipeComponent recipeComponent)
+        public async Task<ActionResult<RecipeComponent>> PostRecipeComponent(RecipeComponent recipeComponent)
         {
+            _logger.LogInformation("Creating new recipe component");
             var bllEntity = _mapper.Map(recipeComponent);
             _bll.RecipeComponentService.Add(bllEntity);
             await _bll.SaveChangesAsync();
+
+            _logger.LogInformation("Created recipe component with ID {Id}", bllEntity.Id);
 
             return CreatedAtAction("GetRecipeComponent", new
             {
@@ -99,15 +103,16 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Delete person by id - owned by current user
+        /// Delete recipe component by ID.
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteActionEntity(Guid id)
+        public async Task<IActionResult> DeleteRecipeComponent(Guid id)
         {
+            _logger.LogInformation("Deleting recipe component with ID {Id}", id);
             await _bll.RecipeComponentService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
+            
+            _logger.LogInformation("Deleted recipe component with ID {Id}", id);
             return NoContent();
         }
     }

@@ -10,15 +10,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.ApiControllers
 {
+    /// <summary>
+    /// Api controller for managing suppliers.
+    /// </summary>
     [ApiVersion( "1.0" )]
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Authorize(Roles = "admin,manager,tootaja")]
     public class SuppliersController : ControllerBase
-    {
-        private readonly ILogger<SuppliersController> _logger;
+    { 
         private readonly IAppBll _bll;
+        
+        private readonly ILogger<SuppliersController> _logger;
         
         private readonly SupplierApiMapper _mapper = new();
         
@@ -31,30 +35,32 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Get all persons for current user
+        /// Get all suppliers
         /// </summary>
-        /// <returns>List of persons</returns>
         [HttpGet]
         [Produces( "application/json" )]
         [ProducesResponseType( typeof( IEnumerable<Supplier> ), 200 )]
         [ProducesResponseType( 404 )]
-        public async Task<ActionResult<IEnumerable<Supplier>>> GetActions()
+        public async Task<ActionResult<IEnumerable<Supplier>>> GetSuppliers()
         {
-            return (await _bll.SupplierService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
-        }
+            _logger.LogInformation("Fetching all suppliers");
+            var result = (await _bll.SupplierService.AllAsync()).Select(x => _mapper.Map(x)!).ToList();
+            
+            _logger.LogInformation("Returned {Count} suppliers", result.Count);
+            return result;        }
 
         /// <summary>
-        /// Get person by id - owned by current user
+        /// Get supplier by ID
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpGet("{id}")]
-        public async Task<ActionResult<Supplier>> GetActionEntity(Guid id)
+        public async Task<ActionResult<Supplier>> GetSupplier(Guid id)
         {
+            _logger.LogInformation("Fetching supplier with ID {Id}", id);
             var supplier = await _bll.SupplierService.FindAsync(id);
 
             if (supplier == null)
             {
+                _logger.LogWarning("Supplier with ID {Id} not found", id);
                 return NotFound();
             }
 
@@ -62,19 +68,18 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Update person
+        /// Update supplier
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="person"></param>
-        /// <returns></returns>
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutActionEntity(Guid id, Supplier supplier)
+        public async Task<IActionResult> PutSupplier(Guid id, Supplier supplier)
         {
             if (id != supplier.Id)
             {
+                _logger.LogWarning("PutSupplier failed: ID mismatch (URL: {Id}, Body: {EntityId})", id, supplier.Id);
                 return BadRequest();
             }
 
+            _logger.LogInformation("Updating supplier with ID {Id}", id);
             await _bll.SupplierService.UpdateAsync(_mapper.Map(supplier)!);
             await _bll.SaveChangesAsync();
 
@@ -82,16 +87,17 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Create new person
+        /// Create new supplier
         /// </summary>
-        /// <param name="person"></param>
-        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Supplier>> PostActionEntity(Supplier supplier)
+        public async Task<ActionResult<Supplier>> PostSupplier(Supplier supplier)
         {
+            _logger.LogInformation("Creating new supplier");
             var bllEntity = _mapper.Map(supplier);
             _bll.SupplierService.Add(bllEntity);
             await _bll.SaveChangesAsync();
+            
+            _logger.LogInformation("Created supplier with ID {Id}", bllEntity.Id);
 
             return CreatedAtAction("GetSupplier", new
             {
@@ -101,25 +107,31 @@ namespace WebApp.ApiControllers
         }
 
         /// <summary>
-        /// Delete person by id - owned by current user
+        /// Delete supplier by ID
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteActionEntity(Guid id)
+        public async Task<IActionResult> DeleteSupplier(Guid id)
         {
+            _logger.LogInformation("Deleting supplier with ID {Id}", id);
             await _bll.SupplierService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
+            
+            _logger.LogInformation("Deleted supplier with ID {Id}", id);
             return NoContent();
         }
         
+        /// <summary>
+        /// Get enriched suppliers
+        /// </summary>
         [HttpGet("enrichedSuppliers/")]
         [ProducesResponseType(typeof(IEnumerable<EnrichedSupplier>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<EnrichedSupplier>>> GetEnrichedSuppliers()
         {
+            _logger.LogInformation("Fetching enriched suppliers");
             var data = await _bll.SupplierService.GetEnrichedSuppliers();
-
             var res = data.Select(u => _enrichedSupplierApiMapper.Map(u)!).ToList();
+            
+            _logger.LogInformation("Returned {Count} enriched suppliers", res.Count);
             return Ok(res);
         }
     }

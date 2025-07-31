@@ -8,29 +8,40 @@ using WebApp.ViewModels;
 
 namespace WebApp.Controllers
 {
+    /// <summary>
+    /// Controller for managing ActionEntity records.
+    /// </summary>
     [Authorize]
     public class ActionsController : Controller
     {
         private readonly IAppBll _bll;
         
-        public ActionsController(IAppBll bll)
+        private readonly ILogger<ActionsController> _logger;
+        
+        public ActionsController(IAppBll bll, ILogger<ActionsController> logger)
         {
             _bll = bll;
+            _logger = logger;
         }
 
-        // GET: Actions
+        /// <summary>
+        /// Displays a list of all actions for the current user.
+        /// </summary>
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation("Fetching all actions for user {UserId}", User.GetUserId());
             var res = await _bll.ActionEntityService.AllAsync(User.GetUserId());
             return View(res);
-
         }
 
-        // GET: Actions/Details/5
+        /// <summary>
+        /// Shows the details of a specific ActionEntity.
+        /// </summary>
         public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
+                _logger.LogWarning("Details called with null ID");
                 return NotFound();
             }
 
@@ -38,15 +49,20 @@ namespace WebApp.Controllers
             
             if (entity == null)
             {
+                _logger.LogWarning("Action with ID {Id} not found", id);
                 return NotFound();
             }
-
+            
             return View(entity);
         }
 
-        // GET: Actions/Create
+        /// <summary>
+        /// Displays the create form for a new ActionEntity.
+        /// </summary>
         public async Task<IActionResult> Create()
         {
+            _logger.LogInformation("Loading create action form for user {UserId}", User.GetUserId());
+            
             var vm = new ActionEntityCreateEditViewModel
             {
                 ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(User.GetUserId()),
@@ -73,19 +89,22 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
-        // POST: Actions/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Handles the form submission to create a new ActionEntity.
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ActionEntityCreateEditViewModel vm)
         {
             if (ModelState.IsValid)
             {
+                _logger.LogInformation("Creating new action for user {UserId}", User.GetUserId());
                 _bll.ActionEntityService.Add(vm.ActionEntity, User.GetUserId());
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
+            _logger.LogWarning("Invalid model state while creating action for user {UserId}", User.GetUserId());
 
             vm.ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(User.GetUserId()),
                 nameof(ActionTypeEntity.Id), nameof(ActionTypeEntity.Name), vm.ActionEntity.ActionTypeId);
@@ -99,17 +118,21 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
-        // GET: Actions/Edit/5
+        /// <summary>
+        /// Displays the edit form for a specific ActionEntity.
+        /// </summary>
         public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
+                _logger.LogWarning("Edit called with null ID");
                 return NotFound();
             }
 
             var actionEntity = await _bll.ActionEntityService.FindAsync(id.Value, User.GetUserId());
             if (actionEntity == null)
             {
+                _logger.LogWarning("Action with ID {Id} not found for edit", id);
                 return NotFound();
             }
             
@@ -143,27 +166,28 @@ namespace WebApp.Controllers
             return View(vm);
         }
 
-        // POST: Actions/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        /// <summary>
+        /// Handles the form submission to update an ActionEntity.
+        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, ActionEntityCreateEditViewModel vm)
         {
             if (id != vm.ActionEntity.Id)
             {
+                _logger.LogWarning("Edit mismatch ID {Id} vs {EntityId}", id, vm.ActionEntity.Id);
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                // TODO: Chati lahendus proovi järgi
-                //vm.ActionEntity.UserId = User.GetUserId();
-                
+                _logger.LogInformation("Updating action with ID {Id} for user {UserId}", id, User.GetUserId());
                 _bll.ActionEntityService.Update(vm.ActionEntity);
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            
+            _logger.LogWarning("Invalid model state while editing action {Id}", id);
 
             vm.ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(User.GetUserId()),
                 nameof(ActionTypeEntity.Id), nameof(ActionTypeEntity.Name), vm.ActionEntity.ActionTypeId);
@@ -176,12 +200,15 @@ namespace WebApp.Controllers
 
             return View(vm);
         }
-
-        // GET: Actions/Delete/5
+        
+        /// <summary>
+        /// Displays the delete confirmation view for a specific ActionEntity.
+        /// </summary>
         public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
+                _logger.LogWarning("Delete called with null ID");
                 return NotFound();
             }
 
@@ -189,21 +216,24 @@ namespace WebApp.Controllers
 
             if (action == null)
             {
+                _logger.LogWarning("Action with ID {Id} not found for delete", id);
                 return NotFound();
             }
 
             return View(action);
         }
 
-        // POST: Actions/Delete/5
+        /// <summary>
+        /// Permanently deletes the specified ActionEntity.
+        /// </summary>
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
+            _logger.LogInformation("Deleting action with ID {Id} for user {UserId}", id, User.GetUserId());
             await _bll.ActionEntityService.RemoveAsync(id, User.GetUserId());
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        
     }
 }
