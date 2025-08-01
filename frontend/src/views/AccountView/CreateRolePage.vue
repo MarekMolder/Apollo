@@ -68,13 +68,13 @@ onMounted(fetchRoles)
 
       <p
         v-if="error"
-        class="mt-4 text-sm font-medium px-4 py-2 rounded-md bg-[rgba(255,80,80,0.15)] border border-[rgba(255,80,80,0.6)] text-[#ff5f5f]"
+        class="mt-4 text-sm font-medium px-4 py-2 rounded-md bg-[rgba(255,80,80,0.15)] border-1 border-[#ffaa33] text-[#ff5f5f]"
       >
         {{ error }}
       </p>
       <p
         v-if="success"
-        class="mt-4 text-sm font-medium px-4 py-2 rounded-md bg-[rgba(0,255,100,0.1)] border border-[rgba(0,255,100,0.4)] text-[#9effb1]"
+        class="mt-4 text-sm font-medium px-4 py-2 rounded-md bg-[rgba(0,255,100,0.1)] border-1 border-[#ffaa33] text-[#9effb1]"
       >
         {{ success }}
       </p>
