@@ -40,22 +40,18 @@ onMounted(fetchRoles)
 </script>
 
 <template>
-  <main class="px-8 py-10 max-w-[1000px] mx-auto text-white font-['Inter']">
+  <main class="px-4 sm:px-6 lg:ml-64 p-6 py-10 max-w-screen-xl mx-auto text-white font-['Inter']">
     <!-- Header -->
-    <section class="mb-8">
-      <h1
-        class="text-4xl font-extrabold text-[#ffaa33] drop-shadow-[0_0_10px_rgba(255,170,51,0.25)] mb-1"
-      >
+    <section class="mb-8 text-center sm:text-left">
+      <h1 class="text-3xl sm:text-4xl font-extrabold text-[#ffaa33] drop-shadow-[0_0_10px_rgba(255,170,51,0.25)] mb-1">
         👥 Roles
       </h1>
       <p class="text-sm text-[#bbbbbb] opacity-85">Manage access roles for your system</p>
     </section>
 
     <!-- Form -->
-    <div
-      class="bg-[rgba(30,30,30,0.6)] backdrop-blur-md rounded-2xl p-6 shadow-[0_0_12px_rgba(255,170,51,0.05)] mb-8"
-    >
-      <form @submit.prevent="createRole" class="flex flex-wrap gap-4">
+    <div class="bg-[rgba(30,30,30,0.6)] backdrop-blur-md rounded-2xl p-6 shadow-[0_0_12px_rgba(255,170,51,0.05)] mb-8">
+      <form @submit.prevent="createRole" class="flex flex-col sm:flex-row gap-4">
         <input
           v-model="newRoleName"
           type="text"
@@ -69,6 +65,7 @@ onMounted(fetchRoles)
           + Create
         </button>
       </form>
+
       <p
         v-if="error"
         class="mt-4 text-sm font-medium px-4 py-2 rounded-md bg-[rgba(255,80,80,0.15)] border border-[rgba(255,80,80,0.6)] text-[#ff5f5f]"
@@ -84,14 +81,12 @@ onMounted(fetchRoles)
     </div>
 
     <!-- Table -->
-    <div
-      class="bg-[rgba(20,20,20,0.5)] rounded-2xl p-4 backdrop-blur-md shadow-inner shadow-[inset_0_0_20px_rgba(255,165,0,0.05)]"
-    >
-      <table class="w-full border-collapse text-left text-white">
+    <div class="overflow-x-auto rounded-2xl">
+      <table class="w-full min-w-[400px] border-collapse text-left text-white bg-[rgba(20,20,20,0.5)] backdrop-blur-md shadow-inner shadow-[inset_0_0_20px_rgba(255,165,0,0.05)]">
         <thead class="bg-[#ffaa33] text-black">
           <tr>
-            <th class="py-3 px-4">ID</th>
-            <th class="py-3 px-4">Role Name</th>
+            <th class="py-3 px-4 text-sm sm:text-base">ID</th>
+            <th class="py-3 px-4 text-sm sm:text-base">Role Name</th>
           </tr>
         </thead>
         <tbody>
@@ -104,3 +99,4 @@ onMounted(fetchRoles)
     </div>
   </main>
 </template>
+
