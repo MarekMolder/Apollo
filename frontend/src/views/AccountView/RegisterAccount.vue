@@ -51,7 +51,7 @@ const doRegister = async () => {
     class="flex justify-center items-center h-full px-4 sm:px-8 py-24 font-['Segoe_UI'] text-white"
   >
     <div
-      class="w-full max-w-[500px] bg-[rgba(20,20,20,0.85)] backdrop-blur-md rounded-[16px] p-6 sm:p-8 md:p-10 shadow-[0_8px_24px_rgba(255,170,51,0.4)] flex flex-col gap-4"
+      class="w-full max-w-[500px] bg-[rgba(20,20,20,0.85)] backdrop-blur-md rounded-[16px] p-6 sm:p-8 md:p-10 shadow-[0_0_16px_rgba(255,165,0,0.2)] flex flex-col gap-4"
     >
       <RouterLink
         to="/"

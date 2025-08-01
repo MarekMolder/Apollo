@@ -36,7 +36,7 @@ const update = async () => {
   >
     <!-- Account Info Card -->
     <div
-      class="flex-1 max-w-[500px] bg-[rgba(20,20,20,0.85)] rounded-[16px] p-6 sm:p-8 shadow-[0_8px_24px_rgba(255,170,51,0.4)] backdrop-blur-md"
+      class="flex-1 max-w-[500px] bg-[rgba(20,20,20,0.85)] rounded-[16px] p-6 sm:p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)] backdrop-blur-md"
     >
       <div class="flex flex-col items-center gap-4 mb-6">
         <div
@@ -66,7 +66,7 @@ const update = async () => {
 
     <!-- Edit Form Card -->
     <div
-      class="flex-1 max-w-[500px] bg-[rgba(20,20,20,0.85)] rounded-[16px] p-6 sm:p-8 shadow-[0_8px_24px_rgba(255,170,51,0.4)] backdrop-blur-md"
+      class="flex-1 max-w-[500px] bg-[rgba(20,20,20,0.85)] rounded-[16px] p-6 sm:p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)] backdrop-blur-md"
     >
       <h2
         class="p-1.5 text-[#ffaa33] text-center text-xl sm:text-2xl font-semibold mb-6"
