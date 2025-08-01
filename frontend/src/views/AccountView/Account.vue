@@ -115,7 +115,7 @@ const update = async () => {
           </button>
           <RouterLink
             to="/changepassword"
-            class="w-full sm:w-auto text-center text-[#ffaa33] font-bold underline"
+            class="w-full sm:w-auto text-center text-[#ffaa33] underline"
           >
             {{ $t('Change password') }}
           </RouterLink>
