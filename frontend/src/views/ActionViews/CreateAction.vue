@@ -100,8 +100,8 @@ const isMahakandmine = computed(() => selectedActionType.value?.name.toLowerCase
 </script>
 
 <template>
-  <main class="flex flex-col items-center mt-4 px-6 py-10 text-white font-sans">
-    <div class="w-full max-w-2xl bg-[rgba(20,20,20,0.85)] backdrop-blur-md p-8  rounded-[16px] shadow-[0_0_16px_rgba(255,165,0,0.2)]">
+  <main class="flex flex-col items-center mt-4 px-4 sm:px-6 lg:px-8 py-10 text-white font-sans">
+    <div class="w-full max-w-md sm:max-w-lg lg:max-w-2xl bg-[rgba(20,20,20,0.85)] backdrop-blur-md p-8 rounded-[16px] shadow-[0_0_16px_rgba(255,165,0,0.2)]">
       <h1 class="text-3xl font-bold text-center mb-6 text-orange-400">
         {{ $t('Create New') }} {{ $t('Action') }}
       </h1>
@@ -195,6 +195,7 @@ const isMahakandmine = computed(() => selectedActionType.value?.name.toLowerCase
         <div v-if="validationError" class="text-red-400 text-center font-semibold pt-2">
           {{ validationError }}
         </div>
+
         <div v-if="successMessage" class="text-green-400 text-center font-semibold pt-2">
           {{ successMessage }}
         </div>
@@ -209,3 +210,4 @@ const isMahakandmine = computed(() => selectedActionType.value?.name.toLowerCase
     </div>
   </main>
 </template>
+
