@@ -22,17 +22,22 @@ onMounted(fetchRoles);
 </script>
 
 <template>
-  <main class="flex justify-center p-8 font-['Inter'] text-white">
+  <main class="flex justify-center px-4 sm:px-6 lg:px-8 py-8 font-['Inter'] text-white">
     <section
-      class="w-full max-w-4xl bg-[rgba(20,20,20,0.85)] rounded-2xl p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)] backdrop-blur-md"
+      class="w-full max-w-4xl bg-[rgba(20,20,20,0.85)] rounded-2xl p-6 sm:p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)] backdrop-blur-md"
     >
       <h1
-        class="text-center text-3xl sm:text-4xl font-extrabold text-[#ffaa33] mb-6"
+        class="text-center text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#ffaa33] mb-6"
       >
         🎬 {{ $t('All roles') }}
       </h1>
 
-      <p v-if="error" class="mb-6 text-center text-red-400 bg-red-900/30 rounded-md py-2 px-4">{{ error }}</p>
+      <p
+        v-if="error"
+        class="mb-6 text-center text-red-400 bg-red-900/30 rounded-md py-2 px-4"
+      >
+        {{ error }}
+      </p>
 
       <div
         class="overflow-x-auto max-h-[400px] overflow-y-auto rounded-xl bg-[rgba(20,20,20,0.5)] shadow-inner shadow-[inset_0_0_10px_rgba(255,170,51,0.05)]"
