@@ -38,7 +38,7 @@ onMounted(async () => {
 
 <template>
   <main
-    class="min-h-screen w-full h-full flex items-center justify-center px-4 sm:px-6 md:px-12 lg:pl-[250px] py-12 text-white font-['Inter']"
+    class="w-full h-full flex items-center justify-center px-4 sm:px-6 md:px-12 lg:pl-[250px] py-12 text-white font-['Inter']"
   >
     <div
       class="w-full max-w-xl bg-[rgba(20,20,20,0.85)] backdrop-blur-md rounded-2xl p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)]"
