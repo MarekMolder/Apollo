@@ -51,7 +51,7 @@ onMounted(async () => {
 
       <select
         v-model="selectedUserId"
-        class="w-full mb-4 px-4 py-2.5 text-base rounded-lg bg-[rgba(43,43,43,0.6)] border-1 border-[#ffaa33] text-white placeholder-white focus:outline-none focus:border-[#ffc266] transition"
+        class="w-full mb-4 px-4 py-2.5 text-base rounded-lg bg-[rgba(43,43,43,0.6)] text-white placeholder-white border-1 border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
       >
         <option disabled value="">Select user</option>
         <option v-for="u in users" :key="u.id" :value="u.id">
@@ -61,7 +61,7 @@ onMounted(async () => {
 
       <select
         v-model="selectedRoleId"
-        class="w-full mb-4 px-4 py-2.5 text-base rounded-lg bg-[rgba(43,43,43,0.6)] border-1 border-[#ffaa33] text-white placeholder-white focus:outline-none focus:border-[#ffc266] transition"
+        class="w-full mb-4 px-4 py-2.5 text-base rounded-lg bg-[rgba(43,43,43,0.6)] text-white placeholder-white border-1 border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
       >
         <option disabled value="">{{ $t('Select role') }}</option>
         <option v-for="r in roles" :key="r.id" :value="r.id">{{ r.name }}</option>
