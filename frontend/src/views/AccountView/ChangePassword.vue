@@ -31,9 +31,9 @@ const changePassword = async () => {
 </script>
 
 <template>
-  <main class="min-h-[80vh] flex justify-center items-center p-8 font-['Inter'] text-white">
-    <section class="w-full max-w-[480px] bg-[rgba(20,20,20,0.85)] rounded-[16px] p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)] backdrop-blur-md">
-      <h1 class="text-2xl text-center text-[#ffaa33] mb-12 drop-shadow-[0_0_8px_rgba(255,170,51,0.2)]">
+  <main class="min-h-[80vh] flex justify-center items-center px-4 py-8 sm:px-8 font-['Inter'] text-white">
+    <section class="w-full max-w-[480px] bg-[rgba(20,20,20,0.85)] rounded-[16px] p-6 sm:p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)] backdrop-blur-md">
+      <h1 class="text-xl sm:text-2xl text-center text-[#ffaa33] mb-8 sm:mb-12 drop-shadow-[0_0_8px_rgba(255,170,51,0.2)]">
         🔐 {{ $t('Change password') }}
       </h1>
 
@@ -65,17 +65,17 @@ const changePassword = async () => {
           />
         </div>
 
-        <div class="flex justify-between items-center mt-4">
+        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
           <button
             type="submit"
-            class="bg-gradient-to-r from-[#ff8c00] to-[#ffa500] text-white font-bold text-sm rounded-lg px-6 py-2 shadow-md hover:from-[#ffc56e] hover:to-[#ffa726] transition"
+            class="w-full sm:w-auto bg-gradient-to-r from-[#ff8c00] to-[#ffa500] text-white font-bold text-sm rounded-lg px-6 py-2 shadow-md hover:from-[#ffc56e] hover:to-[#ffa726] transition"
           >
             {{ $t('Change password') }}
           </button>
 
           <RouterLink
             to="/account"
-            class="text-[#ffaa33] text-sm underline hover:text-[#ffd28f] transition"
+            class="w-full sm:w-auto text-center text-[#ffaa33] text-sm underline hover:text-[#ffd28f] transition"
           >
             {{ $t('Back') }}
           </RouterLink>
