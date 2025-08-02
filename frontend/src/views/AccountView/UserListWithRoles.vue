@@ -58,12 +58,12 @@ onMounted(async () => {
       </p>
 
       <div class="overflow-x-auto rounded-xl bg-[rgba(20,20,20,0.5)] shadow-inner shadow-[inset_0_0_10px_rgba(255,170,51,0.05)]">
-        <table class="w-full min-w-[600px] border-collapse text-base">
+        <table class="w-full min-w-[600px] border-collapse text-sm sm:text-base">
           <thead class="bg-[#ffaa33] text-black">
             <tr>
-              <th class="px-4 py-3 text-left"> {{ $t('Email') }} </th>
-              <th class="px-4 py-3 text-left"> {{ $t('Full name') }} </th>
-              <th class="px-4 py-3 text-left"> {{ $t('Roles') }} </th>
+              <th class="px-2 py-2 sm:px-4 sm:py-3 text-left"> {{ $t('Email') }} </th>
+              <th class="px-2 py-2 sm:px-4 sm:py-3 text-left"> {{ $t('Full name') }} </th>
+              <th class="px-2 py-2 sm:px-4 sm:py-3 text-left"> {{ $t('Roles') }} </th>
             </tr>
           </thead>
           <tbody>
@@ -72,15 +72,15 @@ onMounted(async () => {
               :key="user.id"
               class="hover:bg-[rgba(255,170,51,0.08)]"
             >
-              <td class="px-4 py-3 border-b border-white/10 align-top">{{ user.email }}</td>
-              <td class="px-4 py-3 border-b border-white/10 align-top">
+              <td class="px-2 py-2 sm:px-4 sm:py-3 border-b border-white/10 align-top">{{ user.email }}</td>
+              <td class="px-2 py-2 sm:px-4 sm:py-3 border-b border-white/10 align-top">
                 {{ user.firstName }} {{ user.lastName }}
               </td>
-              <td class="px-4 py-3 border-b border-white/10 align-top">
+              <td class="px-2 py-2 sm:px-4 sm:py-3 border-b border-white/10 align-top">
                 <span
                   v-for="role in user.roles"
                   :key="role"
-                  class="inline-flex items-center text-[#ffaa33] bg-[rgba(255,165,0,0.1)] border-1 border-[#ffaa33] px-3 py-1 mr-1 mb-1 rounded-full text-sm font-semibold"
+                  class="inline-flex items-center text-[#ffaa33] bg-[rgba(255,165,0,0.1)] border-1 border-[#ffaa33] px-2 sm:px-3 py-0.5 sm:py-1 mr-1 mb-1 rounded-full text-xs sm:text-sm font-semibold"
                 >
                   {{ role }}
                   <button
