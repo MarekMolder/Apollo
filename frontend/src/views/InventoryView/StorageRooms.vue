@@ -1,43 +1,49 @@
 ﻿<script setup lang="ts">
-import {computed, onMounted, ref} from "vue";
-import { useRouter } from "vue-router";
-import { StorageRoomService } from "@/services/mvcServices/StorageRoomService";
-import type {IStorageRoomEnriched} from "@/domain/logic/IStorageRoomEnriched.ts";
+import { computed, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { StorageRoomService } from '@/services/mvcServices/StorageRoomService'
+import type { IStorageRoomEnriched } from '@/domain/logic/IStorageRoomEnriched.ts'
 
-const router = useRouter();
-const storageRoomService = new StorageRoomService();
-const data = ref<IStorageRoomEnriched[]>([]);
+const router = useRouter()
+const storageRoomService = new StorageRoomService()
+const data = ref<IStorageRoomEnriched[]>([])
 
-const searchQuery = ref("");
+const searchQuery = ref('')
 
 const fetchPageData = async () => {
   try {
-    const result = await storageRoomService.getEnrichedStorageRooms();
-    data.value = result.data || [];
+    const result = await storageRoomService.getEnrichedStorageRooms()
+    data.value = result.data || []
   } catch (error) {
-    console.error("Error fetching storageRooms:", error);
+    console.error('Error fetching storageRooms:', error)
   }
-};
+}
 
-onMounted(fetchPageData);
+onMounted(fetchPageData)
 
 const goToCurrentStock = (storageRoomId: string) => {
-  router.push(`/currentstock/${storageRoomId}`);
-};
+  router.push(`/currentstock/${storageRoomId}`)
+}
 
-const filteredStorageRooms= computed(() =>
+const filteredStorageRooms = computed(() =>
   data.value.filter((storageRoom) => {
-      return storageRoom.name.toLowerCase().includes(searchQuery.value.toLowerCase());
-  })
-);
+    return storageRoom.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  }),
+)
 </script>
 
 <template>
   <main class="p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-xl mx-auto">
     <!-- Header -->
-    <section class="mb-8">
-      <h1 class="text-4xl font-extrabold text-[#ffaa33] m-0 drop-shadow-[0_0_12px_rgba(255,170,51,0.25)]">🎬 Storage Rooms</h1>
-      <p class="text-lg text-[#ccc] mt-2">Visual overview of all Storage rooms and their locations</p>
+    <section class="mb-8 text-center pb-3">
+      <h1
+        class="text-3xl sm:text-4xl font-extrabold text-[#ffaa33] m-0 drop-shadow-[0_0_12px_rgba(255,170,51,0.25)]"
+      >
+        🎬 Storage Rooms
+      </h1>
+      <p class="text-lg text-[#ccc] mt-2 pb-2">
+        Visual overview of all Storage rooms and their locations
+      </p>
 
       <!-- Search Input -->
       <div class="mt-6 flex justify-center">
