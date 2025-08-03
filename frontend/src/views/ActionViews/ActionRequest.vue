@@ -9,7 +9,7 @@ const requestIsOngoing = ref(false);
 const data = reactive<IResultObject<IActionEnriched[]>>({ data: [], errors: [] });
 
 const service = new ActionService();
-
+  
 const fetchPageData = async () => {
   try {
     const result = await service.getEnrichedActions();
