@@ -6,7 +6,6 @@ import type { IProduct } from "@/domain/logic/IProduct.ts";
 import {ProductCategoryService} from "@/services/mvcServices/ProductCategoryService.ts";
 import type {IProductCategory} from "@/domain/logic/IProductCategory.ts";
 import products from "@/views/ProductView/Products.vue";
-import router from "@/router";
 import { X } from 'lucide-vue-next';
 
 const service = new ProductService();
