@@ -26,4 +26,17 @@ public class ProductRepository: BaseRepository<DAL.DTO.Product, Domain.Logic.Pro
 
         return domainEntities.Select(e => Mapper.Map(e));
     }
+    
+    /// <summary>
+    /// Retrieves all products with their associated supplier.
+    /// </summary>
+    public async Task<IEnumerable<DAL.DTO.Product?>> GetProductsBySupplierAsync(Guid supplierId)
+    {
+        var domainEntities = await RepositoryDbSet
+            .Where(p => p.SupplierId == supplierId)
+            .Include(p => p.ProductCategory)
+            .ToListAsync();
+
+        return domainEntities.Select(p => Mapper.Map(p));
+    }
 }

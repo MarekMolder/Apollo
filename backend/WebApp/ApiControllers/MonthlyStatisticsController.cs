@@ -134,7 +134,7 @@ namespace WebApp.ApiControllers
         {
             _logger.LogInformation("Fetching monthly statistics by storage room ID {Id}", id);
             var stocks = await _bll.MonthlyStatisticsService.GetByStorageRoomIdAsync(id);
-            var res = stocks.Select(x => _mapper.Map(x)!);
+            var res = stocks.Select(x => _enrichedMonthlyStatisticsApiMapper.Map(x)!);
             return Ok(res);
         }
         
@@ -151,6 +151,64 @@ namespace WebApp.ApiControllers
             
             _logger.LogInformation("Returned {Count} enriched monthly statistics", res.Count);
             return Ok(res);
+        }
+        
+        /// <summary>
+        /// Get converted removed quantity for a MonthlyStatistics record.
+        /// </summary>
+        [HttpGet("converted/{monthlyStatisticsId}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetConvertedQuantity(Guid monthlyStatisticsId, [FromQuery] string targetUnit)
+        {
+            var stats = await _bll.MonthlyStatisticsService.FindAsync(monthlyStatisticsId);
+            if (stats == null) return NotFound();
+
+            var product = await _bll.ProductService.FindAsync(stats.ProductId);
+            if (product == null) return NotFound();
+
+            try
+            {
+                var converted = ConvertUnits(stats.TotalRemovedQuantity, product.Unit, targetUnit);
+                return Ok($"{converted:F2} {targetUnit} (from {product.Unit})");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        
+        /// <summary>
+        /// Unit conversion helper function.
+        /// </summary>
+        private decimal ConvertUnits(decimal value, string from, string to)
+        {
+            var conversionRates = new Dictionary<(string from, string to), decimal>
+            {
+                // Massi teisendused
+                { ("g", "kg"), 0.001m },
+                { ("kg", "g"), 1000m },
+                { ("g", "mg"), 1000m },
+                { ("mg", "g"), 0.001m },
+
+                // Mahu teisendused
+                { ("ml", "l"), 0.001m },
+                { ("l", "ml"), 1000m },
+                { ("ml", "cl"), 0.1m },
+                { ("l", "cl"), 100m },
+
+                // Mass -> maht
+                { ("g", "ml"), 1m },
+                { ("g", "l"), 0.001m },
+                { ("kg", "ml"), 1000m },
+                { ("kg", "l"), 1m }
+            };
+
+            if (from == to) return value;
+
+            if (conversionRates.TryGetValue((from, to), out var rate))
+                return value * rate;
+
+            throw new Exception($"Unsupported conversion from {from} to {to}");
         }
     }
 }

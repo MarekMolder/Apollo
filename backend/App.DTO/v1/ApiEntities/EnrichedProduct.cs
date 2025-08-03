@@ -51,6 +51,14 @@ public class EnrichedProduct : IDomainId
     public string ProductCategoryName { get; set; } = default!;
     
     /// <summary>
+    /// Foreign key for Supplier.
+    /// Name of the product category.
+    /// </summary>
+    public Guid? SupplierId { get; set; }
+    public string SupplierName { get; set; } = default!;
+    public string SupplierEmail { get; set; } = default!;
+    
+    /// <summary>
     /// Indicates if the product is a component in a recipe.
     /// </summary>
     public bool IsComponent { get; set; } = false;

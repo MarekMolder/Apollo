@@ -39,4 +39,9 @@ public class Supplier : IDomainId
     /// Collection of actions associated with this supplier (e.g., stock additions).
     /// </summary>
     public ICollection<DAL.DTO.ActionEntity>? Actions { get; set; }
+    
+    /// <summary>
+    /// Collection of products provided by this supplier.
+    /// </summary>
+    public ICollection<DAL.DTO.Product>? Products { get; set; }
 }

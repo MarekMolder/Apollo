@@ -134,5 +134,23 @@ namespace WebApp.ApiControllers
             _logger.LogInformation("Returned {Count} enriched products", res.Count);
             return Ok(res);
         }
+        
+        /// <summary>
+        /// Get products by supplier.
+        /// </summary>
+        [HttpGet("by-supplier/{supplierId}")]
+        [ProducesResponseType(typeof(IEnumerable<Product>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<Product>>> GetProductsBySupplier(Guid supplierId)
+        {
+            _logger.LogInformation("Fetching products for supplier ID {SupplierId}", supplierId);
+
+            var products = await _bll.ProductService.GetProductsBySupplierAsync(supplierId);
+
+            var result = products.Select(p => _mapper.Map(p)!).ToList();
+
+            _logger.LogInformation("Returned {Count} products for supplier ID {SupplierId}", result.Count, supplierId);
+
+            return Ok(result);
+        }
     }
 }

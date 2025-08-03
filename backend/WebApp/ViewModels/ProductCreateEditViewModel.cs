@@ -20,4 +20,10 @@ public class ProductCreateEditViewModel
     /// </summary>
     [ValidateNever]
     public SelectList ProductCategorySelectList { get; set; } = default!;
+    
+    /// <summary>
+    /// A select list of suppliers used to populate the category dropdown in the form.
+    /// </summary>
+    [ValidateNever]
+    public SelectList SupplierSelectList { get; set; } = default!;
 }

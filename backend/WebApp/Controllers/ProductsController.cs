@@ -68,6 +68,11 @@ namespace WebApp.Controllers
                     nameof(ProductCategory.Id),
                     nameof(ProductCategory.Name)
                 ),
+                
+                SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
+                    nameof(Supplier.Id),
+                    nameof(Supplier.Name)
+                ),
             };
             
             return View(vm);
@@ -91,6 +96,8 @@ namespace WebApp.Controllers
             _logger.LogWarning("Invalid model state on product creation");
             vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
                 nameof(ProductCategory.Id), nameof(ProductCategory.Name), vm.Product.ProductCategoryId);
+            vm.SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
+                nameof(Supplier.Id), nameof(Supplier.Name), vm.Product.SupplierId);
 
             return View(vm);
         }
@@ -118,6 +125,12 @@ namespace WebApp.Controllers
                 ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
                     nameof(ProductCategory.Id),
                     nameof(ProductCategory.Name),
+                    product.ProductCategoryId
+                ),
+                
+                SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
+                    nameof(Supplier.Id),
+                    nameof(Supplier.Name),
                     product.ProductCategoryId
                 ),
                 Product = product
@@ -149,6 +162,8 @@ namespace WebApp.Controllers
             _logger.LogWarning("Invalid model state while editing product {Id}", id);
             vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
                 nameof(ProductCategory.Id), nameof(ProductCategory.Name), vm.Product.ProductCategory);
+            vm.SupplierSelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+                nameof(Supplier.Id), nameof(Supplier.Name), vm.Product.Supplier);
 
             return View(vm);
         }

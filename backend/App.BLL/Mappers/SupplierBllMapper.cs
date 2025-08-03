@@ -11,6 +11,9 @@ public class SupplierBllMapper : IMapper<BLL.DTO.Supplier, DAL.DTO.Supplier>
     // Mapper used to map related Supplier objects
     private readonly ActionEntityBllMapper _actionEntityBllMapper = new();
     
+    // Mapper used to map related Supplier objects
+    private readonly ProductBllMapper _productBllMapper = new();
+    
     /// <summary>
     /// Maps a full BLL DTO Supplier entity to a DAL DTO Supplier entity, including related Addresses and Actions.
     /// </summary>
@@ -28,7 +31,9 @@ public class SupplierBllMapper : IMapper<BLL.DTO.Supplier, DAL.DTO.Supplier>
             AddressId = entity.AddressId,
             Address = AddressBllMapper.MapSimple(entity.Address),
             
-            Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!
+            Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!,
+            
+            Products = entity.Products?.Select(t => _productBllMapper.Map(t)).ToList()!
         };
         return res;
     }
@@ -50,7 +55,9 @@ public class SupplierBllMapper : IMapper<BLL.DTO.Supplier, DAL.DTO.Supplier>
             AddressId = entity.AddressId,
             Address = AddressBllMapper.MapSimple(entity.Address),
             
-            Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!
+            Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!,
+            
+            Products = entity.Products?.Select(t => _productBllMapper.Map(t)).ToList()!
         };
         return res;
     }

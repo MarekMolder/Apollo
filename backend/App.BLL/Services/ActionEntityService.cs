@@ -1,4 +1,5 @@
 ﻿using App.BLL.Contracts;
+using App.BLL.Utils;
 using App.DAL.Contracts;
 using Base.BLL;
 using Base.Contracts;
@@ -71,8 +72,31 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
             {
                 foreach (var component in recipeComponents)
                 {
-                    var componentQuantity =
-                        bllAction.Quantity * component.Amount / 1m;
+                    // Leia põhitoote ühik
+                    var baseProduct = await _uow.ProductRepository.FindAsync(bllAction.ProductId);
+                    if (baseProduct == null) continue;
+
+                    // Leia komponenti toote ühik
+                    var componentProduct = await _uow.ProductRepository.FindAsync(component.ComponentProductId);
+                    if (componentProduct == null) continue;
+
+                    // Algne komponentkogus retseptis (nt 0.2 l õli)
+                    var rawComponentQuantity = bllAction.Quantity * component.Amount;
+
+                    // Teisenda, kui ühikud on erinevad
+                    decimal convertedQuantity = rawComponentQuantity;
+                    if (baseProduct.Unit != componentProduct.Unit)
+                    {
+                        try
+                        {
+                            convertedQuantity = UnitConverter.Convert(rawComponentQuantity, baseProduct.Unit, componentProduct.Unit);
+                        }
+                        catch (Exception e)
+                        {
+                            // Logi või ignoreeri — olenevalt vajadusest
+                            continue;
+                        }
+                    }
 
                     var compStat = await _uow.MonthlyStatisticsRepository
                         .FindByProductAndStorageAsync(component.ComponentProductId, bllAction.StorageRoomId);
@@ -80,7 +104,7 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
                     if (compStat != null)
                     {
                         var mappedCompStat = _domainDalMapperMonthlyStatistics.Map(compStat);
-                        mappedCompStat!.TotalRemovedQuantity += componentQuantity;
+                        mappedCompStat!.TotalRemovedQuantity += convertedQuantity;
                         await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedCompStat);
                     }
                     else
@@ -90,14 +114,38 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
                             Id = Guid.NewGuid(),
                             ProductId = component.ComponentProductId,
                             StorageRoomId = bllAction.StorageRoomId,
-                            TotalRemovedQuantity = componentQuantity,
+                            TotalRemovedQuantity = convertedQuantity,
                             Year = DateTime.Today.Year,
                             Month = DateTime.Today.Month,
                         };
                         await _uow.MonthlyStatisticsRepository.AddAsync(newStat);
                     }
                 }
-                return true;
+            }
+            else
+            {
+                var stat = await _uow.MonthlyStatisticsRepository
+                    .FindByProductAndStorageAsync(productId, bllAction.StorageRoomId);
+
+                if (stat != null)
+                {
+                    var mappedStat = _domainDalMapperMonthlyStatistics.Map(stat);
+                    mappedStat!.TotalRemovedQuantity += bllAction.Quantity;
+                    await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedStat);
+                }
+                else
+                {
+                    var newStat = new DAL.DTO.MonthlyStatistics
+                    {
+                        Id = Guid.NewGuid(),
+                        ProductId = productId,
+                        StorageRoomId = bllAction.StorageRoomId,
+                        TotalRemovedQuantity = bllAction.Quantity,
+                        Year = DateTime.Today.Year,
+                        Month = DateTime.Today.Month,
+                    };
+                    await _uow.MonthlyStatisticsRepository.AddAsync(newStat);
+                }
             }
         }
         return true;

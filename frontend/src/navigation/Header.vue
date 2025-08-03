@@ -13,6 +13,7 @@ const fullName = computed(() => userStore.firstName ?? "Kasutaja");
 const logout = () => {
   userStore.jwt = null;
   userStore.refreshToken = null;
+  userStore.roles = [];
   router.push("/");
 };
 

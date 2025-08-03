@@ -8,18 +8,24 @@ import type {IProductCategory} from "@/domain/logic/IProductCategory.ts";
 import products from "@/views/ProductView/Products.vue";
 import router from "@/router";
 import { X } from 'lucide-vue-next';
+import type {ISupplier} from "@/domain/logic/ISupplier.ts";
+import {SupplierService} from "@/services/mvcServices/SupplierService.ts";
 
 const service = new ProductService();
 const productCategoryService = new ProductCategoryService();
+const supplierService = new SupplierService();
 const productCategories = ref<IProductCategory[]>([]);
+const suppliers = ref<ISupplier[]>([]);
 
 onMounted(async () => {
   products.value = (await service.getAllAsync()).data || [];
   productCategories.value = (await productCategoryService.getAllAsync()).data || [];
+  suppliers.value = (await supplierService.getAllAsync()).data || [];
 });
 
 const data = ref<IProductEnriched[]>([]);
 const selectedCategory = ref("All");
+const selectedSupplier = ref("All");
 const searchCode = ref("");
 const searchName = ref("");
 const categories = ref<string[]>([]);
@@ -37,7 +43,9 @@ const emptyProduct = ref<IProduct>({
   name: '',
   price: 0,
   quantity: 1,
-  productCategoryId: ''
+  productCategoryId: '',
+  isComponent: false,
+  supplierId: '',
 });
 
 const activeProduct = computed({
@@ -71,11 +79,14 @@ const filteredProducts = computed(() =>
     const matchCategory =
       selectedCategory.value === "All" ||
       product.productCategoryName === selectedCategory.value;
+    const matchSupplier =
+      selectedSupplier.value === "All" ||
+      product.supplierId === selectedSupplier.value;
     const matchSearchCode =
       product.code.toLowerCase().includes(searchCode.value.toLowerCase());
     const matchSearchName =
       product.name.toLowerCase().includes(searchName.value.toLowerCase());
-    return matchCategory && matchSearchCode && matchSearchName;
+    return matchCategory && matchSupplier && matchSearchCode && matchSearchName;
   })
 );
 
@@ -158,6 +169,14 @@ const removeProduct = async (id: string) => {
         <select v-model="selectedCategory">
           <option v-for="cat in categories" :key="cat">{{ cat }}</option>
         </select>
+
+        <select v-model="selectedSupplier">
+          <option value="All">All Suppliers</option>
+          <option v-for="s in suppliers" :key="s.id" :value="s.id">
+            {{ s.name }}
+          </option>
+        </select>
+
         <input
           v-model="searchCode"
           type="text"
@@ -220,6 +239,23 @@ const removeProduct = async (id: string) => {
               {{ cat.name }}
             </option>
           </select>
+
+          <label>Supplier</label>
+          <select v-model="activeProduct!.supplierId" class="drawer-select">
+            <option disabled value="">-- Select Supplier --</option>
+            <option v-for="cat in suppliers" :key="cat.id" :value="cat.id">
+              {{ cat.name }}
+            </option>
+          </select>
+
+          <label>
+            <input
+              type="checkbox"
+              v-model="activeProduct!.isComponent"
+              style="margin-right: 8px;"
+            />
+            Is Component (used in recipes)
+          </label>
 
           <div class="drawer-buttons">
             <button v-if="drawerMode === 'edit'" @click="updateProduct" class="update-btn">Update</button>

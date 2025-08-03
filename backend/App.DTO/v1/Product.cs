@@ -51,4 +51,9 @@ public class Product : IDomainId
     /// Indicates if the product is a component in a recipe.
     /// </summary>
     public bool IsComponent { get; set; } = false;
+    
+    /// <summary>
+    /// Foreign key to the supplier who provides this product.
+    /// </summary>
+    public Guid? SupplierId { get; set; }
 }
