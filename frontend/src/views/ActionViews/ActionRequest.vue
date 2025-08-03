@@ -42,12 +42,13 @@ onMounted(fetchPageData)
 </script>
 
 <template>
-  <main class="flex flex-wrap justify-center px-4 py-8 text-white">
+  <main class="flex justify-center px-4 py-8 text-white">
     <section
-      class="w-full w-full bg-[rgba(26,26,26,0.95)] backdrop-blur-sm rounded-[16px] shadow-[0_0_16px_rgba(255,165,0,0.2)]"
+      class="w-full max-w-7xl bg-[rgba(26,26,26,0.95)] backdrop-blur-sm rounded-[16px] shadow-[0_0_16px_rgba(255,165,0,0.2)] overflow-hidden"
     >
+      <!-- Header -->
       <header
-        class="rounded-t-[16px] flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-6 py-4 bg-[rgba(43,42,42,0.75)] backdrop-blur"
+        class="rounded-t-[16px] flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-4 sm:px-6 py-4 bg-[rgba(43,42,42,0.75)] backdrop-blur"
       >
         <h1 class="text-2xl font-bold text-[#ffaa33] m-0">{{ $t('Requests') }}</h1>
         <div class="flex flex-wrap gap-4 items-center">
@@ -55,7 +56,7 @@ onMounted(fetchPageData)
             <i class="bi bi-funnel"></i>
             <select
               v-model="selectedStatus"
-              class="bg-[#2a2a2a] text-white rounded-xl px-3 py-1 font-medium cursor-pointer border-1 border-neutral-700"
+              class="bg-[#2a2a2a] text-white rounded-xl px-3 py-1 font-medium cursor-pointer border border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
             >
               <option value="All">{{ $t('All') }}</option>
               <option value="Accepted">{{ $t('Accepted') }}</option>
@@ -73,18 +74,16 @@ onMounted(fetchPageData)
         </div>
       </header>
 
+      <!-- Loading state -->
       <div v-if="!requestIsOngoing" class="flex justify-center gap-2 p-8">
         <span class="w-3 h-3 bg-[#ffaa33] rounded-full animate-bounce [animation-delay:0s]"></span>
-        <span
-          class="w-3 h-3 bg-[#ffaa33] rounded-full animate-bounce [animation-delay:0.2s]"
-        ></span>
-        <span
-          class="w-3 h-3 bg-[#ffaa33] rounded-full animate-bounce [animation-delay:0.4s]"
-        ></span>
+        <span class="w-3 h-3 bg-[#ffaa33] rounded-full animate-bounce [animation-delay:0.2s]"></span>
+        <span class="w-3 h-3 bg-[#ffaa33] rounded-full animate-bounce [animation-delay:0.4s]"></span>
       </div>
 
+      <!-- Table wrapper -->
       <div v-else class="overflow-x-auto">
-        <table class="w-full min-w-[900px] text-sm text-center">
+        <table class="w-full text-sm text-center table-auto">
           <thead>
             <tr class="bg-[#ffaa33] text-black">
               <th
@@ -96,12 +95,10 @@ onMounted(fetchPageData)
               <th class="px-4 py-3">{{ $t('Status') }}</th>
               <th class="px-4 py-3">{{ $t('Quantity') }}</th>
               <th class="px-4 py-3">{{ $t('Action Type') }}</th>
-              <th class="px-4 py-3  hidden md:table-cell">{{ $t('Reason') }}</th>
+              <th class="px-4 py-3 hidden sm:table-cell">{{ $t('Reason') }}</th>
               <th class="px-4 py-3">{{ $t('Supplier') }}</th>
               <th class="px-4 py-3">{{ $t('Product') }}</th>
-              <th class="px-4 py-3 hidden md:table-cell">
-                {{ $t('StorageRoom') }}
-              </th>
+              <th class="px-4 py-3 hidden sm:table-cell">{{ $t('StorageRoom') }}</th>
               <th
                 class="px-4 py-3"
                 :class="filteredData.length === 0 ? 'rounded-br-[16px]' : ''"
@@ -124,33 +121,23 @@ onMounted(fetchPageData)
               >
                 {{ item.id }}
               </td>
-
               <td class="px-4 py-3">
                 <span
-                  :class="[
-                    'px-3 py-1 rounded-full font-bold text-sm inline-block text-shadow-sm capitalize',
-                    {
-                      'bg-green-600 text-white': item.status === 'Accepted',
-                      'bg-red-600 text-white': item.status === 'Declined',
-                      'bg-[#ffaa33] text-black': item.status === 'Pending',
-                    },
-                  ]"
+                  :class="[ 'px-3 py-1 rounded-full font-bold text-sm inline-block capitalize', {
+                    'bg-green-600 text-white': item.status === 'Accepted',
+                    'bg-red-600 text-white': item.status === 'Declined',
+                    'bg-[#ffaa33] text-black': item.status === 'Pending',
+                  }]"
                 >
                   {{ item.status }}
                 </span>
               </td>
-
               <td class="px-4 py-3">{{ item.quantity }}</td>
               <td class="px-4 py-3">{{ item.actionTypeName }}</td>
-              <td class="px-4 py-3 hidden md:table-cell">
-                {{ item.reasonDescription }}
-              </td>
+              <td class="px-4 py-3 hidden sm:table-cell">{{ item.reasonDescription }}</td>
               <td class="px-4 py-3">{{ item.supplierName }}</td>
               <td class="px-4 py-3">{{ item.productName }}</td>
-              <td class="px-4 py-3 hidden md:table-cell">
-                {{ item.storageRoomName }}
-              </td>
-
+              <td class="px-4 py-3 hidden sm:table-cell">{{ item.storageRoomName }}</td>
               <td class="px-2 py-3">
                 <button
                   @click="updateStatus(item.id, 'Accepted')"
@@ -159,7 +146,6 @@ onMounted(fetchPageData)
                   <i class="bi bi-check-circle"></i>
                 </button>
               </td>
-
               <td
                 class="px-2 py-3"
                 :class="index === filteredData.length - 1 ? 'rounded-br-[16px]' : ''"
@@ -178,3 +164,4 @@ onMounted(fetchPageData)
     </section>
   </main>
 </template>
+
