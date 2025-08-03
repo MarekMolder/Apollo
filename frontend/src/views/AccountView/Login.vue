@@ -23,7 +23,7 @@ const doLogin = async () => {
     store.lastName = response.data.lastName;
     store.email = response.data.email;
     store.username = response.data.username;
-    store.role = response.data.roles?.[0] ?? null;
+    store.roles = response.data.roles ?? [];
 
     router.push({ name: 'Home' });
   } else {

@@ -11,6 +11,9 @@ public class SupplierUowMapper: IMapper<DAL.DTO.Supplier, Domain.Logic.Supplier>
     // Mapper used to map related Supplier objects
     private readonly ActionEntityUowMapper _actionEntityUowMapper = new();
     
+    // Mapper used to map related Supplier objects
+    private readonly ProductUowMapper _productUowMapper = new();
+    
     /// <summary>
     /// Maps a full Domain Supplier entity to a DAL DTO Supplier entity, including related Addresses and Actions.
     /// </summary>
@@ -28,7 +31,9 @@ public class SupplierUowMapper: IMapper<DAL.DTO.Supplier, Domain.Logic.Supplier>
             AddressId = entity.AddressId,
             Address = AddressUowMapper.MapSimple(entity.Address),
             
-            Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!
+            Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!,
+            
+            Products = entity.Products?.Select(t => _productUowMapper.Map(t)).ToList()!
         };
         return res;
     }
@@ -50,7 +55,9 @@ public class SupplierUowMapper: IMapper<DAL.DTO.Supplier, Domain.Logic.Supplier>
             AddressId = entity.AddressId,
             Address = AddressUowMapper.MapSimple(entity.Address),
             
-            Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!
+            Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!,
+            
+            Products = entity.Products?.Select(t => _productUowMapper.Map(t)).ToList()!
         };
         return res;
     }

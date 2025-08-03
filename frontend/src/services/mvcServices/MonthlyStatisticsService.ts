@@ -13,7 +13,7 @@ export class MonthlyStatisticsService extends BaseEntityService<IMonthlyStatisti
 
   async getByStorageRoomId(id: string): Promise<IResultObject<IMonthlyStatisticsEnriched[]>> {
     const response = await this.axiosInstance.get(`/monthlyStatistics/bystorageroom/${id}`);
-    return { data: response.data };
+    return { data: response.data as IMonthlyStatisticsEnriched[] };
   }
 
   async getEnrichedMonthlyStatistics(): Promise<IResultObject<IMonthlyStatisticsEnriched[]>> {
@@ -22,5 +22,12 @@ export class MonthlyStatisticsService extends BaseEntityService<IMonthlyStatisti
       data: response.data as IMonthlyStatisticsEnriched[],
       errors: [],
     };
+  }
+
+  async getConvertedQuantity(id: string, targetUnit: string): Promise<string> {
+    const response = await this.axiosInstance.get(`/monthlyStatistics/converted/${id}`, {
+      params: { targetUnit }
+    });
+    return response.data as string;
   }
 }

@@ -25,6 +25,7 @@ public class ProductApiMapper : IMapper<Product, BLL.DTO.Product>
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
             IsComponent = entity.IsComponent,
+            SupplierId = entity.SupplierId,
         };
         return res;
     }
@@ -46,6 +47,7 @@ public class ProductApiMapper : IMapper<Product, BLL.DTO.Product>
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
             IsComponent = entity.IsComponent,
+            SupplierId = entity.SupplierId,
         };
         return res;
     }
@@ -66,6 +68,7 @@ public class ProductApiMapper : IMapper<Product, BLL.DTO.Product>
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
             IsComponent = entity.IsComponent,
+            SupplierId = entity.SupplierId,
         };
         return res;
     }

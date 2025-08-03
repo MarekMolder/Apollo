@@ -24,9 +24,28 @@ const filteredData = computed(() =>
 );
 
 onMounted(async () => {
-  const result = await service.getEnrichedMonthlyStatistics();
-  data.value = (result.data || []).filter(item => item.storageRoomId === storageRoomId);
+  const result = await service.getByStorageRoomId(storageRoomId);
+
+  data.value = result.data || [];
+
+  for (const item of data.value) {
+    selectedUnits.value[item.id] = item.productUnit;
+    convertedQuantities.value[item.id] = `${item.totalRemovedQuantity} ${item.productUnit}`;
+  }
 });
+
+const selectedUnits = ref<Record<string, string>>({});
+const convertedQuantities = ref<Record<string, string>>({});
+const availableUnits = ["g", "kg", "mg", "ml", "l", "cl"];
+
+async function fetchConvertedQuantity(id: string, targetUnit: string) {
+  try {
+    const result = await service.getConvertedQuantity(id, targetUnit);
+    convertedQuantities.value[id] = result;
+  } catch (e) {
+    convertedQuantities.value[id] = "❌";
+  }
+}
 </script>
 
 <template>
@@ -63,8 +82,12 @@ onMounted(async () => {
         <tr v-for="item in filteredData" :key="item.id">
           <td>{{ item.productName }}</td>
           <td>{{ item.productCode }}</td>
-          <td>{{ item.productUnit }}</td>
-          <td>{{ item.totalRemovedQuantity }}</td>
+          <td>
+            <select v-model="selectedUnits[item.id]" @change="fetchConvertedQuantity(item.id, selectedUnits[item.id])">
+              <option v-for="unit in availableUnits" :key="unit" :value="unit">{{ unit }}</option>
+            </select>
+          </td>
+          <td>{{ convertedQuantities[item.id] || '...' }}</td>
         </tr>
         </tbody>
       </table>

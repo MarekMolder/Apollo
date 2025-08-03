@@ -10,4 +10,8 @@ export interface IProductEnriched extends IDomainId {
   quantity: number;
   productCategoryId: string;
   productCategoryName: string;
+  supplierId: string;
+  supplierName: string;
+  supplierEmail: string;
+  isComponent: boolean;
 }

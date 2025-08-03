@@ -33,6 +33,9 @@ public class ProductUowMapper: IMapper<DAL.DTO.Product, Domain.Logic.Product>
             
             IsComponent = entity.IsComponent,
             
+            SupplierId = entity.SupplierId,
+            Supplier = SupplierUowMapper.MapSimple(entity.Supplier),
+            
             Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!,
         };
         return res;
@@ -60,6 +63,9 @@ public class ProductUowMapper: IMapper<DAL.DTO.Product, Domain.Logic.Product>
             
             IsComponent = entity.IsComponent,
             
+            SupplierId = entity.SupplierId,
+            Supplier = SupplierUowMapper.MapSimple(entity.Supplier),
+            
             Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!,
         };
         return res;
@@ -83,6 +89,7 @@ public class ProductUowMapper: IMapper<DAL.DTO.Product, Domain.Logic.Product>
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
             IsComponent = entity.IsComponent,
+            SupplierId = entity.SupplierId,
         };
     }
 
@@ -104,6 +111,7 @@ public class ProductUowMapper: IMapper<DAL.DTO.Product, Domain.Logic.Product>
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
             IsComponent = entity.IsComponent,
+            SupplierId = entity.SupplierId,
         };
     }
 }

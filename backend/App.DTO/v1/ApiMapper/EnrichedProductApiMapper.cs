@@ -27,6 +27,9 @@ public class EnrichedProductApiMapper : IMapper<EnrichedProduct, BLL.DTO.Product
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
             ProductCategoryName = entity.ProductCategory?.Name ?? "Unknown",
+            SupplierId = entity.SupplierId,
+            SupplierName = entity.Supplier?.Name ?? "Unknown",
+            SupplierEmail = entity.Supplier?.Email ?? "Unknown",
         };
     }
 

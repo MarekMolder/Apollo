@@ -11,4 +11,9 @@ public interface IProductService : IBaseService<BLL.DTO.Product>
     /// Retrieves Products enriched with related data.
     /// </summary>
     Task<IEnumerable<BLL.DTO.Product?>> GetEnrichedProducts();
+    
+    /// <summary>
+    /// Retrieves all products provided by the specified supplier.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.Product?>> GetProductsBySupplierAsync(Guid supplierId);
 }

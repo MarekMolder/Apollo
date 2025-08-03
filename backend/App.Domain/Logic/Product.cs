@@ -50,6 +50,13 @@ public class Product : BaseEntity
     public bool IsComponent { get; set; } = false;
     
     /// <summary>
+    /// Foreign key to the supplier who provides this product.
+    /// Navigation property to the related supplier.
+    /// </summary>
+    public Guid? SupplierId { get; set; }
+    public Domain.Logic.Supplier? Supplier { get; set; }
+    
+    /// <summary>
     /// Collection of actions (add/remove) associated with this product.
     /// </summary>
     public ICollection<Domain.Logic.ActionEntity>? Actions { get; set; }

@@ -34,4 +34,9 @@ public class Supplier : BaseEntity
     /// Collection of actions associated with this supplier (e.g., stock additions).
     /// </summary>
     public ICollection<Domain.Logic.ActionEntity>? Actions { get; set; }
+    
+    /// <summary>
+    /// Collection of products provided by this supplier.
+    /// </summary>
+    public ICollection<Domain.Logic.Product>? Products { get; set; }
 }

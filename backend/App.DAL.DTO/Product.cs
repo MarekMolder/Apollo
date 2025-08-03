@@ -55,6 +55,13 @@ public class Product : IDomainId
     public bool IsComponent { get; set; } = false;
     
     /// <summary>
+    /// Foreign key to the supplier who provides this product.
+    /// Navigation property to the related supplier.
+    /// </summary>
+    public Guid? SupplierId { get; set; }
+    public DAL.DTO.Supplier? Supplier { get; set; }
+    
+    /// <summary>
     /// Collection of actions (add/remove) associated with this product.
     /// </summary>
     public ICollection<DAL.DTO.ActionEntity>? Actions { get; set; }

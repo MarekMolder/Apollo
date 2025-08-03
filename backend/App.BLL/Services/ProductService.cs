@@ -26,4 +26,13 @@ public class ProductService : BaseService<BLL.DTO.Product, DAL.DTO.Product, IPro
         var res = await ServiceRepository.GetEnrichedProducts();
         return res.Select(u => _dalBllMapperProducts.Map(u));
     }
+    
+    /// <summary>
+    /// Returns specific supplier products.
+    /// </summary>
+    public async Task<IEnumerable<BLL.DTO.Product?>> GetProductsBySupplierAsync(Guid supplierId)
+    {
+        var res = await ServiceRepository.GetProductsBySupplierAsync(supplierId);
+        return res.Select(x => _dalBllMapperProducts.Map(x));
+    }
 }

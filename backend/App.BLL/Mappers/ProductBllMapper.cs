@@ -33,6 +33,9 @@ public class ProductBllMapper : IMapper<BLL.DTO.Product, DAL.DTO.Product>
             
             IsComponent = entity.IsComponent,
             
+            SupplierId = entity.SupplierId,
+            Supplier = SupplierBllMapper.MapSimple(entity.Supplier),
+            
             Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!,
         };
         return res;
@@ -60,6 +63,9 @@ public class ProductBllMapper : IMapper<BLL.DTO.Product, DAL.DTO.Product>
             
             IsComponent = entity.IsComponent,
             
+            SupplierId = entity.SupplierId,
+            Supplier = SupplierBllMapper.MapSimple(entity.Supplier),
+            
             Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!,
         };
         return res;
@@ -83,6 +89,7 @@ public class ProductBllMapper : IMapper<BLL.DTO.Product, DAL.DTO.Product>
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
             IsComponent = entity.IsComponent,
+            SupplierId = entity.SupplierId,
         };
     }
     
@@ -104,6 +111,7 @@ public class ProductBllMapper : IMapper<BLL.DTO.Product, DAL.DTO.Product>
             Quantity = entity.Quantity,
             ProductCategoryId = entity.ProductCategoryId,
             IsComponent = entity.IsComponent,
+            SupplierId = entity.SupplierId,
         };
     }
 }
