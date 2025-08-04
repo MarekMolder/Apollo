@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import {computed, onMounted, ref} from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import router from '@/router';
 import { ActionService } from '@/services/mvcServices/ActionService';
 import { ActionTypeService } from '@/services/mvcServices/ActionTypeService';
@@ -7,14 +7,13 @@ import { ReasonService } from '@/services/mvcServices/ReasonService';
 import { SupplierService } from '@/services/mvcServices/SupplierService';
 import { ProductService } from '@/services/mvcServices/ProductServices';
 import { StorageRoomService } from '@/services/mvcServices/StorageRoomService.ts';
+import { useUserDataStore } from '@/stores/userDataStore';
 import type { IAction } from '@/domain/logic/IAction';
 import type { IReason } from '@/domain/logic/IReason';
 import type { IProduct } from '@/domain/logic/IProduct';
 import type { ISupplier } from '@/domain/logic/ISupplier';
 import type { IActionType } from '@/domain/logic/IActionType';
-import { useUserDataStore } from '@/stores/userDataStore';
-import type {IStorageRoom} from "@/domain/logic/IStorageRoom.ts";
-import type {IStorageRoomEnriched} from "@/domain/logic/IStorageRoomEnriched.ts";
+import type { IStorageRoomEnriched } from "@/domain/logic/IStorageRoomEnriched.ts";
 
 const actionService = new ActionService();
 const actionTypeService = new ActionTypeService();
@@ -48,9 +47,7 @@ const storageRooms = ref<IStorageRoomEnriched[]>([]);
 
 onMounted(async () => {
   const invRes = await storageRoomService.getEnrichedStorageRooms();
-  const visibleStorageRooms = invRes.data ?? [];
-
-  storageRooms.value = visibleStorageRooms;
+  storageRooms.value = invRes.data ?? [];
 
   actionTypes.value = (await actionTypeService.getAllAsync()).data || [];
   reasons.value = (await reasonService.getAllAsync()).data || [];
@@ -100,157 +97,99 @@ const isMahakandmine = computed(() => selectedActionType.value?.name.toLowerCase
 </script>
 
 <template>
-  <main class="action-wrapper">
-    <div class="action-box">
-      <h1 class="title">{{ $t('Create New') }} {{ $t('Action') }}</h1>
+  <main class="flex flex-col items-center mt-4 px-4 sm:px-6 lg:px-8 py-10 text-white font-sans">
+    <div class="w-full max-w-md sm:max-w-lg lg:max-w-2xl bg-[rgba(20,20,20,0.85)] backdrop-blur-md p-8 rounded-[16px] shadow-[0_0_16px_rgba(255,165,0,0.2)]">
+      <h1 class="text-3xl font-bold text-center mb-6 text-orange-400">
+        {{ $t('Create New') }} {{ $t('Action') }}
+      </h1>
 
-      <form @submit.prevent="doAdd">
-        <label for="quantity">{{ $t('Quantity') }}</label>
-        <input id="quantity" type="number" v-model="action.quantity" required />
+      <form @submit.prevent="doAdd" class="flex flex-col gap-4">
+        <div>
+          <label for="quantity" class="font-semibold block mb-1">{{ $t('Quantity') }}</label>
+          <input
+            id="quantity"
+            type="number"
+            v-model="action.quantity"
+            required
+            class="w-full px-3 py-2 rounded-lg bg-zinc-800 border-1 border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
+          />
+        </div>
 
-        <label for="actionType">{{ $t('Action Type') }}</label>
-        <select id="actionType" v-model="action.actionTypeId" :disabled="!isAdmin" required>
-          <option disabled value="">-- {{ $t('Select') }} {{ $t('Action Type') }} --</option>
-          <option
-            v-for="actionType in actionTypes"
-            :key="actionType.id"
-            :value="actionType.id"
+        <div>
+          <label for="actionType" class="font-semibold block mb-1">{{ $t('Action Type') }}</label>
+          <select
+            id="actionType"
+            v-model="action.actionTypeId"
+            :disabled="!isAdmin"
+            required
+            class="w-full px-3 py-2 rounded-lg bg-zinc-800 border-1 border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition0"
           >
-            {{ actionType.name }}
-          </option>
-        </select>
+            <option disabled value="">-- {{ $t('Select') }} {{ $t('Action Type') }} --</option>
+            <option v-for="type in actionTypes" :key="type.id" :value="type.id">
+              {{ type.name }}
+            </option>
+          </select>
+        </div>
 
-        <template v-if="isMahakandmine">
-          <label for="reason">{{ $t('Reason') }}</label>
-          <select id="reason" v-model="action.reasonId">
+        <div v-if="isMahakandmine">
+          <label for="reason" class="font-semibold block mb-1">{{ $t('Reason') }}</label>
+          <select
+            id="reason"
+            v-model="action.reasonId"
+            class="w-full px-3 py-2 rounded-lg bg-zinc-800 border-1 border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
+          >
             <option disabled value="">-- {{ $t('Select') }} {{ $t('Reason') }} --</option>
             <option v-for="reason in reasons" :key="reason.id" :value="reason.id">
               {{ reason.description }}
             </option>
           </select>
-        </template>
+        </div>
 
-        <label for="product">{{ $t('Product') }}</label>
-        <select id="product" v-model="action.productId" required>
-          <option disabled value="">-- {{ $t('Select') }} {{ $t('Product') }} --</option>
-          <option v-for="product in products" :key="product.id" :value="product.id">
-            {{ product.name }}
-          </option>
-        </select>
+        <div>
+          <label for="product" class="font-semibold block mb-1">{{ $t('Product') }}</label>
+          <select
+            id="product"
+            v-model="action.productId"
+            required
+            class="w-full px-3 py-2 rounded-lg bg-zinc-800 border-1 border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
+          >
+            <option disabled value="">-- {{ $t('Select') }} {{ $t('Product') }} --</option>
+            <option v-for="product in products" :key="product.id" :value="product.id">
+              {{ product.name }}
+            </option>
+          </select>
+        </div>
 
-        <label for="product">{{ $t('StorageRoom') }}</label>
-        <select id="product" v-model="action.storageRoomId" required>
-          <option disabled value="">-- {{ $t('Select') }} {{ $t('StorageRoom') }} --</option>
-          <option v-for="storageRoom in storageRooms" :key="storageRoom.id" :value="storageRoom.id">
-            {{ storageRoom.name }}
-          </option>
-        </select>
+        <div>
+          <label for="storageRoom" class="font-semibold block mb-1">{{ $t('StorageRoom') }}</label>
+          <select
+            id="storageRoom"
+            v-model="action.storageRoomId"
+            required
+            class="w-full px-3 py-2 rounded-lg bg-zinc-800 border-1 border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
+          >
+            <option disabled value="">-- {{ $t('Select') }} {{ $t('StorageRoom') }} --</option>
+            <option v-for="room in storageRooms" :key="room.id" :value="room.id">
+              {{ room.name }}
+            </option>
+          </select>
+        </div>
 
-        <div class="text-danger" v-if="validationError">{{ validationError }}</div>
-        <div class="text-success" v-if="successMessage">{{ successMessage }}</div>
+        <div v-if="validationError" class="text-red-400 text-center font-semibold pt-2">
+          {{ validationError }}
+        </div>
 
-        <button type="submit" class="create-button">{{ $t('Create') }}</button>
+        <div v-if="successMessage" class="text-green-400 text-center font-semibold pt-2">
+          {{ successMessage }}
+        </div>
+
+        <button
+          type="submit"
+          class="mt-4 w-full bg-gradient-to-r from-orange-500 to-yellow-400 hover:from-orange-400 hover:to-yellow-300 text-white font-bold py-2 rounded-lg transition-all"
+        >
+          {{ $t('Create') }}
+        </button>
       </form>
     </div>
   </main>
 </template>
-
-<style scoped>
-.action-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 2vh;
-  padding: 2rem;
-  font-family: 'Segoe UI', sans-serif;
-  color: #f4f4f4;
-}
-
-.action-box {
-  background: rgba(20, 20, 20, 0.85);
-  backdrop-filter: blur(6px);
-  padding: 2rem;
-  border-radius: 12px;
-  width: 100%;
-  max-width: 600px;
-  box-shadow: 0 0 18px rgba(255, 165, 0, 0.4);
-  border: 2px solid orange;
-}
-
-.title {
-  font-size: 2rem;
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: orange;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-label {
-  font-weight: bold;
-  margin-bottom: 0.25rem;
-  color: #f0f0f0;
-}
-
-input,
-select {
-  width: 100%;
-  padding: 0.6rem 0.75rem;
-  border: 1px solid #444;
-  border-radius: 8px;
-  font-size: 1rem;
-  background-color: #2a2a2a;
-  color: white;
-  appearance: none;
-  transition: border-color 0.3s ease, background-color 0.3s ease;
-}
-
-input:focus,
-select:focus {
-  outline: none;
-  border-color: orange;
-  background-color: #1a1a1a;
-}
-
-option {
-  background-color: #1a1a1a;
-  color: white;
-}
-
-.create-button {
-  margin-top: 1rem;
-  background: linear-gradient(to right, #ff8c00, #ffa500);
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem;
-  width: 100%;
-  color: white;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.create-button:hover {
-  background: linear-gradient(to right, #ffa500, #ffcc00);
-}
-
-.text-danger,
-.text-success {
-  text-align: center;
-  font-weight: bold;
-  padding-top: 0.5rem;
-}
-
-.text-danger {
-  color: #ff4d4d;
-}
-
-.text-success {
-  color: #28a745;
-}
-</style>

@@ -47,151 +47,55 @@ onMounted(async () => {
 </script>
 
 <template>
-  <main class="users-wrapper">
-    <section class="users-box">
-      <h1 class="page-title">👤 {{ $t('Users and roles') }}</h1>
+  <main class="flex justify-center px-4 py-8 font-['Inter'] text-white">
+    <section class="w-full max-w-[1100px] bg-[rgba(20,20,20,0.85)] backdrop-blur-md rounded-2xl p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)] backdrop-blur-md">
+      <h1 class="text-center text-3xl font-extrabold text-[#ffaa33] mb-6 drop-shadow-[0_0_10px_rgba(255,170,51,0.2)]">
+        👤 {{ $t('Users and roles') }}
+      </h1>
 
-      <p v-if="error" class="alert error-msg">{{ error }}</p>
+      <p v-if="error" class="text-red-400 bg-[rgba(255,80,80,0.15)] border border-[rgba(255,80,80,0.6)] text-center text-base font-medium px-4 py-2 mb-6 rounded-lg">
+        {{ error }}
+      </p>
 
-      <div class="table-container">
-        <table class="user-table">
-          <thead>
-          <tr>
-            <th>{{ $t('Email') }}</th>
-            <th>{{ $t('Full name') }}</th>
-            <th>{{ $t('Roles') }}</th>
-          </tr>
+      <div class="overflow-x-auto rounded-xl bg-[rgba(20,20,20,0.5)] shadow-inner shadow-[inset_0_0_10px_rgba(255,170,51,0.05)]">
+        <table class="w-full min-w-[600px] border-collapse text-sm sm:text-base">
+          <thead class="bg-[#ffaa33] text-black">
+            <tr>
+              <th class="px-2 py-2 sm:px-4 sm:py-3 text-left"> {{ $t('Email') }} </th>
+              <th class="px-2 py-2 sm:px-4 sm:py-3 text-left"> {{ $t('Full name') }} </th>
+              <th class="px-2 py-2 sm:px-4 sm:py-3 text-left"> {{ $t('Roles') }} </th>
+            </tr>
           </thead>
           <tbody>
-          <tr v-for="user in users" :key="user.id">
-            <td>{{ user.email }}</td>
-            <td>{{ user.firstName }} {{ user.lastName }}</td>
-            <td>
+            <tr
+              v-for="user in users"
+              :key="user.id"
+              class="hover:bg-[rgba(255,170,51,0.08)]"
+            >
+              <td class="px-2 py-2 sm:px-4 sm:py-3 border-b border-white/10 align-top">{{ user.email }}</td>
+              <td class="px-2 py-2 sm:px-4 sm:py-3 border-b border-white/10 align-top">
+                {{ user.firstName }} {{ user.lastName }}
+              </td>
+              <td class="px-2 py-2 sm:px-4 sm:py-3 border-b border-white/10 align-top">
                 <span
-                  class="role-badge"
                   v-for="role in user.roles"
                   :key="role"
+                  class="inline-flex items-center text-[#ffaa33] bg-[rgba(255,165,0,0.1)] border-1 border-[#ffaa33] px-2 sm:px-3 py-0.5 sm:py-1 mr-1 mb-1 rounded-full text-xs sm:text-sm font-semibold"
                 >
                   {{ role }}
                   <button
-                    class="remove-btn"
                     @click="removeRole(user.id, role)"
+                    class="ml-2 text-[#ff5f5f] hover:bg-[rgba(255,80,80,0.15)] text-base font-bold rounded-full px-1"
                     title="Remove role"
                   >
                     ×
                   </button>
                 </span>
-            </td>
-          </tr>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
     </section>
   </main>
 </template>
-
-<style scoped>
-.users-wrapper {
-  padding: 2rem;
-  display: flex;
-  justify-content: center;
-  font-family: 'Inter', sans-serif;
-  color: white;
-}
-
-.users-box {
-  width: 100%;
-  max-width: 1100px;
-  background: rgba(20, 20, 20, 0.85);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 0 16px rgba(255, 165, 0, 0.1);
-  border: 1px solid rgba(255, 170, 51, 0.15);
-}
-
-.page-title {
-  text-align: center;
-  font-size: 2.4rem;
-  font-weight: 800;
-  color: #ffaa33;
-  margin-bottom: 1.5rem;
-  text-shadow: 0 0 10px rgba(255, 170, 51, 0.2);
-}
-
-.alert {
-  font-size: 1rem;
-  padding: 0.8rem 1rem;
-  border-radius: 10px;
-  text-align: center;
-  font-weight: 500;
-  margin-bottom: 1.5rem;
-}
-
-.error-msg {
-  background: rgba(255, 80, 80, 0.15);
-  border: 1px solid rgba(255, 80, 80, 0.6);
-  color: #ff5f5f;
-}
-
-.table-container {
-  overflow-x: auto;
-  border-radius: 12px;
-  background: rgba(20, 20, 20, 0.5);
-  box-shadow: inset 0 0 10px rgba(255, 170, 51, 0.05);
-}
-
-.user-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 1rem;
-  min-width: 600px;
-}
-
-.user-table th,
-.user-table td {
-  padding: 1rem;
-  text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  vertical-align: top;
-}
-
-.user-table thead {
-  background: #ffaa33;
-  color: black;
-}
-
-.user-table tbody tr:hover {
-  background-color: rgba(255, 170, 51, 0.08);
-}
-
-.role-badge {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255, 165, 0, 0.1);
-  color: #ffaa33;
-  padding: 0.4rem 0.8rem;
-  margin: 0.2rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border: 1px solid rgba(255, 170, 51, 0.3);
-}
-
-.remove-btn {
-  margin-left: 0.5rem;
-  background: transparent;
-  border: none;
-  color: #ff5f5f;
-  cursor: pointer;
-  font-size: 1.1rem;
-  font-weight: bold;
-  padding: 0 0.2rem;
-  border-radius: 50%;
-  transition: background 0.2s ease;
-}
-
-.remove-btn:hover {
-  background: rgba(255, 80, 80, 0.15);
-}
-</style>

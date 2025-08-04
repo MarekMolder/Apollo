@@ -1,319 +1,167 @@
 ﻿<script setup lang="ts">
-import {computed, onMounted, reactive, ref} from "vue";
-import { useRouter } from "vue-router";
-import type { IResultObject } from "@/types/IResultObject";
-import type {IActionEnriched } from "@/domain/logic/IActionEnriched.ts";
-import {ActionService} from "@/services/mvcServices/ActionService.ts";
+import { computed, onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import type { IResultObject } from '@/types/IResultObject'
+import type { IActionEnriched } from '@/domain/logic/IActionEnriched.ts'
+import { ActionService } from '@/services/mvcServices/ActionService.ts'
 
-const requestIsOngoing = ref(false);
-const data = reactive<IResultObject<IActionEnriched[]>>({ data: [], errors: [] });
+const requestIsOngoing = ref(false)
+const data = reactive<IResultObject<IActionEnriched[]>>({ data: [], errors: [] })
+const selectedStatus = ref<'All' | 'Accepted' | 'Declined' | 'Pending'>('All')
 
-const service = new ActionService();
+const service = new ActionService()
 
 const fetchPageData = async () => {
   try {
-    const result = await service.getEnrichedActions();
-
-    data.data = result.data;
-    data.errors = result.errors;
-
+    const result = await service.getEnrichedActions()
+    data.data = result.data
+    data.errors = result.errors
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error('Error fetching data:', error)
   } finally {
-    requestIsOngoing.value = true;
+    requestIsOngoing.value = true
   }
-};
-
-onMounted(async () => {
-  await fetchPageData();
-});
+}
 
 const updateStatus = async (id: string, newStatus: 'Accepted' | 'Declined') => {
   try {
-    const response = await service.patchStatus(id, newStatus);
-    console.log(response.message);
-    await fetchPageData();
+    const response = await service.patchStatus(id, newStatus)
+    console.log(response.message)
+    await fetchPageData()
   } catch (error) {
-    console.error('Status update failed', error);
+    console.error('Status update failed', error)
   }
-};
-
-const selectedStatus = ref<'All' | 'Accepted' | 'Declined' | 'Pending'>('All');
+}
 
 const filteredData = computed(() => {
-  if (selectedStatus.value === 'All') return data.data;
-  return data.data!.filter(item => item.status === selectedStatus.value);
-});
+  if (selectedStatus.value === 'All') return data.data
+  return data.data!.filter((item) => item.status === selectedStatus.value)
+})
+
+onMounted(fetchPageData)
 </script>
 
 <template>
-  <main class="request-page">
-    <section class="card">
-      <header class="card-header">
-        <h1>{{ $t('Requests') }}</h1>
-        <div class="card-actions">
-          <div class="filter-group">
+  <main class="flex justify-center px-4 py-8 text-white">
+    <section
+      class="w-full max-w-7xl bg-[rgba(26,26,26,0.95)] backdrop-blur-sm rounded-[16px] shadow-[0_0_16px_rgba(255,165,0,0.2)] overflow-hidden"
+    >
+      <!-- Header -->
+      <header
+        class="rounded-t-[16px] flex flex-col md:flex-row justify-between items-start md:items-center gap-4 px-4 sm:px-6 py-4 bg-[rgba(43,42,42,0.75)] backdrop-blur"
+      >
+        <h1 class="text-2xl font-bold text-[#ffaa33] m-0">{{ $t('Requests') }}</h1>
+        <div class="flex flex-wrap gap-4 items-center">
+          <div class="flex items-center gap-2">
             <i class="bi bi-funnel"></i>
-            <select v-model="selectedStatus">
+            <select
+              v-model="selectedStatus"
+              class="bg-[#2a2a2a] text-white rounded-xl px-3 py-1 font-medium cursor-pointer border border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
+            >
               <option value="All">{{ $t('All') }}</option>
               <option value="Accepted">{{ $t('Accepted') }}</option>
               <option value="Declined">{{ $t('Declined') }}</option>
               <option value="Pending">{{ $t('Pending') }}</option>
             </select>
           </div>
-
-          <router-link to="/createaction" class="btn-primary">
+          <router-link
+            to="/createaction"
+            class="flex items-center gap-2 bg-[#ffaa33] text-black px-4 py-2 rounded-xl font-semibold hover:bg-[#ffaa33] transition no-underline"
+          >
             <i class="bi bi-plus-circle"></i>
             {{ $t('Create New') }}
           </router-link>
         </div>
       </header>
 
-      <div v-if="!requestIsOngoing" class="loader" aria-label="{{ $t('Loading') }}">
-        <span></span><span></span><span></span>
+      <!-- Loading state -->
+      <div v-if="!requestIsOngoing" class="flex justify-center gap-2 p-8">
+        <span class="w-3 h-3 bg-[#ffaa33] rounded-full animate-bounce [animation-delay:0s]"></span>
+        <span class="w-3 h-3 bg-[#ffaa33] rounded-full animate-bounce [animation-delay:0.2s]"></span>
+        <span class="w-3 h-3 bg-[#ffaa33] rounded-full animate-bounce [animation-delay:0.4s]"></span>
       </div>
 
-      <div v-else class="table-wrapper">
-        <table>
+      <!-- Table wrapper -->
+      <div v-else class="overflow-x-auto">
+        <table class="w-full text-sm text-center table-auto">
           <thead>
-          <tr>
-            <th>Id</th>
-            <th>{{ $t('Status') }}</th>
-            <th>{{ $t('Quantity') }}</th>
-            <th>{{ $t('Action Type') }}</th>
-            <th>{{ $t('Reason') }}</th>
-            <th>{{ $t('Product') }}</th>
-            <th>{{ $t('StorageRoom') }}</th>
-            <th class="text-center" colspan="2">{{ $t('Actions') }}</th>
-          </tr>
+            <tr class="bg-[#ffaa33] text-black">
+              <th
+                class="px-4 py-3"
+                :class="filteredData.length === 0 ? 'rounded-bl-[16px]' : ''"
+              >
+                Id
+              </th>
+              <th class="px-4 py-3">{{ $t('Status') }}</th>
+              <th class="px-4 py-3">{{ $t('Quantity') }}</th>
+              <th class="px-4 py-3">{{ $t('Action Type') }}</th>
+              <th class="px-4 py-3 hidden sm:table-cell">{{ $t('Reason') }}</th>
+              <th class="px-4 py-3">{{ $t('Supplier') }}</th>
+              <th class="px-4 py-3">{{ $t('Product') }}</th>
+              <th class="px-4 py-3 hidden sm:table-cell">{{ $t('StorageRoom') }}</th>
+              <th
+                class="px-4 py-3"
+                :class="filteredData.length === 0 ? 'rounded-br-[16px]' : ''"
+                colspan="2"
+              >
+                {{ $t('Actions') }}
+              </th>
+            </tr>
           </thead>
+
           <tbody>
-          <tr v-for="item in filteredData" :key="item.id">
-            <td>{{ item.id }}</td>
-            <td><span :class="['badge', item.status.toLowerCase()]">{{ item.status }}</span></td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.actionTypeName }}</td>
-            <td class="reason-cell">{{ item.reasonDescription }}</td>
-            <td>{{ item.productName }}</td>
-            <td>{{ item.storageRoomName }}</td>
-            <td class="action-buttons">
-              <button @click="updateStatus(item.id, 'Accepted')" class="btn-success" :aria-label="$t('Accept')">
-                <i class="bi bi-check-circle"></i>
-              </button>
-            </td>
-            <td class="action-buttons">
-              <button @click="updateStatus(item.id, 'Declined')" class="btn-danger" :aria-label="$t('Decline')">
-                <i class="bi bi-x-circle"></i>
-              </button>
-            </td>
-          </tr>
+            <tr
+              v-for="(item, index) in filteredData"
+              :key="item.id"
+              class="even:bg-white/5 hover:bg-[#2a2a2a]"
+            >
+              <td
+                class="px-4 py-3"
+                :class="index === filteredData.length - 1 ? 'rounded-bl-[16px]' : ''"
+              >
+                {{ item.id }}
+              </td>
+              <td class="px-4 py-3">
+                <span
+                  :class="[ 'px-3 py-1 rounded-full font-bold text-sm inline-block capitalize', {
+                    'bg-green-600 text-white': item.status === 'Accepted',
+                    'bg-red-600 text-white': item.status === 'Declined',
+                    'bg-[#ffaa33] text-black': item.status === 'Pending',
+                  }]"
+                >
+                  {{ item.status }}
+                </span>
+              </td>
+              <td class="px-4 py-3">{{ item.quantity }}</td>
+              <td class="px-4 py-3">{{ item.actionTypeName }}</td>
+              <td class="px-4 py-3 hidden sm:table-cell">{{ item.reasonDescription }}</td>
+              <td class="px-4 py-3">{{ item.supplierName }}</td>
+              <td class="px-4 py-3">{{ item.productName }}</td>
+              <td class="px-4 py-3 hidden sm:table-cell">{{ item.storageRoomName }}</td>
+              <td class="px-2 py-3">
+                <button
+                  @click="updateStatus(item.id, 'Accepted')"
+                  class="bg-green-600 hover:scale-105 transition w-9 h-9 rounded-xl text-white flex items-center justify-center"
+                >
+                  <i class="bi bi-check-circle"></i>
+                </button>
+              </td>
+              <td
+                class="px-2 py-3"
+                :class="index === filteredData.length - 1 ? 'rounded-br-[16px]' : ''"
+              >
+                <button
+                  @click="updateStatus(item.id, 'Declined')"
+                  class="bg-red-600 hover:scale-105 transition w-9 h-9 rounded-xl text-white flex items-center justify-center"
+                >
+                  <i class="bi bi-x-circle"></i>
+                </button>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
     </section>
   </main>
 </template>
-
-<style scoped>
-.request-page {
-  display: flex;
-  justify-content: center;
-  padding: 2rem;
-  color: #f4f4f4;
-}
-
-.card {
-  width: 100%;
-  max-width: 1600px;
-  background: rgba(26, 26, 26, 0.95);
-  backdrop-filter: blur(6px);
-  border: 1px solid orange;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(255, 165, 0, 0.25);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  position: relative;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 2rem;
-  background-color: rgba(43, 42, 42, 0.75);
-  backdrop-filter: blur(4px);
-  border-bottom: 1px solid orange;
-}
-
-.card-header h1 {
-  margin: 0;
-  font-size: 1.8rem;
-  color: orange;
-}
-
-.card-actions {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.filter-group {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.filter-group select {
-  background-color: #2a2a2a;
-  color: white;
-  border: 1px solid orange;
-  padding: 0.4rem 0.8rem;
-  border-radius: 12px;
-  font-weight: 500;
-  appearance: none;
-  cursor: pointer;
-}
-
-.filter-group select option {
-  background-color: #1a1a1a;
-  color: white;
-}
-
-.btn-primary {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: orange;
-  color: #000;
-  padding: 0.5rem 1rem;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: background 0.3s;
-  text-decoration: none;
-}
-
-.btn-primary:hover {
-  background: #ffaa33;
-}
-
-.btn-success,
-.btn-danger {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border-radius: 12px;
-  border: none;
-  cursor: pointer;
-  color: white;
-  font-size: 1.1rem;
-  transition: transform 0.2s ease;
-}
-
-.btn-success { background: #28a745; }
-.btn-danger  { background: #dc3545; }
-
-.btn-success:hover,
-.btn-danger:hover {
-  transform: scale(1.05);
-}
-
-.table-wrapper {
-  overflow-x: auto;
-}
-
-table {
-  width: 100%;
-  min-width: 900px;
-  border-collapse: collapse;
-  font-size: 0.95rem;
-  color: #f4f4f4;
-}
-
-th,
-td {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #333;
-  text-align: center; /* tee kõik keskseks */
-  vertical-align: middle;
-  white-space: nowrap;
-}
-
-th {
-  background: orange;
-  color: black;
-  border-bottom: 2px solid #1a1a1a;
-}
-
-.badge {
-  min-width: 80px;
-  display: inline-block;
-  text-align: center;
-}
-
-tbody tr:nth-child(even) {
-  background: rgba(255, 255, 255, 0.03);
-}
-
-tbody tr:hover {
-  background: #2a2a2a;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.badge {
-  display: inline-block;
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: bold;
-  text-transform: capitalize;
-  text-shadow: 0 0 2px black;
-}
-
-.badge.accepted { background: #28a745; color: white; }
-.badge.declined { background: #dc3545; color: white; }
-.badge.pending  { background: orange; color: black; }
-
-.loader {
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 2rem;
-}
-
-.loader span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: orange;
-  animation: bounce 0.6s infinite alternate;
-}
-
-.loader span:nth-child(2) { animation-delay: 0.2s; }
-.loader span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes bounce {
-  from { transform: translateY(0); opacity: 0.7; }
-  to   { transform: translateY(-12px); opacity: 1; }
-}
-
-@media (max-width: 768px) {
-  th:nth-child(5), td:nth-child(5),
-  th:nth-child(8), td:nth-child(8) {
-    display: none;
-  }
-
-  .card-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
-</style>
 
