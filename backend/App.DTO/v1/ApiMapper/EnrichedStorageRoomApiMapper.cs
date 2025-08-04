@@ -3,8 +3,15 @@ using Base.Contracts;
 
 namespace App.DTO.v1.ApiMapper;
 
+/// <summary>
+/// Maps between DTO V1 and BLL DTO StorageRoom objects.
+/// Includes both full and simplified mapping logic.
+/// </summary>
 public class EnrichedStorageRoomApiMapper : IMapper<EnrichedStorageRoom, BLL.DTO.StorageRoom>
 {
+    /// <summary>
+    /// Maps a full BLL DTO StorageRoom to a DTO V1 StorageRoom, including related objects.
+    /// </summary>
     public EnrichedStorageRoom? Map(BLL.DTO.StorageRoom? entity)
     {
         if (entity == null) return null;
@@ -30,5 +37,4 @@ public class EnrichedStorageRoomApiMapper : IMapper<EnrichedStorageRoom, BLL.DTO
     {
         throw new NotImplementedException("Mapping from API to BLL is not required.");
     }
-    
 }

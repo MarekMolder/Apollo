@@ -7,45 +7,63 @@ using Base.BLL;
 
 namespace App.BLL;
 
-public class AppBll: BaseBll<IAppUOW>, IAppBLL
+/// <summary>
+/// Central Business Logic Layer (BLL) entry point that provides access to all BLL services.
+/// Services are lazily instantiated and share a common Unit of Work.
+/// </summary>
+public class AppBll: BaseBll<IAppUOW>, IAppBll
 {
     public AppBll(IAppUOW uow) : base(uow)
     {
     }
 
+    //ActionEntity Service
     private IActionEntityService? _actionEntityService;
     public IActionEntityService ActionEntityService => 
-        _actionEntityService ??= new ActionEntityService(BLLUOW, new ActionEntityBLLMapper(), new CurrentStockUOWMapper(), new ActionEntityUOWMapper());
+        _actionEntityService ??= new ActionEntityService(Blluow, new ActionEntityBllMapper(), new MonthlyStatisticsUowMapper(), new ActionEntityUowMapper());
     
+    //ActionTypeEntity Service
     private IActionTypeEntityService? _actionTypeEntityService;
     public  IActionTypeEntityService ActionTypeEntityService => 
-        _actionTypeEntityService ??= new ActionTypeEntityService(BLLUOW, new ActionTypeEntityBLLMapper());
+        _actionTypeEntityService ??= new ActionTypeEntityService(Blluow, new ActionTypeEntityBllMapper());
     
+    //Address Service
     private IAddressService? _addressService;
     public  IAddressService AddressService => 
-        _addressService ??= new AddressService(BLLUOW, new AddressBLLMapper());
+        _addressService ??= new AddressService(Blluow, new AddressBllMapper());
     
-    private ICurrentStockService? _currentStockService;
-    public  ICurrentStockService CurrentStockService => 
-        _currentStockService ??= new CurrentStockService(BLLUOW, new CurrentStockBLLMapper());
-    
+    //ProductCategory Service
     private IProductCategoryService? _productCategoryService;
     public  IProductCategoryService ProductCategoryService => 
-        _productCategoryService ??= new ProductCategoryService(BLLUOW, new ProductCategoryBLLMapper());
+        _productCategoryService ??= new ProductCategoryService(Blluow, new ProductCategoryBllMapper());
     
+    //Product Service
     private IProductService? _productService;
     public  IProductService ProductService => 
-        _productService ??= new ProductService(BLLUOW, new ProductBLLMapper());
+        _productService ??= new ProductService(Blluow, new ProductBllMapper());
     
+    //Reason Service
     private IReasonService? _reasonService;
     public  IReasonService ReasonService => 
-        _reasonService ??= new ReasonService(BLLUOW, new ReasonBLLMapper());
+        _reasonService ??= new ReasonService(Blluow, new ReasonBllMapper());
     
+    //StorageRoom Service
     private IStorageRoomService? _storageRoomService;
     public  IStorageRoomService StorageRoomService => 
-        _storageRoomService ??= new StorageRoomService(BLLUOW, new StorageRoomBLLMapper());
+        _storageRoomService ??= new StorageRoomService(Blluow, new StorageRoomBllMapper());
     
+    //Supplier Service
     private ISupplierService? _supplierService;
     public  ISupplierService SupplierService => 
-        _supplierService ??= new SupplierService(BLLUOW, new SupplierBLLMapper());
+        _supplierService ??= new SupplierService(Blluow, new SupplierBllMapper());
+    
+    //MonthlyStatistics Service
+    private IMonthlyStatisticsService? _monthlyStatisticsService;
+    public  IMonthlyStatisticsService MonthlyStatisticsService => 
+        _monthlyStatisticsService ??= new MonthlyStatisticsService(Blluow, new MonthlyStatisticsBllMapper());
+    
+    //RecipeComponent Service
+    private IRecipeComponentService? _recipeComponentService;
+    public  IRecipeComponentService RecipeComponentService => 
+        _recipeComponentService ??= new RecipeComponentService(Blluow, new RecipeComponentBllMapper());
 }

@@ -16,4 +16,12 @@ export class ProductService extends BaseEntityService<IProduct> {
       errors: [],
     };
   }
+
+  async getBySupplier(supplierId: string): Promise<IResultObject<IProduct[]>> {
+    const response = await this.axiosInstance.get(`/products/by-supplier/${supplierId}`);
+    return {
+      data: response.data as IProduct[],
+      errors: [],
+    };
+  }
 }

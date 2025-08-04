@@ -5,8 +5,14 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Base.Helpers;
 
+/// <summary>
+/// Extension methods and helpers for JWT token handling and user identity extraction.
+/// </summary>
 public static class IdentityExtensions
 {
+    /// <summary>
+    /// Extracts the user's <see cref="Guid"/> identifier from the given <see cref="ClaimsPrincipal"/>.
+    /// </summary>
     public static Guid GetUserId(this ClaimsPrincipal claimsPrincipal)
     {
         var userIdStr = claimsPrincipal.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
@@ -14,8 +20,11 @@ public static class IdentityExtensions
         return userId;
     }
 
-    private static readonly JwtSecurityTokenHandler JWTSecurityTokenHandler = new();
+    private static readonly JwtSecurityTokenHandler JwtSecurityTokenHandler = new();
 
+    /// <summary>
+    /// Generates a JWT token with the given claims and signing information.
+    /// </summary>
     public static string GenerateJwt(
         IEnumerable<Claim> claims,
         string key,
@@ -34,9 +43,12 @@ public static class IdentityExtensions
             signingCredentials: signingCredentials
         );
 
-        return JWTSecurityTokenHandler.WriteToken(token);
+        return JwtSecurityTokenHandler.WriteToken(token);
     }
 
+    /// <summary>
+    /// Validates the given JWT token using the specified parameters.
+    /// </summary>
     public static bool ValidateJwt(string jwt, string key, string issuer, string audience)
     {
         var validationParams = new TokenValidationParameters()

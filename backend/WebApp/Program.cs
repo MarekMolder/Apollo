@@ -65,8 +65,8 @@ else
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 
-builder.Services.AddScoped<IAppUOW, AppUOW>();
-builder.Services.AddScoped<IAppBLL, AppBll>();
+builder.Services.AddScoped<IAppUOW, AppUow>();
+builder.Services.AddScoped<IAppBll, AppBll>();
 
 
 builder.Services.AddIdentity<AppUser, AppRole>(o =>
@@ -284,11 +284,6 @@ static void SetupAppData(IApplicationBuilder app, IWebHostEnvironment env, IConf
 
 static void WaitDbConnection(AppDbContext ctx, ILogger<IApplicationBuilder> logger)
 {
-    // TODO: Login failed for user 'sa'. Reason: Failed to open the explicitly specified database 'nutikas'. [CLIENT: 172.18.0.3]
-    // could actually log in, but db was not there - migrations where not applied yet
-
-    // maybe Database.OpenConnection
-
     while (true)
     {
         try

@@ -46,16 +46,16 @@
                             <li><a class="dropdown-item" asp-area="" asp-controller="Actions" asp-action="Index">Actions</a></li>
                             <li><a class="dropdown-item" asp-area="" asp-controller="ActionTypes" asp-action="Index">ActionType</a></li>
                             <li><a class="dropdown-item" asp-area="" asp-controller="Addresses" asp-action="Index">Address</a></li>
-                            <li><a class="dropdown-item" asp-area="" asp-controller="CurrentStocks" asp-action="Index">CurrentStocks</a></li>
                             <li><a class="dropdown-item" asp-area="" asp-controller="Products" asp-action="Index">Products</a></li>
                             <li><a class="dropdown-item" asp-area="" asp-controller="ProductCategories" asp-action="Index">ProductCategory</a></li>
                             <li><a class="dropdown-item" asp-area="" asp-controller="Reasons" asp-action="Index">Reason</a></li>
                             <li><a class="dropdown-item" asp-area="" asp-controller="StorageRooms" asp-action="Index">StorageRoom</a></li>
                             <li><a class="dropdown-item" asp-area="" asp-controller="Suppliers" asp-action="Index">Suppliers</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="MonthlyStatistics" asp-action="Index">MonthlyStatistics</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="RecipeComponents" asp-action="Index">RecipeComponents</a></li>
                         </ul>
                     </li>
                     }
-
                     @if (User.IsInRole("admin"))
                     {
                         <!-- Dropdown for multiple links -->
@@ -64,17 +64,6 @@
                                 Actions
                             </a>
                             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <li><a class="dropdown-item" asp-area="admin" asp-controller="Actions" asp-action="Index">Actions</a></li>
-                                <li><a class="dropdown-item" asp-area="admin" asp-controller="ActionTypes" asp-action="Index">ActionType</a></li>
-                                <li><a class="dropdown-item" asp-area="admin" asp-controller="Addresses" asp-action="Index">Address</a></li>
-                                <li><a class="dropdown-item" asp-area="admin" asp-controller="CurrentStocks" asp-action="Index">CurrentStocks</a></li>
-                                <li><a class="dropdown-item" asp-area="admin" asp-controller="Products" asp-action="Index">Products</a></li>
-                                <li><a class="dropdown-item" asp-area="admin" asp-controller="ProductCategories" asp-action="Index">ProductCategory</a></li>
-                                <li><a class="dropdown-item" asp-area="admin" asp-controller="Reasons" asp-action="Index">Reason</a></li>
-                                <li><a class="dropdown-item" asp-area="admin" asp-controller="StorageRooms" asp-action="Index">StorageRoom</a></li>
-                                <li><a class="dropdown-item" asp-area="admin" asp-controller="Suppliers" asp-action="Index">Suppliers</a></li>
-                                <hr class="dropdown-divider">
-                                
                                 <li><a class="dropdown-item" asp-area="admin" asp-controller="Users"  asp-action="Index">Users</a></li>
                                 <li><a class="dropdown-item" asp-area="admin" asp-controller="Roles"  asp-action="Index">Roles</a></li>
                                 <li><a class="dropdown-item" asp-area="admin" asp-controller="UserRoles"  asp-action="Index">User Roles</a></li>
@@ -86,9 +75,7 @@
                             </ul>
                         </li>
                     }
-                    
                     <partial name="_LanguageSelection"/>
-                    
                 </ul>
                 <partial name="_LoginPartial"/>
             </div>

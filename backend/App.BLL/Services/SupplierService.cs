@@ -6,17 +6,24 @@ using Base.Contracts;
 
 namespace App.BLL.Services;
 
-public class SupplierService : BaseService<Supplier, DAL.DTO.Supplier, ISupplierRepository>, ISupplierService
+/// <summary>
+/// Business logic service for managing Suppliers.
+/// Provides enriched supplier data including related Address and Products.
+/// </summary>
+public class SupplierService : BaseService<BLL.DTO.Supplier, DAL.DTO.Supplier, ISupplierRepository>, ISupplierService
 {
-    private readonly IMapper<Supplier, DAL.DTO.Supplier> _dalToBLLMapper;
-    public SupplierService(IAppUOW serviceUow, IMapper<Supplier, DAL.DTO.Supplier> mapper) : base(serviceUow, serviceUow.SupplierRepository, mapper)
+    private readonly IMapper<BLL.DTO.Supplier, DAL.DTO.Supplier> _dalBllMapperSuppliers;
+    public SupplierService(IAppUOW serviceUow, IMapper<BLL.DTO.Supplier, DAL.DTO.Supplier> bllMapperSuppliers) : base(serviceUow, serviceUow.SupplierRepository, bllMapperSuppliers)
     {
-        _dalToBLLMapper = mapper;
+        _dalBllMapperSuppliers = bllMapperSuppliers;
     }
     
-    public async Task<IEnumerable<Supplier?>> GetEnrichedSuppliers()
+    /// <summary>
+    /// Returns Suppliers enriched with related data (joins from DB).
+    /// </summary>
+    public async Task<IEnumerable<BLL.DTO.Supplier?>> GetEnrichedSuppliers()
     {
         var res = await ServiceRepository.GetEnrichedSuppliers();
-        return res.Select(u => _dalToBLLMapper.Map(u));
+        return res.Select(u => _dalBllMapperSuppliers.Map(u));
     }
 }

@@ -9,10 +9,10 @@ public class ActionEntityServiceTests
 {
     private readonly Mock<IAppUOW> _mockUow;
     private readonly Mock<IActionEntityRepository> _mockActionRepo;
-    private readonly Mock<ICurrentStockRepository> _mockStockRepo;
+    private readonly Mock<IMonthlyStatisticsRepository> _mockMonthlyStatisticsRepo;
     private readonly Mock<IMapper<App.BLL.DTO.ActionEntity, App.DAL.DTO.ActionEntity>> _mockMapperBll;
     private readonly Mock<IMapper<App.DAL.DTO.ActionEntity, Domain.Logic.ActionEntity>> _mockMapperDomain;
-    private readonly Mock<IMapper<App.DAL.DTO.CurrentStock, Domain.Logic.CurrentStock>> _mockStockMapper;
+    private readonly Mock<IMapper<App.DAL.DTO.MonthlyStatistics, Domain.Logic.MonthlyStatistics>> _mockMonthlyStatisticMapper;
 
     private readonly ActionEntityService _service;
 
@@ -20,18 +20,18 @@ public class ActionEntityServiceTests
     {
         _mockUow = new Mock<IAppUOW>();
         _mockActionRepo = new Mock<IActionEntityRepository>();
-        _mockStockRepo = new Mock<ICurrentStockRepository>();
+        _mockMonthlyStatisticsRepo = new Mock<IMonthlyStatisticsRepository>();
         _mockMapperBll = new Mock<IMapper<App.BLL.DTO.ActionEntity, App.DAL.DTO.ActionEntity>>();
         _mockMapperDomain = new Mock<IMapper<App.DAL.DTO.ActionEntity, Domain.Logic.ActionEntity>>();
-        _mockStockMapper = new Mock<IMapper<App.DAL.DTO.CurrentStock, Domain.Logic.CurrentStock>>();
+        _mockMonthlyStatisticMapper = new Mock<IMapper<App.DAL.DTO.MonthlyStatistics, Domain.Logic.MonthlyStatistics>>();
 
         _mockUow.SetupGet(x => x.ActionEntityRepository).Returns(_mockActionRepo.Object);
-        _mockUow.SetupGet(x => x.CurrentStockRepository).Returns(_mockStockRepo.Object);
+        _mockUow.SetupGet(x => x.MonthlyStatisticsRepository).Returns(_mockMonthlyStatisticsRepo.Object);
 
         _service = new ActionEntityService(
             _mockUow.Object,
             _mockMapperBll.Object,
-            _mockStockMapper.Object,
+            _mockMonthlyStatisticMapper.Object,
             _mockMapperDomain.Object
         );
     }
@@ -102,12 +102,12 @@ public class ActionEntityServiceTests
         _mockMapperDomain.Setup(m => m.Map(fakeAction)).Returns(dalAction);
         _mockMapperBll.Setup(m => m.Map(dalAction)).Returns(bllAction);
 
-        _mockStockRepo.Setup(r => r.FindByProductAndStorageAsync(productId, storageId)).ReturnsAsync((Domain.Logic.CurrentStock?)null);
+        _mockMonthlyStatisticsRepo.Setup(r => r.FindByProductAndStorageAsync(productId, storageId)).ReturnsAsync((Domain.Logic.MonthlyStatistics?)null);
 
-        App.DAL.DTO.CurrentStock? createdStock = null;
-        _mockStockRepo
-            .Setup(r => r.AddAsync(It.IsAny<App.DAL.DTO.CurrentStock>(), It.IsAny<Guid>()))
-            .Callback<App.DAL.DTO.CurrentStock, Guid?>((s, _) => createdStock = s)
+        App.DAL.DTO.MonthlyStatistics? createdMonthlyStatistic = null;
+        _mockMonthlyStatisticsRepo
+            .Setup(r => r.AddAsync(It.IsAny<App.DAL.DTO.MonthlyStatistics>(), It.IsAny<Guid>()))
+            .Callback<App.DAL.DTO.MonthlyStatistics, Guid?>((s, _) => createdMonthlyStatistic = s)
             .Returns(Task.CompletedTask);
 
         // Act
@@ -115,10 +115,10 @@ public class ActionEntityServiceTests
 
         // Assert
         Assert.True(result);
-        Assert.NotNull(createdStock);
-        Assert.Equal(3, createdStock!.Quantity);
-        Assert.Equal(productId, createdStock.ProductId);
-        Assert.Equal(storageId, createdStock.StorageRoomId);
+        Assert.NotNull(createdMonthlyStatistic);
+        Assert.Equal(3, createdMonthlyStatistic!.TotalRemovedQuantity);
+        Assert.Equal(productId, createdMonthlyStatistic.ProductId);
+        Assert.Equal(storageId, createdMonthlyStatistic.StorageRoomId);
     }
     
     [Fact]
@@ -159,29 +159,33 @@ public class ActionEntityServiceTests
         _mockMapperDomain.Setup(m => m.Map(fakeAction)).Returns(dalAction);
         _mockMapperBll.Setup(m => m.Map(dalAction)).Returns(bllAction);
         
-        var currentStock = new Domain.Logic.CurrentStock
+        var currentMonthlyStatistic = new Domain.Logic.MonthlyStatistics()
         {
             ProductId = productId,
             StorageRoomId = storageId,
-            Quantity = 10
+            TotalRemovedQuantity = 10,
+            Year = 2025,
+            Month = 12,
         };
 
-        var dalStock = new App.DAL.DTO.CurrentStock
+        var dalStock = new App.DAL.DTO.MonthlyStatistics()
         {
             ProductId = productId,
             StorageRoomId = storageId,
-            Quantity = 10
+            TotalRemovedQuantity = 10,
+            Year = 2025,
+            Month = 12,
         };
 
-        _mockStockRepo.Setup(r => r.FindByProductAndStorageAsync(productId, storageId))
-            .ReturnsAsync(currentStock);
+        _mockMonthlyStatisticsRepo.Setup(r => r.FindByProductAndStorageAsync(productId, storageId))
+            .ReturnsAsync(currentMonthlyStatistic);
 
-        _mockStockMapper.Setup(m => m.Map(currentStock)).Returns(dalStock);
+        _mockMonthlyStatisticMapper.Setup(m => m.Map(currentMonthlyStatistic)).Returns(dalStock);
 
-        App.DAL.DTO.CurrentStock? updatedStock = null;
-        _mockStockRepo
-            .Setup(r => r.UpdateAsync(It.IsAny<App.DAL.DTO.CurrentStock>(), It.IsAny<Guid>()))
-            .Callback<App.DAL.DTO.CurrentStock, Guid?>((s, _) => updatedStock = s)
+        App.DAL.DTO.MonthlyStatistics? updatedMonthlyStatistic = null;
+        _mockMonthlyStatisticsRepo
+            .Setup(r => r.UpdateAsync(It.IsAny<App.DAL.DTO.MonthlyStatistics>(), It.IsAny<Guid>()))
+            .Callback<App.DAL.DTO.MonthlyStatistics, Guid?>((s, _) => updatedMonthlyStatistic = s)
             .ReturnsAsync(dalStock); 
 
         // Act
@@ -189,10 +193,10 @@ public class ActionEntityServiceTests
 
         // Assert
         Assert.True(result);
-        Assert.NotNull(updatedStock);
-        Assert.Equal(8, updatedStock!.Quantity); // 10 - 2
-        Assert.Equal(productId, updatedStock.ProductId);
-        Assert.Equal(storageId, updatedStock.StorageRoomId);
+        Assert.NotNull(updatedMonthlyStatistic);
+        Assert.Equal(8, updatedMonthlyStatistic!.TotalRemovedQuantity); // 10 - 2
+        Assert.Equal(productId, updatedMonthlyStatistic.ProductId);
+        Assert.Equal(storageId, updatedMonthlyStatistic.StorageRoomId);
     }
     
     [Fact]
@@ -239,8 +243,8 @@ public class ActionEntityServiceTests
         // Assert
         Assert.True(result);
         
-        _mockStockRepo.Verify(r => r.AddAsync(It.IsAny<App.DAL.DTO.CurrentStock>(), It.IsAny<Guid>()), Times.Never);
-        _mockStockRepo.Verify(r => r.UpdateAsync(It.IsAny<App.DAL.DTO.CurrentStock>(), It.IsAny<Guid>()), Times.Never);
+        _mockMonthlyStatisticsRepo.Verify(r => r.AddAsync(It.IsAny<App.DAL.DTO.MonthlyStatistics>(), It.IsAny<Guid>()), Times.Never);
+        _mockMonthlyStatisticsRepo.Verify(r => r.UpdateAsync(It.IsAny<App.DAL.DTO.MonthlyStatistics>(), It.IsAny<Guid>()), Times.Never);
     }
     
     [Fact]
@@ -281,8 +285,8 @@ public class ActionEntityServiceTests
         _mockMapperDomain.Setup(m => m.Map(fakeAction)).Returns(dalAction);
         _mockMapperBll.Setup(m => m.Map(dalAction)).Returns(bllAction);
 
-        _mockStockRepo.Setup(r => r.FindByProductAndStorageAsync(productId, storageId))
-            .ReturnsAsync(new Domain.Logic.CurrentStock());
+        _mockMonthlyStatisticsRepo.Setup(r => r.FindByProductAndStorageAsync(productId, storageId))
+            .ReturnsAsync(new Domain.Logic.MonthlyStatistics());
 
         // Act & Assert
         await Assert.ThrowsAsync<InvalidOperationException>(() =>

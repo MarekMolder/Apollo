@@ -1,9 +1,14 @@
-﻿using App.DAL.DTO;
-using Base.DAL.Contracts;
+﻿using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface ISupplierRepository: IBaseRepository<Supplier>
+/// <summary>
+/// Repository interface for handling data access related to Suppliers.
+/// </summary>
+public interface ISupplierRepository: IBaseRepository<DAL.DTO.Supplier>
 {
-    Task<IEnumerable<Supplier?>> GetEnrichedSuppliers();
+    /// <summary>
+    /// Retrieves Supplier enriched with related data.
+    /// </summary>
+    Task<IEnumerable<DAL.DTO.Supplier?>> GetEnrichedSuppliers();
 }

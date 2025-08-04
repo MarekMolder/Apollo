@@ -1,14 +1,16 @@
 ﻿using App.BLL.Contracts;
-using App.BLL.DTO;
 using App.BLL.Mappers;
 using App.DAL.Contracts;
 using Base.BLL;
 
 namespace App.BLL.Services;
 
-public class ProductCategoryService : BaseService<ProductCategory, DAL.DTO.ProductCategory, IProductCategoryRepository>, IProductCategoryService
+/// <summary>
+/// Business logic service for managing ProductCategories.
+/// </summary>
+public class ProductCategoryService : BaseService<BLL.DTO.ProductCategory, DAL.DTO.ProductCategory, IProductCategoryRepository>, IProductCategoryService
 {
-    public ProductCategoryService(IAppUOW serviceUow, ProductCategoryBLLMapper bllMapper) : base(serviceUow, serviceUow.ProductCategoryRepository, bllMapper)
+    public ProductCategoryService(IAppUOW serviceUow, ProductCategoryBllMapper bllMapperProductCategory) : base(serviceUow, serviceUow.ProductCategoryRepository, bllMapperProductCategory)
     {
     }
 }

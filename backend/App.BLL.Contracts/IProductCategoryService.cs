@@ -2,7 +2,10 @@
 
 namespace App.BLL.Contracts;
 
-public interface IProductCategoryService : IBaseService<DTO.ProductCategory>
+/// <summary>
+/// Business logic contract for managing ProductCategory operations.
+/// </summary>
+public interface IProductCategoryService : IBaseService<BLL.DTO.ProductCategory>
 {
     
 }

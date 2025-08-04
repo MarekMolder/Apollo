@@ -12,24 +12,24 @@ const searchQuery = ref('')
 
 const fetchPageData = async () => {
   try {
-    const result = await storageRoomService.getEnrichedStorageRooms()
-    data.value = result.data || []
+    const result = await storageRoomService.getEnrichedStorageRooms();
+    data.value = result.data || [];
   } catch (error) {
-    console.error('Error fetching storageRooms:', error)
+    console.error("Error fetching storageRooms:", error);
   }
-}
+};
 
-onMounted(fetchPageData)
+onMounted(fetchPageData);
 
 const goToCurrentStock = (storageRoomId: string) => {
-  router.push(`/currentstock/${storageRoomId}`)
-}
+  router.push(`/monthlyStatistics/${storageRoomId}`);
+};
 
 const filteredStorageRooms = computed(() =>
   data.value.filter((storageRoom) => {
-    return storageRoom.name.toLowerCase().includes(searchQuery.value.toLowerCase())
-  }),
-)
+      return storageRoom.name.toLowerCase().includes(searchQuery.value.toLowerCase());
+  })
+);
 </script>
 
 <template>

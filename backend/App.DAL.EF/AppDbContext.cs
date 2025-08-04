@@ -10,21 +10,24 @@ using Microsoft.Extensions.Logging;
 
 namespace App.DAL.EF;
 
+/// <summary>
+/// Application database context extending ASP.NET Core IdentityDbContext.
+/// Manages entity configurations, audit fields, and provides customized behavior for saving changes,
+/// including user metadata and JSONB serialization (e.g., AllowedRoles in StorageRoom).
+/// </summary>
 public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUserClaim<Guid>,AppUserRole,
     IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>, IdentityUserToken<Guid>>
 {
     public DbSet<ActionEntity> Actions { get; set; }
     public DbSet<ActionTypeEntity> ActionTypes { get; set; }
     public DbSet<Address> Addresses { get; set; }
-    public DbSet<CurrentStock> CurrentStocks { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<ProductCategory> ProductCategories { get; set; }
     public DbSet<Reason> Reasons { get; set; }
     public DbSet<StorageRoom> StorageRooms { get; set; }
     public DbSet<Supplier> Suppliers { get; set; }
-    
-    public DbSet<Person> Persons { get; set; }
-
+    public DbSet<MonthlyStatistics> MonthlyStatistics { get; set; }
+    public DbSet<RecipeComponent> RecipeComponents { get; set; }
     public DbSet<AppRefreshToken> RefreshTokens { get; set; } = default!;
     
     private readonly IUserNameResolver _userNameResolver;
@@ -48,15 +51,6 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
         {
             relationship.DeleteBehavior = DeleteBehavior.Restrict;
         }
-
-        /*
-        // TODO - adding primary key to AppUserRole causes issues with RoleManager
-        // We have custom UserRole - with separate PK and navigation for Role and User
-        // override default Identity EF config
-        builder.Entity<AppUserRole>().HasKey(a => new { a.UserId, a.RoleId });
-        builder.Entity<AppUserRole>().HasAlternateKey(a => a.Id);
-        builder.Entity<AppUserRole>().HasIndex(a => new { a.UserId, a.RoleId }).IsUnique();
-        */
 
         modelBuilder.Entity<AppUserRole>()
             .HasOne(a => a.User)
@@ -102,7 +96,6 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
                         (entry.Entity as IDomainMeta)!.ChangedAt = DateTime.UtcNow;
                         (entry.Entity as IDomainMeta)!.ChangedBy = _userNameResolver.CurrentUserName;
 
-                        // Prevent overwriting CreatedBy/CreatedAt on update
                         entry.Property("CreatedAt").IsModified = false;
                         entry.Property("CreatedBy").IsModified = false;
                         break;
@@ -111,7 +104,6 @@ public class AppDbContext : IdentityDbContext<AppUser, AppRole, Guid, IdentityUs
             
             if (entry is { Entity: IDomainUserId, State: EntityState.Modified })
             {
-                // do not allow userid modification
                 entry.Property("UserId").IsModified = false;
                 _logger.LogWarning("UserId modification attempt. Denied!");
             }

@@ -8,6 +8,8 @@ import { SupplierService } from "@/services/mvcServices/SupplierService";
 import {AddressService} from "@/services/mvcServices/AddressService.ts";
 import type {IAddress} from "@/domain/logic/IAddress.ts";
 import suppliers from "@/views/SupplierView/Suppliers.vue";
+import type {IProductEnriched} from "@/domain/logic/IProductEnriched.ts";
+import {ProductService} from "@/services/mvcServices/ProductServices.ts";
 
 const supplierService = new SupplierService();
 const addressService = new AddressService();
@@ -27,6 +29,10 @@ const showDrawer = ref(false);
 const drawerMode = ref<"edit" | "create">("edit");
 const activeEditSupplier = ref<ISupplierEnriched | null>(null);
 const activeCreateSupplier = ref<ISupplier | null>(null);
+
+const showProductsDrawer = ref(false);
+const productsForSupplier = ref<IProductEnriched[]>([]);
+const selectedSupplierName = ref("");
 
 const emptySupplier = ref<ISupplier>({
   id: "",
@@ -52,6 +58,18 @@ const fetchPageData = async () => {
     data.value = result.data || [];
   } catch (error) {
     console.error("Error fetching suppliers:", error);
+  }
+};
+
+const fetchProductsBySupplier = async (supplierId: string, supplierName: string) => {
+  try {
+    selectedSupplierName.value = supplierName;
+    const productService = new ProductService();
+    const result = await productService.getBySupplier(supplierId);
+    productsForSupplier.value = result.data || [];
+    showProductsDrawer.value = true;
+  } catch (error) {
+    console.error("Error fetching products by supplier:", error);
   }
 };
 
@@ -151,6 +169,12 @@ const removeSupplier = async (id: string) => {
             <p><strong>Email:</strong> {{ item.email }}</p>
             <p><strong>Address:</strong> {{ item.fullAddress }}</p>
           </div>
+          <button
+            class="view-button"
+            @click="fetchProductsBySupplier(item.id, item.name)"
+          >
+            🛒 View Products
+          </button>
           <button class="view-button" @click="openSupplierDrawer(item)">View</button>
         </div>
       </div>
@@ -183,6 +207,30 @@ const removeSupplier = async (id: string) => {
             <button v-if="drawerMode === 'edit'" @click="updateSupplier" class="update-btn">Update</button>
             <button v-else @click="createSupplier" class="update-btn">Create</button>
             <button @click="showDrawer = false" class="cancel-btn">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
+    <transition name="fade">
+      <div v-if="showProductsDrawer" class="drawer-overlay" @click.self="showProductsDrawer = false">
+        <div class="drawer">
+          <h2>Products by {{ selectedSupplierName }}</h2>
+
+          <div v-if="productsForSupplier.length === 0">
+            <p>No products found for this supplier.</p>
+          </div>
+
+          <ul v-else style="max-height: 400px; overflow-y: auto;">
+            <li v-for="product in productsForSupplier" :key="product.id" style="margin-bottom: 1rem;">
+              <strong>{{ product.name }}</strong><br />
+              Code: {{ product.code }}<br />
+              Price: {{ product.price }} | Qty: {{ product.quantity }} {{ product.unit }}
+            </li>
+          </ul>
+
+          <div class="drawer-buttons">
+            <button @click="showProductsDrawer = false" class="cancel-btn">Close</button>
           </div>
         </div>
       </div>

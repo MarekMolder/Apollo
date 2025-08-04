@@ -2,7 +2,10 @@
 
 namespace App.BLL.Contracts;
 
-public interface IAddressService : IBaseService<DTO.Address>
+/// <summary>
+/// Business logic contract for managing Address operations.
+/// </summary>
+public interface IAddressService : IBaseService<BLL.DTO.Address>
 {
     
 }

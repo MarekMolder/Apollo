@@ -2,8 +2,18 @@
 
 namespace App.BLL.Contracts;
 
-public interface IProductService : IBaseService<DTO.Product>
+/// <summary>
+/// Business logic contract for managing Product operations.
+/// </summary>
+public interface IProductService : IBaseService<BLL.DTO.Product>
 {
-    Task<IEnumerable<DTO.Product?>> GetEnrichedProducts();
+    /// <summary>
+    /// Retrieves Products enriched with related data.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.Product?>> GetEnrichedProducts();
     
+    /// <summary>
+    /// Retrieves all products provided by the specified supplier.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.Product?>> GetProductsBySupplierAsync(Guid supplierId);
 }

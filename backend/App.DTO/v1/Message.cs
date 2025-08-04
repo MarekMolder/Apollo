@@ -1,5 +1,8 @@
 namespace App.DTO.v1;
 
+/// <summary>
+/// Generic response DTO for returning one or more messages (e.g. success, validation, or error messages).
+/// </summary>
 public class Message
 {
     public Message()

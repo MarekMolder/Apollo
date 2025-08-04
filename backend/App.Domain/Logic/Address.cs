@@ -1,33 +1,59 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Base.Domain;
+﻿using Base.Domain;
 
 namespace App.Domain.Logic;
 
+/// <summary>
+/// Represents a physical address that may be associated with storage rooms or suppliers.
+/// </summary>
 public class Address : BaseEntity
 {
-    [MaxLength(255)]
+    /// <summary>
+    /// Street name.
+    /// </summary>
     public string StreetName { get; set; } = default!;
     
+    /// <summary>
+    /// Building number on the street.
+    /// </summary>
     public int BuildingNr { get; set; }
     
-    [MaxLength(20)]
+    /// <summary>
+    /// Postal or ZIP code.
+    /// </summary>
     public string PostalCode { get; set; } = default!;
     
-    [MaxLength(255)]
+    /// <summary>
+    /// City name.
+    /// </summary>
     public string City { get; set; } = default!;
     
-    [MaxLength(255)]
+    /// <summary>
+    /// Province or state (if applicable).
+    /// </summary>
     public string Province { get; set; } = default!;
     
-    [MaxLength(255)]
+    /// <summary>
+    /// Country name.
+    /// </summary>
     public string Country { get; set; } = default!;
     
-    [MaxLength(255)]
+    /// <summary>
+    /// Display name for this address (e.g., "Main Warehouse").
+    /// </summary>
     public string Name { get; set; } = default!;
     
+    /// <summary>
+    /// Unit or apartment number, if applicable.
+    /// </summary>
     public int? UnitNr { get; set; }
     
-    public ICollection<StorageRoom>? StorageRooms { get; set; }
+    /// <summary>
+    /// Storage rooms associated with this address.
+    /// </summary>
+    public ICollection<Domain.Logic.StorageRoom>? StorageRooms { get; set; }
     
-    public ICollection<Supplier>? Suppliers { get; set; }
+    /// <summary>
+    /// Suppliers associated with this address.
+    /// </summary>
+    public ICollection<Domain.Logic.Supplier>? Suppliers { get; set; }
 }

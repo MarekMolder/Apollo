@@ -3,8 +3,15 @@ using Base.Contracts;
 
 namespace App.DTO.v1.ApiMapper;
 
+/// <summary>
+/// Maps between DTO V1 and BLL DTO ActionEntity objects.
+/// Includes both full and simplified mapping logic.
+/// </summary>
 public class EnrichedActionEntityApiMapper : IMapper<EnrichedActionEntity, BLL.DTO.ActionEntity>
 {
+    /// <summary>
+    /// Maps a full BLL DTO ActionEntity to a DTO V1 ActionEntity, including related objects.
+    /// </summary>
     public EnrichedActionEntity? Map(BLL.DTO.ActionEntity? entity)
     {
         if (entity == null) return null;
@@ -18,8 +25,6 @@ public class EnrichedActionEntityApiMapper : IMapper<EnrichedActionEntity, BLL.D
             ActionTypeName = entity.ActionType?.Name ?? "Unknown",
             ReasonId = entity.ReasonId,
             ReasonDescription = entity.Reason?.Description ?? "Unknown",
-            SupplierId = entity.SupplierId,
-            SupplierName = entity.Supplier?.Name ?? "Unknown",
             ProductId = entity.ProductId,
             ProductName = entity.Product?.Name ?? "Unknown",
             StorageRoomId = entity.StorageRoomId,

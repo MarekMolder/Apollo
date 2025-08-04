@@ -1,6 +1,5 @@
 ﻿<script setup lang="ts">
-import { computed, onMounted, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, reactive, ref } from 'vue'
 import type { IResultObject } from '@/types/IResultObject'
 import type { IActionEnriched } from '@/domain/logic/IActionEnriched.ts'
 import { ActionService } from '@/services/mvcServices/ActionService.ts'

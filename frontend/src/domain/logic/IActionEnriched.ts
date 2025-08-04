@@ -7,8 +7,6 @@ export interface IActionEnriched extends IDomainId {
   actionTypeName: string;
   reasonId: string | null;
   reasonDescription: string | null;
-  supplierId: string | null;
-  supplierName: string | null;
   productId: string;
   productName: string;
   storageRoomId: string;

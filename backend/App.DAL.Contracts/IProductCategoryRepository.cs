@@ -1,9 +1,11 @@
-﻿using App.DAL.DTO;
-using Base.DAL.Contracts;
+﻿using Base.DAL.Contracts;
 
 namespace App.DAL.Contracts;
 
-public interface IProductCategoryRepository: IBaseRepository<ProductCategory>
+/// <summary>
+/// Repository interface for handling data access related to ProductCategory.
+/// </summary>
+public interface IProductCategoryRepository: IBaseRepository<DAL.DTO.ProductCategory>
 {
     
 }

@@ -1,25 +1,47 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Base.Contracts;
+﻿using Base.Contracts;
 
 namespace App.BLL.DTO;
 
+/// <summary>
+/// Represents a supplier who provides products to the storageroom system.
+/// Includes contact information and address association.
+/// </summary>
 public class Supplier : IDomainId
 {
+    /// <summary>
+    /// Unique identifier for the supplier.
+    /// </summary>
     public Guid Id { get; set; }
     
-    [MaxLength(128)]
+    /// <summary>
+    /// Supplier's name (e.g., company or individual name).
+    /// </summary>
     public string Name { get; set; } = default!;
     
-    [MaxLength(20)]
+    /// <summary>
+    /// Telephone number for contacting the supplier.
+    /// </summary>
     public string TelephoneNr { get; set; } = default!;
     
-    [MaxLength(128)]
+    /// <summary>
+    /// Email address of the supplier.
+    /// </summary>
     public string Email { get; set; } = default!;
     
-    
+    /// <summary>
+    /// Foreign key to the supplier's address.
+    /// Reference to the related address entity.
+    /// </summary>
     public Guid AddressId { get; set; }
-    public Address? Address { get; set; }
+    public BLL.DTO.Address? Address { get; set; }
     
+    /// <summary>
+    /// Collection of actions associated with this supplier (e.g., stock additions).
+    /// </summary>
+    public ICollection<BLL.DTO.ActionEntity>? Actions { get; set; }
     
-    public ICollection<ActionEntity>? Actions { get; set; }
+    /// <summary>
+    /// Collection of products provided by this supplier.
+    /// </summary>
+    public ICollection<BLL.DTO.Product>? Products { get; set; }
 }

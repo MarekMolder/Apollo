@@ -1,14 +1,24 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Base.Contracts;
+﻿using Base.Contracts;
 
 namespace App.DTO.v1;
 
+/// <summary>
+/// Represents a reason for an inventory action (e.g., damaged goods, expired items, returned by customer).
+/// </summary>
 public class Reason : IDomainId
 {
+    /// <summary>
+    /// Unique identifier of the reason.
+    /// </summary>
     public Guid Id { get; set; }
     
-    [MaxLength(256)]
+    /// <summary>
+    /// Description of the reason (e.g., "Expired", "Damaged", "Incorrect delivery").
+    /// </summary>
     public string Description { get; set; } = default!;
     
+    /// <summary>
+    /// Optional date indicating when this reason was retired or deactivated.
+    /// </summary>
     public DateTime? EndedAt { get; set; }
 }

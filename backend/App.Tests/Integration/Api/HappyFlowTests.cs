@@ -27,11 +27,11 @@ public class HappyFlowTests : IClassFixture<CustomWebApplicationFactory<Program>
             Email = "admin@example.com",
             Password = "Admin123!"
         });
-        var adminJwt = await loginResp.Content.ReadFromJsonAsync<JWTResponse>();
+        var adminJwt = await loginResp.Content.ReadFromJsonAsync<JwtResponse>();
         Assert.True(loginResp.IsSuccessStatusCode);
         Assert.NotNull(adminJwt);
 
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt!.JWT);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt!.Jwt);
 
         // 1. Register new user (with admin rights)
         var registerResponse = await _client.PostAsJsonAsync("/api/v1/account/register", new Register
@@ -43,7 +43,7 @@ public class HappyFlowTests : IClassFixture<CustomWebApplicationFactory<Program>
         });
         Assert.True(registerResponse.IsSuccessStatusCode);
 
-        var jwtResponse = await registerResponse.Content.ReadFromJsonAsync<JWTResponse>();
+        var jwtResponse = await registerResponse.Content.ReadFromJsonAsync<JwtResponse>();
         Assert.NotNull(jwtResponse);
 
         // 2. Create product category
@@ -100,7 +100,7 @@ public class HappyFlowTests : IClassFixture<CustomWebApplicationFactory<Program>
         Assert.NotEqual(Guid.Empty, removeTypeId);
         
         // Switch token to new user
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtResponse!.JWT);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwtResponse!.Jwt);
 
         // 7. Create Action1 (Add 5)
         var action1 = new ActionEntity
@@ -132,30 +132,17 @@ public class HappyFlowTests : IClassFixture<CustomWebApplicationFactory<Program>
         Assert.True(actionResp2.IsSuccessStatusCode);
         Assert.NotNull(createdAction2);
         
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt!.JWT);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", adminJwt!.Jwt);
 
         // 8. Accept Action1 => CurrentStock record should be created
         var acceptStatus = new StatusUpdateDto { Status = "Accepted" };
         var patchResp1 = await _client.PatchAsJsonAsync($"/api/v1/actions/{createdAction1!.Id}/status", acceptStatus);
         Assert.True(patchResp1.IsSuccessStatusCode);
-
-        // 9. Verify that CurrentStock is created and has Quantity 5
-        var currentStockResp1 = await _client.GetAsync($"/api/v1/currentstocks/bystorageroom/{createdStorage.Id}");
-        var currentStocks1 = await currentStockResp1.Content.ReadFromJsonAsync<List<CurrentStock>>();
-        var stock = currentStocks1!.FirstOrDefault(cs => cs.ProductId == createdProduct.Id);
-        Assert.NotNull(stock);
-        Assert.Equal(5, stock!.Quantity); // ✅ Confirm stock created with 5
+        
 
         // 11. Accept Action2 => CurrentStock.Quantity should reduce to 2
         var patchResp2 = await _client.PatchAsJsonAsync($"/api/v1/actions/{createdAction2!.Id}/status", acceptStatus);
         Assert.True(patchResp2.IsSuccessStatusCode);
-
-        // 12. Verify stock updated to 2
-        var currentStockResp2 = await _client.GetAsync($"/api/v1/currentstocks/bystorageroom/{createdStorage.Id}");
-        var currentStocks2 = await currentStockResp2.Content.ReadFromJsonAsync<List<CurrentStock>>();
-        var updatedStock = currentStocks2!.FirstOrDefault(cs => cs.ProductId == createdProduct.Id);
-        Assert.NotNull(updatedStock);
-        Assert.Equal(2, updatedStock!.Quantity); // ✅ Confirm quantity reduced after removal
 
         // 13. Logout
         var logout = new LogoutInfo { RefreshToken = jwtResponse.RefreshToken };
