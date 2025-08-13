@@ -38,50 +38,106 @@ const filteredStorageRooms = computed(() =>
       return storageRoom.name.toLowerCase().includes(searchQuery.value.toLowerCase());
   })
 );
+
+const gridCols = computed(() => {
+  const n = filteredStorageRooms.value.length
+  if (n <= 1) return 'grid-cols-1'
+  if (n === 2) return 'grid-cols-2'
+  return 'grid-cols-3'
+})
 </script>
 
 <template>
-  <main class="p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-xl mx-auto">
+  <main class="p-6 sm:p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-2xl mx-auto">
     <!-- Header -->
-    <section class="mb-8 text-center pb-3">
+    <section class="mb-8 text-center">
       <h1
-        class="text-3xl sm:text-4xl font-extrabold text-[#ffaa33] m-0 drop-shadow-[0_0_12px_rgba(255,170,51,0.25)]"
-      >
-        🎬 Storage Rooms
+        class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
+               drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)]
+               relative inline-block">
+        <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
+          Storage Rooms
+        </span>
       </h1>
-      <p class="text-lg text-[#ccc] mt-2 pb-2">
-        Visual overview of all Storage rooms and their locations
-      </p>
-
-      <!-- Search Input -->
-      <div class="mt-6 flex justify-center">
-        <input
-          v-model="searchQuery"
-          class="w-full max-w-[460px] px-5 py-3 text-base rounded-[16px] bg-[rgba(50,50,50,0.65)] text-white placeholder:text-[#ccc] shadow-[0_0_10px_rgba(255,170,51,0.1)] border-1 border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
-          placeholder="Search inventory by name..."
-          type="text"
-        />
-      </div>
+      <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
     </section>
 
-    <!-- Storage Room Cards -->
-    <div class="flex flex-col gap-8">
+    <!-- Card container -->
+    <section class="mx-auto w-full max-w-[100rem]">
       <div
-        v-for="storageRoom in filteredStorageRooms"
-        :key="storageRoom.id"
-        class="bg-[rgba(25,25,25,0.4)] rounded-[16px] p-8 backdrop-blur-xl shadow-[inset_0_0_20px_rgba(255,165,0,0.03),_0_8px_24px_rgba(0,0,0,0.4)] hover:shadow-[0_10px_30px_rgba(255,170,51,0.1),_0_0_0_1px_rgba(255,170,51,0.2)] hover:-translate-y-0.5 hover:border-[#ffaa33] duration-300 border-1 border-neutral-700 transition"
-      >
-        <div>
-          <h2 class="text-2xl text-[#ffaa33] font-semibold m-0">{{ storageRoom.name }}</h2>
-          <p class="text-sm text-[#bbb] mt-2">📍 {{ storageRoom.fullAddress }}</p>
-          <button
-            class="mt-4 bg-gradient-to-r from-[#ffaa33] to-[#ff8c00] text-black px-4 py-2 rounded-lg font-bold text-sm hover:from-[#ffc266] hover:to-[#ffa726] transition"
-            @click="goToCurrentStock(storageRoom.id)"
+        class="rounded-[16px] p-6 sm:p-8
+               bg-[rgba(25,25,25,0.4)] backdrop-blur-xl
+               border-1 border-neutral-700
+               shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]">
+
+        <!-- Search bar -->
+        <div class="mb-6 flex items-center gap-2">
+          <i class="bi bi-search text-neutral-400 hidden sm:inline"></i>
+          <input
+            v-model="searchQuery"
+            type="text"
+            placeholder="Search storage room..."
+            class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+                   px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+                   focus:border-neutral-500 transition shadow-inner shadow-black/30"
+          />
+        </div>
+
+        <!-- Grid of storage rooms -->
+        <div class="grid gap-6" :class="gridCols">
+          <div
+            v-for="room in filteredStorageRooms"
+            :key="room.id"
+            class="rounded-xl p-5 bg-neutral-900/60 border border-neutral-700
+           shadow-[0_4px_12px_rgba(0,0,0,0.3)]
+           hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15
+           transition"
           >
-            View Stock
-          </button>
+            <!-- Nimi ja aadress -->
+            <h2 class="text-2xl font-bold text-neutral-200">{{ room.name }}</h2>
+            <p class="text-base text-neutral-400 mt-2">📍 {{ room.fullAddress }}</p>
+
+            <!-- Nupp väiksem -->
+            <div class="mt-6 flex justify-end">
+              <button
+                @click="goToCurrentStock(room.id)"
+                class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+               border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/20 via-cyan-400/15 to-transparent text-cyan-200
+               shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_4px_12px_rgba(0,0,0,0.35)]
+               hover:from-cyan-400/30 hover:via-cyan-300/20 hover:text-white
+               focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition no-underline"
+              >
+                <i class="bi bi-box-seam text-base"></i>
+                View Stock
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- No results -->
+        <div v-if="filteredStorageRooms.length === 0" class="text-center text-neutral-400 mt-8">
+          No storage rooms found.
         </div>
       </div>
-    </div>
+    </section>
   </main>
 </template>
+
+
+<style scoped>
+/* Ühtlane pehme border kõigile “kaardi” elementidele, kui vaja laiendada */
+.card-like {
+  @apply bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl;
+}
+
+/* Kui tahad “primary grey” nuppu taaskasutada */
+.btn-primary-grey {
+  @apply inline-flex items-center justify-center rounded-xl
+  bg-gradient-to-b from-neutral-800 to-neutral-700
+  text-white font-semibold px-6 py-3 text-base
+  border border-white/10 shadow-[0_0_8px_rgba(0,0,0,0.4)]
+  hover:border-[#ffaa33] hover:shadow-[0_0_15px_rgba(255,170,51,0.4)]
+  focus:outline-none focus:ring-2 focus:ring-[#ffaa33]/50 transition;
+}
+</style>
+

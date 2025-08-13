@@ -18,6 +18,12 @@ public interface IActionEntityService : IBaseService<BLL.DTO.ActionEntity>
     Task<IEnumerable<BLL.DTO.ActionEntity?>> GetEnrichedActionEntities();
     
     /// <summary>
+    /// Retrieves ActionEntities enriched with related data + meta data.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.ActionEntity?>> GetEnrichedActionEntitiesFiltered(
+        string? userEmail, int? month, int? year, string? status);
+    
+    /// <summary>
     /// Returns a list of products that have had the highest total quantity removed.
     /// </summary>
     Task<IEnumerable<(Guid ProductId, string ProductName, decimal RemoveQuantity)>> GetTopRemovedProductsAsync();

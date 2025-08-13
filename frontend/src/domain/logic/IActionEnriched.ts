@@ -9,6 +9,9 @@ export interface IActionEnriched extends IDomainId {
   reasonDescription: string | null;
   productId: string;
   productName: string;
+  productUnit: string;
   storageRoomId: string;
   storageRoomName: string;
+  createdBy: string
+  createdAt: string
 }

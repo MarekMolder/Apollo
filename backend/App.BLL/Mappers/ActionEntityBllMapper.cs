@@ -32,6 +32,11 @@ public class ActionEntityBllMapper : IMapper<App.BLL.DTO.ActionEntity, DAL.DTO.A
             
             StorageRoomId = entity.StorageRoomId,
             StorageRoom = StorageRoomBllMapper.MapSimple(entity.StorageRoom),
+            
+            CreatedBy = entity.CreatedBy,
+            CreatedAt = entity.CreatedAt,
+            ChangedBy = entity.ChangedBy,
+            ChangedAt = entity.ChangedAt,
         };
         return res;
     }
@@ -60,6 +65,11 @@ public class ActionEntityBllMapper : IMapper<App.BLL.DTO.ActionEntity, DAL.DTO.A
             
             StorageRoomId = entity.StorageRoomId,
             StorageRoom = StorageRoomBllMapper.MapSimple(entity.StorageRoom),
+            
+            CreatedBy = entity.CreatedBy,
+            CreatedAt = entity.CreatedAt,
+            ChangedBy = entity.ChangedBy,
+            ChangedAt = entity.ChangedAt,
         };
         return res;
     }
@@ -80,6 +90,11 @@ public class ActionEntityBllMapper : IMapper<App.BLL.DTO.ActionEntity, DAL.DTO.A
             ReasonId = entity.ReasonId,
             ProductId = entity.ProductId,
             StorageRoomId = entity.StorageRoomId,
+            
+            CreatedBy = entity.CreatedBy,
+            CreatedAt = entity.CreatedAt,
+            ChangedBy = entity.ChangedBy,
+            ChangedAt = entity.ChangedAt,
         };
     }
     
@@ -99,6 +114,11 @@ public class ActionEntityBllMapper : IMapper<App.BLL.DTO.ActionEntity, DAL.DTO.A
             ReasonId = entity.ReasonId,
             ProductId = entity.ProductId,
             StorageRoomId = entity.StorageRoomId,
+            
+            CreatedBy = entity.CreatedBy,
+            CreatedAt = entity.CreatedAt,
+            ChangedBy = entity.ChangedBy,
+            ChangedAt = entity.ChangedAt,
         };
     }
 }

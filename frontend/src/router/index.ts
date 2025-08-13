@@ -22,6 +22,7 @@ import Address from "@/views/AddressView/Address.vue";
 import ProductCategory from "@/views/ProductCategoryView/ProductCategory.vue";
 import Reason from "@/views/ReasonView/Reason.vue";
 import RecipeComponent from "@/views/RecipeComponentView/RecipeComponent.vue";
+import CrudSettings from "@/views/CrudSettings/CrudSettings.vue";
 
 const routes = [
   { path: "/home", name: "Home", component: Home },
@@ -47,6 +48,8 @@ const routes = [
   { path: "/productCategory", name: "productCategory", component: ProductCategory },
   { path: "/reason", name: "reason", component: Reason },
   { path: "/recipeComponent", name: "recipeComponent", component: RecipeComponent },
+
+  { path: "/crudSettings", name: "crudSettings", component: CrudSettings },
 ];
 
 const router = createRouter({
@@ -75,7 +78,8 @@ router.beforeEach((to, from, next) => {
     "/address",
     "/productCategory",
     "/reason",
-    "/recipeComponent"
+    "/recipeComponent",
+    "/crudSettings"
   ];
 
   const isRestricted = adminOnlyRoutes.some((path) => {
