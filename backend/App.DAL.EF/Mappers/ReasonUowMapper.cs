@@ -22,7 +22,6 @@ public class ReasonUowMapper: IMapper<DAL.DTO.Reason, Domain.Logic.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
             
             Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!
         };
@@ -40,7 +39,6 @@ public class ReasonUowMapper: IMapper<DAL.DTO.Reason, Domain.Logic.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
             
             Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!
         };
@@ -58,7 +56,6 @@ public class ReasonUowMapper: IMapper<DAL.DTO.Reason, Domain.Logic.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
         };
     }
 
@@ -73,7 +70,6 @@ public class ReasonUowMapper: IMapper<DAL.DTO.Reason, Domain.Logic.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
         };
     }
 }

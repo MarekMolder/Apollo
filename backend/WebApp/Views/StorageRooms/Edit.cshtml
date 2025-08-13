@@ -26,11 +26,6 @@
                 <label for="RolesInput" class="control-label">Allowed Roles (comma-separated)</label>
                 <input type="text" name="RolesInput" class="form-control" value="@string.Join(",", Model.StorageRoom.AllowedRoles ?? new List<string>())" />
             </div>
-            <div class="form-group">
-                <label asp-for="StorageRoom.EndedAt" class="control-label"></label>
-                <input asp-for="StorageRoom.EndedAt" class="form-control" />
-                <span asp-validation-for="StorageRoom.EndedAt" class="text-danger"></span>
-            </div>
             <input type="hidden" asp-for="StorageRoom.Id" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

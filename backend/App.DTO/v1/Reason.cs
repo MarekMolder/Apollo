@@ -16,9 +16,4 @@ public class Reason : IDomainId
     /// Description of the reason (e.g., "Expired", "Damaged", "Incorrect delivery").
     /// </summary>
     public string Description { get; set; } = default!;
-    
-    /// <summary>
-    /// Optional date indicating when this reason was retired or deactivated.
-    /// </summary>
-    public DateTime? EndedAt { get; set; }
 }

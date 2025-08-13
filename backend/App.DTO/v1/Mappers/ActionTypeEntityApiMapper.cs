@@ -19,7 +19,6 @@ public class ActionTypeEntityApiMapper : IMapper<ActionTypeEntity, BLL.DTO.Actio
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (ActionTypeEnum)(int)entity.Code
         };
         return res;
@@ -35,7 +34,6 @@ public class ActionTypeEntityApiMapper : IMapper<ActionTypeEntity, BLL.DTO.Actio
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (BLL.DTO.Enums.ActionTypeEnum)(int)entity.Code
         };
         return res;
@@ -50,7 +48,6 @@ public class ActionTypeEntityApiMapper : IMapper<ActionTypeEntity, BLL.DTO.Actio
         {
             Id = Guid.NewGuid(),
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (BLL.DTO.Enums.ActionTypeEnum)(int)entity.Code
         };
         return res;

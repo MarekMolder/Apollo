@@ -23,7 +23,6 @@ public class ActionTypeEntityUowMapper: IMapper<DAL.DTO.ActionTypeEntity, Domain
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (ActionTypeEnum)(int)entity.Code,
             Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!
         };
@@ -41,7 +40,6 @@ public class ActionTypeEntityUowMapper: IMapper<DAL.DTO.ActionTypeEntity, Domain
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (Domain.Enums.ActionTypeEnum)(int)entity.Code,
             Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!
         };
@@ -59,7 +57,6 @@ public class ActionTypeEntityUowMapper: IMapper<DAL.DTO.ActionTypeEntity, Domain
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (ActionTypeEnum)(int)entity.Code
         };
     }
@@ -75,7 +72,6 @@ public class ActionTypeEntityUowMapper: IMapper<DAL.DTO.ActionTypeEntity, Domain
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (Domain.Enums.ActionTypeEnum)(int)entity.Code
         };
     }

@@ -2,5 +2,4 @@
 
 export interface IProductCategory extends IDomainId {
   name: string;
-  endedAt: number;
 }

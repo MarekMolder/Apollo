@@ -18,11 +18,15 @@ public class EnrichedMonthlyStatistics : IDomainId
     /// Name of the product.
     /// Product code (SKU or internal identifier).
     /// Unit of measurement used for the product (e.g., "g", "ml").
+    /// Total volume of the product removed during the specified month.
+    /// Measurement unit for the Volume field (e.g., "l", "ml", "g", "kg").
     /// </summary>
     public Guid ProductId { get; set; }
     public string ProductName { get; set; } = default!;
     public string ProductCode { get; set; } = default!;
     public string ProductUnit { get; set; } = default!;
+    public decimal ProductVolume { get; set; } 
+    public string ProductVolumeUnit { get; set; } = default!;
     
     /// <summary>
     /// ID of the storage room where the product was removed from.

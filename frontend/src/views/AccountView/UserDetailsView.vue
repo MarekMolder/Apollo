@@ -3,9 +3,13 @@ import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { IdentityService } from '@/services/IdentityService'
 
-const route = useRoute()
+// Services
 const identityService = new IdentityService()
 
+// Router
+const route = useRoute()
+
+// Empty user
 const user = ref<{
   id: string
   email: string
@@ -14,6 +18,7 @@ const user = ref<{
   userName: string
 } | null>(null)
 
+// Get User details
 onMounted(async () => {
   try {
     const id = route.params.id as string

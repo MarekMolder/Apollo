@@ -18,7 +18,6 @@ public class ProductCategoryApiMapper : IMapper<ProductCategory, BLL.DTO.Product
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
         };
         return res;
     }
@@ -33,7 +32,6 @@ public class ProductCategoryApiMapper : IMapper<ProductCategory, BLL.DTO.Product
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
         };
         return res;
     }
@@ -47,7 +45,6 @@ public class ProductCategoryApiMapper : IMapper<ProductCategory, BLL.DTO.Product
         {
             Id = Guid.NewGuid(),
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
         };
         return res;
     }

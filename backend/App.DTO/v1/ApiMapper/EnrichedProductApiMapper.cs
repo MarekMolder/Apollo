@@ -21,6 +21,7 @@ public class EnrichedProductApiMapper : IMapper<EnrichedProduct, BLL.DTO.Product
             Id = entity.Id,
             Unit = entity.Unit,
             Volume = entity.Volume,
+            VolumeUnit = entity.VolumeUnit,
             Code = entity.Code,
             Name = entity.Name,
             Price = entity.Price,

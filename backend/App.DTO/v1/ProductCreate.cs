@@ -12,6 +12,12 @@ public class ProductCreate
     /// Volume or weight of the product per unit (e.g., 0.5 for liter bottle).
     /// </summary>
     public decimal Volume { get; set; } = default!;
+    
+    /// <summary>
+    /// Measurement unit for the Volume field (e.g., "l", "ml", "g", "kg").
+    /// This allows distinguishing volume when Unit is "tk".
+    /// </summary>
+    public string VolumeUnit { get; set; } = default!;
 
     /// <summary>
     /// Internal or external product code.

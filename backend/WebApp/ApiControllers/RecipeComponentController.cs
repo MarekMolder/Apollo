@@ -1,5 +1,7 @@
 using App.BLL.Contracts;
 using App.DTO.v1;
+using App.DTO.v1.ApiEntities;
+using App.DTO.v1.ApiMapper;
 using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,6 +25,8 @@ namespace WebApp.ApiControllers
         private readonly ILogger<RecipeComponentController> _logger;
         
         private readonly RecipeComponentApiMapper _mapper = new();
+        
+        private readonly EnrichedRecipeComponentApiMapper _enrichedRecipeComponentApiMapper = new();
 
         public RecipeComponentController(IAppBll bll, ILogger<RecipeComponentController> logger)
         {
@@ -114,6 +118,21 @@ namespace WebApp.ApiControllers
             
             _logger.LogInformation("Deleted recipe component with ID {Id}", id);
             return NoContent();
+        }
+        
+        /// <summary>
+        /// Get enriched recipe components
+        /// </summary>
+        [HttpGet("enrichedRecipeComponents/")]
+        [ProducesResponseType(typeof(IEnumerable<EnrichedRecipeComponent>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrichedRecipeComponent>>> GetEnrichedRecipeComponents()
+        {
+            _logger.LogInformation("Fetching enriched recipe components");
+            var data = await _bll.RecipeComponentService.GetEnrichedRecipeComponents();
+            var res = data.Select(u => _enrichedRecipeComponentApiMapper.Map(u)!).ToList();
+            
+            _logger.LogInformation("Returned {Count} enriched recipeComponents", res.Count);
+            return Ok(res);
         }
     }
 }

@@ -3,40 +3,49 @@ import { onMounted, ref } from 'vue'
 import { RoleService } from '@/services/RoleService'
 import type { AppRole } from '@/domain/logic/AppRole'
 
+// Services
 const roleService = new RoleService()
+
+// Entitys
 const roles = ref<AppRole[]>([])
-const error = ref('')
-const success = ref('')
+
+// ??
 const newRoleName = ref('')
 
+// Messages errors/success
+const validationError = ref('')
+const successMessage = ref('')
+
+// Get roles
 const fetchRoles = async () => {
   try {
     roles.value = await roleService.getAllRoles()
   } catch (e: any) {
-    error.value = e.message
+    validationError.value = e.message
   }
 }
 
+onMounted(fetchRoles)
+
+// Role create function
 const createRole = async () => {
-  error.value = ''
-  success.value = ''
+  validationError.value = ''
+  successMessage.value = ''
 
   if (!newRoleName.value.trim()) {
-    error.value = 'Rolli nimi ei tohi olla tühi'
+    validationError.value = 'Role name cant be empty'
     return
   }
 
   const result = await roleService.createRole(newRoleName.value.trim())
   if (result.errors!.length) {
-    error.value = result.errors!.join(', ')
+    validationError.value = result.errors!.join(', ')
   } else {
-    success.value = result.data!
+    successMessage.value = result.data!
     newRoleName.value = ''
     await fetchRoles()
   }
 }
-
-onMounted(fetchRoles)
 </script>
 
 <template>
@@ -67,16 +76,16 @@ onMounted(fetchRoles)
       </form>
 
       <p
-        v-if="error"
+        v-if="validationError"
         class="mt-4 text-sm font-medium px-4 py-2 rounded-md bg-[rgba(255,80,80,0.15)] border-1 border-[#ffaa33] text-[#ff5f5f]"
       >
-        {{ error }}
+        {{ validationError }}
       </p>
       <p
-        v-if="success"
+        v-if="successMessage"
         class="mt-4 text-sm font-medium px-4 py-2 rounded-md bg-[rgba(0,255,100,0.1)] border-1 border-[#ffaa33] text-[#9effb1]"
       >
-        {{ success }}
+        {{ successMessage }}
       </p>
     </div>
 

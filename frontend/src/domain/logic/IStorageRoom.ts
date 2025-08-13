@@ -5,5 +5,4 @@ export interface IStorageRoom extends IDomainId {
   name: string;
   addressId: string;
   allowedRoles: string[];
-  EndedAt: string;
 }

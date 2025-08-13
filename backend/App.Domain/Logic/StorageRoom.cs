@@ -26,11 +26,6 @@ public class StorageRoom : BaseEntity
     public List<string> AllowedRoles { get; set; } = new();
     
     /// <summary>
-    /// Optional end date marking the storage room as deactivated or archived.
-    /// </summary>
-    public DateTime? EndedAt { get; set; }
-    
-    /// <summary>
     /// Collection of actions (add/remove) that occurred in this storage room.
     /// </summary>
     public ICollection<Domain.Logic.ActionEntity>? Actions { get; set; }

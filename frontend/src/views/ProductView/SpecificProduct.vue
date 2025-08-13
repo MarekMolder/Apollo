@@ -3,14 +3,18 @@ import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import type { IProductEnriched } from '@/domain/logic/IProductEnriched';
 import { ProductService } from '@/services/mvcServices/ProductServices';
-import router from "@/router";
 
+// Services
+const service = new ProductService();
+
+//Entity's
+const product = ref<IProductEnriched | null>(null);
+
+// Route
 const route = useRoute();
 const productId = route.params.id as string;
 
-const product = ref<IProductEnriched | null>(null);
-const service = new ProductService();
-
+// Get products
 const fetchProduct = async () => {
   try {
     const result = await service.getEnrichedProducts();
@@ -20,21 +24,6 @@ const fetchProduct = async () => {
   }
 };
 
-const editProduct = (id: string) => {
-  router.push(`/editproduct/${id}`);
-};
-
-const removeProduct = async (id: string) => {
-  if (!confirm("Are you sure you want to delete this product?")) return;
-
-  try {
-    await service.removeAsync(id);
-    router.push("/products");
-  } catch (error) {
-    console.error("Error deleting product:", error);
-    alert("Failed to delete product.");
-  }
-};
 onMounted(fetchProduct);
 </script>
 
@@ -44,10 +33,6 @@ onMounted(fetchProduct);
     <div class="product-detail-card">
       <h1>{{ product.name }}</h1>
       <div class="image-placeholder">🖼️</div>
-      <div class="header-row">
-        <button class="edit-link" @click="editProduct(product.id)">✎ {{ $t('Edit') }}</button>
-        <button class="remove-link" @click="removeProduct(product.id)">🗑 {{ $t('Remove') }}</button>
-      </div>
       <div class="info">
         <p><strong>{{ $t('Product Code') }}:</strong> {{ product.code }}</p>
         <p><strong>{{ $t('Unit') }}:</strong> {{ product.unit }}</p>

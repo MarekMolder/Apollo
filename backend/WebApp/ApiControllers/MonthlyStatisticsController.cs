@@ -178,6 +178,48 @@ namespace WebApp.ApiControllers
         }
         
         /// <summary>
+        /// Get converted removed volume for a MonthlyStatistics record.
+        /// </summary>
+        [HttpGet("converted-volume/{monthlyStatisticsId}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetConvertedRemovedVolume(Guid monthlyStatisticsId, [FromQuery] string targetUnit)
+        {
+            var stats = await _bll.MonthlyStatisticsService.FindAsync(monthlyStatisticsId);
+            if (stats == null) return NotFound("MonthlyStatistics not found");
+
+            var product = await _bll.ProductService.FindAsync(stats.ProductId);
+            if (product == null) return NotFound("Product not found");
+            
+            if (!string.Equals(product.Unit, "tk", StringComparison.OrdinalIgnoreCase))
+                return BadRequest("Removed volume conversion is only applicable when product unit is 'tk'.");
+
+            if (product.Volume == null || product.Volume <= 0 || string.IsNullOrWhiteSpace(product.VolumeUnit))
+                return BadRequest("Product volume and volume unit must be set for 'tk' products.");
+
+            var baseValue = stats.TotalRemovedQuantity * product.Volume;
+            var fromUnit = product.VolumeUnit!;
+
+            try
+            {
+                decimal result;
+                if (string.Equals(fromUnit, targetUnit, StringComparison.OrdinalIgnoreCase))
+                {
+                    result = baseValue;
+                }
+                else
+                {
+                    result = ConvertUnits(baseValue, fromUnit, targetUnit);
+                }
+
+                return Ok($"{result:F2} {targetUnit} (from {fromUnit})");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+        
+        /// <summary>
         /// Unit conversion helper function.
         /// </summary>
         private decimal ConvertUnits(decimal value, string from, string to)
@@ -200,7 +242,13 @@ namespace WebApp.ApiControllers
                 { ("g", "ml"), 1m },
                 { ("g", "l"), 0.001m },
                 { ("kg", "ml"), 1000m },
-                { ("kg", "l"), 1m }
+                { ("kg", "l"), 1m },
+                
+                // Maht -> mass (eeldame tihedus 1 g/ml)
+                { ("ml", "g"), 1m },
+                { ("l", "g"), 1000m },
+                { ("ml", "kg"), 0.001m },
+                { ("l", "kg"), 1m }
             };
 
             if (from == to) return value;

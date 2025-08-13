@@ -21,9 +21,6 @@
         <th>
             @Html.DisplayNameFor(model => model.AllowedRoles)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.EndedAt)
-        </th>
         <th></th>
     </tr>
     </thead>
@@ -45,9 +42,6 @@
                 {
                     <span class="text-muted">No roles</span>
                 }
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EndedAt)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

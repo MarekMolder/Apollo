@@ -22,7 +22,6 @@ public class ReasonBllMapper : IMapper<BLL.DTO.Reason, DAL.DTO.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
             
             Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!
         };
@@ -40,7 +39,6 @@ public class ReasonBllMapper : IMapper<BLL.DTO.Reason, DAL.DTO.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
             
             Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!
         };
@@ -58,7 +56,6 @@ public class ReasonBllMapper : IMapper<BLL.DTO.Reason, DAL.DTO.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
         };
     }
     
@@ -73,7 +70,6 @@ public class ReasonBllMapper : IMapper<BLL.DTO.Reason, DAL.DTO.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
         };
     }
 }

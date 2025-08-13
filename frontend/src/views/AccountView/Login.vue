@@ -4,16 +4,24 @@ import { useRouter } from 'vue-router';
 import { useUserDataStore } from '@/stores/userDataStore';
 import { IdentityService } from '@/services/IdentityService';
 
+// Services
+const identityService = new IdentityService();
+
+// Store and Router
 const store = useUserDataStore();
 const router = useRouter();
 
+// ??
 const email = ref('admin@taltech.ee');
 const password = ref('Foo.Bar.1');
-const error = ref<string | null>(null);
 
+// Error message
+const validationError = ref<string | null>(null);
+
+// Login function
 const doLogin = async () => {
-  error.value = null;
-  const identityService = new IdentityService();
+  validationError.value = null;
+
   const response = await identityService.login(email.value, password.value);
 
   if (response?.data) {
@@ -30,11 +38,11 @@ const doLogin = async () => {
     const rawError = response.errors?.[0];
 
     if (rawError?.includes('User/Password problem') || rawError?.includes('404')) {
-      error.value = 'Invalid email or password';
+      validationError.value = 'Invalid email or password';
     } else if (rawError?.includes('Network Error')) {
-      error.value = 'Server unreachable';
+      validationError.value = 'Server unreachable';
     } else {
-      error.value = 'Login failed. Please try again.';
+      validationError.value = 'Login failed. Please try again.';
     }
   }
 };
@@ -45,13 +53,13 @@ const doLogin = async () => {
 
     <!-- Kaart -->
     <div class="bg-black text-white w-full max-w-sm sm:max-w-md md:max-w-lg p-6 sm:p-8 rounded-2xl shadow-xl">
-      
+
       <!-- Logo -->
       <img src="@/assets/apollo-logo.png" alt="Apollo logo" class="mx-auto mb-6 w-32 sm:w-40" />
 
       <!-- Login vorm -->
       <form @submit.prevent="doLogin" class="space-y-5">
-        
+
         <!-- Email -->
         <div>
           <label for="email" class="block mb-1 text-sm sm:text-base font-semibold">{{ $t('Email') }}</label>
@@ -85,7 +93,9 @@ const doLogin = async () => {
         </button>
 
         <!-- Error -->
-        <p v-if="error" class="text-red-500 text-sm mt-2 text-center">{{ error }}</p>
+        <p v-if="validationError" class="text-red-500 text-sm mt-2 text-center">{{
+            validationError
+          }}</p>
       </form>
     </div>
   </main>

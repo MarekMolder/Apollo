@@ -74,11 +74,6 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (actionTypeEntity.EndedAt.HasValue)
-                {
-                    actionTypeEntity.EndedAt = DateTime.SpecifyKind(actionTypeEntity.EndedAt.Value, DateTimeKind.Utc);
-                }
-                
                 _logger.LogInformation("Creating new ActionType: {Name}", actionTypeEntity.Name);
                 _bll.ActionTypeEntityService.Add(actionTypeEntity);
                 await _bll.SaveChangesAsync();
@@ -127,12 +122,6 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                
-                if (actionTypeEntity.EndedAt.HasValue)
-                {
-                    actionTypeEntity.EndedAt = DateTime.SpecifyKind(actionTypeEntity.EndedAt.Value, DateTimeKind.Utc);
-                }
-                
                 _logger.LogInformation("Updating ActionType with id {Id}", id);
                 _bll.ActionTypeEntityService.Update(actionTypeEntity);
                 await _bll.SaveChangesAsync();

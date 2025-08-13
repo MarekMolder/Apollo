@@ -7,5 +7,8 @@ namespace App.DAL.Contracts;
 /// </summary>
 public interface IAddressRepository: IBaseRepository<DAL.DTO.Address>
 {
-    
+    /// <summary>
+    /// Retrieves Addresses enriched with related data.
+    /// </summary>
+    Task<IEnumerable<DAL.DTO.Address?>> GetEnrichedAddresses();
 }

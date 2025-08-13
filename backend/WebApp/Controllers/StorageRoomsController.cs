@@ -84,11 +84,6 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 _logger.LogInformation("Creating storage room for user {UserId}", User.GetUserId());
-
-                if (vm.StorageRoom.EndedAt.HasValue)
-                {
-                    vm.StorageRoom.EndedAt = DateTime.SpecifyKind(vm.StorageRoom.EndedAt.Value, DateTimeKind.Utc);
-                }
                 
                 if (!string.IsNullOrWhiteSpace(vm.RolesInput))
                 {
@@ -158,11 +153,6 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 _logger.LogInformation("Updating storage room with ID {Id}", id);
-
-                if (vm.StorageRoom.EndedAt.HasValue)
-                {
-                    vm.StorageRoom.EndedAt = DateTime.SpecifyKind(vm.StorageRoom.EndedAt.Value, DateTimeKind.Utc);
-                }
                 
                 if (!string.IsNullOrWhiteSpace(vm.RolesInput))
                 {

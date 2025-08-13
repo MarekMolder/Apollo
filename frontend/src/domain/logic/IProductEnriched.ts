@@ -4,6 +4,7 @@ export interface IProductEnriched extends IDomainId {
   id: string;
   unit: string;
   volume: number;
+  volumeUnit: string;
   code: string;
   name: string;
   price: number;

@@ -4,17 +4,25 @@ import { RoleService } from "@/services/RoleService";
 import type { AppRole } from "@/domain/logic/AppRole";
 import { useUserDataStore } from "@/stores/userDataStore";
 
+// Services
 const roleService = new RoleService();
+
+// Entitys
 const roles = ref<AppRole[]>([]);
-const error = ref("");
+
+// Store
 const store = useUserDataStore();
 
+// Error Message
+const validationError = ref("");
+
+// Get Roles
 const fetchRoles = async () => {
   console.log("JWT in store:", store.jwt);
   try {
     roles.value = await roleService.getAllRoles();
   } catch (e: any) {
-    error.value = e.message;
+    validationError.value = e.message;
   }
 };
 
@@ -33,10 +41,10 @@ onMounted(fetchRoles);
       </h1>
 
       <p
-        v-if="error"
+        v-if="validationError"
         class="mb-6 text-center text-red-400 bg-red-900/30 rounded-md py-2 px-4"
       >
-        {{ error }}
+        {{ validationError }}
       </p>
 
       <div

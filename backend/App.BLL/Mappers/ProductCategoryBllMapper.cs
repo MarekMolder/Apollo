@@ -22,7 +22,6 @@ public class ProductCategoryBllMapper : IMapper<BLL.DTO.ProductCategory, DAL.DTO
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             
             Products = entity.Products?.Select(t => _productBllMapper.Map(t)).ToList()!,
         };
@@ -40,7 +39,6 @@ public class ProductCategoryBllMapper : IMapper<BLL.DTO.ProductCategory, DAL.DTO
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             
             Products = entity.Products?.Select(t => _productBllMapper.Map(t)).ToList()!,
         };
@@ -58,7 +56,6 @@ public class ProductCategoryBllMapper : IMapper<BLL.DTO.ProductCategory, DAL.DTO
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
         };
     }
     
@@ -73,7 +70,6 @@ public class ProductCategoryBllMapper : IMapper<BLL.DTO.ProductCategory, DAL.DTO
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
         };
     }
 }

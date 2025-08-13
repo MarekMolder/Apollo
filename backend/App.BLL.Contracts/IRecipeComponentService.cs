@@ -7,5 +7,8 @@ namespace App.BLL.Contracts;
 /// </summary>
 public interface IRecipeComponentService : IBaseService<BLL.DTO.RecipeComponent>
 {
-    
+    /// <summary>
+    /// Retrieves RecipeComponents enriched with related data.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.RecipeComponent?>> GetEnrichedRecipeComponents();
 }

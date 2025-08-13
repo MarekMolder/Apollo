@@ -25,4 +25,17 @@ public class RecipeComponentRepository: BaseRepository<DAL.DTO.RecipeComponent, 
             .Where(rc => rc.ProductRecipeId == productId)
             .ToListAsync();
     }
+    
+    /// <summary>
+    /// Retrieves all recipe component entries.
+    /// </summary>
+    public async Task<IEnumerable<DAL.DTO.RecipeComponent?>> GetEnrichedRecipeComponents()
+    {
+        var domainEntities = await RepositoryDbSet
+            .Include(a => a.ProductRecipe)
+            .Include(a => a.ComponentProduct)
+            .ToListAsync();
+
+        return domainEntities.Select(e => Mapper.Map(e));
+    }
 }

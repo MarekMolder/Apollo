@@ -22,7 +22,6 @@ public class ProductCategoryUowMapper: IMapper<DAL.DTO.ProductCategory, Domain.L
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             
             Products = entity.Products?.Select(t => _productUowMapper.Map(t)).ToList()!,
         };
@@ -40,7 +39,6 @@ public class ProductCategoryUowMapper: IMapper<DAL.DTO.ProductCategory, Domain.L
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             
             Products = entity.Products?.Select(t => _productUowMapper.Map(t)).ToList()!,
         };
@@ -58,7 +56,6 @@ public class ProductCategoryUowMapper: IMapper<DAL.DTO.ProductCategory, Domain.L
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
         };
     }
 
@@ -73,7 +70,6 @@ public class ProductCategoryUowMapper: IMapper<DAL.DTO.ProductCategory, Domain.L
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
         };
     }
 }

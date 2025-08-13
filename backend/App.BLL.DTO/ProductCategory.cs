@@ -18,11 +18,6 @@ public class ProductCategory : IDomainId
     public string Name { get; set; } = default!;
     
     /// <summary>
-    /// Optional end date indicating when the category became inactive.
-    /// </summary
-    public DateTime? EndedAt { get; set; }
-    
-    /// <summary>
     /// Collection of products that belong to this category.
     /// </summary>
     public ICollection<BLL.DTO.Product>? Products { get; set; }

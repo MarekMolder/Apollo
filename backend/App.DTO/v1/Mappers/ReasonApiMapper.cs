@@ -18,7 +18,6 @@ public class ReasonApiMapper : IMapper<Reason, BLL.DTO.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
         };
         return res;
     }
@@ -33,7 +32,6 @@ public class ReasonApiMapper : IMapper<Reason, BLL.DTO.Reason>
         {
             Id = entity.Id,
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
         };
         return res;
     }
@@ -47,7 +45,6 @@ public class ReasonApiMapper : IMapper<Reason, BLL.DTO.Reason>
         {
             Id = Guid.NewGuid(),
             Description = entity.Description,
-            EndedAt = entity.EndedAt,
         };
         return res;
     }

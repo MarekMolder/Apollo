@@ -93,7 +93,6 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
                         }
                         catch (Exception e)
                         {
-                            // Logi või ignoreeri — olenevalt vajadusest
                             continue;
                         }
                     }

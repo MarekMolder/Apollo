@@ -14,11 +14,6 @@ public class ActionTypeEntity : BaseEntity
     public string Name { get; set; } = default!;
     
     /// <summary>
-    /// Optional end date, indicating when this action type was disabled or no longer in use.
-    /// </summary>
-    public DateTime? EndedAt { get; set; }
-    
-    /// <summary>
     /// Coded enum value representing the type (e.g. Add = 2, Remove = 1).
     /// </summary>
     public ActionTypeEnum Code { get; set; }

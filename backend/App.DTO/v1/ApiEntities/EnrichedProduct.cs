@@ -24,6 +24,12 @@ public class EnrichedProduct : IDomainId
     public decimal Volume { get; set; } = default!;
     
     /// <summary>
+    /// Measurement unit for the Volume field (e.g., "l", "ml", "g", "kg").
+    /// This allows distinguishing volume when Unit is "tk".
+    /// </summary>
+    public string VolumeUnit { get; set; } = default!;
+    
+    /// <summary>
     /// Internal or external product code.
     /// </summary>
     public string Code { get; set; } = default!;

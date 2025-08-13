@@ -4,21 +4,27 @@ import { useUserDataStore } from '@/stores/userDataStore';
 import { IdentityService } from '@/services/IdentityService';
 import { RouterLink } from 'vue-router';
 
-const store = useUserDataStore();
+// Services
 const identityService = new IdentityService();
 
+//??
 const firstName = ref('');
 const lastName = ref('');
 const userName = ref('');
 const message = ref('');
 
+// Store
+const store = useUserDataStore();
+
+// Get account info
 onMounted(() => {
   firstName.value = store.firstName || '';
   lastName.value = store.lastName || '';
   userName.value = store.username || '';
 });
 
-const update = async () => {
+// Account edit function
+const editAccount = async () => {
   const result = await identityService.updateUserFields({
     email: store.email!,
     userName: userName.value,
@@ -73,7 +79,7 @@ const update = async () => {
       >
         {{ $t('Edit Profile') }}
       </h2>
-      <form @submit.prevent="update" class="flex flex-col gap-4">
+      <form @submit.prevent="editAccount" class="flex flex-col gap-4">
         <div class="p-1">
           <label class="font-semibold block mb-1"></label>
           <input

@@ -4,12 +4,19 @@ import { useRouter } from 'vue-router'
 import { StorageRoomService } from '@/services/mvcServices/StorageRoomService'
 import type { IStorageRoomEnriched } from '@/domain/logic/IStorageRoomEnriched.ts'
 
-const router = useRouter()
+// Services
 const storageRoomService = new StorageRoomService()
+
+// Entity's
 const data = ref<IStorageRoomEnriched[]>([])
 
+// Router
+const router = useRouter()
+
+// Search engine
 const searchQuery = ref('')
 
+// Get storageRooms
 const fetchPageData = async () => {
   try {
     const result = await storageRoomService.getEnrichedStorageRooms();
@@ -21,6 +28,7 @@ const fetchPageData = async () => {
 
 onMounted(fetchPageData);
 
+// Route to monthlyStatistics view
 const goToCurrentStock = (storageRoomId: string) => {
   router.push(`/monthlyStatistics/${storageRoomId}`);
 };

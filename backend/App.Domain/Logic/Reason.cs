@@ -13,11 +13,6 @@ public class Reason : BaseEntity
     public string Description { get; set; } = default!;
     
     /// <summary>
-    /// Optional date indicating when this reason was retired or deactivated.
-    /// </summary>
-    public DateTime? EndedAt { get; set; }
-    
-    /// <summary>
     /// Collection of actions (add/remove) that reference this reason.
     /// </summary>
     public ICollection<Domain.Logic.ActionEntity>? Actions { get; set; }
