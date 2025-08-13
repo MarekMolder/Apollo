@@ -146,25 +146,33 @@ namespace WebApp.ApiControllers
                 await _bll.SaveChangesAsync();
                 return Ok(new { message = $"Status updated to {dto.Status}" });
             }
+            catch (InvalidOperationException ex)
+            {
+                _logger.LogWarning("Finalized status update attempt for action {Id}: {Message}", id, ex.Message);
+                return Conflict(new { message = ex.Message });
+            }
             catch (ArgumentException ex)
             {
                 _logger.LogWarning("Invalid status update for action {Id}: {Message}", id, ex.Message);
-                return BadRequest(ex.Message);
+                return BadRequest(new { message = ex.Message });
             }
         }
         
-        /// <summary>
-        /// Gets enriched view of all actions with related data.
-        /// </summary>
-        [HttpGet("enrichedAction/")]
+        /// <summary>Gets enriched view of all actions with optional filters.</summary>
+        [HttpGet("enrichedAction")]
         [ProducesResponseType(typeof(IEnumerable<EnrichedActionEntity>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EnrichedActionEntity>>> GetEnrichedActionEntities()
+        public async Task<ActionResult<IEnumerable<EnrichedActionEntity>>> GetEnrichedActionEntities(
+            [FromQuery] string? userEmail,
+            [FromQuery] int? month,
+            [FromQuery] int? year,
+            [FromQuery] string? status
+        )
         {
-            _logger.LogInformation("Fetching enriched action data");
+            _logger.LogInformation("Fetching enriched action data with filters user={User} month={Month} year={Year} status={Status}",
+                userEmail, month, year, status);
 
-            var data = await _bll.ActionEntityService.GetEnrichedActionEntities();
+            var data = await _bll.ActionEntityService.GetEnrichedActionEntitiesFiltered(userEmail, month, year, status);
             var res = data.Select(u => _enrichedActionEntityApiMapper.Map(u)!).ToList();
-            
             return Ok(res);
         }
         

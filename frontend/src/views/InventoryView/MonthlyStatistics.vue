@@ -78,360 +78,151 @@ function calcRemovedVolume(item: IMonthlyStatisticsEnriched) {
 </script>
 
 <template>
-  <main class="product-wrapper">
-    <section class="product-header">
-      <div class="product-header-left">
-        <h1 class="page-title">📊 Monthly Statistics</h1>
-        <p class="subtitle">Removed product quantities per month</p>
-      </div>
+  <main class="p-6 sm:p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-2xl mx-auto">
+    <!-- Header (nagu Requests) -->
+    <section class="mb-8 text-center">
+      <h1
+        class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
+               drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)]
+               relative inline-block">
+        <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
+          Monthly Statistics
+        </span>
+      </h1>
+      <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
+      <p class="mt-3 text-sm text-neutral-400">Removed product quantities per month</p>
     </section>
 
-    <div class="filter-bar">
-      <div class="filter-controls">
-        <select v-model="selectedYear" class="search-box">
-          <option v-for="year in yearOptions" :key="year" :value="year">{{ year }}</option>
-        </select>
-        <select v-model="selectedMonth" class="search-box">
-          <option v-for="month in monthOptions" :key="month" :value="month">{{ month }}</option>
-        </select>
-      </div>
-    </div>
+    <!-- Kaart/Container -->
+    <section class="mx-auto w-full max-w-[100rem]">
+      <div
+        class="rounded-[16px] p-6 sm:p-8
+               bg-[rgba(25,25,25,0.4)] backdrop-blur-xl
+               border-1 border-neutral-700
+               shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]">
 
-    <div class="table-scroll-container">
-      <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-          <th>Product</th>
-          <th>Product Code</th>
-          <th>Product Unit</th>
-          <th>Removed Quantity</th>
-          <th>Removed Volume</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="item in filteredData" :key="item.id">
-          <td>{{ item.productName }}</td>
-          <td>{{ item.productCode }}</td>
-          <td>
-            <template v-if="item.productUnit !== 'tk'">
-              <select v-model="selectedUnits[item.id]" @change="fetchConvertedQuantity(item.id, selectedUnits[item.id])">
-                <option v-for="unit in availableUnits" :key="unit" :value="unit">{{ unit }}</option>
-              </select>
-            </template>
-            <template v-else>
-              {{ item.productUnit }}
-            </template>
-          </td>
-          <td>{{ convertedQuantities[item.id] || '...' }}</td>
-          <td>
-            <template v-if="calcRemovedVolume(item)">
-              <select v-model="selectedVolumeUnits[item.id]"
-                      @change="fetchConvertedVolume(item.id, selectedVolumeUnits[item.id])">
-                <option v-for="unit in availableUnits" :key="unit" :value="unit">{{ unit }}</option>
-              </select>
-              {{ convertedVolumes[item.id] || '...' }}
-            </template>
-            <template v-else>—</template>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+        <!-- Toolbar: Aasta / Kuu -->
+        <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-3 items-center">
+          <div class="relative">
+            <label class="sr-only">Year</label>
+            <select
+              v-model="selectedYear"
+              class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+                     px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+                     focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9">
+              <option v-for="year in yearOptions" :key="year" :value="year">{{ year }}</option>
+            </select>
+            <i class="bi bi-calendar-event absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+          </div>
+
+          <div class="relative">
+            <label class="sr-only">Month</label>
+            <select
+              v-model="selectedMonth"
+              class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+                     px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+                     focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9">
+              <option v-for="month in monthOptions" :key="month" :value="month">{{ month }}</option>
+            </select>
+            <i class="bi bi-calendar-event absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+          </div>
+        </div>
+
+        <!-- Tabel -->
+        <div class="overflow-auto rounded-[12px] border-1 border-neutral-700">
+          <table class="w-full text-base text-left">
+            <thead class="sticky top-0 z-10 bg-neutral-900/80 backdrop-blur text-neutral-300">
+            <tr>
+              <th class="px-4 py-3">Product</th>
+              <th class="px-4 py-3 hidden md:table-cell">Code</th>
+              <th class="px-4 py-3">Unit</th>
+              <th class="px-4 py-3">Removed Quantity</th>
+              <th class="px-4 py-3">Removed Volume</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr
+              v-for="item in filteredData"
+              :key="item.id"
+              class="border-t border-white/10 even:bg-white/5 hover:bg-white/10 transition"
+            >
+              <!-- Product -->
+              <td class="px-4 py-3 align-middle">
+                <div class="font-medium text-neutral-100">{{ item.productName }}</div>
+              </td>
+
+              <!-- Code -->
+              <td class="px-4 py-3 align-middle hidden md:table-cell text-neutral-300">
+                {{ item.productCode }}
+              </td>
+
+              <!-- Unit (valik tk mitte muudetav) -->
+              <td class="px-4 py-3 align-middle">
+                <template v-if="item.productUnit !== 'tk'">
+                  <div class="relative inline-block">
+                    <select
+                      v-model="selectedUnits[item.id]"
+                      @change="fetchConvertedQuantity(item.id, selectedUnits[item.id])"
+                      class="h-9 text-base appearance-none rounded-lg border-1 border-neutral-700 bg-neutral-900/70 text-white
+                      pl-3 pr-8 focus:outline-none focus:ring-2 focus:ring-cyan-400/25
+                      focus:border-neutral-500 transition shadow-inner shadow-black/30"
+                    >
+                      <option v-for="unit in availableUnits" :key="unit" :value="unit">{{ unit }}</option>
+                    </select>
+                    <i class="bi bi-chevron-down pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+                  </div>
+                </template>
+                <template v-else>
+                  <span class="inline-block rounded-md border-1 border-neutral-700 px-2 py-1 text-medium text-neutral-300 bg-neutral-900/70">tk</span>
+                </template>
+              </td>
+
+              <!-- Removed Quantity -->
+              <td class="px-4 py-3 align-middle">
+                  <span class="text-neutral-100">
+                    {{ convertedQuantities[item.id] || '…' }}
+                  </span>
+              </td>
+
+              <!-- Removed Volume (ainult kui tk) -->
+              <td class="px-4 py-3 align-middle">
+                <template v-if="calcRemovedVolume(item)">
+                  <div class="flex items-center gap-3">
+                    <!-- Number vasakul -->
+                    <span class="font-medium text-neutral-100">
+                      {{ convertedVolumes[item.id] || '…' }}
+                    </span>
+
+                    <!-- Unit valik paremal -->
+                    <div class="relative inline-block">
+                      <select
+                        v-model="selectedVolumeUnits[item.id]"
+                        @change="fetchConvertedVolume(item.id, selectedVolumeUnits[item.id])"
+                        class="h-9 appearance-none rounded-lg border-1 border-neutral-700 bg-neutral-900/70 text-white
+                   pl-3 pr-8 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/25
+                   focus:border-neutral-500 transition shadow-inner shadow-black/30"
+                      >
+                        <option v-for="unit in availableUnits" :key="unit" :value="unit">{{ unit }}</option>
+                      </select>
+                      <i class="bi bi-chevron-down pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 text-neutral-400 text-xs"></i>
+                    </div>
+                  </div>
+                </template>
+                <template v-else>—</template>
+              </td>
+            </tr>
+
+            <tr v-if="filteredData.length === 0">
+              <td colspan="5" class="px-4 py-10 text-center text-neutral-400">
+                No data to display
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
   </main>
 </template>
-
-<style scoped>
-.product-wrapper {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 2rem;
-  box-sizing: border-box;
-  max-width: 1600px;
-  margin: 0 auto;
-  font-family: 'Inter', 'Segoe UI', sans-serif;
-  color: white;
-  background: transparent;
-}
-
-.product-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  flex-wrap: wrap;
-}
-
-.product-header-left {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-}
-
-.page-title {
-  font-size: 2.6rem;
-  font-weight: 800;
-  color: #ffaa33;
-  text-shadow: 0 0 10px rgba(255, 170, 51, 0.25);
-  margin: 0;
-}
-
-.subtitle {
-  font-size: 1rem;
-  color: #bbb;
-  margin: 0;
-  opacity: 0.85;
-}
-
-.filter-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-  background: rgba(30, 30, 30, 0.6);
-  backdrop-filter: blur(8px);
-  padding: 1rem 1.5rem;
-  border-radius: 16px;
-  box-shadow: 0 0 12px rgba(255, 170, 51, 0.05);
-}
-
-.filter-controls {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.search-box {
-  padding: 0.6rem 1rem;
-  font-size: 1rem;
-  border-radius: 12px;
-  border: 1px solid #ffaa33;
-  background-color: rgba(43, 43, 43, 0.5);
-  color: white;
-  min-width: 220px;
-  transition: all 0.2s ease;
-}
-
-.search-box:focus {
-  outline: none;
-  border-color: #ffc266;
-  background-color: rgb(43, 43, 43);
-}
-
-.search-box::placeholder {
-  color: #ccc;
-}
-
-.create-link {
-  background: linear-gradient(to right, #ffaa33, #ff8c00);
-  color: black;
-  padding: 0.6rem 1.4rem;
-  border-radius: 12px;
-  font-weight: 700;
-  text-decoration: none;
-  box-shadow: 0 2px 6px rgba(255, 165, 0, 0.2);
-  transition: all 0.2s ease;
-}
-
-.create-link:hover {
-  background: linear-gradient(to right, #ffc56e, #ffa726);
-  box-shadow: 0 3px 10px rgba(255, 165, 0, 0.3);
-}
-
-.table-scroll-container {
-  flex-grow: 1;
-  overflow-y: auto;
-  padding: 1.2rem;
-  margin-top: 1rem;
-  border-radius: 16px;
-  background: rgba(20, 20, 20, 0.5);
-  backdrop-filter: blur(6px);
-  box-shadow: inset 0 0 20px rgba(255, 165, 0, 0.05);
-}
-
-.product-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
-}
-
-.product-card {
-  background: rgba(45, 45, 45, 0.6);
-  border-radius: 14px;
-  padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-.product-card:hover {
-  box-shadow: 0 6px 16px rgba(255, 170, 51, 0.1);
-  transform: translateY(-3px);
-  border-color: #ffaa33;
-}
-
-.product-info h3 {
-  color: #ffaa33;
-  font-size: 1.1rem;
-  margin-bottom: 0.4rem;
-}
-
-.product-info p {
-  color: #ccc;
-  font-size: 0.95rem;
-  margin: 0.1rem 0;
-}
-
-.view-button {
-  margin-top: 1rem;
-  padding: 0.4rem 1rem;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(to right, #ffaa33, #ff8c00);
-  color: black;
-  font-weight: bold;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-.view-button:hover {
-  background-color: #ffc266;
-}
-
-.button-group {
-  display: flex;
-  gap: 0.5rem;
-  margin-top: 0.5rem;
-}
-
-@media (max-width: 768px) {
-  .product-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .filter-bar {
-    flex-direction: column;
-  }
-
-  .product-list {
-    grid-template-columns: 1fr;
-  }
-}
-
-.drawer-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  display: flex;
-  justify-content: flex-end;
-  z-index: 999;
-}
-
-.drawer {
-  width: 420px;
-  background: linear-gradient(to bottom, #1e1e1e, #121212);
-  color: white;
-  padding: 2rem;
-  overflow-y: auto;
-  height: 100%;
-  box-shadow: -8px 0 20px rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  border-left: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.drawer input {
-  width: 100%;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  border: none;
-  background: rgba(60, 60, 60, 0.7);
-  color: white;
-  font-size: 1rem;
-  transition: all 0.2s;
-}
-
-.drawer input:focus {
-  outline: none;
-  background: rgba(80, 80, 80, 0.85);
-  border: 1px solid #ffaa33;
-}
-
-.drawer-buttons {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 1.5rem;
-}
-
-.update-btn {
-  background: linear-gradient(to right, #ffaa33, #ff8c00);
-  color: black;
-  font-size: 0.95rem;
-  padding: 0.6rem 1.4rem;
-  border-radius: 10px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
-}
-
-.cancel-btn {
-  background: #333;
-  color: white;
-  font-size: 0.95rem;
-  padding: 0.6rem 1.4rem;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.cancel-btn:hover {
-  background: #444;
-}
-
-.text-danger {
-  color: #ff4d4d;
-  font-weight: bold;
-  text-align: center;
-}
-
-.text-success {
-  color: #28a745;
-  font-weight: bold;
-  text-align: center;
-}
-
-a.view-button {
-  text-decoration: none;
-}
-
-.drawer select {
-  width: 100%;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  border: none;
-  background: rgba(60, 60, 60, 0.7);
-  color: white;
-  font-size: 1rem;
-  appearance: none;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="white" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
-  background-repeat: no-repeat;
-  background-position: right 0.75rem center;
-  background-size: 0.65rem auto;
-  transition: all 0.2s;
-}
-
-.drawer select:focus {
-  outline: none;
-  background: rgba(80, 80, 80, 0.85);
-  border: 1px solid #ffaa33;
-}
-</style>

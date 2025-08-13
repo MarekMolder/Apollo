@@ -36,7 +36,7 @@ public class ActionEntity : IDomainId
     /// ID of the affected product.
     /// </summary>
     public Guid ProductId { get; set; }
-    
+
     /// <summary>
     /// ID of the storage room where the action occurred.
     /// </summary>

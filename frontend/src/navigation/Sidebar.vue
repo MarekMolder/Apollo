@@ -8,8 +8,8 @@ const isAdmin = computed(() => {
   const roles = store.roles;
 
   return Array.isArray(roles)
-    ? roles.includes("admin") || roles.includes("manager")   // massiiv
-    : roles === "admin" || roles === "manager";              // üksik string
+    ? roles.includes("admin") || roles.includes("manager")
+    : roles === "admin" || roles === "manager";
 });
 
 // kontrollime hoverit
@@ -21,14 +21,14 @@ const isOpen = ref(false);
     <div class="sidebar-logo">🎬</div>
 
     <nav class="sidebar-nav">
-      <RouterLink to="/createaction" class="sidebar-link" :class="{ open: isOpen }">
-        <i class="bi bi-plus-circle"></i>
-        <span>{{ $t('Create') }}</span>
-      </RouterLink>
-
       <RouterLink v-if="isAdmin" to="/home" class="sidebar-link" :class="{ open: isOpen }">
         <i class="bi bi-speedometer2"></i>
         <span>{{ $t('Dashboard') }}</span>
+      </RouterLink>
+
+      <RouterLink to="/createaction" class="sidebar-link" :class="{ open: isOpen }">
+        <i class="bi bi-plus-circle"></i>
+        <span>{{ $t('Create') }}</span>
       </RouterLink>
 
       <RouterLink v-if="isAdmin" to="/actionrequest" class="sidebar-link" :class="{ open: isOpen }">
@@ -51,29 +51,9 @@ const isOpen = ref(false);
         <span>{{ $t('Contacts') }}</span>
       </RouterLink>
 
-      <RouterLink v-if="isAdmin" to="/actionType" class="sidebar-link" :class="{ open: isOpen }">
-        <i class="bi bi-telephone"></i>
-        <span>actionType</span>
-      </RouterLink>
-
-      <RouterLink v-if="isAdmin" to="/address" class="sidebar-link" :class="{ open: isOpen }">
-        <i class="bi bi-telephone"></i>
-        <span>address</span>
-      </RouterLink>
-
-      <RouterLink v-if="isAdmin" to="/reason" class="sidebar-link" :class="{ open: isOpen }">
-        <i class="bi bi-telephone"></i>
-        <span>reason</span>
-      </RouterLink>
-
-      <RouterLink v-if="isAdmin" to="/recipeComponent" class="sidebar-link" :class="{ open: isOpen }">
-        <i class="bi bi-telephone"></i>
-        <span>recipeComponent</span>
-      </RouterLink>
-
-      <RouterLink v-if="isAdmin" to="/productCategory" class="sidebar-link" :class="{ open: isOpen }">
-        <i class="bi bi-telephone"></i>
-        <span>ProductCategory</span>
+      <RouterLink v-if="isAdmin" to="/crudSettings" class="sidebar-link" :class="{ open: isOpen }">
+        <i class="bi bi-gear"></i>
+        <span>crudSettings</span>
       </RouterLink>
     </nav>
   </aside>

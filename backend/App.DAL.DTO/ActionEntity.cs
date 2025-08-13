@@ -49,4 +49,12 @@ public class ActionEntity : IDomainId
     /// </summary>
     public Guid StorageRoomId { get; set; }
     public DAL.DTO.StorageRoom? StorageRoom { get; set; }
+    
+    /// <summary>
+    /// META values
+    /// </summary>
+    public string CreatedBy { get; set; } = default!;
+    public DateTime CreatedAt { get; set; }
+    public string? ChangedBy { get; set; }
+    public DateTime? ChangedAt { get; set; }
 }

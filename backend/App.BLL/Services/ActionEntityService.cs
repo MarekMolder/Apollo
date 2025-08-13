@@ -52,10 +52,17 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
         var action = await _uow.ActionEntityRepository.FindAsync(id);
         if (action == null) return false;
 
+        if (string.Equals(action.Status, "Accepted", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(action.Status, "Declined", StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException("Status is already finalized and cannot be changed.");
+        }
+
         var allowedStatuses = new[] { "Accepted", "Declined" };
         if (!allowedStatuses.Contains(newStatus)) throw new ArgumentException("Invalid status");
 
         action.Status = newStatus;
+        
 
         var dalAction = _domainDalMapperActionEntity.Map(action);
         var bllAction = _dalBllMapperActionEntity.Map(dalAction);
@@ -149,7 +156,7 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
         }
         return true;
     }
-
+    
     /// <summary>
     /// Returns ActionEntities enriched with related data (joins from DB).
     /// </summary>
@@ -157,6 +164,31 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
     {
         var res = await ServiceRepository.GetEnrichedActionEntities();
         return res.Select(u => _dalBllMapperActionEntity.Map(u));
+    }
+
+    /// <summary>
+    /// Returns ActionEntities enriched filtered system.
+    /// </summary>
+    public async Task<IEnumerable<BLL.DTO.ActionEntity?>> GetEnrichedActionEntitiesFiltered(
+        string? userEmail, int? month, int? year, string? status)
+    {
+        var res = await ServiceRepository.GetEnrichedActionEntities();
+
+        var q = res.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(userEmail))
+            q = q.Where(x => x!.CreatedBy == userEmail);
+
+        if (year.HasValue)
+            q = q.Where(x => x!.CreatedAt.Year == year.Value);
+
+        if (month.HasValue)
+            q = q.Where(x => x!.CreatedAt.Month == month.Value);
+
+        if (!string.IsNullOrWhiteSpace(status) && (status == "Accepted" || status == "Declined" || status == "Pending"))
+            q = q.Where(x => x!.Status == status);
+
+        return q.Select(u => _dalBllMapperActionEntity.Map(u));
     }
     
     /// <summary>

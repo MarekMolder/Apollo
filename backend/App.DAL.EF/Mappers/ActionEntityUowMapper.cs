@@ -33,6 +33,10 @@ public class ActionEntityUowMapper : IMapper<DAL.DTO.ActionEntity, Domain.Logic.
             StorageRoomId = entity.StorageRoomId,
             StorageRoom = StorageRoomUowMapper.MapSimple(entity.StorageRoom),
             
+            CreatedBy = entity.CreatedBy,
+            CreatedAt = entity.CreatedAt,
+            ChangedBy = entity.ChangedBy,
+            ChangedAt = entity.ChangedAt,
         };
         return res;
     }
@@ -61,6 +65,11 @@ public class ActionEntityUowMapper : IMapper<DAL.DTO.ActionEntity, Domain.Logic.
             
             StorageRoomId = entity.StorageRoomId,
             StorageRoom = StorageRoomUowMapper.MapSimple(entity.StorageRoom),
+            
+            CreatedBy = entity.CreatedBy,
+            CreatedAt = entity.CreatedAt,
+            ChangedBy = entity.ChangedBy,
+            ChangedAt = entity.ChangedAt,
         };
         return res;
     }
@@ -81,6 +90,11 @@ public class ActionEntityUowMapper : IMapper<DAL.DTO.ActionEntity, Domain.Logic.
             ReasonId = entity.ReasonId,
             ProductId = entity.ProductId,
             StorageRoomId = entity.StorageRoomId,
+            
+            CreatedBy = entity.CreatedBy,
+            CreatedAt = entity.CreatedAt,
+            ChangedBy = entity.ChangedBy,
+            ChangedAt = entity.ChangedAt,
         };
     }
     
@@ -100,6 +114,11 @@ public class ActionEntityUowMapper : IMapper<DAL.DTO.ActionEntity, Domain.Logic.
             ReasonId = entity.ReasonId,
             ProductId = entity.ProductId,
             StorageRoomId = entity.StorageRoomId,
+            
+            CreatedBy = entity.CreatedBy,
+            CreatedAt = entity.CreatedAt,
+            ChangedBy = entity.ChangedBy,
+            ChangedAt = entity.ChangedAt,
         };
     }
 }

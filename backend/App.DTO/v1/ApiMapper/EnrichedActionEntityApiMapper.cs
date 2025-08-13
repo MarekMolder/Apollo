@@ -27,8 +27,12 @@ public class EnrichedActionEntityApiMapper : IMapper<EnrichedActionEntity, BLL.D
             ReasonDescription = entity.Reason?.Description ?? "Unknown",
             ProductId = entity.ProductId,
             ProductName = entity.Product?.Name ?? "Unknown",
+            ProductUnit = entity.Product?.Unit ?? "Unknown",
             StorageRoomId = entity.StorageRoomId,
             StorageRoomName = entity.StorageRoom?.Name ?? "Unknown",
+            
+            CreatedBy = entity.CreatedBy,
+            CreatedAt = entity.CreatedAt,
         };
     }
 

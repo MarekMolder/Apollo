@@ -40,9 +40,11 @@ public class EnrichedActionEntity : IDomainId
     /// <summary>
     /// ID of the affected product.
     /// Name of the related product.
+    /// Unit of the product.
     /// </summary>
     public Guid ProductId { get; set; }
     public string ProductName { get; set; } = default!;
+    public string ProductUnit { get; set; } = default!;
     
     /// <summary>
     /// ID of the storage room where the action occurred.
@@ -50,4 +52,8 @@ public class EnrichedActionEntity : IDomainId
     /// </summary>
     public Guid StorageRoomId { get; set; }
     public string StorageRoomName { get; set; } = default!;
+    
+    // META values
+    public string CreatedBy { get; set; } = default!;
+    public DateTime CreatedAt { get; set; }
 }

@@ -125,149 +125,223 @@ const createAction = async () => {
 </script>
 
 <template>
-  <main class="flex flex-col items-center mt-4 px-4 sm:px-6 lg:px-8 py-10 text-white font-sans">
-    <div class="w-full max-w-md sm:max-w-lg lg:max-w-2xl bg-[rgba(20,20,20,0.85)] backdrop-blur-md p-8 rounded-[16px] shadow-[0_0_16px_rgba(255,165,0,0.2)]">
-      <h1 class="text-3xl font-bold text-center mb-6 text-orange-400">
-        {{ $t('Create New') }} {{ $t('Action') }}
+  <main class="p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-xl mx-auto">
+    <!-- Header (nagu Storage Rooms) -->
+    <section class="mb-8 text-center">
+      <h1
+        class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
+           drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)]
+           relative inline-block"
+      >
+    <span
+      class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200
+             bg-clip-text text-transparent"
+    >
+      Discard Items
+    </span>
       </h1>
 
-      <form @submit.prevent="createAction" class="flex flex-col gap-4">
-        <div>
-          <label for="actionType" class="font-semibold block mb-1">{{ $t('Action Type') }}</label>
-          <Multiselect
-            v-model="selectedActionType"
-            :options="actionTypes"
-            :custom-label="a => a.name"
-            :track-by="'id'"
-            :searchable="true"
-            :close-on-select="true"
-            :allow-empty="false"
-            placeholder="-- Select Action Type --"
-            class="text-black bg-white rounded-lg"
-            :class="['custom-multiselect']"
-            :disabled="!isAdmin"
-          />
-        </div>
+      <!-- Õhuke aktsentjoon -->
+      <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
+    </section>
 
-        <div>
-          <label for="reason" class="font-semibold block mb-1">{{ $t('Reason') }}</label>
-          <Multiselect
-            v-model="selectedReason"
-            :options="reasons"
-            :custom-label="r => r.description"
-            :track-by="'id'"
-            :searchable="true"
-            :close-on-select="true"
-            :allow-empty="false"
-            placeholder="-- Select Reason --"
-            class="text-black bg-white rounded-lg"
-            :class="['custom-multiselect']"
-          />
-        </div>
+    <!-- Kaart -->
+    <section class="mx-auto w-full max-w-xl sm:max-w-2xl">
+      <div class="rounded-[16px] p-6 sm:p-8 bg-[rgba(25,25,25,0.4)] backdrop-blur-xl border-1 border-neutral-700 shadow-[inset_0_0_20px_rgba(255,165,0,0.03),_0_8px_24px_rgba(0,0,0,0.4)]">
+        <form @submit.prevent="createAction" class="space-y-6">
+          <!-- Product -->
+          <div>
+            <label class="mb-2 block text-medium font-medium text-neutral-300">
+              {{ $t('Product') }}
+            </label>
+            <Multiselect
+              v-model="selectedProduct"
+              :options="products"
+              :custom-label="p => p.name"
+              track-by="id"
+              :searchable="true"
+              :close-on-select="true"
+              :allow-empty="false"
+              placeholder="-- Select Product --"
+              class="multiselect-dark"
+            />
+          </div>
 
-        <div>
-          <label for="product" class="font-semibold block mb-1">{{ $t('Product') }}</label>
-          <Multiselect
-            v-model="selectedProduct"
-            :options="products"
-            :custom-label="p => p.name"
-            :track-by="'id'"
-            :searchable="true"
-            :close-on-select="true"
-            :allow-empty="false"
-            placeholder="-- Select Product --"
-            class="text-black bg-white rounded-lg"
-            :class="['custom-multiselect']"
-          />
-        </div>
+          <!-- Action type -->
+          <div>
+            <label class="mb-2 block text-medium font-medium text-neutral-300">
+              {{ $t('Action Type') }}
+            </label>
+            <Multiselect
+              v-model="selectedActionType"
+              :options="actionTypes"
+              :custom-label="a => a.name"
+              track-by="id"
+              :searchable="true"
+              :close-on-select="true"
+              :allow-empty="false"
+              placeholder="-- Select Action Type --"
+              class="multiselect-dark"
+              :disabled="!isAdmin"
+            />
+          </div>
 
-        <div>
-          <label for="quantity" class="font-semibold block mb-1">{{ $t('Quantity') }}
-            <span v-if="selectedProduct">({{ selectedProduct.unit }})</span>
-          </label>
-          <input
-            id="quantity"
-            type="number"
-            v-model.number="action.quantity"
-            :step="selectedProduct && selectedProduct.unit === 'tk' ? 1 : 'any'"
-            min="0"
-            inputmode="decimal"
-            required
-            class="w-full px-3 py-2 rounded-lg bg-zinc-800 border-1 border-neutral-700 focus:outline-none focus:border-[#ffaa33] transition"
-          />
-        </div>
+          <!-- Reason -->
+          <div>
+            <label class="mb-2 block text-medium font-medium text-neutral-300">
+              {{ $t('Reason') }}
+            </label>
+            <Multiselect
+              v-model="selectedReason"
+              :options="reasons"
+              :custom-label="r => r.description"
+              track-by="id"
+              :searchable="true"
+              :close-on-select="true"
+              :allow-empty="false"
+              placeholder="-- Select Reason --"
+              class="multiselect-dark"
+            />
+          </div>
 
-        <div>
-          <label for="storageRoom" class="font-semibold block mb-1">{{ $t('StorageRoom') }}</label>
-          <Multiselect
-            v-model="selectedStorageRoom"
-            :options="storageRooms"
-            :custom-label="s => s.name"
-            :track-by="'id'"
-            :searchable="true"
-            :close-on-select="true"
-            :allow-empty="false"
-            placeholder="-- Select Storage Room --"
-            class="text-black bg-white rounded-lg"
-            :class="['custom-multiselect']"
-          />
-        </div>
+          <!-- Quantity -->
+          <div>
+            <label class="mb-2 block text-medium font-medium text-neutral-300">
+              {{ $t('Quantity') }}
+              <span v-if="selectedProduct" class="text-neutral-400">({{ selectedProduct.unit }})</span>
+            </label>
+            <input
+              id="quantity"
+              type="number"
+              v-model.number="action.quantity"
+              :step="selectedProduct && selectedProduct.unit === 'tk' ? 1 : 'any'"
+              min="0"
+              inputmode="decimal"
+              required
+              placeholder="0"
+              class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 py-3 text-base text-white placeholder-neutral-500 outline-none transition focus:border-[#ffaa33] focus:ring-2 focus:ring-[#ffaa33]/35"
+            />
+          </div>
 
-        <div v-if="validationError" class="text-red-400 text-center font-semibold pt-2">
-          {{ validationError }}
-        </div>
+          <!-- Storage room -->
+          <div>
+            <label class="mb-2 block text-medium font-medium text-neutral-300">
+              {{ $t('StorageRoom') }}
+            </label>
+            <Multiselect
+              v-model="selectedStorageRoom"
+              :options="storageRooms"
+              :custom-label="s => s.name"
+              track-by="id"
+              :searchable="true"
+              :close-on-select="true"
+              :allow-empty="false"
+              placeholder="-- Select Storage Room --"
+              class="multiselect-dark"
+            />
+          </div>
 
-        <div v-if="successMessage" class="text-green-400 text-center font-semibold pt-2">
-          {{ successMessage }}
-        </div>
+          <!-- Messages -->
+          <p v-if="validationError" class="text-rose-400 text-center font-medium">
+            {{ validationError }}
+          </p>
+          <p v-if="successMessage" class="text-emerald-400 text-center font-medium">
+            {{ successMessage }}
+          </p>
 
-        <button
-          type="submit"
-          class="mt-4 w-full bg-gradient-to-r from-orange-500 to-yellow-400 hover:from-orange-400 hover:to-yellow-300 text-white font-bold py-2 rounded-lg transition-all"
-        >
-          {{ $t('Create') }}
-        </button>
-      </form>
-    </div>
+          <!-- Actions -->
+          <div class="pt-2 flex flex-col sm:flex-row gap-3">
+            <button
+              type="button"
+              class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-5 py-3 text-sm font-medium text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15"
+              @click="
+                () => {
+                  action.quantity = 0;
+                  action.actionTypeId = '';
+                  action.reasonId = '';
+                  action.productId = '';
+                  action.storageRoomId = '';
+                }
+              "
+            >
+              Reset
+            </button>
+
+            <!-- sama palett mis Storage Rooms kaardil -->
+            <button
+              type="submit"
+              class="w-full sm:flex-1 inline-flex items-center justify-center rounded-xl
+               bg-white/5
+               text-neutral-200 px-6 py-3 text-sm font-medium
+               border-1 border-neutral-700
+               shadow-[0_0_8px_rgba(0,0,0,0.4)]
+               transition-all duration-300
+              hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15"
+            >
+              {{ $t('Create') }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
   </main>
 </template>
 
-<style>
-.custom-multiselect {
-  @apply w-full bg-zinc-800 text-black rounded-lg border border-neutral-700 shadow-sm focus:ring-1 focus:ring-orange-400 focus:border-orange-400 transition-all;
+<style scoped>
+/* --- vue-multiselect: tume, puhas --- */
+:deep(.multiselect-dark) {
+  @apply w-full rounded-xl border border-white/10 bg-neutral-900/70 text-white shadow-sm transition;
 }
 
-.custom-multiselect .multiselect__content-wrapper {
-  @apply bg-zinc-900 border border-neutral-700 rounded-lg shadow-lg max-h-60 overflow-auto z-50;
+/* Konteiner teksti vertikaalseks keskjoondamiseks */
+:deep(.multiselect-dark .multiselect__tags) {
+  @apply flex items-center min-h-[44px] rounded-xl border-0 bg-transparent px-3 py-0;
 }
 
-.custom-multiselect .multiselect__option {
-  @apply px-4 py-2 hover:bg-zinc-700 cursor-pointer transition text-black;
+/* Placeholder + valitud teksti joondus ja läbipaistev taust */
+:deep(.multiselect-dark .multiselect__placeholder),
+:deep(.multiselect-dark .multiselect__single) {
+  /* puhastame vaikimisi padjad/taustad ja paneme line-height sama mis kõrgus */
+  @apply block p-0 m-0 bg-transparent text-neutral-300 leading-[44px];
 }
 
-.custom-multiselect .multiselect__option--selected {
-  @apply bg-orange-500 text-black;
+/* Sisend (otsing) sama kõrgusega, keskel */
+:deep(.multiselect-dark .multiselect__input) {
+  @apply bg-transparent text-white placeholder-neutral-500 leading-[44px] p-0 m-0;
 }
 
-.custom-multiselect .multiselect__option--highlight {
-  @apply bg-zinc-700;
+/* Nool & clear ikoonid */
+:deep(.multiselect-dark .multiselect__select),
+:deep(.multiselect-dark .multiselect__clear) {
+  @apply text-neutral-400 hover:text-white;
 }
 
-.custom-multiselect .multiselect__placeholder,
-.custom-multiselect .multiselect__single {
-  @apply text-black;
+/* Aktiivne rõngas */
+:deep(.multiselect-dark.multiselect--active .multiselect__tags) {
+  @apply ring-2 ring-[#ffaa33]/35 outline-none border-[#ffaa33];
 }
 
-.custom-multiselect .multiselect__select {
-  @apply text-black;
+/* Dropdown – tume menüü */
+:deep(.multiselect-dark .multiselect__content-wrapper) {
+  @apply mt-2 rounded-xl border border-white/10 bg-neutral-950/95 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/80 shadow-2xl max-h-64;
+}
+:deep(.multiselect-dark .multiselect__content) { @apply py-1; }
+:deep(.multiselect-dark .multiselect__option) {
+  @apply px-4 py-2 text-neutral-200 cursor-pointer transition;
+}
+/* Hover */
+:deep(.multiselect-dark .multiselect__option--highlight) { @apply bg-white/10; }
+/* Valitud valik – mitte hele, vaid õrn tume + bränditekst */
+:deep(.multiselect-dark .multiselect__option--selected) {
+  @apply bg-white/[0.06] text-[#ffaa33];
 }
 
-.custom-multiselect .multiselect__input {
-  @apply bg-transparent text-black placeholder-black;
-}
+/* Disabled */
+:deep(.multiselect-dark.multiselect--disabled) { @apply opacity-60 cursor-not-allowed; }
 
-.custom-multiselect.multiselect--disabled {
-  @apply bg-zinc-700 opacity-50 cursor-not-allowed;
+/* --- Inputs / nupud: vähem heledaid jooni --- */
+:deep(input[type="number"]) {
+  /* vaikimisi piirjoon mahedamaks (kui mitte classis üle kirjutatud) */
+  @apply border-white/5;
 }
-
 </style>
