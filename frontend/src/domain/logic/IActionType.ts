@@ -2,6 +2,5 @@
 
 export interface IActionType extends IDomainId {
   name: string;
-  endedAt: string;
   code: number;
 }

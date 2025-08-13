@@ -24,11 +24,14 @@ public class EnrichedMonthlyStatisticsApiMapper : IMapper<EnrichedMonthlyStatist
             ProductCode = entity.Product?.Code ?? "Unknown",
             ProductName = entity.Product?.Name ?? "Unknown",
             ProductUnit = entity.Product?.Unit ?? "Unknown",
+            ProductVolume = entity.Product?.Volume ?? 0m,
+            ProductVolumeUnit = entity.Product?.VolumeUnit ?? "Unknown",
             
             StorageRoomId = entity.StorageRoomId,
             StorageRoomName = entity.StorageRoom?.Name ?? "Unknown",
             
             TotalRemovedQuantity = entity.TotalRemovedQuantity,
+            
             Year = entity.Year,
             Month = entity.Month,
         };

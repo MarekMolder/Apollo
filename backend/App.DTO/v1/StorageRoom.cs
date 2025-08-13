@@ -26,9 +26,4 @@ public class StorageRoom : IDomainId
     /// List of role names allowed to access this storage room.
     /// </summary>
     public List<string>? AllowedRoles { get; set; }
-    
-    /// <summary>
-    /// Optional end date marking the storage room as deactivated or archived.
-    /// </summary>
-    public DateTime? EndedAt { get; set; }
 }

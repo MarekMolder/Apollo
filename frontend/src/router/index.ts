@@ -6,11 +6,7 @@ import CreateAction from "@/views/ActionViews/CreateAction.vue";
 import ActionRequest from "@/views/ActionViews/ActionRequest.vue";
 import Products from "@/views/ProductView/Products.vue";
 import SpecificProduct from "@/views/ProductView/SpecificProduct.vue";
-import CreateProduct from "@/views/ProductView/CreateProduct.vue";
-import EditProduct from "@/views/ProductView/EditProduct.vue";
 import Suppliers from "@/views/SupplierView/Suppliers.vue";
-import CreateSupplier from "@/views/SupplierView/CreateSupplier.vue";
-import EditSupplier from "@/views/SupplierView/EditSupplier.vue";
 import StorageRooms from "@/views/InventoryView/StorageRooms.vue";
 import UserDetailsView from "@/views/AccountView/UserDetailsView.vue";
 import { useUserDataStore } from "@/stores/userDataStore";
@@ -21,6 +17,11 @@ import CreateRolePage from "@/views/AccountView/CreateRolePage.vue";
 import UserListWithRoles from "@/views/AccountView/UserListWithRoles.vue";
 import Home from "@/views/Home.vue";
 import MonthlyStatistics from "@/views/InventoryView/MonthlyStatistics.vue";
+import ActionType from "@/views/ActionTypeView/ActionType.vue";
+import Address from "@/views/AddressView/Address.vue";
+import ProductCategory from "@/views/ProductCategoryView/ProductCategory.vue";
+import Reason from "@/views/ReasonView/Reason.vue";
+import RecipeComponent from "@/views/RecipeComponentView/RecipeComponent.vue";
 
 const routes = [
   { path: "/home", name: "Home", component: Home },
@@ -31,11 +32,7 @@ const routes = [
   { path: "/createaction", name: "CreateAction", component: CreateAction },
   { path: "/products", name: "Products", component: Products },
   { path: "/product/:id", name: "SpecificProduct", component: SpecificProduct },
-  { path: "/createproduct", name: "CreateProduct", component: CreateProduct },
-  { path: "/editproduct/:id", name: "EditProduct", component: EditProduct },
   { path: "/suppliers", name: "Suppliers", component: Suppliers },
-  { path: "/createsupplier", name: "CreateSupplier", component: CreateSupplier },
-  { path: "/editsupplier/:id", name: "EditSupplier", component: EditSupplier },
   { path: "/storagerooms", name: "StorageRooms", component: StorageRooms },
   { path: "/monthlyStatistics/:storageRoomId", name: "MonthlyStatistics", component: MonthlyStatistics },
   { path: "/users/:id", name: "UserDetails", component: UserDetailsView },
@@ -44,6 +41,12 @@ const routes = [
   { path: "/assignRole", name: "assignRole", component: AssignRoleToUserPage },
   { path: "/createRole", name: "createRole", component: CreateRolePage },
   { path: "/userRoles", name: "userRoles", component: UserListWithRoles },
+
+  { path: "/actionType", name: "actionType", component: ActionType },
+  { path: "/address", name: "address", component: Address },
+  { path: "/productCategory", name: "productCategory", component: ProductCategory },
+  { path: "/reason", name: "reason", component: Reason },
+  { path: "/recipeComponent", name: "recipeComponent", component: RecipeComponent },
 ];
 
 const router = createRouter({
@@ -58,12 +61,8 @@ router.beforeEach((to, from, next) => {
     "/home",
     "/actionrequest",
     "/products",
-    "/createproduct",
-    "/editproduct/:id",
     "/product/:id",
     "/suppliers",
-    "/createsupplier",
-    "/editsupplier/:id",
     "/storagerooms",
     "/monthlyStatistics/:storageRoomId",
     "/users/:id",
@@ -72,6 +71,11 @@ router.beforeEach((to, from, next) => {
     "/assignRole",
     "/getRole",
     "/userRoles",
+    "/actionType",
+    "/address",
+    "/productCategory",
+    "/reason",
+    "/recipeComponent"
   ];
 
   const isRestricted = adminOnlyRoutes.some((path) => {

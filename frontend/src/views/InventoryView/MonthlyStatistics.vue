@@ -2,27 +2,32 @@
 import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { MonthlyStatisticsService } from "@/services/mvcServices/MonthlyStatisticsService";
-import type { IMonthlyStatistics } from "@/domain/logic/IMonthlyStatistics";
 import type {IMonthlyStatisticsEnriched} from "@/domain/logic/IMonthlyStatisticsEnriched.ts";
 
+// Services
+const service = new MonthlyStatisticsService();
+
+// Entity's
+const data = ref<IMonthlyStatisticsEnriched[]>([]);
+
+// Route
 const route = useRoute();
 const storageRoomId = route.params.storageRoomId as string;
 
-const service = new MonthlyStatisticsService();
-const data = ref<IMonthlyStatisticsEnriched[]>([]);
-
+// Search engine
 const selectedYear = ref(new Date().getFullYear());
 const selectedMonth = ref(new Date().getMonth() + 1);
-
 const yearOptions = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 const monthOptions = Array.from({ length: 12 }, (_, i) => i + 1);
 
-const filteredData = computed(() =>
-  data.value.filter(
-    (x) => x.year === selectedYear.value && x.month === selectedMonth.value
-  )
-);
+// Unit conversion
+const selectedUnits = ref<Record<string, string>>({});
+const convertedQuantities = ref<Record<string, string>>({});
+const availableUnits = ["g", "kg", "mg", "ml", "l", "cl"];
+const selectedVolumeUnits = ref<Record<string, string>>({});
+const convertedVolumes = ref<Record<string, string>>({});
 
+// Get monthlyStatistics
 onMounted(async () => {
   const result = await service.getByStorageRoomId(storageRoomId);
 
@@ -31,12 +36,13 @@ onMounted(async () => {
   for (const item of data.value) {
     selectedUnits.value[item.id] = item.productUnit;
     convertedQuantities.value[item.id] = `${item.totalRemovedQuantity} ${item.productUnit}`;
+
+    if (item.productUnit === "tk" && item.productVolumeUnit) {
+      selectedVolumeUnits.value[item.id] = item.productVolumeUnit;
+      convertedVolumes.value[item.id] = `${calcRemovedVolume(item)!.value} ${item.productVolumeUnit}`;
+    }
   }
 });
-
-const selectedUnits = ref<Record<string, string>>({});
-const convertedQuantities = ref<Record<string, string>>({});
-const availableUnits = ["g", "kg", "mg", "ml", "l", "cl"];
 
 async function fetchConvertedQuantity(id: string, targetUnit: string) {
   try {
@@ -45,6 +51,29 @@ async function fetchConvertedQuantity(id: string, targetUnit: string) {
   } catch (e) {
     convertedQuantities.value[id] = "❌";
   }
+}
+
+async function fetchConvertedVolume(id: string, targetUnit: string) {
+  try {
+    const result = await service.getConvertedVolume(id, targetUnit);
+    convertedVolumes.value[id] = result;
+  } catch {
+    convertedVolumes.value[id] = "❌";
+  }
+}
+
+// Search engine filtered monthlyStatistics
+const filteredData = computed(() =>
+  data.value.filter(
+    (x) => x.year === selectedYear.value && x.month === selectedMonth.value
+  )
+);
+
+function calcRemovedVolume(item: IMonthlyStatisticsEnriched) {
+  if (item.productUnit !== 'tk') return null;
+  const vol = Number(item.productVolume) || 0;
+  const qty = Number(item.totalRemovedQuantity) || 0;
+  return { value: vol * qty, unit: item.productVolumeUnit };
 }
 </script>
 
@@ -76,6 +105,7 @@ async function fetchConvertedQuantity(id: string, targetUnit: string) {
           <th>Product Code</th>
           <th>Product Unit</th>
           <th>Removed Quantity</th>
+          <th>Removed Volume</th>
         </tr>
         </thead>
         <tbody>
@@ -83,11 +113,26 @@ async function fetchConvertedQuantity(id: string, targetUnit: string) {
           <td>{{ item.productName }}</td>
           <td>{{ item.productCode }}</td>
           <td>
-            <select v-model="selectedUnits[item.id]" @change="fetchConvertedQuantity(item.id, selectedUnits[item.id])">
-              <option v-for="unit in availableUnits" :key="unit" :value="unit">{{ unit }}</option>
-            </select>
+            <template v-if="item.productUnit !== 'tk'">
+              <select v-model="selectedUnits[item.id]" @change="fetchConvertedQuantity(item.id, selectedUnits[item.id])">
+                <option v-for="unit in availableUnits" :key="unit" :value="unit">{{ unit }}</option>
+              </select>
+            </template>
+            <template v-else>
+              {{ item.productUnit }}
+            </template>
           </td>
           <td>{{ convertedQuantities[item.id] || '...' }}</td>
+          <td>
+            <template v-if="calcRemovedVolume(item)">
+              <select v-model="selectedVolumeUnits[item.id]"
+                      @change="fetchConvertedVolume(item.id, selectedVolumeUnits[item.id])">
+                <option v-for="unit in availableUnits" :key="unit" :value="unit">{{ unit }}</option>
+              </select>
+              {{ convertedVolumes[item.id] || '...' }}
+            </template>
+            <template v-else>—</template>
+          </td>
         </tr>
         </tbody>
       </table>

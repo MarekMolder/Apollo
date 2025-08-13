@@ -20,7 +20,6 @@ public class StorageRoomApiMapper : IMapper<StorageRoom, BLL.DTO.StorageRoom>
             Name = entity.Name,
             AddressId = entity.AddressId,
             AllowedRoles = entity.AllowedRoles?.ToList(),
-            EndedAt = entity.EndedAt,
         };
         return res;
     }
@@ -37,7 +36,6 @@ public class StorageRoomApiMapper : IMapper<StorageRoom, BLL.DTO.StorageRoom>
             Name = entity.Name,
             AddressId = entity.AddressId,
             AllowedRoles = entity.AllowedRoles?.ToList(),
-            EndedAt = entity.EndedAt,
         };
         return res;
     }
@@ -53,7 +51,6 @@ public class StorageRoomApiMapper : IMapper<StorageRoom, BLL.DTO.StorageRoom>
             Name = entity.Name,
             AddressId = entity.AddressId,
             AllowedRoles = entity.AllowedRoles?.ToList(),
-            EndedAt = entity.EndedAt,
         };
         return res;
     }

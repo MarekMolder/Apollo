@@ -7,5 +7,8 @@ namespace App.BLL.Contracts;
 /// </summary>
 public interface IAddressService : IBaseService<BLL.DTO.Address>
 {
-    
+    /// <summary>
+    /// Retrieves Addresses enriched with related data.
+    /// </summary>
+    Task<IEnumerable<BLL.DTO.Address?>> GetEnrichedAddresses();
 }

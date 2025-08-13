@@ -1,16 +1,22 @@
 ﻿<script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import type { IResultObject } from '@/types/IResultObject'
 import type { IActionEnriched } from '@/domain/logic/IActionEnriched.ts'
 import { ActionService } from '@/services/mvcServices/ActionService.ts'
 
-const requestIsOngoing = ref(false)
-const data = reactive<IResultObject<IActionEnriched[]>>({ data: [], errors: [] })
-const selectedStatus = ref<'All' | 'Accepted' | 'Declined' | 'Pending'>('All')
-
+// Services
 const service = new ActionService()
 
+// Entity's
+const data = reactive<IResultObject<IActionEnriched[]>>({ data: [], errors: [] })
+
+// ??
+const requestIsOngoing = ref(false)
+
+// Search engine
+const selectedStatus = ref<'All' | 'Accepted' | 'Declined' | 'Pending'>('All')
+
+// Get actions
 const fetchPageData = async () => {
   try {
     const result = await service.getEnrichedActions()
@@ -23,7 +29,16 @@ const fetchPageData = async () => {
   }
 }
 
-const updateStatus = async (id: string, newStatus: 'Accepted' | 'Declined') => {
+onMounted(fetchPageData)
+
+// Search engine filtered suppliers
+const filteredData = computed(() => {
+  if (selectedStatus.value === 'All') return data.data
+  return data.data!.filter((item) => item.status === selectedStatus.value)
+})
+
+// Accept / Deckline function
+const editStatus = async (id: string, newStatus: 'Accepted' | 'Declined') => {
   try {
     const response = await service.patchStatus(id, newStatus)
     console.log(response.message)
@@ -32,13 +47,6 @@ const updateStatus = async (id: string, newStatus: 'Accepted' | 'Declined') => {
     console.error('Status update failed', error)
   }
 }
-
-const filteredData = computed(() => {
-  if (selectedStatus.value === 'All') return data.data
-  return data.data!.filter((item) => item.status === selectedStatus.value)
-})
-
-onMounted(fetchPageData)
 </script>
 
 <template>
@@ -96,7 +104,6 @@ onMounted(fetchPageData)
               <th class="px-4 py-3">{{ $t('Quantity') }}</th>
               <th class="px-4 py-3">{{ $t('Action Type') }}</th>
               <th class="px-4 py-3 hidden sm:table-cell">{{ $t('Reason') }}</th>
-              <th class="px-4 py-3">{{ $t('Supplier') }}</th>
               <th class="px-4 py-3">{{ $t('Product') }}</th>
               <th class="px-4 py-3 hidden sm:table-cell">{{ $t('StorageRoom') }}</th>
               <th
@@ -135,12 +142,11 @@ onMounted(fetchPageData)
               <td class="px-4 py-3">{{ item.quantity }}</td>
               <td class="px-4 py-3">{{ item.actionTypeName }}</td>
               <td class="px-4 py-3 hidden sm:table-cell">{{ item.reasonDescription }}</td>
-              <td class="px-4 py-3">{{ item.supplierName }}</td>
               <td class="px-4 py-3">{{ item.productName }}</td>
               <td class="px-4 py-3 hidden sm:table-cell">{{ item.storageRoomName }}</td>
               <td class="px-2 py-3">
                 <button
-                  @click="updateStatus(item.id, 'Accepted')"
+                  @click="editStatus(item.id, 'Accepted')"
                   class="bg-green-600 hover:scale-105 transition w-9 h-9 rounded-xl text-white flex items-center justify-center"
                 >
                   <i class="bi bi-check-circle"></i>
@@ -151,7 +157,7 @@ onMounted(fetchPageData)
                 :class="index === filteredData.length - 1 ? 'rounded-br-[16px]' : ''"
               >
                 <button
-                  @click="updateStatus(item.id, 'Declined')"
+                  @click="editStatus(item.id, 'Declined')"
                   class="bg-red-600 hover:scale-105 transition w-9 h-9 rounded-xl text-white flex items-center justify-center"
                 >
                   <i class="bi bi-x-circle"></i>

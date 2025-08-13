@@ -65,7 +65,9 @@ namespace WebApp.Controllers
 
             var vm = new RecipeComponentsCreateEditViewModel()
             {
-                ProductRecipeSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+                ProductRecipeSelectList = new SelectList(
+                    (await _bll.ProductService.AllAsync(User.GetUserId()))
+                    .Where(p => !p.IsComponent),
                     nameof(Product.Id),
                     nameof(Product.Name)
                 ),
@@ -129,7 +131,7 @@ namespace WebApp.Controllers
             var vm = new RecipeComponentsCreateEditViewModel()
             {
                 ProductRecipeSelectList = new SelectList(
-                    allProducts,
+                    allProducts.Where(p => !p.IsComponent),
                     nameof(Product.Id),
                     nameof(Product.Name),
                     recipeComponent.ProductRecipeId

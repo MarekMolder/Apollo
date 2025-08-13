@@ -5,35 +5,45 @@ import { IdentityService } from '@/services/IdentityService'
 import type { AppRole } from '@/domain/logic/AppRole'
 import type { AssignRoleDto } from '@/types/AssignRoleDto'
 
+// Services
 const roleService = new RoleService()
 const identityService = new IdentityService()
 
-const users = ref<{ id: string; firstName: string; lastName: string }[]>([])
+// Entity's
 const roles = ref<AppRole[]>([])
+
+// ??
+const users = ref<{ id: string; firstName: string; lastName: string }[]>([])
+
+// ?
 const selectedUserId = ref('')
 const selectedRoleId = ref('')
-const message = ref('')
-const error = ref('')
 
-const assign = async () => {
+// Messages errors/success
+const successMessage = ref('')
+const validationError = ref('')
+
+// Get users and roles
+onMounted(async () => {
+  users.value = await identityService.getAllUsers()
+  roles.value = await roleService.getAllRoles()
+})
+
+// Assign Role to user function
+const assignRole = async () => {
   const dto: AssignRoleDto = {
     userId: selectedUserId.value,
     roleId: selectedRoleId.value,
   }
   const res = await roleService.assignRoleToUser(dto)
   if (res.errors!.length) {
-    error.value = res.errors![0]
-    message.value = ''
+    validationError.value = res.errors![0]
+    successMessage.value = ''
   } else {
-    message.value = res.data!
-    error.value = ''
+    successMessage.value = res.data!
+    validationError.value = ''
   }
 }
-
-onMounted(async () => {
-  users.value = await identityService.getAllUsers()
-  roles.value = await roleService.getAllRoles()
-})
 </script>
 
 <template>
@@ -69,23 +79,23 @@ onMounted(async () => {
 
       <button
         class="w-full bg-gradient-to-r from-[#ffaa33] to-[#ff8c00] text-black font-bold text-base rounded-xl px-6 py-3 transition hover:from-[#ffc56e] hover:to-[#ffa726] shadow-[0_3px_10px_rgba(255,165,0,0.2)]"
-        @click="assign"
+        @click="assignRole"
       >
         {{ $t('Assign') }}
       </button>
 
       <p
-        v-if="message"
+        v-if="successMessage"
         class="mt-4 text-center text-sm font-medium px-4 py-2 rounded-md bg-[rgba(0,255,100,0.1)] border-1 border-[#ffaa33] text-[#9effb1]"
       >
-        {{ message }}
+        {{ successMessage }}
       </p>
 
       <p
-        v-if="error"
+        v-if="validationError"
         class="mt-4 text-center text-sm font-medium px-4 py-2 rounded-md bg-[rgba(255,80,80,0.15)] border-1 border-[#ffaa33] text-[#ff5f5f]"
       >
-        {{ error }}
+        {{ validationError }}
       </p>
     </div>
   </main>

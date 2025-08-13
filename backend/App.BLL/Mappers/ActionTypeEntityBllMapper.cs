@@ -22,7 +22,6 @@ public class ActionTypeEntityBllMapper : IMapper<BLL.DTO.ActionTypeEntity, DAL.D
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (App.DAL.DTO.Enums.ActionTypeEnum)(int)entity.Code,
             Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!
         };
@@ -40,7 +39,6 @@ public class ActionTypeEntityBllMapper : IMapper<BLL.DTO.ActionTypeEntity, DAL.D
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (DTO.Enums.ActionTypeEnum)(int)entity.Code,
             Actions = entity.Actions?.Select(t => _actionEntityBllMapper.Map(t)).ToList()!
         };
@@ -58,7 +56,6 @@ public class ActionTypeEntityBllMapper : IMapper<BLL.DTO.ActionTypeEntity, DAL.D
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (App.DAL.DTO.Enums.ActionTypeEnum)(int)entity.Code
         };
     }
@@ -74,7 +71,6 @@ public class ActionTypeEntityBllMapper : IMapper<BLL.DTO.ActionTypeEntity, DAL.D
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             Code = (DTO.Enums.ActionTypeEnum)(int)entity.Code
         };
     }

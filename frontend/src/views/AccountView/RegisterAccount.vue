@@ -4,22 +4,29 @@ import { useRouter } from 'vue-router';
 import { IdentityService } from '@/services/IdentityService';
 import { useUserDataStore } from '@/stores/userDataStore';
 
+// Services
 const identityService = new IdentityService();
+
+// Store and Router
 const router = useRouter();
 const store = useUserDataStore();
 
+// ??
 const email = ref('');
 const password = ref('');
 const firstName = ref('');
 const lastName = ref('');
-const error = ref<string | null>(null);
-const success = ref<string | null>(null);
 
-const isAdmin = store.role === 'admin'; 
+// Messages errors/success
+const validationError = ref<string | null>(null);
+const successMessage = ref<string | null>(null);
 
+const isAdmin = store.roles === 'admin';
+
+// Register function
 const doRegister = async () => {
-  error.value = null;
-  success.value = null;
+  validationError.value = null;
+  successMessage.value = null;
 
   const result = await identityService.register({
     email: email.value,
@@ -34,14 +41,14 @@ const doRegister = async () => {
       store.refreshToken = result.data.refreshToken;
       router.push({ name: 'Home' });
     } else {
-      success.value = 'Account successfully created';
+      successMessage.value = 'Account successfully created';
       email.value = '';
       password.value = '';
       firstName.value = '';
       lastName.value = '';
     }
   } else {
-    error.value = result.errors?.[0] || 'Registration failed';
+    validationError.value = result.errors?.[0] || 'Registration failed';
   }
 };
 </script>
@@ -61,17 +68,17 @@ const doRegister = async () => {
       </RouterLink>
 
       <div
-        v-if="error"
+        v-if="validationError"
         class="text-center bg-[rgba(255,80,80,0.2)] text-[#ff6b6b] border border-[rgba(255,80,80,0.4)] font-bold text-sm p-3 rounded"
       >
-        {{ error }}
+        {{ validationError }}
       </div>
 
       <div
-        v-if="success"
+        v-if="successMessage"
         class="text-center bg-[rgba(80,255,160,0.2)] text-[#80ffaa] border border-[rgba(80,255,160,0.4)] font-bold text-sm p-3 rounded"
       >
-        {{ success }}
+        {{ successMessage }}
       </div>
 
       <form @submit.prevent="doRegister" class="flex flex-col gap-4">

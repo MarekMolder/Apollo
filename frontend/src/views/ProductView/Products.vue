@@ -10,34 +10,39 @@ import { X } from 'lucide-vue-next';
 import type {ISupplier} from "@/domain/logic/ISupplier.ts";
 import {SupplierService} from "@/services/mvcServices/SupplierService.ts";
 
+// Services
 const service = new ProductService();
 const productCategoryService = new ProductCategoryService();
 const supplierService = new SupplierService();
+
+// Entity's
+const data = ref<IProductEnriched[]>([]);
 const productCategories = ref<IProductCategory[]>([]);
 const suppliers = ref<ISupplier[]>([]);
 
-onMounted(async () => {
-  products.value = (await service.getAllAsync()).data || [];
-  productCategories.value = (await productCategoryService.getAllAsync()).data || [];
-  suppliers.value = (await supplierService.getAllAsync()).data || [];
-});
-
-const data = ref<IProductEnriched[]>([]);
+// Search engine
 const selectedCategory = ref("All");
 const selectedSupplier = ref("All");
 const searchCode = ref("");
 const searchName = ref("");
 const categories = ref<string[]>([]);
 
+// Drawer mode
 const showDrawer = ref(false);
 const drawerMode = ref<'edit' | 'create'>('edit');
 const activeEditProduct = ref<IProductEnriched | null>(null);
 const activeCreateProduct = ref<IProduct | null>(null);
 
+// Messages errors/success
+const validationError = ref('');
+const successMessage = ref('');
+
+// Empty Product entity
 const emptyProduct = ref<IProduct>({
   id: '',
   unit: '',
   volume: 0,
+  volumeUnit: '',
   code: '',
   name: '',
   price: 0,
@@ -47,14 +52,11 @@ const emptyProduct = ref<IProduct>({
   supplierId: '',
 });
 
-const activeProduct = computed({
-  get() {
-    return drawerMode.value === 'edit' ? activeEditProduct.value : activeCreateProduct.value;
-  },
-  set(value) {
-    if (drawerMode.value === 'edit') activeEditProduct.value = value as IProductEnriched;
-    else activeCreateProduct.value = value as IProduct;
-  }
+// Get products
+onMounted(async () => {
+  products.value = (await service.getAllAsync()).data || [];
+  productCategories.value = (await productCategoryService.getAllAsync()).data || [];
+  suppliers.value = (await supplierService.getAllAsync()).data || [];
 });
 
 const fetchPageData = async () => {
@@ -73,6 +75,7 @@ const fetchPageData = async () => {
 
 onMounted(fetchPageData);
 
+// Search engine filtered suppliers
 const filteredProducts = computed(() =>
   data.value.filter((product) => {
     const matchCategory =
@@ -89,6 +92,7 @@ const filteredProducts = computed(() =>
   })
 );
 
+// Drawers for Products
 const openProductDrawer = (product: IProductEnriched) => {
   activeEditProduct.value = { ...product };
   drawerMode.value = 'edit';
@@ -101,7 +105,18 @@ const openCreateDrawer = () => {
   showDrawer.value = true;
 };
 
-const updateProduct = async () => {
+const activeProduct = computed({
+  get() {
+    return drawerMode.value === 'edit' ? activeEditProduct.value : activeCreateProduct.value;
+  },
+  set(value) {
+    if (drawerMode.value === 'edit') activeEditProduct.value = value as IProductEnriched;
+    else activeCreateProduct.value = value as IProduct;
+  }
+});
+
+// Product edit function
+const editProduct = async () => {
   if (!activeEditProduct.value) return;
   try {
     await service.updateAsync(activeEditProduct.value);
@@ -112,9 +127,7 @@ const updateProduct = async () => {
   }
 };
 
-const validationError = ref('');
-const successMessage = ref('');
-
+// Product create function
 const createProduct = async () => {
   validationError.value = '';
   successMessage.value = '';
@@ -141,6 +154,7 @@ const createProduct = async () => {
   }
 };
 
+//Product remove function
 const removeProduct = async (id: string) => {
   if (!confirm("Are you sure you want to delete this product?")) return;
 
@@ -231,6 +245,9 @@ const removeProduct = async (id: string) => {
           <label>Volume</label>
           <input v-model="activeProduct!.volume" type="text" />
 
+          <label>Volume unit</label>
+          <input v-model="activeProduct!.volumeUnit" type="text" />
+
           <label>Category</label>
           <select v-model="activeProduct!.productCategoryId" class="drawer-select">
             <option disabled value="">-- Select Category --</option>
@@ -257,7 +274,7 @@ const removeProduct = async (id: string) => {
           </label>
 
           <div class="drawer-buttons">
-            <button v-if="drawerMode === 'edit'" @click="updateProduct" class="update-btn">Update</button>
+            <button v-if="drawerMode === 'edit'" @click="editProduct" class="update-btn">Update</button>
             <button v-else @click="createProduct" class="update-btn">Create</button>
             <button @click="showDrawer = false" class="cancel-btn">Cancel</button>
           </div>

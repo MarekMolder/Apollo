@@ -1,6 +1,5 @@
 ﻿<script setup lang="ts">
 import { onMounted, ref, computed } from "vue";
-import { useRouter } from "vue-router";
 import { X } from "lucide-vue-next";
 import type { ISupplier } from "@/domain/logic/ISupplier";
 import type { ISupplierEnriched } from "@/domain/logic/ISupplierEnriched";
@@ -11,29 +10,33 @@ import suppliers from "@/views/SupplierView/Suppliers.vue";
 import type {IProductEnriched} from "@/domain/logic/IProductEnriched.ts";
 import {ProductService} from "@/services/mvcServices/ProductServices.ts";
 
+// Services
 const supplierService = new SupplierService();
 const addressService = new AddressService();
+
+// Entity's
 const supplierAddresses = ref<IAddress[]>([]);
-
-onMounted(async () => {
-  suppliers.value = (await supplierService.getAllAsync()).data || [];
-  supplierAddresses.value = (await addressService.getAllAsync()).data || [];
-});
-
-
-const router = useRouter();
-
 const data = ref<ISupplierEnriched[]>([]);
+const productsForSupplier = ref<IProductEnriched[]>([]);
+
+// Search engine
 const searchName = ref("");
+
+// Drawer mode
 const showDrawer = ref(false);
+const showProductsDrawer = ref(false);
 const drawerMode = ref<"edit" | "create">("edit");
 const activeEditSupplier = ref<ISupplierEnriched | null>(null);
 const activeCreateSupplier = ref<ISupplier | null>(null);
 
-const showProductsDrawer = ref(false);
-const productsForSupplier = ref<IProductEnriched[]>([]);
+//??
 const selectedSupplierName = ref("");
 
+// Messages errors/success
+const validationError = ref('');
+const successMessage = ref('');
+
+// Empty Supplier entity
 const emptySupplier = ref<ISupplier>({
   id: "",
   name: "",
@@ -42,14 +45,10 @@ const emptySupplier = ref<ISupplier>({
   addressId: ""
 });
 
-const activeSupplier = computed({
-  get() {
-    return drawerMode.value === "edit" ? activeEditSupplier.value : activeCreateSupplier.value;
-  },
-  set(value) {
-    if (drawerMode.value === "edit") activeEditSupplier.value = value as ISupplierEnriched;
-    else activeCreateSupplier.value = value as ISupplier;
-  }
+// Get suppliers
+onMounted(async () => {
+  suppliers.value = (await supplierService.getAllAsync()).data || [];
+  supplierAddresses.value = (await addressService.getAllAsync()).data || [];
 });
 
 const fetchPageData = async () => {
@@ -61,6 +60,7 @@ const fetchPageData = async () => {
   }
 };
 
+// Get products by Supplier
 const fetchProductsBySupplier = async (supplierId: string, supplierName: string) => {
   try {
     selectedSupplierName.value = supplierName;
@@ -75,34 +75,45 @@ const fetchProductsBySupplier = async (supplierId: string, supplierName: string)
 
 onMounted(fetchPageData);
 
+// Search engine filtered suppliers
 const filteredSuppliers = computed(() =>
   data.value.filter((supplier) =>
     supplier.name.toLowerCase().includes(searchName.value.toLowerCase())
   )
 );
 
-const openSupplierDrawer = (supplier: ISupplierEnriched) => {
+// Drawers for Suppliers
+const openSupplierEditDrawer = (supplier: ISupplierEnriched) => {
   activeEditSupplier.value = { ...supplier };
   drawerMode.value = "edit";
   showDrawer.value = true;
 };
 
-const openCreateDrawer = () => {
+const openSupplierCreateDrawer = () => {
   activeCreateSupplier.value = emptySupplier.value;
   drawerMode.value = "create";
   showDrawer.value = true;
 };
 
-const updateSupplier = async () => {
+const activeSupplier = computed({
+  get() {
+    return drawerMode.value === "edit" ? activeEditSupplier.value : activeCreateSupplier.value;
+  },
+  set(value) {
+    if (drawerMode.value === "edit") activeEditSupplier.value = value as ISupplierEnriched;
+    else activeCreateSupplier.value = value as ISupplier;
+  }
+});
+
+// Supplier edit function
+const editSupplier = async () => {
   if (!activeEditSupplier.value) return;
   await supplierService.updateAsync(activeEditSupplier.value);
   showDrawer.value = false;
   await fetchPageData();
 };
 
-const validationError = ref('');
-const successMessage = ref('');
-
+// Supplier create function
 const createSupplier = async () => {
   validationError.value = '';
   successMessage.value = '';
@@ -129,6 +140,7 @@ const createSupplier = async () => {
   }
 };
 
+//Supplier remove function
 const removeSupplier = async (id: string) => {
   if (!confirm("Are you sure you want to delete this supplier?")) return;
   await supplierService.removeAsync(id);
@@ -154,7 +166,7 @@ const removeSupplier = async (id: string) => {
           class="search-box"
         />
       </div>
-      <button class="create-link" @click="openCreateDrawer">+ Create New</button>
+      <button class="create-link" @click="openSupplierCreateDrawer">+ Create New</button>
     </div>
 
     <div class="table-scroll-container">
@@ -175,7 +187,7 @@ const removeSupplier = async (id: string) => {
           >
             🛒 View Products
           </button>
-          <button class="view-button" @click="openSupplierDrawer(item)">View</button>
+          <button class="view-button" @click="openSupplierEditDrawer(item)">View</button>
         </div>
       </div>
     </div>
@@ -204,7 +216,7 @@ const removeSupplier = async (id: string) => {
           </select>
 
           <div class="drawer-buttons">
-            <button v-if="drawerMode === 'edit'" @click="updateSupplier" class="update-btn">Update</button>
+            <button v-if="drawerMode === 'edit'" @click="editSupplier" class="update-btn">Update</button>
             <button v-else @click="createSupplier" class="update-btn">Create</button>
             <button @click="showDrawer = false" class="cancel-btn">Cancel</button>
           </div>

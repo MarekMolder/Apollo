@@ -72,11 +72,6 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (productCategory.EndedAt.HasValue)
-                { 
-                    productCategory.EndedAt = DateTime.SpecifyKind(productCategory.EndedAt.Value, DateTimeKind.Utc);
-                }
-                
                 _logger.LogInformation("Creating new product category");
                 _bll.ProductCategoryService.Add(productCategory);
                 await _bll.SaveChangesAsync();
@@ -123,11 +118,6 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                if (productCategory.EndedAt.HasValue)
-                { 
-                    productCategory.EndedAt = DateTime.SpecifyKind(productCategory.EndedAt.Value, DateTimeKind.Utc);
-                }
-                
                 _logger.LogInformation("Updating product category ID {Id}", id);
                 _bll.ProductCategoryService.Update(productCategory);
                 await _bll.SaveChangesAsync();

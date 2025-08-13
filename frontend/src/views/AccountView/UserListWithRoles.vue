@@ -4,16 +4,27 @@ import { RoleService } from "@/services/RoleService";
 import type { UserWithRolesDto } from "@/types/UserWithRolesDto";
 import type { AppRole } from "@/domain/logic/AppRole";
 
+// Serivces
 const roleService = new RoleService();
+
+// Entity's
 const users = ref<UserWithRolesDto[]>([]);
 const allRoles = ref<AppRole[]>([]);
-const error = ref("");
+
+// Error message
+const validationError = ref("");
+
+// Get users and roles
+onMounted(async () => {
+  await fetchAllRoles();
+  await fetchUsers();
+});
 
 const fetchUsers = async () => {
   try {
     users.value = await roleService.getAllUsersWithRoles();
   } catch (e: any) {
-    error.value = e.message || "Viga kasutajate laadimisel";
+    validationError.value = e.message || "Error loading users";
   }
 };
 
@@ -21,14 +32,15 @@ const fetchAllRoles = async () => {
   try {
     allRoles.value = await roleService.getAllRoles();
   } catch (e: any) {
-    error.value = e.message || "Viga rollide laadimisel";
+    validationError.value = e.message || "Error loading roles";
   }
 };
 
+// Role remove function
 const removeRole = async (userId: string, roleName: string) => {
   const role = allRoles.value.find(r => r.name === roleName);
   if (!role) {
-    error.value = `Rolli '${roleName}' ei leitud`;
+    validationError.value = `Role - '${roleName}' does not exist`;
     return;
   }
 
@@ -36,14 +48,10 @@ const removeRole = async (userId: string, roleName: string) => {
   if (!result.errors!.length) {
     await fetchUsers();
   } else {
-    error.value = result.errors!.join(", ");
+    validationError.value = result.errors!.join(", ");
   }
 };
 
-onMounted(async () => {
-  await fetchAllRoles();
-  await fetchUsers();
-});
 </script>
 
 <template>
@@ -53,8 +61,8 @@ onMounted(async () => {
         👤 {{ $t('Users and roles') }}
       </h1>
 
-      <p v-if="error" class="text-red-400 bg-[rgba(255,80,80,0.15)] border border-[rgba(255,80,80,0.6)] text-center text-base font-medium px-4 py-2 mb-6 rounded-lg">
-        {{ error }}
+      <p v-if="validationError" class="text-red-400 bg-[rgba(255,80,80,0.15)] border border-[rgba(255,80,80,0.6)] text-center text-base font-medium px-4 py-2 mb-6 rounded-lg">
+        {{ validationError }}
       </p>
 
       <div class="overflow-x-auto rounded-xl bg-[rgba(20,20,20,0.5)] shadow-inner shadow-[inset_0_0_10px_rgba(255,170,51,0.05)]">

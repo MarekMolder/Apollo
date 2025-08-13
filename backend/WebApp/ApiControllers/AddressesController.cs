@@ -1,4 +1,6 @@
 using App.BLL.Contracts;
+using App.DTO.v1.ApiEntities;
+using App.DTO.v1.ApiMapper;
 using App.DTO.v1.Mappers;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,6 +25,9 @@ namespace WebApp.ApiControllers
         private readonly ILogger<AddressesController> _logger;
         
         private readonly AddressApiMapper _mapper = new();
+        
+        private readonly EnrichedAddressApiMapper _enrichedAddressApiMapper = new();
+
 
         public AddressesController(IAppBll bll, ILogger<AddressesController> logger)
         {
@@ -120,6 +125,21 @@ namespace WebApp.ApiControllers
             
             _logger.LogInformation("Deleted address with ID {Id}", id);
             return NoContent();
+        }
+        
+        /// <summary>
+        /// Get enriched storage rooms allowed for current user.
+        /// </summary>
+        [HttpGet("enrichedAddresses")]
+        [ProducesResponseType(typeof(IEnumerable<EnrichedAddress>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<EnrichedAddress>>> GetEnrichedAddresses()
+        {
+            _logger.LogInformation("Fetching enriched address data");
+            var data = await _bll.AddressService.GetEnrichedAddresses();
+            var res = data.Select(u => _enrichedAddressApiMapper.Map(u)!).ToList();
+            
+            _logger.LogInformation("Returned {Count} enriched addresses", res.Count);
+            return Ok(res);
         }
     }
 }

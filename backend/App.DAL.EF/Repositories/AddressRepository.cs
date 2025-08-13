@@ -13,4 +13,15 @@ public class AddressRepository: BaseRepository<DAL.DTO.Address, Domain.Logic.Add
     public AddressRepository(DbContext repositoryDbContext) : base(repositoryDbContext, new AddressUowMapper())
     {
     }
+    
+    /// <summary>
+    /// Retrieves all addresses.
+    /// </summary>
+    public async Task<IEnumerable<DAL.DTO.Address?>> GetEnrichedAddresses()
+    {
+        var domainEntities = await RepositoryDbSet
+            .ToListAsync();
+
+        return domainEntities.Select(e => Mapper.Map(e));
+    }
 }

@@ -7,5 +7,6 @@ export interface IAddress extends IDomainId {
   province: string;
   country: string;
   name: string;
-  unitNr: number;
+  postalCode: string;
+  unitNr?: number | null;
 }

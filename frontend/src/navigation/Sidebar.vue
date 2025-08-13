@@ -50,6 +50,31 @@ const isOpen = ref(false);
         <i class="bi bi-telephone"></i>
         <span>{{ $t('Contacts') }}</span>
       </RouterLink>
+
+      <RouterLink v-if="isAdmin" to="/actionType" class="sidebar-link" :class="{ open: isOpen }">
+        <i class="bi bi-telephone"></i>
+        <span>actionType</span>
+      </RouterLink>
+
+      <RouterLink v-if="isAdmin" to="/address" class="sidebar-link" :class="{ open: isOpen }">
+        <i class="bi bi-telephone"></i>
+        <span>address</span>
+      </RouterLink>
+
+      <RouterLink v-if="isAdmin" to="/reason" class="sidebar-link" :class="{ open: isOpen }">
+        <i class="bi bi-telephone"></i>
+        <span>reason</span>
+      </RouterLink>
+
+      <RouterLink v-if="isAdmin" to="/recipeComponent" class="sidebar-link" :class="{ open: isOpen }">
+        <i class="bi bi-telephone"></i>
+        <span>recipeComponent</span>
+      </RouterLink>
+
+      <RouterLink v-if="isAdmin" to="/productCategory" class="sidebar-link" :class="{ open: isOpen }">
+        <i class="bi bi-telephone"></i>
+        <span>ProductCategory</span>
+      </RouterLink>
     </nav>
   </aside>
 </template>

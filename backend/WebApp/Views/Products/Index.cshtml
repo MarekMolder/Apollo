@@ -19,6 +19,9 @@
             @Html.DisplayNameFor(model => model.Volume)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.VolumeUnit)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Code)
         </th>
         <th>
@@ -50,6 +53,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Volume)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VolumeUnit)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Code)

@@ -2,5 +2,4 @@
 
 export interface IReason extends IDomainId {
   description: string;
-  endedAt: string;
 }

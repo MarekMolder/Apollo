@@ -30,4 +30,11 @@ export class MonthlyStatisticsService extends BaseEntityService<IMonthlyStatisti
     });
     return response.data as string;
   }
+
+  async getConvertedVolume(id: string, targetUnit: string): Promise<string> {
+    const response = await this.axiosInstance.get(`/monthlyStatistics/converted-volume/${id}`, {
+      params: { targetUnit }
+    });
+    return response.data as string;
+  }
 }

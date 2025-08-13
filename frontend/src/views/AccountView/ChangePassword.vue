@@ -4,17 +4,24 @@ import { IdentityService } from "@/services/IdentityService.ts";
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 
-const store = useUserDataStore();
+// Services
 const identityService = new IdentityService();
 
-const message = ref('');
+// Store
+const store = useUserDataStore();
+
+// ??
 const currentPassword = ref('');
 const newPassword = ref('');
 const confirmNewPassword = ref('');
 
+// Messages errors/success
+const message = ref('');
+
+// Password edit function
 const changePassword = async () => {
   if (newPassword.value !== confirmNewPassword.value) {
-    message.value = 'Uus parool ja kinnitus ei ühti!';
+    message.value = 'New password and confirmation password arent same';
     return;
   }
 
@@ -25,8 +32,8 @@ const changePassword = async () => {
   });
 
   message.value = result.errors
-    ? `Viga: ${result.errors.join(', ')}`
-    : 'Parool muudetud edukalt!';
+    ? `Error: ${result.errors.join(', ')}`
+    : 'Password changed successfully!';
 };
 </script>
 

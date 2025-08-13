@@ -16,9 +16,4 @@ public class ProductCategory : IDomainId
     /// Name of the category (e.g., "Drinks", "Food").
     /// </summary>
     public string Name { get; set; } = default!;
-    
-    /// <summary>
-    /// Optional end date indicating when the category became inactive.
-    /// </summary
-    public DateTime? EndedAt { get; set; }
 }

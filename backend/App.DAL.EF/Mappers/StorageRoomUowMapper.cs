@@ -26,7 +26,6 @@ public class StorageRoomUowMapper: IMapper<DAL.DTO.StorageRoom, Domain.Logic.Sto
             Address = AddressUowMapper.MapSimple(entity.Address),
             
             AllowedRoles = entity.AllowedRoles?.ToList(),
-            EndedAt = entity.EndedAt,
             
             Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!,
         };
@@ -48,7 +47,6 @@ public class StorageRoomUowMapper: IMapper<DAL.DTO.StorageRoom, Domain.Logic.Sto
             Address = AddressUowMapper.MapSimple(entity.Address),
             
             AllowedRoles = entity.AllowedRoles?.ToList(),
-            EndedAt = entity.EndedAt,
             
             Actions = entity.Actions?.Select(t => _actionEntityUowMapper.Map(t)).ToList()!,
         };
@@ -66,7 +64,6 @@ public class StorageRoomUowMapper: IMapper<DAL.DTO.StorageRoom, Domain.Logic.Sto
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             AddressId = entity.AddressId,
             AllowedRoles = entity.AllowedRoles?.ToList()
         };
@@ -83,7 +80,6 @@ public class StorageRoomUowMapper: IMapper<DAL.DTO.StorageRoom, Domain.Logic.Sto
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             AddressId = entity.AddressId,
             AllowedRoles = entity.AllowedRoles?.ToList()
         };

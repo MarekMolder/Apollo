@@ -23,6 +23,7 @@ public class ProductUowMapper: IMapper<DAL.DTO.Product, Domain.Logic.Product>
             Id = entity.Id,
             Unit = entity.Unit,
             Volume = entity.Volume,
+            VolumeUnit = entity.VolumeUnit,
             Code = entity.Code,
             Name = entity.Name,
             Price = entity.Price,
@@ -46,13 +47,15 @@ public class ProductUowMapper: IMapper<DAL.DTO.Product, Domain.Logic.Product>
     /// </summary>
     public Domain.Logic.Product? Map(DAL.DTO.Product? entity)
     {
-                if (entity == null) return null;
+        if (entity == null) return null;
         
         var res = new Domain.Logic.Product
         {
             Id = entity.Id,
             Unit = entity.Unit,
             Volume = entity.Volume,
+            VolumeUnit = entity.VolumeUnit,
+
             Code = entity.Code,
             Name = entity.Name,
             Price = entity.Price,
@@ -83,6 +86,7 @@ public class ProductUowMapper: IMapper<DAL.DTO.Product, Domain.Logic.Product>
             Id = entity.Id,
             Unit = entity.Unit,
             Volume = entity.Volume,
+            VolumeUnit = entity.VolumeUnit,
             Code = entity.Code,
             Name = entity.Name,
             Price = entity.Price,
@@ -105,6 +109,7 @@ public class ProductUowMapper: IMapper<DAL.DTO.Product, Domain.Logic.Product>
             Id = entity.Id,
             Unit = entity.Unit,
             Volume = entity.Volume,
+            VolumeUnit = entity.VolumeUnit,
             Code = entity.Code,
             Name = entity.Name,
             Price = entity.Price,

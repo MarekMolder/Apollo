@@ -72,11 +72,6 @@ namespace WebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (reason.EndedAt.HasValue)
-                { 
-                    reason.EndedAt = DateTime.SpecifyKind(reason.EndedAt.Value, DateTimeKind.Utc);
-                }
-                
                 _logger.LogInformation("Creating reason: {Description}", reason.Description);
                 _bll.ReasonService.Add(reason);
                 await _bll.SaveChangesAsync();
@@ -123,11 +118,6 @@ namespace WebApp.Controllers
 
             if (ModelState.IsValid)
             {
-                if (reason.EndedAt.HasValue)
-                { 
-                    reason.EndedAt = DateTime.SpecifyKind(reason.EndedAt.Value, DateTimeKind.Utc);
-                }
-                
                 _logger.LogInformation("Updating reason with ID {Id}", id);
                 _bll.ReasonService.Update(reason);
                 await _bll.SaveChangesAsync();

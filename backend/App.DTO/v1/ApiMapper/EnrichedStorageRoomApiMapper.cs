@@ -26,7 +26,6 @@ public class EnrichedStorageRoomApiMapper : IMapper<EnrichedStorageRoom, BLL.DTO
         {
             Id = entity.Id,
             Name = entity.Name,
-            EndedAt = entity.EndedAt,
             AddressId = entity.AddressId,
             FullAddress = fullAddress,
             AllowedRoles = entity.AllowedRoles?.ToList()
