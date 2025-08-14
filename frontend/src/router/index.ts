@@ -5,13 +5,11 @@ import ChangePassword from "@/views/AccountView/ChangePassword.vue";
 import CreateAction from "@/views/ActionViews/CreateAction.vue";
 import ActionRequest from "@/views/ActionViews/ActionRequest.vue";
 import Products from "@/views/ProductView/Products.vue";
-import SpecificProduct from "@/views/ProductView/SpecificProduct.vue";
 import Suppliers from "@/views/SupplierView/Suppliers.vue";
 import StorageRooms from "@/views/InventoryView/StorageRooms.vue";
 import UserDetailsView from "@/views/AccountView/UserDetailsView.vue";
 import { useUserDataStore } from "@/stores/userDataStore";
 import RegisterAccount from "@/views/AccountView/RegisterAccount.vue";
-import GetRolesPage from "@/views/AccountView/GetRolesPage.vue";
 import AssignRoleToUserPage from "@/views/AccountView/AssignRoleToUserPage.vue";
 import CreateRolePage from "@/views/AccountView/CreateRolePage.vue";
 import UserListWithRoles from "@/views/AccountView/UserListWithRoles.vue";
@@ -32,13 +30,11 @@ const routes = [
   { path: "/actionrequest", name: "ActionRequest", component: ActionRequest },
   { path: "/createaction", name: "CreateAction", component: CreateAction },
   { path: "/products", name: "Products", component: Products },
-  { path: "/product/:id", name: "SpecificProduct", component: SpecificProduct },
   { path: "/suppliers", name: "Suppliers", component: Suppliers },
   { path: "/storagerooms", name: "StorageRooms", component: StorageRooms },
   { path: "/monthlyStatistics/:storageRoomId", name: "MonthlyStatistics", component: MonthlyStatistics },
   { path: "/users/:id", name: "UserDetails", component: UserDetailsView },
   { path: "/register", name: "Register", component: RegisterAccount },
-  { path: "/getRole", name: "getRole", component: GetRolesPage },
   { path: "/assignRole", name: "assignRole", component: AssignRoleToUserPage },
   { path: "/createRole", name: "createRole", component: CreateRolePage },
   { path: "/userRoles", name: "userRoles", component: UserListWithRoles },

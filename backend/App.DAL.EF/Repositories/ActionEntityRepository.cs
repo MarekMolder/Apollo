@@ -45,52 +45,68 @@ public class ActionEntityRepository : BaseRepository<DAL.DTO.ActionEntity, Domai
     /// Returns the top 5 products with the highest total removed quantity.
     /// Filters only "Accepted" Remove-type actions.
     /// </summary>
-    public async Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity)>> GetTopRemovedProductsAsync()
+    public async Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> GetTopRemovedProductsAsync()
     {
         var results = await RepositoryDbSet
+            .Include(a => a.Product) // et Product.Unit, Volume, VolumeUnit oleks olemas
             .Where(a =>
                 a.Status == "Accepted" &&
-                a.ActionType!.Code == ActionTypeEnum.Remove &&
                 a.Product != null)
-            .GroupBy(a => new { a.ProductId, a.Product!.Name })
+            .GroupBy(a => new 
+            { 
+                a.ProductId, 
+                a.Product!.Name, 
+                a.Product!.Unit, 
+                ProductVolume = (decimal?)a.Product!.Volume, 
+                ProductVolumeUnit = (string?)a.Product!.VolumeUnit 
+            })
             .Select(g => new
             {
                 g.Key.ProductId,
                 ProductName = g.Key.Name,
-                RemoveQuantity = g.Sum(x => x.Quantity)
+                RemoveQuantity = g.Sum(x => x.Quantity),
+                ProductUnit = g.Key.Unit,
+                ProductVolume = g.Key.ProductVolume,
+                ProductVolumeUnit = g.Key.ProductVolumeUnit
             })
             .OrderByDescending(x => x.RemoveQuantity)
             .Take(5)
             .ToListAsync();
 
         return results
-            .Select(x => (x.ProductId, x.ProductName, x.RemoveQuantity))
+            .Select(x => (
+                x.ProductId, 
+                x.ProductName, 
+                x.RemoveQuantity, 
+                x.ProductUnit, 
+                x.ProductVolume, 
+                x.ProductVolumeUnit
+            ))
             .ToList();
     }
+
     
     /// <summary>
     /// Returns the top 5 users who have removed the most product quantity.
     /// Based on Remove-type actions with non-null CreatedBy.
     /// </summary>
-    public async Task<List<(string CreatedBy, decimal TotalRemovedQuantity)>> GetTopUsersByRemovedQuantityAsync()
+    public async Task<List<(string CreatedBy, int TotalRemovals)>> GetTopUsersByRemovedQuantityAsync()
     {
         var result = await RepositoryDbSet
             .Include(a => a.ActionType)
-            .Where(a =>
-                a.ActionType!.Code == ActionTypeEnum.Remove &&
-                a.CreatedBy != null)
+            .Where(a => a.CreatedBy != null)
             .GroupBy(a => a.CreatedBy)
             .Select(g => new
             {
                 CreatedBy = g.Key!,
-                TotalRemovedQuantity = g.Sum(x => x.Quantity)
+                TotalRemovals = g.Count() // loendab kirjed, mitte kogust
             })
-            .OrderByDescending(x => x.TotalRemovedQuantity)
+            .OrderByDescending(x => x.TotalRemovals)
             .Take(5)
             .ToListAsync();
 
         return result
-            .Select(x => (x.CreatedBy, x.TotalRemovedQuantity))
+            .Select(x => (x.CreatedBy, x.TotalRemovals))
             .ToList();
     }
 }

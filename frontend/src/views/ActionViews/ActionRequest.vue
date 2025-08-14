@@ -3,6 +3,8 @@ import { computed, onMounted, reactive, ref } from 'vue'
 import type { IResultObject } from '@/types/IResultObject'
 import type { IActionEnriched } from '@/domain/logic/IActionEnriched.ts'
 import { ActionService } from '@/services/mvcServices/ActionService.ts'
+import { useSidebarStore } from '@/stores/sidebarStore';
+const sidebarStore = useSidebarStore();
 
 // Services
 const service = new ActionService()
@@ -109,8 +111,12 @@ const editStatus = async (id: string, newStatus: 'Accepted' | 'Declined', curren
 </script>
 
 <template>
-  <main class="p-6 sm:p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-2xl mx-auto">
-    <!-- Header -->
+  <main
+    :class="[
+    'transition-all duration-300 p-4 sm:p-6 lg:p-8 text-white max-w-screen-2xl',
+    sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
+  ]"
+  >
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]

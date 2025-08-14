@@ -20,10 +20,10 @@ public interface IActionEntityRepository : IBaseRepository<DAL.DTO.ActionEntity>
     /// <summary>
     /// Returns top products by removed quantity.
     /// </summary>
-    Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity)>> GetTopRemovedProductsAsync();
+    Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> GetTopRemovedProductsAsync();
 
     /// <summary>
     /// Returns users who have removed the most quantity across all actions.
     /// </summary>
-    Task<List<(string CreatedBy, decimal TotalRemovedQuantity)>> GetTopUsersByRemovedQuantityAsync();
+    Task<List<(string CreatedBy, int TotalRemovals)>> GetTopUsersByRemovedQuantityAsync();
 }

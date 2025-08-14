@@ -3,6 +3,8 @@ import { ref, onMounted, computed } from "vue";
 import { useRoute } from "vue-router";
 import { MonthlyStatisticsService } from "@/services/mvcServices/MonthlyStatisticsService";
 import type {IMonthlyStatisticsEnriched} from "@/domain/logic/IMonthlyStatisticsEnriched.ts";
+import { useSidebarStore } from '@/stores/sidebarStore';
+const sidebarStore = useSidebarStore();
 
 // Services
 const service = new MonthlyStatisticsService();
@@ -78,8 +80,12 @@ function calcRemovedVolume(item: IMonthlyStatisticsEnriched) {
 </script>
 
 <template>
-  <main class="p-6 sm:p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-2xl mx-auto">
-    <!-- Header (nagu Requests) -->
+  <main
+    :class="[
+    'transition-all duration-300 p-4 sm:p-6 lg:p-8 text-white max-w-screen-2xl',
+    sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
+  ]"
+  >
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]

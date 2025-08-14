@@ -329,10 +329,10 @@ public class ActionEntityServiceTests
     public async Task GetTopRemovedProductsAsync_ReturnsExpectedData()
     {
         // Arrange
-        var expected = new List<(Guid ProductId, string ProductName, decimal RemoveQuantity)>
+        var expected = new List<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>
         {
-            (Guid.NewGuid(), "Milk", 5),
-            (Guid.NewGuid(), "Bread", 3)
+            (Guid.NewGuid(), "Milk", 5, "ml", 5, "ml"),
+            (Guid.NewGuid(), "Bread", 3, "g", 3, "g")
         };
 
         _mockActionRepo.Setup(r => r.GetTopRemovedProductsAsync()).ReturnsAsync(expected);
@@ -350,7 +350,7 @@ public class ActionEntityServiceTests
     public async Task GetTopUsersByRemovedQuantityAsync_ReturnsExpectedData()
     {
         // Arrange
-        var expected = new List<(string CreatedBy, decimal TotalRemovedQuantity)>
+        var expected = new List<(string CreatedBy, int TotalRemovals)>
         {
             ("alice@example.com", 10),
             ("bob@example.com", 7)
@@ -364,6 +364,6 @@ public class ActionEntityServiceTests
         // Assert
         Assert.Equal(2, result.Count);
         Assert.Equal("alice@example.com", result[0].CreatedBy);
-        Assert.Equal(10, result[0].TotalRemovedQuantity);
+        Assert.Equal(10, result[0].TotalRemovals);
     }
 }

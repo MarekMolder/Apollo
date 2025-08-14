@@ -35,114 +35,85 @@ const goToPendingPage = () => {
 </script>
 
 <template>
-  <div class="pending-actions-card">
-    <h2>{{ $t('Pending Actions') }}</h2>
-    <ul v-if="filteredData.length">
-      <li v-for="action in filteredData.slice(0, 10)" :key="action.id" class="action-item">
-        <span class="type">{{ action.actionTypeName }}</span>
-        <span class="product">{{ action.productName }}</span>
-        <span class="quantity">{{ action.quantity }}</span>
-      </li>
-    </ul>
-    <p v-else class="empty">{{ $t('No pending actions') }}</p>
-    <button @click="goToPendingPage" class="view-all-button">{{ $t('View All') }}</button>
+  <div
+    class="h-full rounded-2xl border border-white/10 bg-neutral-900/70 p-5 sm:p-6 backdrop-blur-xl flex flex-col"
+  >
+    <!-- header -->
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg sm:text-xl font-semibold text-neutral-100 flex items-center gap-2">
+        <span
+          class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-amber-500/15 ring-1 ring-amber-400/30 text-sm"
+        >📦</span>
+        {{ $t('Pending discards') }}
+      </h2>
+      <span
+        class="inline-flex h-8 items-center rounded-full border border-white/10 px-3 text-xs text-neutral-300"
+      >
+        {{ filteredData.length }}
+      </span>
+    </div>
+
+    <div
+      class="mt-3 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"
+    ></div>
+
+    <!-- list -->
+    <div class="mt-4 flex-1">
+      <ul
+        v-if="filteredData.length"
+        class="space-y-1.5 max-h-56 overflow-y-auto pr-1"
+      >
+        <li
+          v-for="a in filteredData.slice(0, 10)"
+          :key="a.id"
+          class="group grid grid-cols-[1fr,auto] items-center gap-3 rounded-xl border border-white/5 bg-white/5 px-3 py-2.5
+                 hover:bg-white/10 hover:border-white/10 transition-colors"
+        >
+          <!-- product + action -->
+          <div class="min-w-0">
+            <p
+              class="truncate text-neutral-100 font-medium"
+              :title="a.productName"
+            >
+              {{ a.productName }}
+            </p>
+            <p
+              class="truncate text-xs text-neutral-400"
+              :title="a.actionTypeName"
+            >
+              {{ a.actionTypeName }}
+            </p>
+          </div>
+
+          <!-- qty -->
+          <span
+            class="shrink-0 rounded-lg px-2.5 py-1 text-xs font-semibold
+                   bg-amber-500/10 text-amber-300 ring-1 ring-amber-400/30"
+          >
+            {{ a.quantity }}
+          </span>
+        </li>
+      </ul>
+
+      <!-- empty -->
+      <div v-else class="text-center py-10">
+        <div
+          class="mx-auto mb-2 h-10 w-10 grid place-items-center rounded-xl bg-white/5 ring-1 ring-white/10"
+        >📭</div>
+        <p class="text-neutral-400 italic">
+          {{ $t('No pending actions') }}
+        </p>
+      </div>
+    </div>
+
+    <!-- cta -->
+    <div class="pt-4 flex justify-end">
+      <button
+        @click="goToPendingPage"
+        class="inline-flex items-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-400/15 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition-colors"
+      >
+        {{ $t('View All') }}
+      </button>
+    </div>
   </div>
 </template>
-
-<style scoped>
-.pending-actions-card {
-  background-color: #1e1e1e;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 6px 20px rgba(255, 165, 0, 0.2);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  transition: box-shadow 0.3s ease;
-}
-
-.pending-actions-card h2 {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: orange;
-  border-bottom: 2px solid orange;
-  padding-bottom: 0.5rem;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  max-height: 220px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: orange #1e1e1e;
-}
-
-ul::-webkit-scrollbar {
-  width: 6px;
-}
-
-ul::-webkit-scrollbar-track {
-  background: #1e1e1e;
-}
-
-ul::-webkit-scrollbar-thumb {
-  background-color: orange;
-  border-radius: 4px;
-}
-
-.action-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.4rem 0;
-  border-bottom: 1px solid #333;
-  font-size: 0.95rem;
-}
-
-.action-item:last-child {
-  border-bottom: none;
-}
-
-.type {
-  font-weight: 600;
-  flex: 1;
-}
-
-.product {
-  flex: 1;
-  text-align: center;
-}
-
-.quantity {
-  flex: 0.5;
-  text-align: right;
-  color: #ffb84d;
-}
-
-.empty {
-  font-style: italic;
-  color: #aaa;
-  text-align: center;
-}
-
-.view-all-button {
-  margin-top: auto;
-  padding: 0.6rem 1rem;
-  background-color: orange;
-  border: none;
-  border-radius: 8px;
-  color: black;
-  font-weight: bold;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.view-all-button:hover {
-  background-color: #ffcc66;
-}
-</style>

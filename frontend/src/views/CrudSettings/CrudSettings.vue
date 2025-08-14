@@ -4,6 +4,8 @@ import { X } from "lucide-vue-next";
 import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import type { Ref } from "vue";
+import { useSidebarStore } from '@/stores/sidebarStore';
+const sidebarStore = useSidebarStore();
 
 // --- Services & Types ---
 import { ActionTypeService } from "@/services/mvcServices/ActionTypeService";
@@ -57,12 +59,12 @@ const at_fetch = async () => {
   at_data.value = res.data ?? [];
 };
 const at_openEdit = (row: IActionType) => {
-  at_edit.value = { ...row };
+  at_edit.value = { ...row, code: 2 };
   at_mode.value = "edit";
   at_show.value = true;
 };
 const at_openCreate = () => {
-  at_create.value = { ...at_empty };
+  at_create.value = { ...at_empty, code: 2 };
   at_mode.value = "create";
   at_show.value = true;
 };
@@ -485,8 +487,12 @@ const placeholderByTab: Record<TabKey, string> = {
 </script>
 
 <template>
-  <main class="p-6 sm:p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-2xl mx-auto">
-    <!-- Header -->
+  <main
+    :class="[
+    'transition-all duration-300 p-4 sm:p-6 lg:p-8 text-white max-w-screen-2xl',
+    sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
+  ]"
+  >
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -502,13 +508,13 @@ const placeholderByTab: Record<TabKey, string> = {
     <!-- Tabs -->
     <nav
       class="mb-5 flex flex-wrap items-center justify-center gap-2
-             rounded-2xl border border-neutral-700/70 bg-neutral-900/40 p-2 backdrop-blur-xl">
+             rounded-2xl border-1 border-neutral-700/70 bg-neutral-900/40 p-2 backdrop-blur-xl">
       <button
         v-for="t in tabs"
         :key="t.key"
         @click="activeTab = t.key"
         class="inline-flex items-center justify-center rounded-xl px-3.5 py-2 text-sm font-semibold
-               border border-neutral-700 bg-white/5 text-neutral-200
+               border-1 border-neutral-700 bg-white/5 text-neutral-200
                hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
         :class="{
           'bg-gradient-to-br from-cyan-500/20 via-cyan-400/15 to-transparent text-white shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_8px_24px_rgba(0,0,0,0.35)]':
@@ -522,7 +528,7 @@ const placeholderByTab: Record<TabKey, string> = {
     <!-- Card container -->
     <section
       class="rounded-[16px] p-6 sm:p-8 bg-[rgba(25,25,25,0.4)] backdrop-blur-xl
-             border border-neutral-700 shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]">
+             border-1 border-neutral-700 shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]">
 
       <!-- Toolbar -->
       <div class="mb-6 flex items-center justify-between gap-3 flex-wrap">
@@ -530,7 +536,7 @@ const placeholderByTab: Record<TabKey, string> = {
           <input
             v-model="currentSearch"
             :placeholder="placeholderByTab[activeTab]"
-            class="w-[300px] max-w-full appearance-none rounded-xl border border-neutral-700 bg-neutral-900/70 text-white
+            class="w-[300px] max-w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
          h-11 text-sm pl-10 pr-3 focus:outline-none focus:ring-2 focus:ring-cyan-400/30
          focus:border-neutral-500 transition shadow-inner shadow-black/30"
           />
@@ -545,7 +551,7 @@ const placeholderByTab: Record<TabKey, string> = {
                  : activeTab==='productCategories' ? pc_openCreate()
                  : addr_openCreate()"
           class="group inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
-                 border border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200
+                 border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200
                  shadow-[0_0_0_1px_rgba(34,211,238,0.25),_0_8px_24px_rgba(0,0,0,0.35)]
                  hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
                  focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition">
@@ -557,7 +563,7 @@ const placeholderByTab: Record<TabKey, string> = {
           v-else
           @click="rc_openCreate"
           class="group inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
-                 border border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200
+                 border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200
                  shadow-[0_0_0_1px_rgba(34,211,238,0.25),_0_8px_24px_rgba(0,0,0,0.35)]
                  hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
                  focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition">
@@ -574,16 +580,15 @@ const placeholderByTab: Record<TabKey, string> = {
                     shadow hover:bg-white/10 transition">
           <button
             class="absolute right-2 top-2 inline-flex items-center justify-center rounded-full w-8 h-8
-                   border border-rose-400/50 bg-rose-500/10 text-rose-300
+                   border-1 border-rose-400/50 bg-rose-500/10 text-rose-300
                    hover:bg-rose-500/15 hover:text-white focus:outline-none focus:ring-2 focus:ring-rose-400/30"
             @click="at_remove(row.id)" title="Remove">
             <i class="bi bi-trash3"></i>
           </button>
           <h3 class="text-lg font-semibold text-neutral-100 pr-10">{{ row.name }}</h3>
-          <p class="text-sm text-neutral-400 mt-1">Code: <span class="text-neutral-200 font-semibold">{{ row.code }}</span></p>
           <div class="mt-4 flex justify-end">
             <button class="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium
-                           border border-neutral-700 bg-white/5 text-neutral-200
+                           border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="at_openEdit(row)">
               <i class="bi bi-pencil"></i> Edit
@@ -598,7 +603,7 @@ const placeholderByTab: Record<TabKey, string> = {
              class="relative rounded-lg p-4 bg-neutral-900/60 border border-neutral-700
                     shadow hover:bg-white/10 transition">
           <button class="absolute right-2 top-2 inline-flex items-center justify-center rounded-full w-8 h-8
-                         border border-rose-400/50 bg-rose-500/10 text-rose-300
+                         border-1 border-rose-400/50 bg-rose-500/10 text-rose-300
                          hover:bg-rose-500/15 hover:text-white focus:outline-none focus:ring-2 focus:ring-rose-400/30"
                   @click="rs_remove(row.id)" title="Remove">
             <i class="bi bi-trash3"></i>
@@ -606,7 +611,7 @@ const placeholderByTab: Record<TabKey, string> = {
           <h3 class="text-lg font-semibold text-neutral-100 pr-10">{{ row.description }}</h3>
           <div class="mt-4 flex justify-end">
             <button class="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium
-                           border border-neutral-700 bg-white/5 text-neutral-200
+                           border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="rs_openEdit(row)">
               <i class="bi bi-pencil"></i> Edit
@@ -621,7 +626,7 @@ const placeholderByTab: Record<TabKey, string> = {
              class="relative rounded-lg p-4 bg-neutral-900/60 border border-neutral-700
                     shadow hover:bg-white/10 transition">
           <button class="absolute right-2 top-2 inline-flex items-center justify-center rounded-full w-8 h-8
-                         border border-rose-400/50 bg-rose-500/10 text-rose-300
+                         border-1 border-rose-400/50 bg-rose-500/10 text-rose-300
                          hover:bg-rose-500/15 hover:text-white focus:outline-none focus:ring-2 focus:ring-rose-400/30"
                   @click="pc_remove(row.id)" title="Remove">
             <i class="bi bi-trash3"></i>
@@ -629,7 +634,7 @@ const placeholderByTab: Record<TabKey, string> = {
           <h3 class="text-lg font-semibold text-neutral-100 pr-10">{{ row.name }}</h3>
           <div class="mt-4 flex justify-end">
             <button class="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium
-                           border border-neutral-700 bg-white/5 text-neutral-200
+                           border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="pc_openEdit(row)">
               <i class="bi bi-pencil"></i> Edit
@@ -644,7 +649,7 @@ const placeholderByTab: Record<TabKey, string> = {
              class="relative rounded-lg p-4 bg-neutral-900/60 border border-neutral-700
                     shadow hover:bg-white/10 transition">
           <button class="absolute right-2 top-2 inline-flex items-center justify-center rounded-full w-8 h-8
-                         border border-rose-400/50 bg-rose-500/10 text-rose-300
+                         border-1 border-rose-400/50 bg-rose-500/10 text-rose-300
                          hover:bg-rose-500/15 hover:text-white focus:outline-none focus:ring-2 focus:ring-rose-400/30"
                   @click="addr_remove(row.id)" title="Remove">
             <i class="bi bi-trash3"></i>
@@ -653,7 +658,7 @@ const placeholderByTab: Record<TabKey, string> = {
           <p class="text-sm text-neutral-400 mt-1">{{ row.fullAddress }}</p>
           <div class="mt-4 flex justify-end">
             <button class="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium
-                           border border-neutral-700 bg-white/5 text-neutral-200
+                           border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="addr_openEdit(row)">
               <i class="bi bi-pencil"></i> Edit
@@ -667,7 +672,7 @@ const placeholderByTab: Record<TabKey, string> = {
         <div v-for="g in rc_grouped" :key="g.key"
              class="rounded-lg p-4 bg-neutral-900/60 border border-neutral-700 shadow">
           <h3 class="text-lg font-semibold text-neutral-100 flex items-center gap-2">
-            {{ g.name }}
+            {{ g.name }} - 1 g / ml / l etc.
             <span class="inline-flex items-center justify-center min-w-[24px] h-[22px] px-2 rounded-full text-xs font-bold text-black
                          bg-gradient-to-r from-amber-400 to-orange-500 shadow">
               {{ g.items.length }}
@@ -681,7 +686,7 @@ const placeholderByTab: Record<TabKey, string> = {
                         px-2.5 py-1.5 text-sm text-neutral-100">
               <button
                 class="inline-flex items-center justify-center w-5 h-5 rounded-full
-                       border border-rose-500/60 bg-rose-500/10 text-rose-300
+                       border-1 border-rose-500/60 bg-rose-500/10 text-rose-300
                        hover:bg-rose-500/20 hover:text-white"
                 @click.stop="rc_remove(item.id)" title="Remove">
                 <X class="w-3.5 h-3.5" />
@@ -694,7 +699,7 @@ const placeholderByTab: Record<TabKey, string> = {
 
           <div class="mt-4 flex justify-end">
             <button class="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium
-                           border border-neutral-700 bg-white/5 text-neutral-200
+                           border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="rc_openEdit(g.items[0])">
               <i class="bi bi-pencil"></i> Edit
@@ -708,31 +713,27 @@ const placeholderByTab: Record<TabKey, string> = {
     <!-- ActionType -->
     <transition name="fade">
       <div v-if="at_show" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 p-4" @click.self="at_show=false">
-        <div class="w-full max-w-xl rounded-2xl border border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+        <div class="w-full max-w-xl rounded-2xl border-1 border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
               {{ at_mode === 'edit' ? (at_edit?.name || 'Edit Action Type') : 'Create Action Type' }}
             </h2>
-            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="at_show=false">
+            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="at_show=false">
               <i class="bi bi-x-lg"></i>
             </button>
           </div>
 
-          <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="mt-6">
             <div>
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label>
-              <input v-model="at_active!.name" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
-            </div>
-            <div>
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Code</label>
-              <input v-model.number="(at_active as IActionType).code" type="number" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
+              <input v-model="at_active!.name" type="text" class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
             </div>
           </div>
 
           <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <button v-if="at_mode==='edit'" @click="at_update" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
-            <button v-else @click="at_createFn" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
-            <button @click="at_show=false" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
+            <button v-if="at_mode==='edit'" @click="at_update" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
+            <button v-else @click="at_createFn" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
+            <button @click="at_show=false" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
           </div>
         </div>
       </div>
@@ -741,25 +742,25 @@ const placeholderByTab: Record<TabKey, string> = {
     <!-- Reason -->
     <transition name="fade">
       <div v-if="rs_show" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 p-4" @click.self="rs_show=false">
-        <div class="w-full max-w-xl rounded-2xl border border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+        <div class="w-full max-w-xl rounded-2xl border-1 border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
               {{ rs_mode === 'edit' ? (rs_edit?.description || 'Edit Reason') : 'Create Reason' }}
             </h2>
-            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="rs_show=false">
+            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="rs_show=false">
               <i class="bi bi-x-lg"></i>
             </button>
           </div>
 
           <div class="mt-6">
             <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Description</label>
-            <input v-model="rs_active!.description" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
+            <input v-model="rs_active!.description" type="text" class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
           </div>
 
           <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <button v-if="rs_mode==='edit'" @click="rs_update" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
-            <button v-else @click="rs_createFn" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
-            <button @click="rs_show=false" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
+            <button v-if="rs_mode==='edit'" @click="rs_update" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
+            <button v-else @click="rs_createFn" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
+            <button @click="rs_show=false" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
           </div>
         </div>
       </div>
@@ -768,25 +769,25 @@ const placeholderByTab: Record<TabKey, string> = {
     <!-- Product Category -->
     <transition name="fade">
       <div v-if="pc_show" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 p-4" @click.self="pc_show=false">
-        <div class="w-full max-w-xl rounded-2xl border border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+        <div class="w-full max-w-xl rounded-2xl border-1 border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
               {{ pc_mode === 'edit' ? (pc_edit?.name || 'Edit Product Category') : 'Create Product Category' }}
             </h2>
-            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="pc_show=false">
+            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="pc_show=false">
               <i class="bi bi-x-lg"></i>
             </button>
           </div>
 
           <div class="mt-6">
             <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label>
-            <input v-model="pc_active!.name" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
+            <input v-model="pc_active!.name" type="text" class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
           </div>
 
           <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <button v-if="pc_mode==='edit'" @click="pc_update" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
-            <button v-else @click="pc_createFn" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
-            <button @click="pc_show=false" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
+            <button v-if="pc_mode==='edit'" @click="pc_update" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
+            <button v-else @click="pc_createFn" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
+            <button @click="pc_show=false" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
           </div>
         </div>
       </div>
@@ -795,12 +796,12 @@ const placeholderByTab: Record<TabKey, string> = {
     <!-- Address -->
     <transition name="fade">
       <div v-if="addr_show" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 p-4" @click.self="addr_show=false">
-        <div class="w-full max-w-xl rounded-2xl border border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+        <div class="w-full max-w-xl rounded-2xl border-1 border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
               {{ addr_mode === 'edit' ? (addr_edit?.name || 'Edit Address') : 'Create Address' }}
             </h2>
-            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="addr_show=false">
+            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="addr_show=false">
               <i class="bi bi-x-lg"></i>
             </button>
           </div>
@@ -817,9 +818,9 @@ const placeholderByTab: Record<TabKey, string> = {
           </div>
 
           <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <button v-if="addr_mode==='edit'" @click="addr_update" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
-            <button v-else @click="addr_createFn" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
-            <button @click="addr_show=false" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
+            <button v-if="addr_mode==='edit'" @click="addr_update" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
+            <button v-else @click="addr_createFn" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
+            <button @click="addr_show=false" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
           </div>
         </div>
       </div>
@@ -828,12 +829,12 @@ const placeholderByTab: Record<TabKey, string> = {
     <!-- Recipe Components -->
     <transition name="fade">
       <div v-if="rc_show" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 p-4" @click.self="rc_show=false">
-        <div class="w-full max-w-2xl rounded-2xl border border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+        <div class="w-full max-w-2xl rounded-2xl border-1 border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
               {{ rc_mode === 'edit' ? 'Edit Recipe Component' : 'Create Recipe Component' }}
             </h2>
-            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="rc_show=false">
+            <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="rc_show=false">
               <i class="bi bi-x-lg"></i>
             </button>
           </div>
@@ -850,7 +851,7 @@ const placeholderByTab: Record<TabKey, string> = {
                 :searchable="true"
                 :close-on-select="true"
                 placeholder="Select recipe product (not a component)"
-                class="ms"
+                class="multiselect-dark w-full"
               />
             </div>
             <div class="sm:col-span-2">
@@ -864,20 +865,20 @@ const placeholderByTab: Record<TabKey, string> = {
                 :searchable="true"
                 :close-on-select="true"
                 placeholder="Select component product"
-                class="ms"
+                class="multiselect-dark w-full"
               />
             </div>
             <div class="sm:col-span-2">
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Amount</label>
               <input v-model.number="rc_active!.amount" type="number" min="0" step="0.01"
-                     class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
+                     class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
             </div>
           </div>
 
           <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <button v-if="rc_mode==='edit'" @click="rc_update" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
-            <button v-else @click="rc_createFn" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
-            <button @click="rc_show=false" class="rounded-xl border border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
+            <button v-if="rc_mode==='edit'" @click="rc_update" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
+            <button v-else @click="rc_createFn" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
+            <button @click="rc_show=false" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
           </div>
 
           <p v-if="rc_validation" class="mt-3 text-rose-400 text-center font-medium">{{ rc_validation }}</p>
@@ -889,15 +890,40 @@ const placeholderByTab: Record<TabKey, string> = {
 </template>
 
 <style scoped>
-/* transition for modals */
-.fade-enter-active,.fade-leave-active{transition:opacity .18s ease}
-.fade-enter-from,.fade-leave-to{opacity:0}
+/* jäta <style scoped> alles */
+:deep(.multiselect-dark) {
+  @apply w-full rounded-xl border border-white/10 bg-neutral-900/70 text-white shadow-sm transition;
+}
 
-/* vue-multiselect dark theming to blend with Tailwind dark glass */
-.ms :deep(.multiselect){background:rgba(30,30,30,.7);border:1px solid rgba(255,255,255,.1);border-radius:12px;color:#fff}
-.ms :deep(.multiselect__tags){min-height:44px;background:transparent;border:0;padding:.45rem .7rem;display:flex;align-items:center}
-.ms :deep(.multiselect__input), .ms :deep(.multiselect__single){color:#fff}
-.ms :deep(.multiselect__content-wrapper){background:#121212;border:1px solid rgba(255,255,255,.1);border-radius:12px}
-.ms :deep(.multiselect__option--highlight){background:linear-gradient(to right,#ffaa33,#ff8c00);color:#000}
-.ms :deep(.multiselect__option--selected){background:rgba(255,170,51,.18);color:#ffd9a1}
+:deep(.multiselect-dark .multiselect__tags) {
+  @apply flex items-center min-h-[44px] rounded-xl border-0 bg-transparent px-3 py-0;
+}
+
+:deep(.multiselect-dark .multiselect__placeholder),
+:deep(.multiselect-dark .multiselect__single) {
+  @apply block p-0 m-0 bg-transparent text-neutral-300 leading-[44px];
+}
+
+:deep(.multiselect-dark .multiselect__input) {
+  @apply bg-transparent text-white placeholder-neutral-500 leading-[44px] p-0 m-0;
+}
+
+:deep(.multiselect-dark .multiselect__select),
+:deep(.multiselect-dark .multiselect__clear) {
+  @apply text-neutral-400 hover:text-white;
+}
+
+:deep(.multiselect-dark.multiselect--active .multiselect__tags) {
+  @apply ring-2 ring-[#ffaa33]/35 outline-none border-[#ffaa33];
+}
+
+:deep(.multiselect-dark .multiselect__content-wrapper) {
+  @apply mt-2 rounded-xl border border-white/10 bg-neutral-950/95 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/80 shadow-2xl max-h-64;
+}
+
+:deep(.multiselect-dark .multiselect__content) { @apply py-1; }
+:deep(.multiselect-dark .multiselect__option) { @apply px-4 py-2 text-neutral-200 cursor-pointer transition; }
+:deep(.multiselect-dark .multiselect__option--highlight) { @apply bg-white/10; }
+:deep(.multiselect-dark .multiselect__option--selected) { @apply bg-white/[0.06] text-[#ffaa33]; }
+:deep(.multiselect-dark.multiselect--disabled) { @apply opacity-60 cursor-not-allowed; }
 </style>

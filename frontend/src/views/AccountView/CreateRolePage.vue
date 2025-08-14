@@ -2,6 +2,8 @@
 import { onMounted, ref } from 'vue'
 import { RoleService } from '@/services/RoleService'
 import type { AppRole } from '@/domain/logic/AppRole'
+import { useSidebarStore } from '@/stores/sidebarStore'
+const sidebarStore = useSidebarStore()
 
 // Services
 const roleService = new RoleService()
@@ -49,63 +51,77 @@ const createRole = async () => {
 </script>
 
 <template>
-  <main class="px-4 sm:px-6 lg:ml-64 p-6 py-10 max-w-screen-xl mx-auto text-white font-['Inter']">
+  <main
+    :class="[
+      'transition-all duration-300 p-6 sm:p-8 text-white font-[Inter,sans-serif] bg-transparent max-w-screen-2xl',
+      sidebarStore.isOpen ? 'ml-[165px]' : 'ml-[64px]'
+    ]"
+  >
     <!-- Header -->
-    <section class="mb-8 text-center sm:text-left">
-      <h1 class="text-3xl sm:text-4xl font-extrabold text-[#ffaa33] drop-shadow-[0_0_10px_rgba(255,170,51,0.25)] mb-1">
-        👥 Roles
+    <section class="mb-8 text-center">
+      <h1
+        class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
+           drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)] relative inline-block">
+    <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
+      {{ $t('Roles') }}
+    </span>
       </h1>
-      <p class="text-sm text-[#bbbbbb] opacity-85">Manage access roles for your system</p>
+      <div class="mt-4 mx-auto h-px w-64 max-w-full bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
+      <p class="mt-3 text-sm text-neutral-400">{{ $t('Manage access roles for your system') }}</p>
     </section>
 
     <!-- Form -->
-    <div class="bg-[rgba(30,30,30,0.6)] backdrop-blur-md rounded-2xl p-6 shadow-[0_0_12px_rgba(255,170,51,0.05)] mb-8">
+    <div class="rounded-xl border border-neutral-700 bg-neutral-900/60 p-5 sm:p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02),_0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-xl mb-8">
       <form @submit.prevent="createRole" class="flex flex-col sm:flex-row gap-4">
         <input
           v-model="newRoleName"
           type="text"
-          placeholder="Enter new role name"
-          class="flex-1 px-4 py-2.5 rounded-lg text-white placeholder-gray-300 bg-[rgba(43,43,43,0.6)] border-1 border-[#ffaa33] focus:outline-none focus:ring-1"
+          :placeholder="$t('Enter new role name') as string"
+          class="flex-1 rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white
+                 placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"
         />
         <button
           type="submit"
-          class="bg-gradient-to-r from-[#ffaa33] to-[#ff8c00] text-black font-bold text-base rounded-lg px-6 py-2.5 hover:from-[#ffc56e] hover:to-[#ffa726] transition"
+          class="inline-flex items-center justify-center rounded-xl px-5 h-11 text-sm font-semibold
+                 border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200
+                 shadow-[0_0_0_1px_rgba(34,211,238,0.25),_0_8px_24px_rgba(0,0,0,0.35)]
+                 hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
+                 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition w-full sm:w-auto"
         >
-          + Create
+          + {{ $t('Create') }}
         </button>
       </form>
 
       <p
         v-if="validationError"
-        class="mt-4 text-sm font-medium px-4 py-2 rounded-md bg-[rgba(255,80,80,0.15)] border-1 border-[#ffaa33] text-[#ff5f5f]"
+        class="mt-4 text-medium font-medium px-4 py-2 rounded-md bg-red-500/10 border border-red-500/20 text-red-400"
       >
         {{ validationError }}
       </p>
       <p
         v-if="successMessage"
-        class="mt-4 text-sm font-medium px-4 py-2 rounded-md bg-[rgba(0,255,100,0.1)] border-1 border-[#ffaa33] text-[#9effb1]"
+        class="mt-4 text-medium font-medium px-4 py-2 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400"
       >
         {{ successMessage }}
       </p>
     </div>
 
     <!-- Table -->
-    <div class="overflow-x-auto rounded-2xl">
-      <table class="w-full min-w-[400px] border-collapse text-left text-white bg-[rgba(20,20,20,0.5)] backdrop-blur-md shadow-inner shadow-[inset_0_0_20px_rgba(255,165,0,0.05)]">
-        <thead class="bg-[#ffaa33] text-black">
-          <tr>
-            <th class="py-3 px-4 text-sm sm:text-base">ID</th>
-            <th class="py-3 px-4 text-sm sm:text-base">Role Name</th>
-          </tr>
+    <div class="overflow-x-auto rounded-xl border border-neutral-700 bg-neutral-900/60 shadow-inner backdrop-blur-xl">
+      <table class="w-full min-w-[400px] text-left text-medium">
+        <thead class="bg-neutral-800/50 text-neutral-300">
+        <tr>
+          <th class="py-3 px-4 font-medium">{{ $t('ID') }}</th>
+          <th class="py-3 px-4 font-medium">{{ $t('Role Name') }}</th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="role in roles" :key="role.id" class="hover:bg-[rgba(255,170,51,0.1)]">
-            <td class="py-3 px-4 border-b border-white/10">{{ role.id }}</td>
-            <td class="py-3 px-4 border-b border-white/10">{{ role.name }}</td>
-          </tr>
+        <tr v-for="role in roles" :key="role.id" class="hover:bg-white/5 transition">
+          <td class="py-3 px-4 border-t border-white/10">{{ role.id }}</td>
+          <td class="py-3 px-4 border-t border-white/10">{{ role.name }}</td>
+        </tr>
         </tbody>
       </table>
     </div>
   </main>
 </template>
-
