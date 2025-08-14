@@ -87,7 +87,11 @@ const doLogin = async () => {
         <!-- Submit -->
         <button
           type="submit"
-          class="w-full py-3 rounded-lg font-bold text-black text-sm sm:text-base bg-gradient-to-r from-yellow-500 to-yellow-300 hover:from-yellow-600 hover:to-yellow-400 transition"
+          class="w-full h-11 inline-flex items-center justify-center rounded-xl text-sm font-semibold
+                 border border-neutral-700 bg-gradient-to-br from-[#ffaa33]/20 via-[#ffaa33]/10 to-transparent text-[#ffaa33]
+                 shadow-[0_0_0_1px_rgba(255,170,51,0.25),_0_8px_24px_rgba(0,0,0,0.35)]
+                 hover:from-[#ffaa33]/30 hover:via-[#ffaa33]/20 hover:text-white
+                 focus:outline-none focus:ring-2 focus:ring-[#ffaa33]/30 transition"
         >
           {{ $t('Login') }}
         </button>

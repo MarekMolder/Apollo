@@ -2,6 +2,8 @@
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { IdentityService } from '@/services/IdentityService'
+import { useSidebarStore } from '@/stores/sidebarStore'
+const sidebarStore = useSidebarStore()
 
 // Services
 const identityService = new IdentityService()

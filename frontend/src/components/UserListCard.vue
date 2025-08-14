@@ -17,107 +17,76 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="user-list-card">
-    <h2>👥  {{ $t('All Users') }}</h2>
-    <ul v-if="users.length">
-      <li v-for="user in users" :key="user.id" class="user-entry">
-        <div class="info">
-          <strong>{{ user.firstName }} {{ user.lastName }}</strong>
-          <p>{{ user.email }}</p>
-        </div>
-        <RouterLink :to="`/users/${user.id}`" class="view-link">{{ $t('View') }}</RouterLink>
-      </li>
-    </ul>
-    <p v-else class="empty">{{ $t('No users found') }}</p>
+  <div
+    class="h-full rounded-2xl border border-white/10 bg-neutral-900/70 p-5 sm:p-6 backdrop-blur-xl flex flex-col"
+  >
+    <!-- header -->
+    <div class="flex items-center justify-between">
+      <h2 class="text-lg sm:text-xl font-semibold text-neutral-100 flex items-center gap-2">
+        <span
+          class="inline-flex h-6 w-6 items-center justify-center rounded-md bg-white/10 ring-1 ring-white/20 text-sm"
+        >👥</span>
+        {{ $t('All users') }}
+      </h2>
+      <span
+        class="inline-flex h-8 items-center rounded-full border border-white/10 px-3 text-xs text-neutral-300"
+      >
+        {{ users.length }}
+      </span>
+    </div>
+
+    <div
+      class="mt-3 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"
+    ></div>
+
+    <!-- content -->
+    <div class="mt-4 flex-1">
+      <ul
+        v-if="users.length"
+        class="space-y-1.5 max-h-56 overflow-y-auto pr-1"
+      >
+        <li
+          v-for="user in users"
+          :key="user.id"
+          class="group grid grid-cols-[1fr,auto] items-center gap-3 rounded-xl border border-white/5 bg-white/5 px-3 py-2.5
+                 hover:bg-white/10 hover:border-white/10 transition-colors"
+        >
+          <!-- name + email -->
+          <div class="min-w-0">
+            <p
+              class="truncate text-neutral-100 font-medium"
+              :title="`${user.firstName} ${user.lastName}`"
+            >
+              {{ user.firstName }} {{ user.lastName }}
+            </p>
+            <p
+              class="truncate text-neutral-400 text-xs"
+              :title="user.email"
+            >
+              {{ user.email }}
+            </p>
+          </div>
+
+          <!-- view btn -->
+          <RouterLink
+            :to="`/users/${user.id}`"
+            class="shrink-0 inline-flex items-center rounded-xl border border-neutral-700 px-3 py-1.5 text-xs font-medium text-neutral-200 hover:bg-white/10 transition-colors"
+          >
+            {{ $t('View') }}
+          </RouterLink>
+        </li>
+      </ul>
+
+      <!-- empty state -->
+      <div v-else class="text-center py-10">
+        <div
+          class="mx-auto mb-2 h-10 w-10 grid place-items-center rounded-xl bg-white/5 ring-1 ring-white/10"
+        >📭</div>
+        <p class="text-neutral-400 italic">
+          {{ $t('No users found') }}
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
-<style scoped>
-.user-list-card {
-  background-color: #1e1e1e;
-  padding: 1.5rem;
-  border-radius: 1rem;
-  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
-  color: white;
-  max-width: 400px;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.user-list-card h2 {
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: #cccccc;
-  margin: 0;
-  border-bottom: 2px solid #333;
-  padding-bottom: 0.5rem;
-}
-
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  max-height: 220px;
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #666 #1e1e1e;
-}
-
-ul::-webkit-scrollbar {
-  width: 6px;
-}
-ul::-webkit-scrollbar-track {
-  background: #1e1e1e;
-}
-ul::-webkit-scrollbar-thumb {
-  background-color: #666;
-  border-radius: 4px;
-}
-
-.user-entry {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid #333;
-  font-size: 0.95rem;
-}
-
-.user-entry:last-child {
-  border-bottom: none;
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
-}
-
-.info p {
-  margin: 0;
-  font-size: 0.85rem;
-  color: #aaa;
-}
-
-.view-link {
-  background-color: #333;
-  color: #ddd;
-  padding: 0.4rem 0.8rem;
-  border-radius: 6px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.view-link:hover {
-  background-color: #444;
-  color: white;
-}
-
-.empty {
-  font-style: italic;
-  color: #888;
-  text-align: center;
-}
-</style>

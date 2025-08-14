@@ -22,12 +22,19 @@ export class ActionService extends BaseEntityService<IAction> {
     };
   }
 
-  async getTopRemovedProducts(): Promise<{ productId: string; productName: string; removeQuantity: number }[]> {
+  async getTopRemovedProducts(): Promise<{
+    productId: string;
+    productName: string;
+    removeQuantity: number;
+    productUnit: string;
+    productVolume: number | null;
+    productVolumeUnit: string | null;
+  }[]> {
     const response = await this.axiosInstance.get('/actions/problematicProducts');
     return response.data;
   }
 
-  async getTopUsersByRemove(): Promise<{ createdBy: string; totalRemovedQuantity: number }[]> {
+  async getTopUsersByRemove(): Promise<{ createdBy: string; totalRemovals: number }[]> {
     const response = await this.axiosInstance.get('/actions/topUsersByRemove');
     return response.data;
   }

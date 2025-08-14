@@ -191,7 +191,10 @@ namespace WebApp.ApiControllers
             {
                 r.ProductId,
                 r.ProductName,
-                r.RemoveQuantity
+                r.RemoveQuantity,
+                r.ProductUnit,
+                r.ProductVolume,
+                r.ProductVolumeUnit
             });
 
             return Ok(response);
@@ -210,7 +213,7 @@ namespace WebApp.ApiControllers
 
             var response = result.Select(r => new
             {
-                r.CreatedBy, r.TotalRemovedQuantity
+                r.CreatedBy, r.TotalRemovals
             });
 
             return Ok(response);

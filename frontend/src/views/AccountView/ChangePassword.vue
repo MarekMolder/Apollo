@@ -3,6 +3,8 @@ import { useUserDataStore } from "@/stores/userDataStore.ts";
 import { IdentityService } from "@/services/IdentityService.ts";
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
+import { useSidebarStore } from '@/stores/sidebarStore'
+const sidebarStore = useSidebarStore()
 
 // Services
 const identityService = new IdentityService();
@@ -38,65 +40,112 @@ const changePassword = async () => {
 </script>
 
 <template>
-  <main class="min-h-[80vh] flex justify-center items-center px-4 py-8 sm:px-8 font-['Inter'] text-white">
-    <section class="w-full max-w-[480px] bg-[rgba(20,20,20,0.85)] rounded-[16px] p-6 sm:p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)] backdrop-blur-md">
-      <h1 class="text-xl sm:text-2xl text-center text-[#ffaa33] mb-8 sm:mb-12 drop-shadow-[0_0_8px_rgba(255,170,51,0.2)]">
-        🔐 {{ $t('Change password') }}
-      </h1>
-
-      <form @submit.prevent="changePassword" class="flex flex-col gap-4">
-        <div>
-          <input
-            v-model="currentPassword"
-            type="password"
-            :placeholder="$t('Enter current password')"
-            class="w-full bg-[rgba(60,60,60,0.7)] text-white rounded-lg px-4 py-2 text-base focus:outline-none focus:bg-[rgba(80,80,80,0.85)] focus:border focus:border-[#ffaa33] transition"
-          />
-        </div>
-
-        <div>
-          <input
-            v-model="newPassword"
-            type="password"
-            :placeholder="$t('Enter new password')"
-            class="w-full bg-[rgba(60,60,60,0.7)] text-white rounded-lg px-4 py-2 text-base focus:outline-none focus:bg-[rgba(80,80,80,0.85)] focus:border focus:border-[#ffaa33] transition"
-          />
-        </div>
-
-        <div>
-          <input
-            v-model="confirmNewPassword"
-            type="password"
-            :placeholder="$t('Confirm new password')"
-            class="w-full bg-[rgba(60,60,60,0.7)] text-white rounded-lg px-4 py-2 text-base focus:outline-none focus:bg-[rgba(80,80,80,0.85)] focus:border focus:border-[#ffaa33] transition"
-          />
-        </div>
-
-        <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
-          <button
-            type="submit"
-            class="w-full sm:w-auto bg-gradient-to-r from-[#ff8c00] to-[#ffa500] text-white font-bold text-sm rounded-lg px-6 py-2 shadow-md hover:from-[#ffc56e] hover:to-[#ffa726] transition"
-          >
-            {{ $t('Change password') }}
-          </button>
-
-          <RouterLink
-            to="/account"
-            class="w-full sm:w-auto text-center text-[#ffaa33] text-sm underline hover:text-[#ffd28f] transition"
-          >
-            {{ $t('Back') }}
-          </RouterLink>
-        </div>
-
-        <p
-          v-if="message"
-          :class="message.includes('Viga')
-            ? 'mt-4 text-center font-semibold text-sm bg-[rgba(255,80,80,0.15)] border border-[rgba(255,80,80,0.6)] text-[#ff5f5f] px-4 py-2 rounded-lg'
-            : 'mt-4 text-center font-semibold text-sm bg-[rgba(0,255,100,0.1)] border border-[rgba(0,255,100,0.4)] text-[#9effb1] px-4 py-2 rounded-lg'"
+  <main
+    :class="[
+    sidebarStore.isOpen ? 'ml-[165px]' : 'ml-[64px]',
+    'transition-all duration-300 px-6 sm:px-8 py-8',
+    'flex items-start justify-center text-white font-[Inter,sans-serif] bg-transparent',
+    'pt-16 sm:pt-20 min-h-screen'
+  ]"
+  >
+    <!-- Keskosa wrapper, piiratud laius -->
+    <div class="w-full max-w-lg">
+      <!-- Header väljaspool kasti, keskel -->
+      <section class="mb-6 text-center">
+        <h1
+          class="text-3xl sm:text-4xl font-[Playfair_Display] font-bold tracking-[0.02em]
+                 drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)]"
         >
-          {{ message }}
+          <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
+            {{ $t('Change password') }}
+          </span>
+        </h1>
+        <div class="mt-4 mx-auto h-px w-64 max-w-full bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
+        <p class="mt-3 text-sm text-neutral-400">
+          {{ $t('Update your password securely') }}
         </p>
-      </form>
-    </section>
+      </section>
+
+      <!-- Kaart -->
+      <section>
+        <div
+          class="rounded-xl border border-neutral-700 bg-neutral-900/60 p-5 sm:p-6
+                 shadow-[0_0_0_1px_rgba(255,255,255,0.02),_0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+        >
+          <form @submit.prevent="changePassword" class="grid grid-cols-1 gap-4">
+            <div>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">
+                {{ $t('Enter current password') }}
+              </label>
+              <input
+                v-model="currentPassword"
+                type="password"
+                class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white
+                       placeholder-neutral-500 outline-none transition focus:border-[#ffaa33]/50 focus:ring-2 focus:ring-[#ffaa33]/25"
+                :placeholder="$t('Enter current password') as string"
+              />
+            </div>
+
+            <div>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">
+                {{ $t('Enter new password') }}
+              </label>
+              <input
+                v-model="newPassword"
+                type="password"
+                class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white
+                       placeholder-neutral-500 outline-none transition focus:border-[#ffaa33]/50 focus:ring-2 focus:ring-[#ffaa33]/25"
+                :placeholder="$t('Enter new password') as string"
+              />
+            </div>
+
+            <div>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">
+                {{ $t('Confirm new password') }}
+              </label>
+              <input
+                v-model="confirmNewPassword"
+                type="password"
+                class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white
+                       placeholder-neutral-500 outline-none transition focus:border-[#ffaa33]/50 focus:ring-2 focus:ring-[#ffaa33]/25"
+                :placeholder="$t('Confirm new password') as string"
+              />
+            </div>
+
+            <div class="mt-2 flex flex-col sm:flex-row gap-3 sm:justify-between">
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center rounded-xl px-5 h-11 text-sm font-semibold
+                       border-1 border-neutral-700 bg-gradient-to-br from-[#ffaa33]/20 via-[#ffaa33]/10 to-transparent text-[#ffaa33]
+                       shadow-[0_0_0_1px_rgba(255,170,51,0.25),_0_8px_24px_rgba(0,0,0,0.35)]
+                       hover:from-[#ffaa33]/30 hover:via-[#ffaa33]/20 hover:text-white
+                       focus:outline-none focus:ring-2 focus:ring-[#ffaa33]/30 transition w-full sm:w-auto"
+              >
+                {{ $t('Change password') }}
+              </button>
+
+              <RouterLink
+                to="/account"
+                class="inline-flex items-center justify-center rounded-xl px-5 h-11 text-sm font-semibold
+                       border-1 border-neutral-700 bg-white/5 text-neutral-200 no-underline
+                       hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition w-full sm:w-auto text-center"
+              >
+                {{ $t('Back') }}
+              </RouterLink>
+            </div>
+
+            <p
+              v-if="message"
+              :class="message.includes('Error')
+                ? 'mt-2 text-center font-medium px-4 py-2 rounded-md bg-red-500/10 border border-red-500/20 text-red-400'
+                : 'mt-2 text-center font-medium px-4 py-2 rounded-md bg-emerald-500/10 border border-emerald-500/20 text-emerald-400'"
+            >
+              {{ message }}
+            </p>
+          </form>
+        </div>
+      </section>
+    </div>
   </main>
 </template>
+

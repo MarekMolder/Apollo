@@ -11,6 +11,8 @@ import type {IProductEnriched} from "@/domain/logic/IProductEnriched.ts";
 import {ProductService} from "@/services/mvcServices/ProductServices.ts";
 import Multiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.min.css';
+import { useSidebarStore } from '@/stores/sidebarStore';
+const sidebarStore = useSidebarStore();
 
 // Services
 const supplierService = new SupplierService();
@@ -159,8 +161,12 @@ const selectedAddress = computed({
 </script>
 
 <template>
-  <main class="p-6 sm:p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-2xl mx-auto">
-    <!-- Header -->
+  <main
+    :class="[
+    'transition-all duration-300 p-4 sm:p-6 lg:p-8 text-white max-w-screen-2xl',
+    sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
+  ]"
+  >
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -210,7 +216,7 @@ const selectedAddress = computed({
         </div>
 
         <!-- Cards grid -->
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+        <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
           <div
             v-for="item in filteredSuppliers"
             :key="item.id"

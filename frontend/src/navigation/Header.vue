@@ -77,7 +77,6 @@ onUnmounted(() => {
                   <li><RouterLink to="/register">{{ $t('Register') }}</RouterLink></li>
                   <li><RouterLink to="/createRole">{{ $t('Create role') }}</RouterLink></li>
                   <li><RouterLink to="/assignRole">{{ $t('Assign role') }}</RouterLink></li>
-                  <li><RouterLink to="/getRole">{{ $t('Get role') }}</RouterLink></li>
                   <li><RouterLink to="/userRoles">{{ $t('Users and roles') }}</RouterLink></li>
                 </template>
               </ul>

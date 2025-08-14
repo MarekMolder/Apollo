@@ -3,6 +3,8 @@ import { onMounted, ref } from "vue";
 import { RoleService } from "@/services/RoleService";
 import type { UserWithRolesDto } from "@/types/UserWithRolesDto";
 import type { AppRole } from "@/domain/logic/AppRole";
+import { useSidebarStore } from '@/stores/sidebarStore'
+const sidebarStore = useSidebarStore()
 
 // Serivces
 const roleService = new RoleService();
@@ -55,54 +57,97 @@ const removeRole = async (userId: string, roleName: string) => {
 </script>
 
 <template>
-  <main class="flex justify-center px-4 py-8 font-['Inter'] text-white">
-    <section class="w-full max-w-[1100px] bg-[rgba(20,20,20,0.85)] backdrop-blur-md rounded-2xl p-8 shadow-[0_0_16px_rgba(255,165,0,0.2)] backdrop-blur-md">
-      <h1 class="text-center text-3xl font-extrabold text-[#ffaa33] mb-6 drop-shadow-[0_0_10px_rgba(255,170,51,0.2)]">
-        👤 {{ $t('Users and roles') }}
+  <main
+    :class="[
+      'transition-all duration-300 p-6 sm:p-8 text-white font-[Inter,sans-serif] bg-transparent max-w-screen-2xl',
+      sidebarStore.isOpen ? 'ml-[165px]' : 'ml-[64px]'
+    ]"
+  >
+    <!-- Header väljaspool kaarti -->
+    <section class="mb-8 text-center">
+      <h1
+        class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
+               drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)]"
+      >
+        <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
+          {{ $t('Users and roles') }}
+        </span>
       </h1>
-
-      <p v-if="validationError" class="text-red-400 bg-[rgba(255,80,80,0.15)] border border-[rgba(255,80,80,0.6)] text-center text-base font-medium px-4 py-2 mb-6 rounded-lg">
-        {{ validationError }}
+      <div class="mt-4 mx-auto h-px w-64 max-w-full bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
+      <p class="mt-3 text-sm text-neutral-400">
+        {{ $t('View users and manage their roles') }}
       </p>
+    </section>
 
-      <div class="overflow-x-auto rounded-xl bg-[rgba(20,20,20,0.5)] shadow-inner shadow-[inset_0_0_10px_rgba(255,170,51,0.05)]">
-        <table class="w-full min-w-[600px] border-collapse text-sm sm:text-base">
-          <thead class="bg-[#ffaa33] text-black">
+    <!-- Kaart -->
+    <section class="mx-auto w-full max-w-[100rem]">
+      <div
+        class="rounded-xl border border-neutral-700 bg-neutral-900/60 p-5 sm:p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02),_0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-xl"
+      >
+        <!-- Veateade -->
+        <p
+          v-if="validationError"
+          class="mb-6 text-center text-sm font-medium px-4 py-2 rounded-md bg-red-500/10 border border-red-500/20 text-red-400"
+        >
+          {{ validationError }}
+        </p>
+
+        <!-- Tabel -->
+        <div class="overflow-x-auto rounded-[12px] border border-neutral-700">
+          <table class="w-full min-w-[600px] text-left text-sm sm:text-base table-fixed">
+            <colgroup>
+              <col class="w-[22rem]" />  <!-- Email -->
+              <col class="w-[18rem]" />  <!-- Full name -->
+              <col />                    <!-- Roles -->
+            </colgroup>
+
+            <thead class="bg-neutral-900/70 text-neutral-300">
             <tr>
-              <th class="px-2 py-2 sm:px-4 sm:py-3 text-left"> {{ $t('Email') }} </th>
-              <th class="px-2 py-2 sm:px-4 sm:py-3 text-left"> {{ $t('Full name') }} </th>
-              <th class="px-2 py-2 sm:px-4 sm:py-3 text-left"> {{ $t('Roles') }} </th>
+              <th class="px-4 py-3 font-medium">{{ $t('Email') }}</th>
+              <th class="px-4 py-3 font-medium">{{ $t('Full name') }}</th>
+              <th class="px-4 py-3 font-medium">{{ $t('Roles') }}</th>
             </tr>
-          </thead>
-          <tbody>
+            </thead>
+
+            <tbody>
             <tr
               v-for="user in users"
               :key="user.id"
-              class="hover:bg-[rgba(255,170,51,0.08)]"
+              class="border-t border-white/10 even:bg-white/5 hover:bg-white/10 transition"
             >
-              <td class="px-2 py-2 sm:px-4 sm:py-3 border-b border-white/10 align-top">{{ user.email }}</td>
-              <td class="px-2 py-2 sm:px-4 sm:py-3 border-b border-white/10 align-top">
+              <td class="px-4 py-3 align-top">{{ user.email }}</td>
+              <td class="px-4 py-3 align-top">
                 {{ user.firstName }} {{ user.lastName }}
               </td>
-              <td class="px-2 py-2 sm:px-4 sm:py-3 border-b border-white/10 align-top">
-                <span
-                  v-for="role in user.roles"
-                  :key="role"
-                  class="inline-flex items-center text-[#ffaa33] bg-[rgba(255,165,0,0.1)] border-1 border-[#ffaa33] px-2 sm:px-3 py-0.5 sm:py-1 mr-1 mb-1 rounded-full text-xs sm:text-sm font-semibold"
-                >
-                  {{ role }}
-                  <button
-                    @click="removeRole(user.id, role)"
-                    class="ml-2 text-[#ff5f5f] hover:bg-[rgba(255,80,80,0.15)] text-base font-bold rounded-full px-1"
-                    title="Remove role"
+              <td class="px-4 py-3 align-top">
+                  <span
+                    v-for="role in user.roles"
+                    :key="role"
+                    class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs sm:text-sm font-medium
+                           ring-1 ring-[#ffaa33]/35 bg-white/[0.06] text-[#ffaa33] mr-2 mb-2"
                   >
-                    ×
-                  </button>
-                </span>
+                    {{ role }}
+                    <button
+                      @click="removeRole(user.id, role)"
+                      class="inline-flex items-center justify-center w-5 h-5 rounded-full
+                             ring-1 ring-rose-400/30 bg-rose-500/10 text-rose-300
+                             hover:bg-rose-500/15 hover:text-white transition"
+                      :title="$t('Remove role') as string"
+                    >
+                      ×
+                    </button>
+                  </span>
               </td>
             </tr>
-          </tbody>
-        </table>
+
+            <tr v-if="users.length === 0">
+              <td colspan="3" class="px-4 py-10 text-center text-neutral-400">
+                {{ $t('No data to display') }}
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </section>
   </main>

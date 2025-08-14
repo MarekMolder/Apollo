@@ -194,7 +194,7 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
     /// <summary>
     /// Returns top products by removed quantity.
     /// </summary>
-    public async Task<IEnumerable<(Guid ProductId, string ProductName, decimal RemoveQuantity)>> GetTopRemovedProductsAsync()
+    public async Task<IEnumerable<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> GetTopRemovedProductsAsync()
     {
         return await _uow.ActionEntityRepository.GetTopRemovedProductsAsync();
     }
@@ -202,7 +202,7 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
     /// <summary>
     /// Returns users who have removed the most quantity across all actions.
     /// </summary>
-    public async Task<IEnumerable<(string CreatedBy, decimal TotalRemovedQuantity)>> GetTopUsersByRemovedQuantityAsync()
+    public async Task<IEnumerable<(string CreatedBy, int TotalRemovals)>> GetTopUsersByRemovedQuantityAsync()
     {
         return await _uow.ActionEntityRepository.GetTopUsersByRemovedQuantityAsync();
     }

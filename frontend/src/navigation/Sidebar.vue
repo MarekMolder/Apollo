@@ -2,6 +2,8 @@
 import { RouterLink } from "vue-router";
 import { useUserDataStore } from "@/stores/userDataStore";
 import { computed, ref } from "vue";
+import { useSidebarStore } from '@/stores/sidebarStore';
+const sidebarStore = useSidebarStore();
 
 const store = useUserDataStore();
 const isAdmin = computed(() => {
@@ -17,7 +19,12 @@ const isOpen = ref(false);
 </script>
 
 <template>
-  <aside class="sidebar" :class="{ open: isOpen }" @mouseenter="isOpen = true" @mouseleave="isOpen = false">
+  <aside
+    class="sidebar"
+    :class="{ open: sidebarStore.isOpen }"
+    @mouseenter="sidebarStore.isOpen = true"
+    @mouseleave="sidebarStore.isOpen = false"
+  >
     <div class="sidebar-logo">🎬</div>
 
     <nav class="sidebar-nav">
@@ -77,7 +84,7 @@ const isOpen = ref(false);
 }
 
 .sidebar.open {
-  width: 150px;
+  width: 165px;
 }
 
 .sidebar-logo {

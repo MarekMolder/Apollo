@@ -10,6 +10,8 @@ import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 import type {ISupplier} from "@/domain/logic/ISupplier.ts";
 import {SupplierService} from "@/services/mvcServices/SupplierService.ts";
+import { useSidebarStore } from '@/stores/sidebarStore';
+const sidebarStore = useSidebarStore();
 
 // Services
 const service = new ProductService();
@@ -180,8 +182,13 @@ const selectedSupplierObj = computed({
 </script>
 
 <template>
-  <main class="p-6 sm:p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-2xl mx-auto">
-    <!-- Header (nagu Requests) -->
+  <main
+    :class="[
+    'transition-all duration-300 p-4 sm:p-6 lg:p-8 text-white max-w-screen-2xl',
+    sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
+  ]"
+  >
+
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -199,82 +206,85 @@ const selectedSupplierObj = computed({
     <section class="mx-auto w-full max-w-[100rem]">
       <div
         class="rounded-[16px] p-6 sm:p-8
-               bg-[rgba(25,25,25,0.4)] backdrop-blur-xl
-               border-1 border-neutral-700
-               shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]">
+         bg-[rgba(25,25,25,0.4)] backdrop-blur-xl
+         border-1 border-neutral-700
+         shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]
+         max-w-[95%] mx-auto"
+      >
 
         <!-- Üks rida, kitsad väljad, võimalik horisontaalne scroll -->
+        <!-- Filter bar + nupp ühel real -->
         <div
-          class="mb-6 flex items-center gap-3 whitespace-nowrap overflow-x-auto
-         [-ms-overflow-style:none] [scrollbar-width:none]"
+          class="mb-6 flex flex-wrap gap-3 items-center justify-between
+         overflow-x-auto px-2"
         >
+          <!-- vasak blokk: filtrid -->
+          <div class="flex flex-wrap gap-3">
+            <!-- Category -->
+            <div class="relative w-48">
+              <label class="sr-only">Category</label>
+              <select
+                v-model="selectedCategory"
+                class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+               px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+               focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9"
+              >
+                <option v-for="cat in categories" :key="cat">{{ cat }}</option>
+              </select>
+              <i class="bi bi-list-ul absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+              <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+            </div>
 
-          <!-- Category -->
-          <div class="relative shrink-0">
-            <label class="sr-only">Category</label>
-            <select
-              v-model="selectedCategory"
-              class="w-[270px] appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
-             px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
-             focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9"
-            >
-              <option v-for="cat in categories" :key="cat">{{ cat }}</option>
-            </select>
-            <i class="bi bi-list-ul absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
-            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+            <!-- Supplier -->
+            <div class="relative w-56">
+              <label class="sr-only">Supplier</label>
+              <select
+                v-model="selectedSupplier"
+                class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+               px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+               focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9"
+              >
+                <option value="All">All Suppliers</option>
+                <option v-for="s in suppliers" :key="s.id" :value="s.id">{{ s.name }}</option>
+              </select>
+              <i class="bi bi-truck absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+              <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+            </div>
+
+            <!-- Search by code -->
+            <div class="relative w-48">
+              <input
+                v-model="searchCode"
+                type="text"
+                placeholder="Search by code"
+                class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+               h-11 text-medium pl-10 pr-3 focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+               focus:border-neutral-500 transition shadow-inner shadow-black/30"
+              />
+              <i class="bi bi-upc-scan pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+            </div>
+
+            <!-- Search by name -->
+            <div class="relative w-48">
+              <input
+                v-model="searchName"
+                type="text"
+                placeholder="Search by name"
+                class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+               h-11 text-medium pl-10 pr-3 focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+               focus:border-neutral-500 transition shadow-inner shadow-black/30"
+              />
+              <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+            </div>
           </div>
 
-          <!-- Supplier -->
-          <div class="relative shrink-0">
-            <label class="sr-only">Supplier</label>
-            <select
-              v-model="selectedSupplier"
-              class="w-[290px] appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
-             px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
-             focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9"
-            >
-              <option value="All">All Suppliers</option>
-              <option v-for="s in suppliers" :key="s.id" :value="s.id">{{ s.name }}</option>
-            </select>
-            <i class="bi bi-truck absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
-            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
-          </div>
-
-          <!-- Search by code -->
-          <div class="relative shrink-0">
-            <input
-              v-model="searchCode"
-              type="text"
-              placeholder="Search by code"
-              class="w-[290px] appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
-             h-11 text-medium pl-10 pr-3
-             focus:outline-none focus:ring-2 focus:ring-cyan-400/30
-             focus:border-neutral-500 transition shadow-inner shadow-black/30"
-            />
-            <i class="bi bi-upc-scan pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
-          </div>
-
-          <!-- Search by name -->
-          <div class="relative shrink-0">
-            <input
-              v-model="searchName"
-              type="text"
-              placeholder="Search by name"
-              class="w-[290px] appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
-             h-11 text-medium pl-10 pr-3
-             focus:outline-none focus:ring-2 focus:ring-cyan-400/30
-             focus:border-neutral-500 transition shadow-inner shadow-black/30"
-            />
-            <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
-          </div>
-
-          <!-- Create button -->
-          <div class="shrink-0 ml-1">
+          <!-- parem blokk: nupp -->
+          <div class="flex-shrink-0">
             <button
               @click="openCreateDrawer"
               class="group inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
              border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200
-             shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_8px_24px_rgba(0,0,0,0.35)]
+             shadow-[0_0_0_1px_rgba(34,211,238,0.25),_0_8px_24px_rgba(0,0,0,0.35)]
              hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
              focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition"
             >
@@ -285,7 +295,7 @@ const selectedSupplierObj = computed({
         </div>
 
         <!-- Cards grid -->
-        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+        <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5">
           <div
             v-for="item in filteredProducts"
             :key="item.id"

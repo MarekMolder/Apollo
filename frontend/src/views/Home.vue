@@ -1,77 +1,48 @@
 ﻿<script setup>
 import PendingActionsCard from "@/components/PendingActionsCard.vue";
 import ProblematicProducts from "@/components/ProblematicProducts.vue";
-import LowestStockProductsCard from "@/components/LowestStockProductsCard.vue";
 import TopUsersByRemoveCard from "@/components/TopUsersByRemoveCard.vue";
-import TotalInventoryWorthCard from "@/components/TotalInventoryWorthCard.vue";
-import ProductQuickSearchCard from "@/components/ProductQuickSearchCard.vue";
 import UserListCard from "@/components/UserListCard.vue";
+import { useSidebarStore } from '@/stores/sidebarStore';
+const sidebarStore = useSidebarStore();
 </script>
 
 <template>
-  <div class="dashboard-grid">
-    <!-- RIDA 1 -->
-    <ProductQuickSearchCard class="card card-info" />
-    <TotalInventoryWorthCard class="card card-focus wide" />
-    <PendingActionsCard class="card card-warning" />
-    <ProblematicProducts class="card card-danger" />
+  <main
+    :class="[
+      'transition-all duration-300 px-4 sm:px-6 lg:px-8 py-6 sm:py-8 text-white',
+      sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
+    ]"
+  >
+    <!-- Pealkiri -->
+    <section class="mb-6 text-center">
+      <h1 class="text-3xl sm:text-4xl font-[Playfair_Display] font-bold text-neutral-100">
+        {{ $t('Dashboard') }}
+      </h1>
+      <div class="mx-auto mt-3 h-px w-64 max-w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+    </section>
 
+    <!-- Üks kaart ühe rea peal, laius vastavalt ekraanile -->
+    <section class="mx-auto w-full">
+      <div class="space-y-4 sm:space-y-5 lg:space-y-6">
+        <!-- Iga ümbris keskendab kaardi ja piirab laiuse: min 22rem, eelistatult 92vw, max 72rem -->
+        <div class="mx-auto w-full max-w-[clamp(22rem,92vw,72rem)]">
+          <PendingActionsCard />
+        </div>
 
-    <!-- RIDA 2 -->
-    <TopUsersByRemoveCard class="card card-blue" />
-    <UserListCard class="card card-default" />
-    <LowestStockProductsCard class="card card-warning" />
-  </div>
+        <div class="mx-auto w-full max-w-[clamp(22rem,92vw,72rem)]">
+          <ProblematicProducts />
+        </div>
+
+        <div class="mx-auto w-full max-w-[clamp(22rem,92vw,72rem)]">
+          <TopUsersByRemoveCard />
+        </div>
+
+        <div class="mx-auto w-full max-w-[clamp(22rem,92vw,72rem)]">
+          <UserListCard />
+        </div>
+      </div>
+    </section>
+  </main>
 </template>
 
-<style scoped>
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  padding: 3rem 4rem;
-}
-
-/* Kaardid */
-.card {
-  backdrop-filter: blur(12px);
-  background: rgba(20, 20, 20, 0.7);
-  padding: 1.6rem;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  min-width: 0;
-}
-
-.card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 12px 28px rgba(255, 170, 51, 0.2);
-}
-
-.card.wide {
-  grid-column: span 2;
-}
-
-/* Värvid */
-.card-danger { border-left: 5px solid #e74c3c; }
-.card-warning { border-left: 5px solid #ffaa33; }
-.card-info { border-left: 5px solid #3498db; }
-.card-blue { border-left: 5px solid #1abc9c; }
-.card-focus { border-left: 5px solid #9b59b6; }
-.card-default { border-left: 5px solid #666; }
-
-/* Responsive */
-@media (max-width: 1024px) {
-  .dashboard-grid {
-    grid-template-columns: 1fr;
-    padding: 2rem;
-  }
-
-  .card.wide {
-    grid-column: span 1;
-  }
-}
-</style>
