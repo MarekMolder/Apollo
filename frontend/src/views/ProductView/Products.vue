@@ -179,6 +179,23 @@ const selectedSupplierObj = computed({
     selectedSupplier.value = val?.id ?? 'All'
   }
 })
+
+const selectedCategoryObj = computed({
+  get() {
+    if (selectedCategory.value === 'All') return { id: 'All', name: 'All Categories' } as IProductCategory
+    return productCategories.value.find(c => c.id === selectedCategory.value) || null;
+  },
+  set(val: IProductCategory | null) {
+    selectedCategory.value = val?.id ?? 'All';
+    if (drawerMode.value === 'create' && activeCreateProduct.value) {
+      activeCreateProduct.value.productCategoryId = val?.id ?? '';
+    }
+    if (drawerMode.value === 'edit' && activeEditProduct.value) {
+      activeEditProduct.value.productCategoryId = val?.id ?? '';
+    }
+  }
+});
+
 </script>
 
 <template>
@@ -223,13 +240,10 @@ const selectedSupplierObj = computed({
             <!-- Category -->
             <div class="relative w-48">
               <label class="sr-only">Category</label>
-              <select
-                v-model="selectedCategory"
-                class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
-               px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
-               focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9"
-              >
-                <option v-for="cat in categories" :key="cat">{{ cat }}</option>
+              <select v-model="selectedCategory"
+                      class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30 focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9">
+                <option value="All">All Categories</option>
+                <option v-for="c in productCategories" :key="c.id" :value="c.id">{{ c.name }}</option>
               </select>
               <i class="bi bi-list-ul absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
               <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
@@ -410,21 +424,23 @@ const selectedSupplierObj = computed({
             </div>
             <!-- Category -->
             <div class="relative shrink-0">
-              <label class="sr-only">Category</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Category</label>
               <Multiselect
-                v-model="selectedCategory"
-                :options="categories"
-              :searchable="true"
-              :close-on-select="true"
-              :allow-empty="false"
-              placeholder="All Categories"
-              class="multiselect-dark w-[270px]"
+                v-model="selectedCategoryObj"
+                :options="[{ id: 'All', name: 'All Categories' }, ...productCategories]"
+                :custom-label="c => c.name"
+                track-by="id"
+                :searchable="true"
+                :close-on-select="true"
+                :allow-empty="false"
+                placeholder="All Categories"
+                class="multiselect-dark w-[270px]"
               />
             </div>
 
             <!-- Supplier -->
             <div class="relative shrink-0">
-              <label class="sr-only">Supplier</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Supplier</label>
               <Multiselect
                 v-model="selectedSupplierObj"
                 :options="[{ id:'All', name:'All Suppliers' }, ...suppliers]"
