@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserDataStore } from '@/stores/userDataStore';
 import { IdentityService } from '@/services/IdentityService';
+const showHelp = ref(false);
 
 // Services
 const identityService = new IdentityService();

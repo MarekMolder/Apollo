@@ -22,6 +22,9 @@ public class MonthlyStatisticsUowMapper: IMapper<DAL.DTO.MonthlyStatistics, Doma
             ProductId = entity.ProductId,
             Product = ProductUowMapper.MapSimple(entity.Product),
             
+            ProductCategoryId = entity.ProductCategoryId,
+            ProductCategory = ProductCategoryUowMapper.MapSimple(entity.ProductCategory),
+            
             TotalRemovedQuantity = entity.TotalRemovedQuantity,
             
             StorageRoomId = entity.StorageRoomId,
@@ -29,6 +32,7 @@ public class MonthlyStatisticsUowMapper: IMapper<DAL.DTO.MonthlyStatistics, Doma
             
             Year = entity.Year,
             Month = entity.Month,
+            Day = entity.Day,
         };
         return res;
     }
@@ -47,6 +51,9 @@ public class MonthlyStatisticsUowMapper: IMapper<DAL.DTO.MonthlyStatistics, Doma
             ProductId = entity.ProductId,
             Product = ProductUowMapper.MapSimple(entity.Product),
             
+            ProductCategoryId = entity.ProductCategoryId,
+            ProductCategory = ProductCategoryUowMapper.MapSimple(entity.ProductCategory),
+            
             TotalRemovedQuantity = entity.TotalRemovedQuantity,
             
             StorageRoomId = entity.StorageRoomId,
@@ -54,6 +61,7 @@ public class MonthlyStatisticsUowMapper: IMapper<DAL.DTO.MonthlyStatistics, Doma
             
             Year = entity.Year,
             Month = entity.Month,
+            Day = entity.Day,
         };
         return res;
     }

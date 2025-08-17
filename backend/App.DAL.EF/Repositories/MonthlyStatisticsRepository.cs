@@ -22,6 +22,7 @@ public class MonthlyStatisticsRepository: BaseRepository<DAL.DTO.MonthlyStatisti
     {
         var domainEntities = await RepositoryDbSet
             .Include(x => x.Product)
+            .Include(x => x.ProductCategory)
             .Where(x => x.StorageRoomId == storageRoomId)
             .ToListAsync();
 
@@ -44,6 +45,7 @@ public class MonthlyStatisticsRepository: BaseRepository<DAL.DTO.MonthlyStatisti
     {
         var domainEntities = await RepositoryDbSet
             .Include(a => a.Product)
+            .Include(x => x.ProductCategory)
             .Include(a => a.StorageRoom)
             .ToListAsync();
 

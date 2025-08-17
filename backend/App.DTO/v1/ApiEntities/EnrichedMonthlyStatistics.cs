@@ -29,6 +29,13 @@ public class EnrichedMonthlyStatistics : IDomainId
     public string ProductVolumeUnit { get; set; } = default!;
     
     /// <summary>
+    /// ID of the productCategory for which the statistics apply.
+    /// Name of the productCategory.
+    /// </summary>
+    public Guid ProductCategoryId { get; set; }
+    public string ProductCategoryName { get; set; } = default!;
+    
+    /// <summary>
     /// ID of the storage room where the product was removed from.
     /// Name of the storage room.
     /// </summary>
@@ -49,6 +56,11 @@ public class EnrichedMonthlyStatistics : IDomainId
     /// Month of the statistics period (1 = January, 12 = December).
     /// </summary>
     public int Month { get; set; }
+    
+    /// <summary>
+    /// Day of the statistics period.
+    /// </summary>
+    public int Day { get; set; }
     
     /// <summary>
     /// Start date of the period (always first day of the month).

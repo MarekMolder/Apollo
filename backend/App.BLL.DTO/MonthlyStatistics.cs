@@ -20,6 +20,13 @@ public class MonthlyStatistics : IDomainId
     public BLL.DTO.Product? Product { get; set; }
     
     /// <summary>
+    /// ID of the productCategory for which the statistics apply.
+    /// Related productCategory entity.
+    /// </summary>
+    public Guid ProductCategoryId { get; set; }
+    public BLL.DTO.ProductCategory? ProductCategory { get; set; }
+    
+    /// <summary>
     /// Total quantity of the product removed during the specified month.
     /// </summary>
     public decimal TotalRemovedQuantity { get; set; }
@@ -40,6 +47,11 @@ public class MonthlyStatistics : IDomainId
     /// Month of the statistics period (1 = January, 12 = December).
     /// </summary>
     public int Month { get; set; }
+    
+    /// <summary>
+    /// Day of the statistics period.
+    /// </summary>
+    public int Day { get; set; }
     
     /// <summary>
     /// Start date of the period (always first day of the month).

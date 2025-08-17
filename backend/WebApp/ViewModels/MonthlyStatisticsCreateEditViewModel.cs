@@ -22,6 +22,12 @@ public class MonthlyStatisticsCreateEditViewModel
     public SelectList ProductSelectList { get; set; } = default!;
     
     /// <summary>
+    /// Select list of available productCategories to associate with the monthly statistic.
+    /// </summary>
+    [ValidateNever]
+    public SelectList ProductCategorySelectList { get; set; } = default!;
+    
+    /// <summary>
     /// Select list of available storage rooms for selection.
     /// </summary>
     [ValidateNever]

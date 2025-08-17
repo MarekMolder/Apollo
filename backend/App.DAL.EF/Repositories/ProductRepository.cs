@@ -22,6 +22,7 @@ public class ProductRepository: BaseRepository<DAL.DTO.Product, Domain.Logic.Pro
     {
         var domainEntities = await RepositoryDbSet
             .Include(a => a.ProductCategory)
+            .Include(a => a.Supplier)
             .ToListAsync();
 
         return domainEntities.Select(e => Mapper.Map(e));
@@ -35,6 +36,7 @@ public class ProductRepository: BaseRepository<DAL.DTO.Product, Domain.Logic.Pro
         var domainEntities = await RepositoryDbSet
             .Where(p => p.SupplierId == supplierId)
             .Include(p => p.ProductCategory)
+            .Include(p => p.Supplier)
             .ToListAsync();
 
         return domainEntities.Select(p => Mapper.Map(p));

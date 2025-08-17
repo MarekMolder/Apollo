@@ -18,10 +18,12 @@ public class MonthlyStatisticsApiMapper : IMapper<MonthlyStatistics, BLL.DTO.Mon
         {
             Id = entity.Id,
             ProductId = entity.ProductId,
+            ProductCategoryId = entity.ProductCategoryId,
             StorageRoomId = entity.StorageRoomId,
             TotalRemovedQuantity = entity.TotalRemovedQuantity,
             Year = entity.Year,
             Month = entity.Month,
+            Day = entity.Day,
         };
         return res;
     }
@@ -36,10 +38,12 @@ public class MonthlyStatisticsApiMapper : IMapper<MonthlyStatistics, BLL.DTO.Mon
         {
             Id = entity.Id,
             ProductId = entity.ProductId,
+            ProductCategoryId = entity.ProductCategoryId,
             StorageRoomId = entity.StorageRoomId,
             TotalRemovedQuantity = entity.TotalRemovedQuantity,
             Year = entity.Year,
             Month = entity.Month,
+            Day = entity.Day,
         };
         return res;
     }
@@ -53,10 +57,12 @@ public class MonthlyStatisticsApiMapper : IMapper<MonthlyStatistics, BLL.DTO.Mon
         {
             Id = Guid.NewGuid(),
             ProductId = entity.ProductId,
+            ProductCategoryId = entity.ProductCategoryId,
             StorageRoomId = entity.StorageRoomId,
             TotalRemovedQuantity = entity.TotalRemovedQuantity,
             Year = entity.Year,
             Month = entity.Month,
+            Day = entity.Day,
         };
         return res;
     }

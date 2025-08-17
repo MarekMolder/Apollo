@@ -7,9 +7,12 @@ export interface IMonthlyStatisticsEnriched extends IDomainId {
   productUnit: string;
   productVolume: number;
   productVolumeUnit: string;
+  productCategoryId: string;
+  productCategoryName: string;
   storageRoomId: string;
   storageRoomName: string;
   totalRemovedQuantity: number;
   year: number;
   month: number;
+  day: number;
 }

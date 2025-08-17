@@ -48,114 +48,125 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
     /// Returns false if the entity is not found. Throws an exception if the status is invalid.
     /// </summary>
     public virtual async Task<bool> UpdateStatusAsync(Guid id, string newStatus)
+{
+    var action = await _uow.ActionEntityRepository.FindAsync(id);
+    if (action == null) return false;
+
+    if (string.Equals(action.Status, "Accepted", StringComparison.OrdinalIgnoreCase) ||
+        string.Equals(action.Status, "Declined", StringComparison.OrdinalIgnoreCase))
     {
-        var action = await _uow.ActionEntityRepository.FindAsync(id);
-        if (action == null) return false;
+        throw new InvalidOperationException("Status is already finalized and cannot be changed.");
+    }
 
-        if (string.Equals(action.Status, "Accepted", StringComparison.OrdinalIgnoreCase) ||
-            string.Equals(action.Status, "Declined", StringComparison.OrdinalIgnoreCase))
+    var allowedStatuses = new[] { "Accepted", "Declined" };
+    if (!allowedStatuses.Contains(newStatus))
+        throw new ArgumentException("Invalid status");
+
+    action.Status = newStatus;
+
+    var dalAction = _domainDalMapperActionEntity.Map(action);
+    var bllAction = _dalBllMapperActionEntity.Map(dalAction);
+    await UpdateAsync(bllAction);
+
+    if (newStatus != "Accepted") return true;
+
+    var productId = bllAction.ProductId;
+    
+    var recipeComponents = await _uow.RecipeComponentRepository
+        .GetComponentsByRecipeProductIdAsync(productId);
+
+    if (recipeComponents != null && recipeComponents.Any())
+    {
+        var baseProduct = await _uow.ProductRepository.FindAsync(bllAction.ProductId);
+        if (baseProduct == null) return true;
+
+        foreach (var component in recipeComponents)
         {
-            throw new InvalidOperationException("Status is already finalized and cannot be changed.");
-        }
-
-        var allowedStatuses = new[] { "Accepted", "Declined" };
-        if (!allowedStatuses.Contains(newStatus)) throw new ArgumentException("Invalid status");
-
-        action.Status = newStatus;
-        
-
-        var dalAction = _domainDalMapperActionEntity.Map(action);
-        var bllAction = _dalBllMapperActionEntity.Map(dalAction);
-        await UpdateAsync(bllAction);
-        
-        if (newStatus == "Accepted")
-        {
-            var productId = bllAction.ProductId;
+            var componentProduct = await _uow.ProductRepository.FindAsync(component.ComponentProductId);
+            if (componentProduct == null) continue;
             
-            var recipeComponents = await _uow.RecipeComponentRepository
-                .GetComponentsByRecipeProductIdAsync(productId);
-
-            if (recipeComponents != null && recipeComponents.Any())
+            var rawComponentQuantity = bllAction.Quantity * component.Amount;
+            
+            decimal convertedQuantity = rawComponentQuantity;
+            if (!string.Equals(baseProduct.Unit, componentProduct.Unit, StringComparison.OrdinalIgnoreCase))
             {
-                foreach (var component in recipeComponents)
+                try
                 {
-                    // Leia põhitoote ühik
-                    var baseProduct = await _uow.ProductRepository.FindAsync(bllAction.ProductId);
-                    if (baseProduct == null) continue;
-
-                    // Leia komponenti toote ühik
-                    var componentProduct = await _uow.ProductRepository.FindAsync(component.ComponentProductId);
-                    if (componentProduct == null) continue;
-
-                    // Algne komponentkogus retseptis (nt 0.2 l õli)
-                    var rawComponentQuantity = bllAction.Quantity * component.Amount;
-
-                    // Teisenda, kui ühikud on erinevad
-                    decimal convertedQuantity = rawComponentQuantity;
-                    if (baseProduct.Unit != componentProduct.Unit)
-                    {
-                        try
-                        {
-                            convertedQuantity = UnitConverter.Convert(rawComponentQuantity, baseProduct.Unit, componentProduct.Unit);
-                        }
-                        catch (Exception e)
-                        {
-                            continue;
-                        }
-                    }
-
-                    var compStat = await _uow.MonthlyStatisticsRepository
-                        .FindByProductAndStorageAsync(component.ComponentProductId, bllAction.StorageRoomId);
-
-                    if (compStat != null)
-                    {
-                        var mappedCompStat = _domainDalMapperMonthlyStatistics.Map(compStat);
-                        mappedCompStat!.TotalRemovedQuantity += convertedQuantity;
-                        await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedCompStat);
-                    }
-                    else
-                    {
-                        var newStat = new DAL.DTO.MonthlyStatistics
-                        {
-                            Id = Guid.NewGuid(),
-                            ProductId = component.ComponentProductId,
-                            StorageRoomId = bllAction.StorageRoomId,
-                            TotalRemovedQuantity = convertedQuantity,
-                            Year = DateTime.Today.Year,
-                            Month = DateTime.Today.Month,
-                        };
-                        await _uow.MonthlyStatisticsRepository.AddAsync(newStat);
-                    }
+                    convertedQuantity = UnitConverter.Convert(rawComponentQuantity, baseProduct.Unit, componentProduct.Unit);
                 }
+                catch
+                {
+                    continue;
+                }
+            }
+
+            var compStat = await _uow.MonthlyStatisticsRepository
+                .FindByProductAndStorageAsync(component.ComponentProductId, bllAction.StorageRoomId);
+
+            if (compStat != null)
+            {
+                var mappedCompStat = _domainDalMapperMonthlyStatistics.Map(compStat)!;
+                mappedCompStat.TotalRemovedQuantity += convertedQuantity;
+                
+                if (mappedCompStat.ProductCategoryId == Guid.Empty)
+                    mappedCompStat.ProductCategoryId = componentProduct.ProductCategoryId;
+
+                await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedCompStat);
             }
             else
             {
-                var stat = await _uow.MonthlyStatisticsRepository
-                    .FindByProductAndStorageAsync(productId, bllAction.StorageRoomId);
-
-                if (stat != null)
+                var newStat = new DAL.DTO.MonthlyStatistics
                 {
-                    var mappedStat = _domainDalMapperMonthlyStatistics.Map(stat);
-                    mappedStat!.TotalRemovedQuantity += bllAction.Quantity;
-                    await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedStat);
-                }
-                else
-                {
-                    var newStat = new DAL.DTO.MonthlyStatistics
-                    {
-                        Id = Guid.NewGuid(),
-                        ProductId = productId,
-                        StorageRoomId = bllAction.StorageRoomId,
-                        TotalRemovedQuantity = bllAction.Quantity,
-                        Year = DateTime.Today.Year,
-                        Month = DateTime.Today.Month,
-                    };
-                    await _uow.MonthlyStatisticsRepository.AddAsync(newStat);
-                }
+                    Id = Guid.NewGuid(),
+                    ProductId = component.ComponentProductId,
+                    ProductCategoryId = componentProduct.ProductCategoryId,
+                    StorageRoomId = bllAction.StorageRoomId,
+                    TotalRemovedQuantity = convertedQuantity,
+                    Year = DateTime.Today.Year,
+                    Month = DateTime.Today.Month,
+                    Day = DateTime.Today.Day,
+                };
+                await _uow.MonthlyStatisticsRepository.AddAsync(newStat);
             }
         }
-        return true;
     }
+    else
+    {
+        var product = await _uow.ProductRepository.FindAsync(productId);
+        if (product == null) return true;
+
+        var stat = await _uow.MonthlyStatisticsRepository
+            .FindByProductAndStorageAsync(productId, bllAction.StorageRoomId);
+
+        if (stat != null)
+        {
+            var mappedStat = _domainDalMapperMonthlyStatistics.Map(stat)!;
+            mappedStat.TotalRemovedQuantity += bllAction.Quantity;
+            
+            if (mappedStat.ProductCategoryId == Guid.Empty)
+                mappedStat.ProductCategoryId = product.ProductCategoryId;
+
+            await _uow.MonthlyStatisticsRepository.UpdateAsync(mappedStat);
+        }
+        else
+        {
+            var newStat = new DAL.DTO.MonthlyStatistics
+            {
+                Id = Guid.NewGuid(),
+                ProductId = productId,
+                ProductCategoryId = product.ProductCategoryId,
+                StorageRoomId = bllAction.StorageRoomId,
+                TotalRemovedQuantity = bllAction.Quantity,
+                Year = DateTime.Today.Year,
+                Month = DateTime.Today.Month,
+                Day = DateTime.Today.Day,
+            };
+            await _uow.MonthlyStatisticsRepository.AddAsync(newStat);
+        }
+    }
+
+    return true;
+}
     
     /// <summary>
     /// Returns ActionEntities enriched with related data (joins from DB).

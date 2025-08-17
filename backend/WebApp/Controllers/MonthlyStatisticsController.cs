@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using WebApp.ViewModels;
+using ProductCategory = App.Domain.Logic.ProductCategory;
 
 namespace WebApp.Controllers
 {
@@ -69,6 +70,11 @@ namespace WebApp.Controllers
                     nameof(Product.Id),
                     nameof(Product.Name)
                 ),
+                
+                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+                    nameof(ProductCategory.Id),
+                    nameof(ProductCategory.Name)
+                ),
 
                 StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
                     nameof(StorageRoom.Id),
@@ -97,6 +103,8 @@ namespace WebApp.Controllers
             _logger.LogWarning("Invalid model state while creating monthly statistics");
             vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
                 nameof(Product.Id), nameof(Product.Name), vm.MonthlyStatistics.ProductId);
+            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+                nameof(ProductCategory.Id), nameof(ProductCategory.Name), vm.MonthlyStatistics.ProductCategoryId);
             vm.StorageRoomSelectList = new SelectList(await _bll.MonthlyStatisticsService.AllAsync(User.GetUserId()),
                 nameof(StorageRoom.Id), nameof(StorageRoom.Name), vm.MonthlyStatistics.StorageRoomId);
             
@@ -127,6 +135,12 @@ namespace WebApp.Controllers
                     nameof(Product.Id),
                     nameof(Product.Name),
                     monthlyStatistics.ProductId
+                ),
+                
+                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+                    nameof(ProductCategory.Id),
+                    nameof(ProductCategory.Name),
+                    monthlyStatistics.ProductCategoryId
                 ),
                 
                 StorageRoomSelectList = new SelectList(await _bll.MonthlyStatisticsService.AllAsync(User.GetUserId()),
@@ -165,6 +179,8 @@ namespace WebApp.Controllers
 
             vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
                 nameof(Product.Id), nameof(Product.Name), vm.MonthlyStatistics.ProductId);
+            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+                nameof(ProductCategory.Id), nameof(ProductCategory.Name), vm.MonthlyStatistics.ProductCategoryId);
             vm.StorageRoomSelectList = new SelectList(await _bll.RecipeComponentService.AllAsync(User.GetUserId()),
                 nameof(StorageRoom.Id), nameof(StorageRoom.Name), vm.MonthlyStatistics.StorageRoomId);
 

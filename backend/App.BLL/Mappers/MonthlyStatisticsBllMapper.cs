@@ -22,6 +22,9 @@ public class MonthlyStatisticsBllMapper: IMapper<BLL.DTO.MonthlyStatistics, DAL.
             ProductId = entity.ProductId,
             Product = ProductBllMapper.MapSimple(entity.Product),
             
+            ProductCategoryId = entity.ProductCategoryId,
+            ProductCategory = ProductCategoryBllMapper.MapSimple(entity.ProductCategory),
+            
             TotalRemovedQuantity = entity.TotalRemovedQuantity,
             
             StorageRoomId = entity.StorageRoomId,
@@ -29,6 +32,7 @@ public class MonthlyStatisticsBllMapper: IMapper<BLL.DTO.MonthlyStatistics, DAL.
             
             Year = entity.Year,
             Month = entity.Month,
+            Day = entity.Day,
         };
         return res;
     }
@@ -47,6 +51,9 @@ public class MonthlyStatisticsBllMapper: IMapper<BLL.DTO.MonthlyStatistics, DAL.
             ProductId = entity.ProductId,
             Product = ProductBllMapper.MapSimple(entity.Product),
             
+            ProductCategoryId = entity.ProductCategoryId,
+            ProductCategory = ProductCategoryBllMapper.MapSimple(entity.ProductCategory),
+            
             TotalRemovedQuantity = entity.TotalRemovedQuantity,
             
             StorageRoomId = entity.StorageRoomId,
@@ -54,6 +61,7 @@ public class MonthlyStatisticsBllMapper: IMapper<BLL.DTO.MonthlyStatistics, DAL.
             
             Year = entity.Year,
             Month = entity.Month,
+            Day = entity.Day,
         };
         return res;
     }

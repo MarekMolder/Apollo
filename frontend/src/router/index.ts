@@ -15,11 +15,6 @@ import CreateRolePage from "@/views/AccountView/CreateRolePage.vue";
 import UserListWithRoles from "@/views/AccountView/UserListWithRoles.vue";
 import Home from "@/views/Home.vue";
 import MonthlyStatistics from "@/views/InventoryView/MonthlyStatistics.vue";
-import ActionType from "@/views/ActionTypeView/ActionType.vue";
-import Address from "@/views/AddressView/Address.vue";
-import ProductCategory from "@/views/ProductCategoryView/ProductCategory.vue";
-import Reason from "@/views/ReasonView/Reason.vue";
-import RecipeComponent from "@/views/RecipeComponentView/RecipeComponent.vue";
 import CrudSettings from "@/views/CrudSettings/CrudSettings.vue";
 
 const routes = [
@@ -38,12 +33,6 @@ const routes = [
   { path: "/assignRole", name: "assignRole", component: AssignRoleToUserPage },
   { path: "/createRole", name: "createRole", component: CreateRolePage },
   { path: "/userRoles", name: "userRoles", component: UserListWithRoles },
-
-  { path: "/actionType", name: "actionType", component: ActionType },
-  { path: "/address", name: "address", component: Address },
-  { path: "/productCategory", name: "productCategory", component: ProductCategory },
-  { path: "/reason", name: "reason", component: Reason },
-  { path: "/recipeComponent", name: "recipeComponent", component: RecipeComponent },
 
   { path: "/crudSettings", name: "crudSettings", component: CrudSettings },
 ];
@@ -70,11 +59,6 @@ router.beforeEach((to, from, next) => {
     "/assignRole",
     "/getRole",
     "/userRoles",
-    "/actionType",
-    "/address",
-    "/productCategory",
-    "/reason",
-    "/recipeComponent",
     "/crudSettings"
   ];
 
