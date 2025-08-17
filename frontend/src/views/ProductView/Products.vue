@@ -21,7 +21,7 @@ const supplierService = new SupplierService();
 // Entity's
 const data = ref<IProductEnriched[]>([]);
 const productCategories = ref<IProductCategory[]>([]);
-const suppliers = ref<ISupplier[]>([]);
+const productSuppliers = ref<ISupplier[]>([]);
 
 // Search engine
 const selectedCategory = ref("All");
@@ -29,12 +29,14 @@ const selectedSupplier = ref("All");
 const searchCode = ref("");
 const searchName = ref("");
 const categories = ref<string[]>([]);
+const suppliers = ref<string[]>([]);
 
 // Drawer mode
 const showDrawer = ref(false);
 const drawerMode = ref<'edit' | 'create'>('edit');
 const activeEditProduct = ref<IProductEnriched | null>(null);
-const activeCreateProduct = ref<IProduct | null>(null);
+const activeCreateProduct = ref<IProduct  | null>(null);
+
 
 // Messages errors/success
 const validationError = ref('');
@@ -57,9 +59,9 @@ const emptyProduct = ref<IProduct>({
 
 // Get products
 onMounted(async () => {
-  products.value = (await service.getAllAsync()).data || [];
+  products.value = (await service.getEnrichedProducts()).data || [];
   productCategories.value = (await productCategoryService.getAllAsync()).data || [];
-  suppliers.value = (await supplierService.getAllAsync()).data || [];
+  productSuppliers.value = (await supplierService.getAllAsync()).data || [];
 });
 
 const fetchPageData = async () => {
@@ -67,9 +69,15 @@ const fetchPageData = async () => {
     const result = await service.getEnrichedProducts();
     data.value = result.data || [];
 
+    console.log("Loaded products:", data.value);
+
     categories.value = [
       "All",
       ...new Set(data.value.map((item) => item.productCategoryName))
+    ];
+    suppliers.value = [
+      "All",
+      ...new Set(data.value.map((item) => item.supplierName))
     ];
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -83,27 +91,35 @@ const filteredProducts = computed(() =>
   data.value.filter((product) => {
     const matchCategory =
       selectedCategory.value === "All" ||
-      product.productCategoryName === selectedCategory.value;
+      String(product.productCategoryId) === String(selectedCategory.value);
+
     const matchSupplier =
       selectedSupplier.value === "All" ||
-      product.supplierId === selectedSupplier.value;
+      String(product.supplierId) === String(selectedSupplier.value);
+
     const matchSearchCode =
       product.code.toLowerCase().includes(searchCode.value.toLowerCase());
     const matchSearchName =
       product.name.toLowerCase().includes(searchName.value.toLowerCase());
+
     return matchCategory && matchSupplier && matchSearchCode && matchSearchName;
   })
 );
 
+
 // Drawers for Products
 const openProductDrawer = (product: IProductEnriched) => {
   activeEditProduct.value = { ...product };
+  selectedCategory.value = product.productCategoryId ?? 'All';
+  selectedSupplier.value = product.supplierId ?? 'All';
   drawerMode.value = 'edit';
   showDrawer.value = true;
 };
 
 const openCreateDrawer = () => {
-  activeCreateProduct.value = emptyProduct.value;
+  activeCreateProduct.value = JSON.parse(JSON.stringify(emptyProduct.value));
+  selectedCategory.value = 'All';
+  selectedSupplier.value = 'All';
   drawerMode.value = 'create';
   showDrawer.value = true;
 };
@@ -143,6 +159,7 @@ const createProduct = async () => {
     const cleaned = Object.fromEntries(
       Object.entries(rest).filter(([_, v]) => v !== null && v !== '')
     ) as unknown as IProduct;
+    console.log(cleaned);
 
     const result = await service.addAsync(cleaned);
     if (result.errors?.length) {
@@ -173,10 +190,16 @@ const removeProduct = async (id: string) => {
 const selectedSupplierObj = computed({
   get() {
     if (selectedSupplier.value === 'All') return { id: 'All', name: 'All Suppliers' } as ISupplier
-    return suppliers.value.find(s => s.id === selectedSupplier.value) || null
+    return productSuppliers.value.find(s => s.id === selectedSupplier.value) || null
   },
   set(val: ISupplier | null) {
     selectedSupplier.value = val?.id ?? 'All'
+    if (drawerMode.value === 'create' && activeCreateProduct.value) {
+      activeCreateProduct.value.supplierId = val?.id ?? '';
+    }
+    if (drawerMode.value === 'edit' && activeEditProduct.value) {
+      activeEditProduct.value.supplierId = val?.id ?? '';
+    }
   }
 })
 
@@ -259,7 +282,7 @@ const selectedCategoryObj = computed({
                focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9"
               >
                 <option value="All">All Suppliers</option>
-                <option v-for="s in suppliers" :key="s.id" :value="s.id">{{ s.name }}</option>
+                <option v-for="s in productSuppliers" :key="s.id" :value="s.id">{{ s.name }}</option>
               </select>
               <i class="bi bi-truck absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
               <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
@@ -329,6 +352,8 @@ const selectedCategoryObj = computed({
             <h3 class="text-xl font-semibold text-neutral-100 pr-10">{{ item.name }}</h3>
             <p class="text-sm text-neutral-400 mt-1"><span class="text-neutral-300 font-medium">Code:</span> {{ item.code }}</p>
             <p class="text-sm text-neutral-400"><span class="text-neutral-300 font-medium">Category:</span> {{ item.productCategoryName }}</p>
+            <p class="text-sm text-neutral-400"><span class="text-neutral-300 font-medium">Supplier:</span> {{ item.supplierName }}</p>
+
 
             <div class="mt-5 flex justify-end">
               <button
@@ -443,7 +468,7 @@ const selectedCategoryObj = computed({
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Supplier</label>
               <Multiselect
                 v-model="selectedSupplierObj"
-                :options="[{ id:'All', name:'All Suppliers' }, ...suppliers]"
+                :options="[{ id:'All', name:'All Suppliers' }, ...productSuppliers]"
                 :custom-label="s => s.name"
                 track-by="id"
                 :searchable="true"
