@@ -214,20 +214,32 @@ const editAccount = async () => {
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              Sellel lehel saad <strong>otsida</strong>, <strong>luua</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> tarnijaid ning vaadata, millised tooted on konkreetse tarnijaga seotud.
+              Sellel lehel saad oma <strong>konto andmeid vaadata</strong> ja <strong>profiili uuendada</strong>.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
-              <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li>
+                <strong>Profiili muutmine:</strong> täida väljad <em>Firstname</em>, <em>Lastname</em> ja <em>Username</em> ning vajuta <em>Save data</em>.
+              </li>
+              <li>
+                <strong>Parooli vahetamine:</strong> klõpsa nupul <em>Change password</em>, et liikuda parooli muutmise vaatesse.
+              </li>
+              <li>
+                <strong>Teated:</strong> eduka salvestuse korral kuvatakse roheline kinnitus, vea korral punane teade koos põhjusega.
+              </li>
             </ul>
 
+            <div class="space-y-1">
+              <p class="font-medium text-neutral-200">Nõuanded</p>
+              <ul class="list-disc pl-6 space-y-1 text-neutral-300">
+                <li>Väljad on eeltäidetud sinu praeguste andmetega; tühjaks jätmine ei muuda vastavat väärtust.</li>
+                <li>Kasutajanime muutmine võib mõjutada sisselogimist — veendu, et mäletad uut kasutajanime.</li>
+                <li>E-posti aadress on ainult vaadatav; kui vajad selle muutmist, pöördu administraatori poole (või kasuta vastavat vaadet, kui see on olemas).</li>
+              </ul>
+            </div>
+
             <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
+              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
             </p>
           </div>
 

@@ -457,14 +457,17 @@ watch(
             </div>
 
             <!-- Unit (SELECT) -->
-            <div>
+            <div class="relative shrink-0">
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Unit</label>
-              <select
-                v-model="activeProduct!.unit"
-                class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
-              >
-                <option v-for="u in availableUnits" :key="u" :value="u">{{ u }}</option>
-              </select>
+              <Multiselect
+                v-model="(activeProduct as any).unit"
+                :options="availableUnits"
+                :searchable="true"
+                :close-on-select="true"
+                :allow-empty="false"
+                placeholder="Select unit"
+                class="multiselect-dark w-[270px]"
+              />
               <p v-if="isCreateMode && activeCreateProduct?.unit !== 'tk'" class="mt-1 text-xs text-neutral-400">
                 In create mode: volume = quantity, volume unit = unit.
               </p>
@@ -482,15 +485,18 @@ watch(
               />
             </div>
 
-            <!-- Volume unit (SELECT) -->
-            <div v-if="!(isCreateMode && activeCreateProduct?.unit !== 'tk')">
+            <!-- Volume unit (FORM, multiselect) -->
+            <div v-if="!(isCreateMode && activeCreateProduct?.unit !== 'tk')" class="relative shrink-0">
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Volume unit</label>
-              <select
-                v-model="activeProduct!.volumeUnit"
-                class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/20"
-              >
-                <option v-for="u in availableUnits.filter((u) => u !== 'tk')" :key="u" :value="u">{{ u }}</option>
-              </select>
+              <Multiselect
+                v-model="(activeProduct as any).volumeUnit"
+                :options="availableUnits.filter(u => u !== 'tk')"
+                :searchable="true"
+                :close-on-select="true"
+                :allow-empty="true"
+                placeholder="Select volume unit"
+                class="multiselect-dark w-[270px]"
+              />
             </div>
 
             <!-- Category (FORM) -->
@@ -623,20 +629,37 @@ watch(
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              Sellel lehel saad <strong>otsida</strong>, <strong>luua</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> tarnijaid ning vaadata, millised tooted on konkreetse tarnijaga seotud.
+              See leht võimaldab <strong>otsida</strong>, <strong>filtreerida</strong>, <strong>lisada</strong>, <strong>muuta</strong> ja
+              <strong>kustutada</strong> tooteid. Ülariba filtritega saad kiiresti leida vajaliku.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
-              <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li>
+                <strong>Filtrid:</strong> vali <em>Category</em> ja/või <em>Supplier</em> või kasuta välju
+                <em>Search by code</em> ja <em>Search by name</em>. Valik <em>All</em> näitab kõiki tulemusi.
+              </li>
+              <li>
+                <strong>Uus toode:</strong> klõpsa <em>New Product</em>, täida vorm (Code, Name, Price, Quantity, Unit, Category, Supplier) ja salvesta.
+              </li>
+              <li>
+                <strong>Vaatamine/muutmine:</strong> kaardil nupp <em>View</em> avab vormi, kus saad toote andmeid muuta.
+              </li>
+              <li>
+                <strong>Kustutamine:</strong> prügikasti ikoon eemaldab toote pärast kinnitust. Seda toimingut ei saa tagasi võtta.
+              </li>
+              <li>
+                <strong>Unit &amp; Volume loogika (create):</strong>
+                kui <em>Unit ≠ tk</em>, siis määratakse <em>volume = quantity</em> ja <em>volumeUnit = unit</em> automaatselt.
+                Kui <em>Unit = tk</em>, saad <em>Volume</em> ja <em>Volume unit</em> käsitsi valida (nt ml, l, g).
+              </li>
+              <li>
+                <strong>Is Component:</strong> märgi toode komponendiks, kui seda kasutatakse retseptides (Recipe Components).
+              </li>
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
+              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Filtrid ei muutu, kui avad/lood toote —
+              nii on mugav jätkata samas vaates.
             </p>
           </div>
 

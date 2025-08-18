@@ -200,20 +200,38 @@ const changePassword = async () => {
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              Sellel lehel saad <strong>otsida</strong>, <strong>luua</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> tarnijaid ning vaadata, millised tooted on konkreetse tarnijaga seotud.
+              Sellel lehel saad turvaliselt oma konto <strong>parooli vahetada</strong>. Täida vorm, kinnita uus parool ja salvesta muudatus.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
-              <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li>
+                <strong>Praegune parool:</strong> sisesta kehtiv parool väljale <em>Enter current password</em>.
+              </li>
+              <li>
+                <strong>Uus parool:</strong> kirjuta soovitud uus parool väljale <em>Enter new password</em>.
+              </li>
+              <li>
+                <strong>Kinnitus:</strong> korda uut parooli väljale <em>Confirm new password</em>.
+                Kui väljad ei kattu, kuvatakse teade „New password and confirmation password aren't same”.
+              </li>
+              <li>
+                <strong>Salvestamine:</strong> vajuta <em>Change password</em>.
+                Õnnestumisel kuvatakse kinnitus „Password changed successfully!”.
+                Kui backend tagastab vead (nt vale praegune parool või paroolipoliitika rikkumine), kuvatakse <em>Error:</em> teade.
+              </li>
             </ul>
 
+            <div class="space-y-1 text-neutral-300">
+              <p class="font-medium">Hea parooli soovitused:</p>
+              <ul class="list-disc pl-6 space-y-1 text-neutral-300">
+                <li>vähemalt 8–12 märki, koos suur- ja väiketähtede, numbrite ja sümbolitega;</li>
+                <li>väldi korduskasutust ja äratuntavaid mustreid (nt <code>Passw0rd!</code>);</li>
+                <li>ära jaga parooli ja ära salvesta seda avalikult nähtavatesse kohtadesse.</li>
+              </ul>
+            </div>
+
             <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
+              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
             </p>
           </div>
 

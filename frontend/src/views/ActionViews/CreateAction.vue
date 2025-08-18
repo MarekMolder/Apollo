@@ -337,20 +337,41 @@ const createAction = async () => {
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              Sellel lehel saad <strong>otsida</strong>, <strong>luua</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> tarnijaid ning vaadata, millised tooted on konkreetse tarnijaga seotud.
+              See vaade on mõeldud <strong>mahakandmiste</strong> (Discard) lisamiseks. Täida allolev vorm ja salvesta,
+              et kande kirje tekiks süsteemi ning kajastuks ladude statistikas.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
-              <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li>
+                <strong>Product:</strong> vali toode, mida maha kantakse.
+                (Loendis on ainult <em>mitte-komponenttooted</em>.)
+              </li>
+              <li>
+                <strong>Action Type:</strong> toimingu tüüp. <em>Admin/manager</em> saab seda muuta; tavakasutajal
+                võib see olla eelnevalt lukus väärtusele “maha kandmine”.
+              </li>
+              <li>
+                <strong>Reason:</strong> vali põhjendus (nt aegunud, kahjustatud jms), et aruandlus oleks korrektne.
+              </li>
+              <li>
+                <strong>Quantity:</strong> sisesta kogus valitud toote ühikus
+                (<span class="text-neutral-400">välja järel näidatakse ühikut</span>).
+                Kui ühik on <code>tk</code>, sisend on täisarv; muudel juhtudel lubatakse ka komakohad.
+              </li>
+              <li>
+                <strong>Storage Room:</strong> vali ladu/laoruum, kust kaubad maha kantakse. See mõjutab laojääke ja kuu statistikat.
+              </li>
+              <li>
+                <strong>Reset:</strong> puhastab vormi väljad.
+              </li>
+              <li>
+                <strong>Create:</strong> salvestab kande. Vigade korral kuvatakse teade punasena; õnnestumisel roheline kinnitus.
+              </li>
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
+              Nipp: koguse sisestamisel kasuta komakoha jaoks punkt<i>(.)</i> või koma, sõltuvalt klaviatuuri seadistusest.
+              Modaali saab sulgeda taustale klõpsates või ülanurga <em>×</em> nupust.
             </p>
           </div>
 

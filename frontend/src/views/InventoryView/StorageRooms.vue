@@ -1,45 +1,89 @@
 ﻿<script setup lang="ts">
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useSidebarStore } from '@/stores/sidebarStore'
+import Multiselect from 'vue-multiselect'
+import 'vue-multiselect/dist/vue-multiselect.min.css'
+
+// Services & types
 import { StorageRoomService } from '@/services/mvcServices/StorageRoomService'
-import type { IStorageRoomEnriched } from '@/domain/logic/IStorageRoomEnriched.ts'
-import { useSidebarStore } from '@/stores/sidebarStore';
-const sidebarStore = useSidebarStore();
-const showHelp = ref(false);
+import type { IStorageRoom } from '@/domain/logic/IStorageRoom'
+import type { IStorageRoomEnriched } from '@/domain/logic/IStorageRoomEnriched'
+import { AddressService } from '@/services/mvcServices/AddressService'
+import type { IAddress } from '@/domain/logic/IAddress'
+
+// Store
+const sidebarStore = useSidebarStore()
+
+// UI State
+const showHelp = ref(false)
+const showDrawer = ref(false)
+const drawerMode = ref<'edit' | 'create'>('create')
+
 // Services
 const storageRoomService = new StorageRoomService()
+const addressService = new AddressService()
 
-// Entity's
+// Data
 const data = ref<IStorageRoomEnriched[]>([])
+const addresses = ref<IAddress[]>([])
 
 // Router
 const router = useRouter()
 
-// Search engine
+// Search
 const searchQuery = ref('')
 
-// Get storageRooms
+// Messages
+const validationError = ref('')
+const successMessage = ref('')
+
+// Edit/Create models
+const activeEditRoom = ref<IStorageRoomEnriched | null>(null)
+const activeCreateRoom = ref<IStorageRoom | null>(null)
+
+// Empty entity (adjust defaults if your backend requires different ones)
+const emptyRoom = ref<IStorageRoom>({
+  id: '',
+  name: '',
+  addressId: '',
+  allowedRoles: []
+})
+
+// Fetch
 const fetchPageData = async () => {
   try {
-    const result = await storageRoomService.getEnrichedStorageRooms();
-    data.value = result.data || [];
+    const result = await storageRoomService.getEnrichedStorageRooms()
+    data.value = result.data || []
   } catch (error) {
-    console.error("Error fetching storageRooms:", error);
+    console.error('Error fetching storageRooms:', error)
   }
-};
+}
 
-onMounted(fetchPageData);
+const fetchAddresses = async () => {
+  try {
+    const result = await addressService.getAllAsync()
+    addresses.value = result.data || []
+  } catch (e) {
+    console.error('Error fetching addresses', e)
+  }
+}
 
-// Route to monthlyStatistics view
+onMounted(async () => {
+  await Promise.all([fetchPageData(), fetchAddresses()])
+})
+
+// Navigation
 const goToCurrentStock = (storageRoomId: string) => {
-  router.push(`/monthlyStatistics/${storageRoomId}`);
-};
+  router.push(`/monthlyStatistics/${storageRoomId}`)
+}
 
+// Filters
 const filteredStorageRooms = computed(() =>
-  data.value.filter((storageRoom) => {
-      return storageRoom.name.toLowerCase().includes(searchQuery.value.toLowerCase());
-  })
-);
+  data.value.filter((storageRoom) =>
+    storageRoom.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  )
+)
 
 const gridCols = computed(() => {
   const n = filteredStorageRooms.value.length
@@ -47,14 +91,137 @@ const gridCols = computed(() => {
   if (n === 2) return 'grid-cols-2'
   return 'grid-cols-3'
 })
+
+// Drawer open helpers
+const openCreateDrawer = () => {
+  activeCreateRoom.value = { ...emptyRoom.value }
+  drawerMode.value = 'create'
+  showDrawer.value = true
+  validationError.value = ''
+  successMessage.value = ''
+}
+
+const openEditDrawer = (room: IStorageRoomEnriched) => {
+  // NOTE: IStorageRoomEnriched extends IStorageRoom with extra fields like fullAddress
+  const { id, name, addressId, allowedRoles } = room
+  activeEditRoom.value = { id, name, addressId, allowedRoles, fullAddress: room.fullAddress } as IStorageRoomEnriched
+  drawerMode.value = 'edit'
+  showDrawer.value = true
+  validationError.value = ''
+  successMessage.value = ''
+}
+
+// Two-way binding for the modal form regardless of mode
+const activeRoom = computed<Partial<IStorageRoom>>({
+  get() {
+    return drawerMode.value === 'edit' ? (activeEditRoom.value as IStorageRoom) : (activeCreateRoom.value as IStorageRoom)
+  },
+  set(v) {
+    if (drawerMode.value === 'edit') {
+      activeEditRoom.value = { ...(activeEditRoom.value as IStorageRoomEnriched), ...(v as IStorageRoom) }
+    } else {
+      activeCreateRoom.value = { ...(activeCreateRoom.value as IStorageRoom), ...(v as IStorageRoom) }
+    }
+  }
+})
+
+// CRUD
+const createRoom = async () => {
+  validationError.value = ''
+  successMessage.value = ''
+  try {
+    if (!activeCreateRoom.value) return
+
+    // basic validation
+    if (!activeCreateRoom.value.name?.trim()) {
+      validationError.value = 'Name is required.'
+      return
+    }
+    if (!activeCreateRoom.value.addressId) {
+      validationError.value = 'Address is required.'
+      return
+    }
+
+    const { id, ...payload } = activeCreateRoom.value
+    const cleaned: IStorageRoom = {
+      ...payload,
+      allowedRoles: payload.allowedRoles?.filter(r => r && r.trim().length > 0) || []
+    } as IStorageRoom
+
+    const res = await storageRoomService.addAsync(cleaned)
+    if (res.errors?.length) {
+      validationError.value = res.errors.join(', ')
+      return
+    }
+
+    successMessage.value = '✅ Storage room created!'
+    showDrawer.value = false
+    await fetchPageData()
+  } catch (e) {
+    console.error('Create room failed', e)
+    validationError.value = 'Create failed. Check console.'
+  }
+}
+
+const updateRoom = async () => {
+  validationError.value = ''
+  successMessage.value = ''
+  try {
+    if (!activeEditRoom.value) return
+    const payload: IStorageRoom = {
+      id: activeEditRoom.value.id,
+      name: activeEditRoom.value.name,
+      addressId: activeEditRoom.value.addressId,
+      allowedRoles: activeEditRoom.value.allowedRoles || []
+    }
+    const res = await storageRoomService.updateAsync(payload)
+    if (res.errors?.length) {
+      validationError.value = res.errors.join(', ')
+      return
+    }
+    successMessage.value = '✅ Storage room updated!'
+    showDrawer.value = false
+    await fetchPageData()
+  } catch (e) {
+    console.error('Update room failed', e)
+    validationError.value = 'Update failed. Check console.'
+  }
+}
+
+const removeRoom = async (id: string) => {
+  if (!confirm('Are you sure you want to delete this storage room?')) return
+  try {
+    await storageRoomService.removeAsync(id)
+    await fetchPageData()
+  } catch (e) {
+    console.error('Delete room failed', e)
+    alert('Failed to delete storage room.')
+  }
+}
+
+// Allowed roles as comma-separated <-> array helpers (if you prefer a simple text field)
+const rolesInput = computed({
+  get() {
+    const arr = (drawerMode.value === 'edit' ? activeEditRoom.value?.allowedRoles : activeCreateRoom.value?.allowedRoles) || []
+    return arr.join(',')
+  },
+  set(v: string) {
+    const arr = v
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean)
+    if (drawerMode.value === 'edit' && activeEditRoom.value) activeEditRoom.value.allowedRoles = arr
+    if (drawerMode.value === 'create' && activeCreateRoom.value) activeCreateRoom.value.allowedRoles = arr
+  }
+})
 </script>
 
 <template>
   <main
     :class="[
-    'transition-all duration-300 p-4 sm:p-6 lg:p-8 text-white max-w-screen-2xl',
-    sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
-  ]"
+      'transition-all duration-300 p-4 sm:p-6 lg:p-8 text-white max-w-screen-2xl',
+      sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
+    ]"
   >
     <section class="mb-8 text-center">
       <h1
@@ -76,17 +243,30 @@ const gridCols = computed(() => {
                border-1 border-neutral-700
                shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]">
 
-        <!-- Search bar -->
-        <div class="mb-6 flex items-center gap-2">
-          <i class="bi bi-search text-neutral-400 hidden sm:inline"></i>
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search storage room..."
-            class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
-                   px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/30
-                   focus:border-neutral-500 transition shadow-inner shadow-black/30"
-          />
+        <!-- Toolbar: search + create button -->
+        <div class="mb-6 flex items-center justify-between gap-3 flex-wrap">
+          <div class="flex items-center gap-2 min-w-[260px] flex-1">
+            <i class="bi bi-search text-neutral-400 hidden sm:inline"></i>
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="Search storage room..."
+              class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+                     px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+                     focus:border-neutral-500 transition shadow-inner shadow-black/30"
+            />
+          </div>
+
+          <button
+            @click="openCreateDrawer"
+            class="group inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
+                   border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200
+                   shadow-[0_0_0_1px_rgba(34,211,238,0.25),_0_8px_24px_rgba(0,0,0,0.35)]
+                   hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
+                   focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition">
+            <i class="bi bi-plus-lg opacity-90 group-hover:opacity-100"></i>
+            <span>New Storage Room</span>
+          </button>
         </div>
 
         <!-- Grid of storage rooms -->
@@ -94,27 +274,44 @@ const gridCols = computed(() => {
           <div
             v-for="room in filteredStorageRooms"
             :key="room.id"
-            class="rounded-xl p-5 bg-neutral-900/60 border border-neutral-700
-           shadow-[0_4px_12px_rgba(0,0,0,0.3)]
-           hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15
-           transition"
+            class="relative rounded-xl p-5 bg-neutral-900/60 border border-neutral-700
+                   shadow-[0_4px_12px_rgba(0,0,0,0.3)]
+                   hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/15 transition"
           >
-            <!-- Nimi ja aadress -->
-            <h2 class="text-2xl font-bold text-neutral-200">{{ room.name }}</h2>
+            <!-- Remove -->
+            <button
+              class="absolute right-2 top-2 inline-flex items-center justify-center rounded-full w-8 h-8
+                     border-1 border-rose-400/50 bg-rose-500/10 text-rose-300
+                     hover:bg-rose-500/15 hover:text-white focus:outline-none focus:ring-2 focus:ring-rose-400/30"
+              @click="removeRoom(room.id)"
+              title="Remove storage room">
+              <i class="bi bi-trash3"></i>
+            </button>
+
+            <h2 class="text-2xl font-bold text-neutral-200 pr-10">{{ room.name }}</h2>
             <p class="text-base text-neutral-400 mt-2">📍 {{ room.fullAddress }}</p>
 
-            <!-- Nupp väiksem -->
-            <div class="mt-6 flex justify-end">
+            <div class="mt-6 flex justify-end gap-2">
+              <button
+                @click="openEditDrawer(room)"
+                class="inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium
+                       border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200
+                       shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_3px_10px_rgba(0,0,0,0.35)]
+                       hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
+                       focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition">
+                <i class="bi bi-pencil"></i>
+                Edit
+              </button>
               <button
                 @click="goToCurrentStock(room.id)"
                 class="inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold
-               border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/20 via-cyan-400/15 to-transparent text-cyan-200
-               shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_4px_12px_rgba(0,0,0,0.35)]
-               hover:from-cyan-400/30 hover:via-cyan-300/20 hover:text-white
-               focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition no-underline"
+                       border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/20 via-cyan-400/15 to-transparent text-cyan-200
+                       shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_4px_12px_rgba(0,0,0,0.35)]
+                       hover:from-cyan-400/30 hover:via-cyan-300/20 hover:text-white
+                       focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition no-underline"
               >
                 <i class="bi bi-box-seam text-base"></i>
-                View Stock
+                Write-off statistics
               </button>
             </div>
           </div>
@@ -127,23 +324,23 @@ const gridCols = computed(() => {
       </div>
     </section>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
-         bg-gradient-to-br from-cyan-500/20 via-cyan-400/15 to-transparent
-         border-1 border-neutral-700 text-neutral-100
-         shadow-[0_6px_24px_rgba(0,0,0,0.45)]
-         hover:from-cyan-500/30 hover:via-cyan-400/20
-         backdrop-blur-sm transition focus:outline-none
-         focus:ring-2 focus:ring-cyan-400/40"
+             bg-gradient-to-br from-cyan-500/20 via-cyan-400/15 to-transparent
+             border-1 border-neutral-700 text-neutral-100
+             shadow-[0_6px_24px_rgba(0,0,0,0.45)]
+             hover:from-cyan-500/30 hover:via-cyan-400/20
+             backdrop-blur-sm transition focus:outline-none
+             focus:ring-2 focus:ring-cyan-400/40"
       aria-label="Help & guide"
       title="Help"
     >
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -152,8 +349,8 @@ const gridCols = computed(() => {
       >
         <div
           class="w-full max-w-3xl rounded-2xl border border-white/10
-             bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8
-             shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+                 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8
+                 shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
           role="dialog"
           aria-modal="true"
           aria-labelledby="help-title"
@@ -165,9 +362,9 @@ const gridCols = computed(() => {
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
-                 border border-white/10 bg-white/5 text-neutral-300
-                 hover:bg-white/10 hover:text-white focus:outline-none
-                 focus:ring-2 focus:ring-white/15"
+                     border border-white/10 bg-white/5 text-neutral-300
+                     hover:bg-white/10 hover:text-white focus:outline-none
+                     focus:ring-2 focus:ring-white/15"
               @click="showHelp = false"
               title="Sulge"
               aria-label="Close help"
@@ -179,30 +376,51 @@ const gridCols = computed(() => {
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              Sellel lehel saad <strong>otsida</strong>, <strong>luua</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> tarnijaid ning vaadata, millised tooted on konkreetse tarnijaga seotud.
+              See leht võimaldab <strong>otsida</strong>, <strong>lisada</strong>, <strong>muuta</strong> ja
+              <strong>kustutada</strong> laoruume. Iga kaardi pealt pääsed ka nupu
+              <em>Write-off statistics</em> kaudu kuu statistika vaatesse.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
-              <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li>
+                <strong>Otsing:</strong> tööriistariba väli <em>Search storage room…</em> filtreerib kaarte laoruumi nime järgi.
+              </li>
+              <li>
+                <strong>Uus laoruum:</strong> klõpsa <em>New Storage Room</em>, täida vorm (<em>Name</em>, <em>Address</em>,
+                vajadusel <em>Allowed Roles</em>) ja salvesta.
+              </li>
+              <li>
+                <strong>Muutmine:</strong> kaardi nupp <em>Edit</em> avab valitud laoruumi andmete muutmise vormi.
+              </li>
+              <li>
+                <strong>Kustutamine:</strong> prügikasti ikoon eemaldab laoruumi pärast kinnitust. Seda toimingut ei saa tagasi võtta.
+              </li>
+              <li>
+                <strong>Address:</strong> vali olemasolev aadress rippmenüüst. (Aadresse saad hallata Settings &rarr; Addresses vaates.)
+              </li>
+              <li>
+                <strong>Allowed Roles:</strong> sisesta rollid komadega eraldatult (nt <code>admin,mustamäe</code>).
+                Tühjaks jätmisel ei lisata ühtegi rolli; tegelik ligipääsupiirang sõltub backendi loogikast.
+              </li>
+              <li>
+                <strong>Write-off statistics:</strong> avab valitud laoruumi mahakandmiste kuuülevaate.
+              </li>
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
+              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga <em>×</em> nupust.
+              Otsing jääb avatuks ka pärast muutmisi, et saaksid kiiresti samas vaates jätkata.
             </p>
           </div>
+
 
           <!-- Footer -->
           <div class="mt-6 flex justify-end">
             <button
               @click="showHelp = false"
               class="inline-flex items-center justify-center rounded-xl border border-neutral-700
-                 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
-                 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
+                     bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
+                     hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
               Sain aru
             </button>
@@ -211,24 +429,114 @@ const gridCols = computed(() => {
       </div>
     </transition>
 
+    <!-- CREATE/EDIT MODAL -->
+    <transition name="fade">
+      <div v-if="showDrawer" class="fixed inset-0 z-[1300] flex items-center justify-center bg-black/60 p-4" @click.self="showDrawer = false">
+        <div
+          class="w-full max-w-2xl rounded-2xl border border-neutral-700 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8
+                 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
+          <!-- Header -->
+          <div class="flex items-start justify-between gap-4">
+            <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
+              {{ drawerMode === 'edit' ? (activeEditRoom?.name || 'Edit Storage Room') : 'Create New Storage Room' }}
+            </h2>
+            <button
+              class="inline-flex items-center justify-center w-9 h-9 rounded-xl
+                     border-1 border-neutral-700 bg-white/5 text-neutral-300
+                     hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/15"
+              @click="showDrawer = false" title="Close">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <!-- Form -->
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Name -->
+            <div class="sm:col-span-2">
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label>
+              <input v-model="(activeRoom as any).name" type="text"
+                     class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white
+                            placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"/>
+            </div>
+
+            <!-- Address -->
+            <div class="sm:col-span-2">
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Address</label>
+              <select v-model="(activeRoom as any).addressId"
+                      class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+                             px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+                             focus:border-neutral-500 transition shadow-inner shadow-black/30">
+                <option disabled value="">Select address</option>
+                <option v-for="a in addresses" :key="a.id" :value="a.id">{{ a.name }}</option>
+              </select>
+            </div>
+
+            <!-- Allowed roles (as comma list OR switch to tag multiselect if you prefer) -->
+            <div class="sm:col-span-2">
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Allowed Roles (comma-separated)</label>
+              <input v-model="rolesInput" type="text"
+                     placeholder="e.g. admin,mustamäe"
+                     class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white
+                            placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"/>
+              <p class="mt-2 text-xs text-neutral-400">Tip: leave empty to allow no roles (or handle at backend as needed).</p>
+            </div>
+          </div>
+
+          <!-- Messages -->
+          <div class="mt-4">
+            <p v-if="validationError" class="text-rose-400 text-center font-medium">{{ validationError }}</p>
+            <p v-if="successMessage" class="text-emerald-400 text-center font-medium">{{ successMessage }}</p>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-end">
+            <button
+              v-if="drawerMode === 'edit'"
+              @click="updateRoom"
+              class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
+                     text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
+              Update
+            </button>
+            <button
+              v-else
+              @click="createRoom"
+              class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
+                     text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
+              Create
+            </button>
+            <button
+              @click="showDrawer = false"
+              class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
+                     text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </main>
 </template>
 
-
 <style scoped>
-/* Ühtlane pehme border kõigile “kaardi” elementidele, kui vaja laiendada */
-.card-like {
-  @apply bg-white/[0.04] backdrop-blur-xl border border-white/10 rounded-2xl;
-}
+/* modal fade */
+.fade-enter-active, .fade-leave-active { transition: opacity .18s ease; }
+.fade-enter-from, .fade-leave-to { opacity: 0; }
 
-/* Kui tahad “primary grey” nuppu taaskasutada */
-.btn-primary-grey {
-  @apply inline-flex items-center justify-center rounded-xl
-  bg-gradient-to-b from-neutral-800 to-neutral-700
-  text-white font-semibold px-6 py-3 text-base
-  border border-white/10 shadow-[0_0_8px_rgba(0,0,0,0.4)]
-  hover:border-[#ffaa33] hover:shadow-[0_0_15px_rgba(255,170,51,0.4)]
-  focus:outline-none focus:ring-2 focus:ring-[#ffaa33]/50 transition;
+/* vue-multiselect (if you later switch roles input to tagging) */
+:deep(.multiselect-dark) {
+  @apply w-full rounded-xl border border-white/10 bg-neutral-900/70 text-white shadow-sm transition;
 }
+:deep(.multiselect-dark .multiselect__tags) { @apply flex items-center min-h-[44px] rounded-xl border-0 bg-transparent px-3 py-0; }
+:deep(.multiselect-dark .multiselect__placeholder),
+:deep(.multiselect-dark .multiselect__single) { @apply block p-0 m-0 bg-transparent text-neutral-300 leading-[44px]; }
+:deep(.multiselect-dark .multiselect__input) { @apply bg-transparent text-white placeholder-neutral-500 leading-[44px] p-0 m-0; }
+:deep(.multiselect-dark .multiselect__select),
+:deep(.multiselect-dark .multiselect__clear) { @apply text-neutral-400 hover:text-white; }
+:deep(.multiselect-dark.multiselect--active .multiselect__tags) { @apply ring-2 ring-[#ffaa33]/35 outline-none border-[#ffaa33]; }
+:deep(.multiselect-dark .multiselect__content-wrapper) { @apply mt-2 rounded-xl border border-white/10 bg-neutral-950/95 backdrop-blur supports-[backdrop-filter]:bg-neutral-950/80 shadow-2xl max-h-64; }
+:deep(.multiselect-dark .multiselect__content) { @apply py-1; }
+:deep(.multiselect-dark .multiselect__option) { @apply px-4 py-2 text-neutral-200 cursor-pointer transition; }
+:deep(.multiselect-dark .multiselect__option--highlight) { @apply bg-white/10; }
+:deep(.multiselect-dark .multiselect__option--selected) { @apply bg-white/[0.06] text-[#ffaa33]; }
+:deep(.multiselect-dark.multiselect--disabled) { @apply opacity-60 cursor-not-allowed; }
 </style>
-

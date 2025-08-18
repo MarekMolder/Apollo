@@ -487,20 +487,31 @@ const showHelp = ref(false);
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              Sellel lehel saad <strong>otsida</strong>, <strong>luua</strong>, <strong>muuta</strong> ja
+              See leht aitab sul <strong>otsida</strong>, <strong>lisada</strong>, <strong>muuta</strong> ja
               <strong>kustutada</strong> tarnijaid ning vaadata, millised tooted on konkreetse tarnijaga seotud.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
-              <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li>
+                <strong>Otsing:</strong> ülariba väli <em>Search by name</em> filtreerib tarnijaid nime järgi.
+              </li>
+              <li>
+                <strong>Uus tarnija:</strong> klõpsa <em>New Supplier</em>, täida nimi, kontaktid ja <em>Address</em>, seejärel salvesta.
+              </li>
+              <li>
+                <strong>Muutmine:</strong> nupust <em>Edit</em> avad valitud tarnija andmete muutmise vormi.
+              </li>
+              <li>
+                <strong>Seotud tooted:</strong> nupust <em>Products</em> näed kõiki tooteid, mille tarnijaks on valitud ettevõte.
+              </li>
+              <li>
+                <strong>Kustutamine:</strong> prügikasti ikoon eemaldab tarnija pärast kinnitust. Seda toimingut ei saa tagasi võtta.
+              </li>
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

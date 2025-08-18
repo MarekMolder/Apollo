@@ -394,20 +394,41 @@ const acceptAll = async () => {
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              Sellel lehel saad <strong>otsida</strong>, <strong>luua</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> tarnijaid ning vaadata, millised tooted on konkreetse tarnijaga seotud.
+              See vaade võimaldab <strong>kinnitada</strong> või <strong>tagasi lükata</strong> kasutajate sisestatud mahakandmise taotlusi
+              ning filtreerida neid staatuse, kasutaja ja aja järgi.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
-              <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li>
+                <strong>Filtrid:</strong> ülariba <em>Status / User / Month / Year</em> piiravad alloleva tabeli kirjeid.
+                <em>All</em> tähendab, et filtrit ei rakendata.
+              </li>
+              <li>
+                <strong>Tabeli veerud:</strong> toode, põhjus, kogus, taotleja, taotluse aeg, laoruum, staatus ja toimingud.
+                Aeg kuvatakse lokaalses formaadis.
+              </li>
+              <li>
+                <strong>Staatused:</strong> <em>Pending</em> (ootel), <em>Accepted</em> (kinnitatud), <em>Declined</em> (tagasi lükatud).
+                Kui kirje pole enam <em>Pending</em>, ei saa seda muuta.
+              </li>
+              <li>
+                <strong>Accept / Decline:</strong> rea lõpus olevate nuppudega kinnitad või lükkad tagasi üksiku taotluse.
+              </li>
+              <li>
+                <strong>Accept (kõik nähtavad):</strong> tööriistariba roheline nupp kinnitab <em>kõik hetkel filtritega nähtavad</em>
+                <em>Pending</em> taotlused.
+              </li>
+              <li>
+                <strong>Dispose item:</strong> viib uuele lehele, kus saab lisada uue mahakandmise taotluse.
+              </li>
+              <li>
+                <strong>Laadimine:</strong> kui andmeid kogutakse, kuvatakse lühidalt laadimisindikaator.
+              </li>
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
+              Nipp: kui soovid kinnitada vaid kindla kuu/kasutaja taotlused, rakenda vastavad filtrid enne
+              <em>Accept (kõik nähtavad)</em> nupu vajutamist. Modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
             </p>
           </div>
 

@@ -204,20 +204,32 @@ const removeRole = async (userId: string, roleName: string) => {
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              Sellel lehel saad <strong>otsida</strong>, <strong>luua</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> tarnijaid ning vaadata, millised tooted on konkreetse tarnijaga seotud.
+              See leht kuvab kõik süsteemi kasutajad ja nende külge määratud <strong>rollid</strong>.
+              Siin saad vaadata kasutajate infot ning <strong>eemaldada rolle</strong>.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
-              <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li>
+                <strong>Tabeli veerud:</strong> <em>Email</em>, <em>Full name</em> ja <em>Roles</em>.
+                Rollid kuvatakse märgenditena (badges).
+              </li>
+              <li>
+                <strong>Rolli eemaldamine:</strong> klõpsa rolli märgendi paremal ääres olevale <em>×</em> nupule.
+                Muudatus rakendub kohe ja loend värskendatakse.
+              </li>
+              <li>
+                <strong>Veateated:</strong> kui toiming ebaõnnestub, kuvatakse ülaservas punane teade täpse põhjusega.
+              </li>
+              <li>
+                <strong>Tühi vaade:</strong> kui kasutajaid pole või andmete laadimine ebaõnnestus, kuvatakse „No data to display”.
+              </li>
+              <li>
+                <strong>Märkus:</strong> rollide <em>lisamine</em> ei ole sellel lehel võimalik. Tee see vastavas rollihalduse vaates.
+              </li>
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
+              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
             </p>
           </div>
 

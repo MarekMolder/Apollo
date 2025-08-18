@@ -40,6 +40,28 @@ const convertedVolumes = ref<Record<string, string>>({});
 // Helpers
 const normalize = (s: string) => s.trim().toLowerCase();
 
+function getUnifiedAmount(item: IMonthlyStatisticsEnriched): string {
+  // tk -> kasutame mahtu (ja kasutaja valitud volumeUnit'i kui olemas)
+  if (item.productUnit === "tk") {
+    // olemasolev cache (kehtib ka siis, kui kasutaja valis teise mahuühiku)
+    const cached = convertedVolumes.value[item.id];
+    if (cached) return cached;
+
+    // fallback, kui pole veel teisendatud ega valikut tehtud
+    const vol = calcRemovedVolume(item);
+    if (!vol) return "";
+    const unit = selectedVolumeUnits.value[item.id] ?? vol.unit ?? "";
+    return `${vol.value} ${unit}`.trim();
+  }
+
+  // mitte tk -> kasutame kogust (ja kasutaja valitud unit'it kui olemas)
+  const cachedQ = convertedQuantities.value[item.id];
+  if (cachedQ) return cachedQ;
+
+  const unit = selectedUnits.value[item.id] ?? item.productUnit;
+  return `${item.totalRemovedQuantity} ${unit}`.trim();
+}
+
 // Get monthlyStatistics
 onMounted(async () => {
   const result = await service.getByStorageRoomId(storageRoomId);
@@ -164,19 +186,30 @@ const exportColumns = [
     label: "Category",
     get: (x: IMonthlyStatisticsEnriched) => x.productCategoryName ?? "",
   },
+
+  // 🆕 ÜHTNE veerg
+  // Kui soovid, võid 'label'i panna täpselt "Removed Volume" või "Removed Quantity".
+  // Mina panen neutraalse "Removed Amount (normalized)".
+  {
+    key: "normalizedAmount",
+    label: "Removed Amount (normalized)",
+    get: (x: IMonthlyStatisticsEnriched) => getUnifiedAmount(x),
+  },
+
+  // --- valikuline: kui tahad, jäta ka toorveerud alles, aga vaikimisi mitte valituks:
   {
     key: "productUnit",
-    label: "Unit",
+    label: "Unit (raw)",
     get: (x: IMonthlyStatisticsEnriched) => x.productUnit ?? "",
   },
   {
     key: "totalRemovedQuantity",
-    label: "Removed Quantity",
+    label: "Removed Quantity (raw)",
     get: (x: IMonthlyStatisticsEnriched) => x.totalRemovedQuantity,
   },
   {
     key: "removedVolume",
-    label: "Removed Volume",
+    label: "Removed Volume (raw)",
     get: (x: IMonthlyStatisticsEnriched) => {
       const vol = calcRemovedVolume(x);
       return vol ? `${vol.value} ${vol.unit ?? ""}`.trim() : "";
@@ -188,7 +221,8 @@ const exportColumns = [
 const selectedExportKeys = ref<string[]>([
   "productName",
   "productCode",
-  "totalRemovedQuantity",
+  "productCategoryName",
+  "normalizedAmount", // 🟦 ainult see veerg koguse/mahu jaoks
 ]);
 
 const exportToExcel = () => {
@@ -539,17 +573,41 @@ const exportToExcel = () => {
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              Sellel lehel saad <strong>otsida</strong>, <strong>luua</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> tarnijaid ning vaadata, millised tooted on konkreetse tarnijaga seotud.
+              See vaade näitab valitud laoruumi <strong>kuiseid mahakantud koguseid</strong>.
+              Filtreeri ülevalt aasta ja kuu järgi ning täpsusta tulemusi lisafilteritega.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
-              <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li>
+                <strong>Aasta & kuu:</strong> vali rippmenüüdest periood, mille andmeid soovid vaadata.
+              </li>
+              <li>
+                <strong>Filtrid:</strong> <em>Filter by name</em> ja <em>Filter by code</em> otsivad vastavalt toote nime ja koodi järgi.
+                <em>Category</em> piirab kategooria kaupa, <em>Day</em> lubab vaadata konkreetse päeva kandeid.
+              </li>
+              <li>
+                <strong>Ühikute vahetus (Quantity):</strong> kui toote ühik ei ole <code>tk</code>, saad veerus
+                <em>Unit</em> valida sihtühiku (nt g, kg, ml, l). Vastav <em>Removed Quantity</em> teisendatakse automaatselt.
+              </li>
+              <li>
+                <strong>Tükikaubad (Volume):</strong> kui toote ühik on <code>tk</code>, kuvatakse veerus
+                <em>Removed Volume</em> kogumaht (tk × toote maht). Vali kõrval rippmenüüst soovitud mahuühik (nt ml, l),
+                et näha mahtu selles ühikus.
+              </li>
+              <li>
+                <strong>Tabel:</strong> veerud näitavad toodet, koodi, kategooriat, ühikut ning eemaldatud kogust/mahtu vastavalt sinu valikutele.
+              </li>
+              <li>
+                <strong>Excelisse eksport:</strong> vali <em>Columns</em> alt, millised veerud kaasata, ja klõpsa
+                <em>Export Excel</em>, et salvestada hetkel nähtavad read failiks <code>monthly_statistics_YYYY-MM.xlsx</code>.
+              </li>
             </ul>
+
+            <p class="text-neutral-400 text-sm">
+              Nipp: kuu või aasta muutmisel lähtestub <em>Day</em> filter automaatselt. Modaali saab sulgeda taustale klõpsates või ülanurga <em>×</em> nupust.
+            </p>
+          </div>
+
 
             <p class="text-neutral-400 text-sm">
               Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
@@ -568,7 +626,6 @@ const exportToExcel = () => {
             </button>
           </div>
         </div>
-      </div>
     </transition>
   </main>
 </template>
