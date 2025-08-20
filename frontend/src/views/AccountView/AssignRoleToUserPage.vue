@@ -7,34 +7,32 @@ import type { AssignRoleDto } from '@/types/AssignRoleDto'
 import { useSidebarStore } from '@/stores/sidebarStore'
 import Multiselect from "vue-multiselect";
 import 'vue-multiselect/dist/vue-multiselect.min.css'
-const sidebarStore = useSidebarStore()
-const showHelp = ref(false);
 
-// Services
+// ---------------- Services ----------------
 const roleService = new RoleService()
 const identityService = new IdentityService()
 
-// Entity's
+// ---------------- Entities ----------------
 const roles = ref<AppRole[]>([])
 
-// ??
+// ---------------- Stores, drawers and users ----------------
+const sidebarStore = useSidebarStore()
+const showHelp = ref(false);
 const users = ref<{ id: string; firstName: string; lastName: string }[]>([])
-
-// ?
 const selectedUserId = ref('')
 const selectedRoleId = ref('')
 
-// Messages errors/success
+// ---------------- Messages errors/success ----------------
 const successMessage = ref('')
 const validationError = ref('')
 
-// Get users and roles
+// ---------------- Fetch ----------------
 onMounted(async () => {
   users.value = await identityService.getAllUsers()
   roles.value = await roleService.getAllRoles()
 })
 
-// Assign Role to user function
+// ---------------- Assign role to user function----------------
 const assignRole = async () => {
   const dto: AssignRoleDto = {
     userId: selectedUserId.value,
@@ -50,11 +48,10 @@ const assignRole = async () => {
   }
 }
 
-// Tüübid + reducer
+// ---------------- Options ----------------
 type SelectOpt = { label: string; value: string }
 const reduceToValue = (opt: SelectOpt) => opt.value
 
-// Ehitame valikud tüübitult
 const userOptions = computed<SelectOpt[]>(
   () => users.value.map(u => ({ label: `${u.firstName} ${u.lastName}`, value: u.id }))
 )
@@ -155,7 +152,7 @@ const roleOptions = computed<SelectOpt[]>(
       </p>
     </div>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -171,7 +168,7 @@ const roleOptions = computed<SelectOpt[]>(
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -235,7 +232,8 @@ const roleOptions = computed<SelectOpt[]>(
             </div>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

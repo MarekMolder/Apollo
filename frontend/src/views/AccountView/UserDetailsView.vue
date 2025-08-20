@@ -4,16 +4,10 @@ import { useRoute, useRouter } from 'vue-router'
 import { IdentityService } from '@/services/IdentityService'
 import { useSidebarStore } from '@/stores/sidebarStore'
 
-const sidebarStore = useSidebarStore()
-const showHelp = ref(false)
-
+// ---------------- Services ----------------
 const identityService = new IdentityService()
-const route = useRoute()
-const router = useRouter()
 
-const loading = ref(true)
-const error = ref<string | null>(null)
-
+// ---------------- Entities ----------------
 const user = ref<{
   id: string
   email: string
@@ -22,6 +16,18 @@ const user = ref<{
   userName: string
 } | null>(null)
 
+// ---------------- Store, router and drawer----------------
+const sidebarStore = useSidebarStore()
+const showHelp = ref(false)
+const route = useRoute()
+const router = useRouter()
+const loading = ref(true)
+const goBack = () => router.back()
+
+// ---------------- Error message ----------------
+const error = ref<string | null>(null)
+
+// ---------------- Fetch ----------------
 onMounted(async () => {
   try {
     const id = route.params.id as string
@@ -32,8 +38,6 @@ onMounted(async () => {
     loading.value = false
   }
 })
-
-const goBack = () => router.back()
 </script>
 
 <template>
@@ -43,7 +47,7 @@ const goBack = () => router.back()
       sidebarStore.isOpen ? 'ml-[165px]' : 'ml-[64px]'
     ]"
   >
-    <!-- Header (sama stiil kui Account) -->
+    <!-- HEADER -->
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -56,10 +60,9 @@ const goBack = () => router.back()
       <p class="mt-3 text-sm text-neutral-400">{{ $t('View selected user profile') }}</p>
     </section>
 
-    <!-- Kaardikonteiner (sama skeem) -->
+    <!-- Card container -->
     <section class="mx-auto w-full max-w-[100rem]">
       <div class="grid gap-5 place-items-center">
-        <!-- Info kaart -->
         <div
           class="w-full max-w-[640px] mx-auto rounded-xl border border-neutral-700 bg-neutral-900/60 p-4 sm:p-5"
         >          <div class="flex items-center gap-4 mb-5">
@@ -108,13 +111,10 @@ const goBack = () => router.back()
             </button>
           </div>
         </div>
-
-        <!-- (Valikuline) Lisakaart tulevikuks: nt rollide kokkuvõte vms -->
-        <!-- <div class="rounded-xl border border-neutral-700 bg-neutral-900/60 p-4 sm:p-5"></div> -->
       </div>
     </section>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -130,7 +130,7 @@ const goBack = () => router.back()
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -174,19 +174,17 @@ const goBack = () => router.back()
                 <em>Username</em>.
               </li>
               <li>
-                <strong>Laadimine:</strong> kui andmed on teel, kuvatakse “Loading…”. Kui andmeid ei ilmu,
+                <strong>Laadimine:</strong> kui andmeid laetakse, kuvatakse “Loading…”. Kui andmeid ei ilmu,
                 värskenda lehte või naase kasutajate loendisse.
               </li>
               <li>
                 <strong>Rollid & õigused:</strong> rollide vaatamiseks/haldamiseks kasuta
                 <em>Users and roles</em> vaadet.
               </li>
-              <li>
-                <strong>Privaatsus:</strong> vaata/jaga isikuandmeid ainult vastavate õigustega.
-              </li>
             </ul>
             <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

@@ -3,23 +3,23 @@ import { onMounted, ref } from 'vue'
 import { RoleService } from '@/services/RoleService'
 import type { AppRole } from '@/domain/logic/AppRole'
 import { useSidebarStore } from '@/stores/sidebarStore'
-const sidebarStore = useSidebarStore()
-const showHelp = ref(false);
 
-// Services
+// // ---------------- Services ----------------
 const roleService = new RoleService()
 
-// Entitys
+// ---------------- Entities ----------------
 const roles = ref<AppRole[]>([])
 
-// ??
+// ---------------- Store, drawer and role string ----------------
+const sidebarStore = useSidebarStore()
+const showHelp = ref(false);
 const newRoleName = ref('')
 
-// Messages errors/success
+// ---------------- Messages errors/success ----------------
 const validationError = ref('')
 const successMessage = ref('')
 
-// Get roles
+// ---------------- Fetch ----------------
 const fetchRoles = async () => {
   try {
     roles.value = await roleService.getAllRoles()
@@ -30,7 +30,7 @@ const fetchRoles = async () => {
 
 onMounted(fetchRoles)
 
-// Role create function
+// ---------------- Role create function  ----------------
 const createRole = async () => {
   validationError.value = ''
   successMessage.value = ''
@@ -125,7 +125,7 @@ const createRole = async () => {
       </table>
     </div>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -141,7 +141,7 @@ const createRole = async () => {
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -205,7 +205,8 @@ const createRole = async () => {
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

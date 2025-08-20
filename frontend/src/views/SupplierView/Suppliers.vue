@@ -1,6 +1,5 @@
 ﻿<script setup lang="ts">
 import { onMounted, ref, computed } from "vue";
-import { X } from "lucide-vue-next";
 import type { ISupplier } from "@/domain/logic/ISupplier";
 import type { ISupplierEnriched } from "@/domain/logic/ISupplierEnriched";
 import { SupplierService } from "@/services/mvcServices/SupplierService";
@@ -14,33 +13,32 @@ import 'vue-multiselect/dist/vue-multiselect.min.css';
 import { useSidebarStore } from '@/stores/sidebarStore';
 const sidebarStore = useSidebarStore();
 
-// Services
+// ---------------- Services ----------------
 const supplierService = new SupplierService();
 const addressService = new AddressService();
 
-// Entity's
+// ---------------- Entities ----------------
 const supplierAddresses = ref<IAddress[]>([]);
 const data = ref<ISupplierEnriched[]>([]);
 const productsForSupplier = ref<IProductEnriched[]>([]);
 
-// Search engine
-const searchName = ref("");
-
-// Drawer mode
+// ---------------- Drawer Mode ----------------
 const showDrawer = ref(false);
 const showProductsDrawer = ref(false);
 const drawerMode = ref<"edit" | "create">("edit");
 const activeEditSupplier = ref<ISupplierEnriched | null>(null);
 const activeCreateSupplier = ref<ISupplier | null>(null);
+const showHelp = ref(false);
 
-//??
+// ---------------- Filters ----------------
+const searchName = ref("");
 const selectedSupplierName = ref("");
 
-// Messages errors/success
+// ---------------- Messages errors/success ----------------
 const validationError = ref('');
 const successMessage = ref('');
 
-// Empty Supplier entity
+// ---------------- Empty Supplier entity ----------------
 const emptySupplier = ref<ISupplier>({
   id: "",
   name: "",
@@ -49,7 +47,7 @@ const emptySupplier = ref<ISupplier>({
   addressId: ""
 });
 
-// Get suppliers
+// ---------------- Fetch ----------------
 onMounted(async () => {
   suppliers.value = (await supplierService.getAllAsync()).data || [];
   supplierAddresses.value = (await addressService.getAllAsync()).data || [];
@@ -64,7 +62,6 @@ const fetchPageData = async () => {
   }
 };
 
-// Get products by Supplier
 const fetchProductsBySupplier = async (supplierId: string, supplierName: string) => {
   try {
     selectedSupplierName.value = supplierName;
@@ -79,14 +76,14 @@ const fetchProductsBySupplier = async (supplierId: string, supplierName: string)
 
 onMounted(fetchPageData);
 
-// Search engine filtered suppliers
+// ---------------- Search engine filtered suppliers ----------------
 const filteredSuppliers = computed(() =>
   data.value.filter((supplier) =>
     supplier.name.toLowerCase().includes(searchName.value.toLowerCase())
   )
 );
 
-// Drawers for Suppliers
+// ---------------- Drawers for suppliers ----------------
 const openSupplierEditDrawer = (supplier: ISupplierEnriched) => {
   activeEditSupplier.value = { ...supplier };
   drawerMode.value = "edit";
@@ -109,7 +106,7 @@ const activeSupplier = computed({
   }
 });
 
-// Supplier edit function
+// ---------------- Supplier edit function ----------------
 const editSupplier = async () => {
   validationError.value = "";
   successMessage.value = "";
@@ -126,7 +123,7 @@ const editSupplier = async () => {
   }
 };
 
-// Supplier create function
+// ---------------- Supplier create function ----------------
 const createSupplier = async () => {
   validationError.value = "";
   successMessage.value = "";
@@ -142,7 +139,6 @@ const createSupplier = async () => {
     const result = await supplierService.addAsync(cleaned);
 
     if (result.errors?.length) {
-      // concise UI message; details in console
       validationError.value = "❌ Failed to create supplier. Please check the fields.";
       console.error("Supplier creation validation errors:", result.errors);
     } else {
@@ -156,13 +152,6 @@ const createSupplier = async () => {
   }
 };
 
-//Supplier remove function
-const removeSupplier = async (id: string) => {
-  if (!confirm("Are you sure you want to delete this supplier?")) return;
-  await supplierService.removeAsync(id);
-  await fetchPageData();
-};
-
 const selectedAddress = computed({
   get: () =>
     supplierAddresses.value.find(a => a.id === (activeSupplier.value?.addressId ?? '')) || null,
@@ -171,7 +160,12 @@ const selectedAddress = computed({
   }
 });
 
-const showHelp = ref(false);
+// ---------------- Supplier remove function ----------------
+const removeSupplier = async (id: string) => {
+  if (!confirm("Are you sure you want to delete this supplier?")) return;
+  await supplierService.removeAsync(id);
+  await fetchPageData();
+};
 </script>
 
 <template>
@@ -181,6 +175,7 @@ const showHelp = ref(false);
     sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
   ]"
   >
+    <!-- HEADER -->
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -199,7 +194,7 @@ const showHelp = ref(false);
         class="rounded-[16px] p-6 sm:p-8 bg-[rgba(25,25,25,0.4)] backdrop-blur-xl
                border-1 border-neutral-700 shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]">
 
-        <!-- Filters in one row -->
+        <!-- Filters -->
         <div
           class="mb-6 flex items-center gap-3 whitespace-nowrap overflow-x-auto
                  [-ms-overflow-style:none] [scrollbar-width:none]">
@@ -229,7 +224,7 @@ const showHelp = ref(false);
           </div>
         </div>
 
-        <!-- Cards grid -->
+        <!-- Cards -->
         <div class="grid gap-4 grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
           <div
             v-for="item in filteredSuppliers"
@@ -283,7 +278,7 @@ const showHelp = ref(false);
       </div>
     </section>
 
-    <!-- CENTERED MODAL: Create/Edit Supplier -->
+    <!-- Create/Edit Supplier -->
     <transition name="fade">
       <div v-if="showDrawer" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 p-4" @click.self="showDrawer = false">
         <div
@@ -375,7 +370,7 @@ const showHelp = ref(false);
       </div>
     </transition>
 
-    <!-- CENTERED MODAL: Products by Supplier -->
+    <!-- Products by Supplier -->
     <transition name="fade">
       <div v-if="showProductsDrawer" class="fixed inset-0 z-[1000] flex items-center justify-center bg-black/60 p-4" @click.self="showProductsDrawer = false">
         <div
@@ -419,23 +414,7 @@ const showHelp = ref(false);
       </div>
     </transition>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
-    <button
-      @click="showHelp = true"
-      class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
-         bg-gradient-to-br from-cyan-500/20 via-cyan-400/15 to-transparent
-         border border-neutral-700 text-neutral-100
-         shadow-[0_6px_24px_rgba(0,0,0,0.45)]
-         hover:from-cyan-500/30 hover:via-cyan-400/20
-         backdrop-blur-sm transition focus:outline-none
-         focus:ring-2 focus:ring-cyan-400/40"
-      aria-label="Help & guide"
-      title="Help"
-    >
-      <i class="bi bi-question-lg text-xl"></i>
-    </button>
-
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -451,7 +430,7 @@ const showHelp = ref(false);
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -526,6 +505,7 @@ const showHelp = ref(false);
               Sain aru
             </button>
           </div>
+
         </div>
       </div>
     </transition>
@@ -534,9 +514,8 @@ const showHelp = ref(false);
 </template>
 
 <style scoped>
-/* --- vue-multiselect: tume variant --- */
+/* --- vue-multiselect --- */
 :deep(.multiselect-dark) {
-  /* konteiner */
   border: 1px solid rgba(255,255,255,0.1);
   border-radius: 0.75rem;
   background: rgba(17,17,17,0.7);
@@ -597,8 +576,4 @@ const showHelp = ref(false);
   opacity: .6;
   cursor: not-allowed;
 }
-
-.fade-enter-active, .fade-leave-active { transition: opacity .18s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-
 </style>

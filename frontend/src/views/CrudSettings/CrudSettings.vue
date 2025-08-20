@@ -5,10 +5,6 @@ import Multiselect from "vue-multiselect";
 import "vue-multiselect/dist/vue-multiselect.min.css";
 import type { Ref } from "vue";
 import { useSidebarStore } from '@/stores/sidebarStore';
-const sidebarStore = useSidebarStore();
-const showHelp = ref(false);
-
-// --- Services & Types ---
 import { ActionTypeService } from "@/services/mvcServices/ActionTypeService";
 import type { IActionType } from "@/domain/logic/IActionType";
 import { ReasonService } from "@/services/mvcServices/ReasonService";
@@ -23,6 +19,12 @@ import type { IRecipeComponent } from "@/domain/logic/IRecipeComponent";
 import type { IRecipeComponentEnriched } from "@/domain/logic/IRecipeComponentEnriched";
 import { ProductService } from "@/services/mvcServices/ProductServices";
 import type { IProduct } from "@/domain/logic/IProduct";
+
+// ---------------- Drawer Mode ----------------
+const showHelp = ref(false);
+
+// ---------------- Store ----------------
+const sidebarStore = useSidebarStore();
 
 // ---------------- Tabs ----------------
 type TabKey = "actionTypes" | "reasons" | "productCategories" | "addresses" | "recipeComponents";
@@ -462,7 +464,7 @@ onMounted(async () => {
   await Promise.all([at_fetch(), rs_fetch(), pc_fetch(), addr_fetch(), rc_fetch(), prod_fetch()]);
 });
 
-// kaardista iga taba oma otsingu-refile
+// ---------------- Filters ----------------
 const searchByTab: Record<TabKey, Ref<string>> = {
   actionTypes: at_search,
   reasons: rs_search,
@@ -471,13 +473,11 @@ const searchByTab: Record<TabKey, Ref<string>> = {
   recipeComponents: rc_search,
 };
 
-// v-model proxy aktiivse taba otsingule
 const currentSearch = computed<string>({
   get: () => searchByTab[activeTab.value].value,
   set: (v) => { searchByTab[activeTab.value].value = v; },
 });
 
-// (valikuline) placeholderid tabade kaupa – kergem lugeda
 const placeholderByTab: Record<TabKey, string> = {
   actionTypes: "Search by name",
   reasons: "Search by description",
@@ -494,6 +494,7 @@ const placeholderByTab: Record<TabKey, string> = {
     sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
   ]"
   >
+    <!-- HEADER -->
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -888,7 +889,7 @@ const placeholderByTab: Record<TabKey, string> = {
       </div>
     </transition>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -904,7 +905,7 @@ const placeholderByTab: Record<TabKey, string> = {
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -940,17 +941,15 @@ const placeholderByTab: Record<TabKey, string> = {
           <!-- Body -->
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
-              See leht võimaldab hallata rakenduse <strong>põhiandmeid</strong> (Action Types, Reasons, Product Categories, Addresses)
-              ning <strong>Recipe Components</strong> seoseid. Kasuta ülariba sakke, et liikuda andmekogude vahel.
+              See leht võimaldab hallata rakenduse <strong>põhiandmeid</strong> (Action Types, Reasons, Product Categories, Addresses, Recipe components) seoseid. Kasuta ülariba nuppe, et liikuda andmekogude vahel.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
               <li>
-                <strong>Otsing:</strong> tööriistariba otsing filtreerib <em>aktiivse saki</em> elemente (nt nime või kirjelduse järgi).
+                <strong>Otsing:</strong> tööriistariba otsing filtreerib <em>aktiivse nupu</em> elemente (nt nime või kirjelduse järgi).
               </li>
               <li>
-                <strong>Uus kirje:</strong> klõpsa <em>New</em> (või sakis <em>Recipe Components</em> nupul <em>New Component</em>),
-                täida vorm ja salvesta.
+                <strong>Uus kirje:</strong> vajuta <em>New</em>, täida vorm ja salvesta.
               </li>
               <li>
                 <strong>Muutmine:</strong> kaardi nupust <em>Edit</em> avad vormi olemasoleva kirje muutmiseks.
@@ -960,16 +959,13 @@ const placeholderByTab: Record<TabKey, string> = {
               </li>
               <li>
                 <strong>Recipe Components:</strong> siin seod retseptitoote (Recipe Product) konkreetsete
-                komponenditoodetega (Component Product) ja määrad <em>amount</em> (näiteks 1 retseptiühik = X g/ml komponenti).
-              </li>
-              <li>
-                <strong>Aadressid:</strong> Addresses sakis haldad aadressi põhiandmeid (nimi, tänav, maja/üksus, indeks, linn jm).
+                komponenditoodetega (Component Product) ja määrad <em>amount</em> (näiteks 1 g/ml/.. retseptiühik = X g/ml/.. komponenti).
               </li>
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust. Kiiremaks
-              navigeerimiseks vaheta sakke ja kasuta otsingut enne uue kirje lisamist.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

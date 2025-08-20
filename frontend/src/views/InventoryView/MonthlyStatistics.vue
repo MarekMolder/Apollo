@@ -4,65 +4,90 @@ import { useRoute } from "vue-router";
 import { MonthlyStatisticsService } from "@/services/mvcServices/MonthlyStatisticsService";
 import type { IMonthlyStatisticsEnriched } from "@/domain/logic/IMonthlyStatisticsEnriched.ts";
 import { useSidebarStore } from '@/stores/sidebarStore';
+import * as XLSX from "xlsx";
 
-const sidebarStore = useSidebarStore();
-const showHelp = ref(false);
-
-// Services
+// ---------------- Services ----------------
 const service = new MonthlyStatisticsService();
 
-// Entity's
+// ---------------- Entities ----------------
 const data = ref<IMonthlyStatisticsEnriched[]>([]);
 
-// Route
+// ---------------- Store && Router ----------------
 const route = useRoute();
+const sidebarStore = useSidebarStore();
 const storageRoomId = route.params.storageRoomId as string;
 
-// Search engine (year/month)
+// ---------------- Filters ----------------
 const selectedYear = ref(new Date().getFullYear());
 const selectedMonth = ref(new Date().getMonth() + 1);
 const yearOptions = Array.from({ length: 5 }, (_, i) => new Date().getFullYear() - i);
 const monthOptions = Array.from({ length: 12 }, (_, i) => i + 1);
-
-// Filters
 const nameQuery = ref("");
 const codeQuery = ref("");
 const selectedCategoryId = ref<"All" | string>("All");
 const selectedDay = ref<"All" | number>("All");
 
-// Unit conversion
+// ---------------- Unit conversion ----------------
 const selectedUnits = ref<Record<string, string>>({});
 const convertedQuantities = ref<Record<string, string>>({});
 const availableUnits = ["g", "kg", "mg", "ml", "l", "cl"];
 const selectedVolumeUnits = ref<Record<string, string>>({});
 const convertedVolumes = ref<Record<string, string>>({});
 
-// Helpers
+// ---------------- Helpers ----------------
+const showHelp = ref(false);
 const normalize = (s: string) => s.trim().toLowerCase();
 
-function getUnifiedAmount(item: IMonthlyStatisticsEnriched): string {
-  // tk -> kasutame mahtu (ja kasutaja valitud volumeUnit'i kui olemas)
-  if (item.productUnit === "tk") {
-    // olemasolev cache (kehtib ka siis, kui kasutaja valis teise mahuühiku)
-    const cached = convertedVolumes.value[item.id];
-    if (cached) return cached;
+// ---------------- Excel columns ----------------
+const exportColumns = [
+  {
+    key: "productName",
+    label: "Name",
+    get: (x: IMonthlyStatisticsEnriched) => x.productName ?? "",
+  },
+  {
+    key: "productCode",
+    label: "Code",
+    get: (x: IMonthlyStatisticsEnriched) => x.productCode ?? "",
+  },
+  {
+    key: "productCategoryName",
+    label: "Category",
+    get: (x: IMonthlyStatisticsEnriched) => x.productCategoryName ?? "",
+  },
+  {
+    key: "normalizedAmount",
+    label: "Removed Amount (normalized)",
+    get: (x: IMonthlyStatisticsEnriched) => getUnifiedAmount(x),
+  },
+  {
+    key: "productUnit",
+    label: "Unit (raw)",
+    get: (x: IMonthlyStatisticsEnriched) => x.productUnit ?? "",
+  },
+  {
+    key: "totalRemovedQuantity",
+    label: "Removed Quantity (raw)",
+    get: (x: IMonthlyStatisticsEnriched) => x.totalRemovedQuantity,
+  },
+  {
+    key: "removedVolume",
+    label: "Removed Volume (raw)",
+    get: (x: IMonthlyStatisticsEnriched) => {
+      const vol = calcRemovedVolume(x);
+      return vol ? `${vol.value} ${vol.unit ?? ""}`.trim() : "";
+    },
+  },
+];
 
-    // fallback, kui pole veel teisendatud ega valikut tehtud
-    const vol = calcRemovedVolume(item);
-    if (!vol) return "";
-    const unit = selectedVolumeUnits.value[item.id] ?? vol.unit ?? "";
-    return `${vol.value} ${unit}`.trim();
-  }
+const selectedExportKeys = ref<string[]>([
+  "productName",
+  "productCode",
+  "productCategoryName",
+  "normalizedAmount",
+]);
 
-  // mitte tk -> kasutame kogust (ja kasutaja valitud unit'it kui olemas)
-  const cachedQ = convertedQuantities.value[item.id];
-  if (cachedQ) return cachedQ;
-
-  const unit = selectedUnits.value[item.id] ?? item.productUnit;
-  return `${item.totalRemovedQuantity} ${unit}`.trim();
-}
-
-// Get monthlyStatistics
+// ---------------- Fetch ----------------
 onMounted(async () => {
   const result = await service.getByStorageRoomId(storageRoomId);
   data.value = result.data || [];
@@ -79,12 +104,6 @@ onMounted(async () => {
   }
 });
 
-// reset day when year/month changes
-watch([selectedYear, selectedMonth], () => {
-  selectedDay.value = "All";
-});
-
-// Conversion fetchers
 async function fetchConvertedQuantity(id: string, targetUnit: string) {
   try {
     const result = await service.getConvertedQuantity(id, targetUnit);
@@ -103,9 +122,27 @@ async function fetchConvertedVolume(id: string, targetUnit: string) {
   }
 }
 
-// Options (unique categories by ID; days of selected month)
+function getUnifiedAmount(item: IMonthlyStatisticsEnriched): string {
+  if (item.productUnit === "tk") {
+    const cached = convertedVolumes.value[item.id];
+    if (cached) return cached;
+
+    const vol = calcRemovedVolume(item);
+    if (!vol) return "";
+    const unit = selectedVolumeUnits.value[item.id] ?? vol.unit ?? "";
+    return `${vol.value} ${unit}`.trim();
+  }
+
+  const cachedQ = convertedQuantities.value[item.id];
+  if (cachedQ) return cachedQ;
+
+  const unit = selectedUnits.value[item.id] ?? item.productUnit;
+  return `${item.totalRemovedQuantity} ${unit}`.trim();
+}
+
+// ---------------- Search engine filtered monthlyStatistics ----------------
 const categoryOptions = computed(() => {
-  const map = new Map<string, string>(); // id -> name
+  const map = new Map<string, string>();
   for (const it of data.value ?? []) {
     if (it.productCategoryId && it.productCategoryName) {
       const id = String(it.productCategoryId);
@@ -127,7 +164,6 @@ const dayOptions = computed<number[]>(() => {
   return Array.from(days).sort((a, b) => a - b);
 });
 
-// Filtered data
 const filteredData = computed(() => {
   let items = (data.value ?? []).filter(
     (x) => x.year === selectedYear.value && x.month === selectedMonth.value
@@ -159,6 +195,11 @@ const filteredData = computed(() => {
   return items;
 });
 
+// ---------------- Conversions ----------------
+watch([selectedYear, selectedMonth], () => {
+  selectedDay.value = "All";
+});
+
 function calcRemovedVolume(item: IMonthlyStatisticsEnriched) {
   if (item.productUnit !== "tk") return null;
   const vol = Number(item.productVolume) || 0;
@@ -166,69 +207,10 @@ function calcRemovedVolume(item: IMonthlyStatisticsEnriched) {
   return { value: vol * qty, unit: item.productVolumeUnit };
 }
 
-// ⬇️ UUS: Excel
-import * as XLSX from "xlsx";
-
-// millised veerud kasutaja saab valida (key -> label -> väärtuse leidja)
-const exportColumns = [
-  {
-    key: "productName",
-    label: "Name",
-    get: (x: IMonthlyStatisticsEnriched) => x.productName ?? "",
-  },
-  {
-    key: "productCode",
-    label: "Code",
-    get: (x: IMonthlyStatisticsEnriched) => x.productCode ?? "",
-  },
-  {
-    key: "productCategoryName",
-    label: "Category",
-    get: (x: IMonthlyStatisticsEnriched) => x.productCategoryName ?? "",
-  },
-
-  // 🆕 ÜHTNE veerg
-  // Kui soovid, võid 'label'i panna täpselt "Removed Volume" või "Removed Quantity".
-  // Mina panen neutraalse "Removed Amount (normalized)".
-  {
-    key: "normalizedAmount",
-    label: "Removed Amount (normalized)",
-    get: (x: IMonthlyStatisticsEnriched) => getUnifiedAmount(x),
-  },
-
-  // --- valikuline: kui tahad, jäta ka toorveerud alles, aga vaikimisi mitte valituks:
-  {
-    key: "productUnit",
-    label: "Unit (raw)",
-    get: (x: IMonthlyStatisticsEnriched) => x.productUnit ?? "",
-  },
-  {
-    key: "totalRemovedQuantity",
-    label: "Removed Quantity (raw)",
-    get: (x: IMonthlyStatisticsEnriched) => x.totalRemovedQuantity,
-  },
-  {
-    key: "removedVolume",
-    label: "Removed Volume (raw)",
-    get: (x: IMonthlyStatisticsEnriched) => {
-      const vol = calcRemovedVolume(x);
-      return vol ? `${vol.value} ${vol.unit ?? ""}`.trim() : "";
-    },
-  },
-];
-
-// vaikimisi valitud veerud (võid muuta)
-const selectedExportKeys = ref<string[]>([
-  "productName",
-  "productCode",
-  "productCategoryName",
-  "normalizedAmount", // 🟦 ainult see veerg koguse/mahu jaoks
-]);
-
+// ---------------- Excel export ----------------
 const exportToExcel = () => {
   if (!filteredData.value.length || !selectedExportKeys.value.length) return;
 
-  // ehita read vastavalt valitud veergudele
   const rows = filteredData.value.map((item) => {
     const row: Record<string, unknown> = {};
     for (const key of selectedExportKeys.value) {
@@ -246,7 +228,6 @@ const exportToExcel = () => {
   const m = String(selectedMonth.value).padStart(2, "0");
   XLSX.writeFile(wb, `monthly_statistics_${y}-${m}.xlsx`);
 };
-
 </script>
 
 <template>
@@ -256,6 +237,7 @@ const exportToExcel = () => {
       sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
     ]"
   >
+    <!-- HEADER -->
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -270,7 +252,7 @@ const exportToExcel = () => {
       <p class="mt-3 text-sm text-neutral-400">Removed product quantities per month</p>
     </section>
 
-    <!-- Kaart/Container -->
+    <!-- Card container -->
     <section class="mx-auto w-full max-w-[100rem]">
       <div
         class="rounded-[16px] p-6 sm:p-8
@@ -280,6 +262,7 @@ const exportToExcel = () => {
       >
         <!-- Toolbar: Year / Month + filters -->
         <div class="mb-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3 items-center">
+
           <!-- Year -->
           <div class="relative">
             <label class="sr-only">Year</label>
@@ -307,6 +290,24 @@ const exportToExcel = () => {
               <option v-for="month in monthOptions" :key="month" :value="month">{{ month }}</option>
             </select>
             <i class="bi bi-calendar-event absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+          </div>
+
+          <!-- Day filter -->
+          <div class="relative">
+            <label class="sr-only">Day</label>
+            <select
+              v-model="selectedDay"
+              :disabled="dayOptions.length === 0"
+              class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+                     px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+                     focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9
+                     disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <option value="All">All days</option>
+              <option v-for="d in dayOptions" :key="d" :value="d">{{ d }}</option>
+            </select>
+            <i class="bi bi-clock-history absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
             <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
           </div>
 
@@ -356,27 +357,8 @@ const exportToExcel = () => {
             <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
           </div>
 
-          <!-- Day filter -->
-          <div class="relative">
-            <label class="sr-only">Day</label>
-            <select
-              v-model="selectedDay"
-              :disabled="dayOptions.length === 0"
-              class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
-                     px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
-                     focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9
-                     disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <option value="All">All days</option>
-              <option v-for="d in dayOptions" :key="d" :value="d">{{ d }}</option>
-            </select>
-            <i class="bi bi-clock-history absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
-            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
-          </div>
-
-          <!-- 🟦 EXPORT: veerude valik + nupp -->
+          <!-- Excel export -->
           <div class="col-span-1 xl:col-span-6 flex flex-wrap items-center gap-3 mt-2">
-            <!-- mitmikvalik veergudele -->
             <div class="flex flex-wrap items-center gap-2">
               <span class="text-sm text-neutral-400">Columns:</span>
               <div class="flex flex-wrap gap-2">
@@ -414,7 +396,7 @@ const exportToExcel = () => {
 
         </div>
 
-        <!-- Tabel -->
+        <!-- Table -->
         <div class="overflow-auto rounded-[12px] border-1 border-neutral-700">
           <table class="w-full text-base text-left">
             <thead class="sticky top-0 z-10 bg-neutral-900/80 backdrop-blur text-neutral-300">
@@ -454,8 +436,7 @@ const exportToExcel = () => {
                 <span v-else class="text-neutral-500">—</span>
               </td>
 
-
-              <!-- Unit (valik, tk mitte muudetav) -->
+              <!-- Unit -->
               <td class="px-4 py-3 align-middle">
                 <template v-if="item.productUnit !== 'tk'">
                   <div class="relative inline-block">
@@ -484,7 +465,7 @@ const exportToExcel = () => {
                   </span>
               </td>
 
-              <!-- Removed Volume (ainult kui tk) -->
+              <!-- Removed Volume -->
               <td class="px-4 py-3 align-middle">
                 <template v-if="calcRemovedVolume(item)">
                   <div class="flex items-center gap-3">
@@ -521,7 +502,7 @@ const exportToExcel = () => {
       </div>
     </section>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -537,7 +518,7 @@ const exportToExcel = () => {
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -579,11 +560,14 @@ const exportToExcel = () => {
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
               <li>
-                <strong>Aasta & kuu:</strong> vali rippmenüüdest periood, mille andmeid soovid vaadata.
+                <strong>Aasta & kuu & päeva:</strong> vali rippmenüüdest periood, mille andmeid soovid vaadata.
               </li>
               <li>
                 <strong>Filtrid:</strong> <em>Filter by name</em> ja <em>Filter by code</em> otsivad vastavalt toote nime ja koodi järgi.
-                <em>Category</em> piirab kategooria kaupa, <em>Day</em> lubab vaadata konkreetse päeva kandeid.
+                <em>Category</em> piirab kategooria kaupa.
+              </li>
+              <li>
+                <strong>Tabel:</strong> veerud näitavad toodet, koodi, kategooriat, ühikut ning eemaldatud kogust/mahtu vastavalt sinu valikutele.
               </li>
               <li>
                 <strong>Ühikute vahetus (Quantity):</strong> kui toote ühik ei ole <code>tk</code>, saad veerus
@@ -595,23 +579,15 @@ const exportToExcel = () => {
                 et näha mahtu selles ühikus.
               </li>
               <li>
-                <strong>Tabel:</strong> veerud näitavad toodet, koodi, kategooriat, ühikut ning eemaldatud kogust/mahtu vastavalt sinu valikutele.
-              </li>
-              <li>
-                <strong>Excelisse eksport:</strong> vali <em>Columns</em> alt, millised veerud kaasata, ja klõpsa
+                <strong>Excelisse eksport:</strong> vali <em>Columns</em> alt, millised veerud kaasata, ja vajuta
                 <em>Export Excel</em>, et salvestada hetkel nähtavad read failiks <code>monthly_statistics_YYYY-MM.xlsx</code>.
               </li>
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: kuu või aasta muutmisel lähtestub <em>Day</em> filter automaatselt. Modaali saab sulgeda taustale klõpsates või ülanurga <em>×</em> nupust.
-            </p>
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.            </p>
           </div>
-
-
-            <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
-            </p>
           </div>
 
           <!-- Footer -->

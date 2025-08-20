@@ -5,14 +5,20 @@ import type { IResultObject } from "@/types/IResultObject";
 import type { IActionEnriched } from "@/domain/logic/IActionEnriched";
 import { ActionService } from "@/services/mvcServices/ActionService";
 
+// ---------------- Services ----------------
 const service = new ActionService();
 const data = reactive<IResultObject<IActionEnriched[]>>({
   data: [],
   errors: []
 });
 
+// ---------------- Router ----------------
 const router = useRouter();
+const goToPendingPage = () => {
+  router.push('/actionrequest');
+};
 
+// ---------------- Fetch ----------------
 const fetchPageData = async () => {
   try {
     const result = await service.getEnrichedActions();
@@ -25,20 +31,17 @@ const fetchPageData = async () => {
 
 onMounted(fetchPageData);
 
+// ---------------- Filters ----------------
 const filteredData = computed(() => {
   return data.data!.filter(item => item.status === 'Pending');
 });
-
-const goToPendingPage = () => {
-  router.push('/actionrequest');
-};
 </script>
 
 <template>
   <div
     class="h-full rounded-2xl border border-white/10 bg-neutral-900/70 p-5 sm:p-6 backdrop-blur-xl flex flex-col"
   >
-    <!-- header -->
+    <!-- Header -->
     <div class="flex items-center justify-between">
       <h2 class="text-lg sm:text-xl font-semibold text-neutral-100 flex items-center gap-2">
         <span
@@ -57,7 +60,7 @@ const goToPendingPage = () => {
       class="mt-3 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"
     ></div>
 
-    <!-- list -->
+    <!-- List -->
     <div class="mt-4 flex-1">
       <ul
         v-if="filteredData.length"
@@ -69,7 +72,7 @@ const goToPendingPage = () => {
           class="group grid grid-cols-[1fr,auto] items-center gap-3 rounded-xl border border-white/5 bg-white/5 px-3 py-2.5
                  hover:bg-white/10 hover:border-white/10 transition-colors"
         >
-          <!-- product + action -->
+          <!-- Product + Action -->
           <div class="min-w-0">
             <p
               class="truncate text-neutral-100 font-medium"
@@ -106,7 +109,6 @@ const goToPendingPage = () => {
       </div>
     </div>
 
-    <!-- cta -->
     <div class="pt-4 flex justify-end">
       <button
         @click="goToPendingPage"

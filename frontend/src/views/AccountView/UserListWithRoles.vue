@@ -4,20 +4,22 @@ import { RoleService } from "@/services/RoleService";
 import type { UserWithRolesDto } from "@/types/UserWithRolesDto";
 import type { AppRole } from "@/domain/logic/AppRole";
 import { useSidebarStore } from '@/stores/sidebarStore'
-const sidebarStore = useSidebarStore()
-const showHelp = ref(false);
 
-// Serivces
+// // ---------------- Services ----------------
 const roleService = new RoleService();
 
-// Entity's
+// ---------------- Entities ----------------
 const users = ref<UserWithRolesDto[]>([]);
 const allRoles = ref<AppRole[]>([]);
 
-// Error message
+// ---------------- Store and drawers ----------------
+const sidebarStore = useSidebarStore()
+const showHelp = ref(false);
+
+// ---------------- Error message ----------------
 const validationError = ref("");
 
-// Get users and roles
+// ---------------- Fetch ----------------
 onMounted(async () => {
   await fetchAllRoles();
   await fetchUsers();
@@ -39,7 +41,7 @@ const fetchAllRoles = async () => {
   }
 };
 
-// Role remove function
+// ---------------- Role remove function ----------------
 const removeRole = async (userId: string, roleName: string) => {
   const role = allRoles.value.find(r => r.name === roleName);
   if (!role) {
@@ -64,7 +66,7 @@ const removeRole = async (userId: string, roleName: string) => {
       sidebarStore.isOpen ? 'ml-[165px]' : 'ml-[64px]'
     ]"
   >
-    <!-- Header väljaspool kaarti -->
+    <!-- HEADER -->
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -80,12 +82,11 @@ const removeRole = async (userId: string, roleName: string) => {
       </p>
     </section>
 
-    <!-- Kaart -->
+    <!-- Card container -->
     <section class="mx-auto w-full max-w-[100rem]">
       <div
         class="rounded-xl border border-neutral-700 bg-neutral-900/60 p-5 sm:p-6 shadow-[0_0_0_1px_rgba(255,255,255,0.02),_0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-xl"
       >
-        <!-- Veateade -->
         <p
           v-if="validationError"
           class="mb-6 text-center text-sm font-medium px-4 py-2 rounded-md bg-red-500/10 border border-red-500/20 text-red-400"
@@ -93,7 +94,7 @@ const removeRole = async (userId: string, roleName: string) => {
           {{ validationError }}
         </p>
 
-        <!-- Tabel -->
+        <!-- Table -->
         <div class="overflow-x-auto rounded-[12px] border border-neutral-700">
           <table class="w-full min-w-[600px] text-left text-sm sm:text-base table-fixed">
             <colgroup>
@@ -152,7 +153,7 @@ const removeRole = async (userId: string, roleName: string) => {
       </div>
     </section>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -168,7 +169,7 @@ const removeRole = async (userId: string, roleName: string) => {
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -214,7 +215,7 @@ const removeRole = async (userId: string, roleName: string) => {
                 Rollid kuvatakse märgenditena (badges).
               </li>
               <li>
-                <strong>Rolli eemaldamine:</strong> klõpsa rolli märgendi paremal ääres olevale <em>×</em> nupule.
+                <strong>Rolli eemaldamine:</strong> vajuta rolli märgendi paremal ääres olevale <em>×</em> nupule.
                 Muudatus rakendub kohe ja loend värskendatakse.
               </li>
               <li>
@@ -229,7 +230,8 @@ const removeRole = async (userId: string, roleName: string) => {
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

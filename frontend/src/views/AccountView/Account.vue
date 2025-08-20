@@ -7,26 +7,26 @@ import { useSidebarStore } from '@/stores/sidebarStore'
 const sidebarStore = useSidebarStore()
 const showHelp = ref(false);
 
-// Services
+// ---------------- Services ----------------
 const identityService = new IdentityService();
 
-//??
+// ---------------- Fields ----------------
 const firstName = ref('');
 const lastName = ref('');
 const userName = ref('');
 const message = ref('');
 
-// Store
+// ---------------- Store ----------------
 const store = useUserDataStore();
 
-// Get account info
+// ---------------- Fetch ----------------
 onMounted(() => {
   firstName.value = store.firstName || '';
   lastName.value = store.lastName || '';
   userName.value = store.username || '';
 });
 
-// Account edit function
+// ---------------- Account edit function ----------------
 const editAccount = async () => {
   const result = await identityService.updateUserFields({
     email: store.email!,
@@ -42,7 +42,6 @@ const editAccount = async () => {
 <template>
   <main
     :class="[
-      // ühtne paigutus kõigil lehtedel
       'transition-all duration-300 p-6 sm:p-8 text-white font-[Inter,sans-serif] bg-transparent max-w-screen-2xl',
       sidebarStore.isOpen ? 'ml-[165px]' : 'ml-[64px]'
     ]"
@@ -60,11 +59,9 @@ const editAccount = async () => {
       <p class="mt-3 text-sm text-neutral-400">{{ $t('View and update your profile') }}</p>
     </section>
 
-    <!-- Kaardikonteiner samas stiilis -->
+    <!-- Card container -->
     <section class="mx-auto w-full max-w-[100rem]">
-        <!-- kaks kaarti kõrvuti, virna väiksel -->
       <div class="grid gap-5 md:grid-cols-2">
-          <!-- Info kaart -->
           <div class="rounded-xl border border-neutral-700 bg-neutral-900/60 p-4 sm:p-5">
             <div class="flex items-center gap-4 mb-5">
               <div
@@ -96,7 +93,6 @@ const editAccount = async () => {
             </div>
           </div>
 
-          <!-- Muuda profiili kaart -->
         <div class="rounded-xl border border-neutral-700 bg-neutral-900/60 p-4 sm:p-5">
           <h2 class="text-lg font-semibold text-neutral-100 mb-5">{{ $t('Edit Profile') }}</h2>
 
@@ -162,7 +158,7 @@ const editAccount = async () => {
         </div>
     </section>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -178,7 +174,7 @@ const editAccount = async () => {
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -239,7 +235,8 @@ const editAccount = async () => {
             </div>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

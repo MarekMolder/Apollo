@@ -4,25 +4,24 @@ import type { IResultObject } from '@/types/IResultObject'
 import type { IActionEnriched } from '@/domain/logic/IActionEnriched.ts'
 import { ActionService } from '@/services/mvcServices/ActionService.ts'
 import { useSidebarStore } from '@/stores/sidebarStore';
+
+// ---------------- Services ----------------
+const service = new ActionService()
+
+// ---------------- Entities ----------------
+const data = reactive<IResultObject<IActionEnriched[]>>({ data: [], errors: [] })
+
+// ---------------- Store and Drawer ----------------
+const requestIsOngoing = ref(false)
 const sidebarStore = useSidebarStore();
 const showHelp = ref(false);
 
-// Services
-const service = new ActionService()
-
-// Entity's
-const data = reactive<IResultObject<IActionEnriched[]>>({ data: [], errors: [] })
-
-// ??
-const requestIsOngoing = ref(false)
-
-// Search engine
+// ---------------- Filters ----------------
 const selectedStatus = ref<'All' | 'Accepted' | 'Declined' | 'Pending'>('All')
 const selectedUser = ref<'All' | string>('All')
 const selectedMonth = ref<'All' | number>('All')
 const selectedYear = ref<'All' | number>('All')
 
-// Options (tuletame andmetest)
 const userOptions = computed<string[]>(() => {
   const set = new Set<string>()
   for (const it of data.data ?? []) {
@@ -37,7 +36,7 @@ const yearOptions = computed<number[]>(() => {
     const d = it?.createdAt ? new Date(it.createdAt) : null
     if (d && !isNaN(d.getTime())) set.add(d.getFullYear())
   }
-  return Array.from(set).sort((a, b) => b - a) // uuemad ees
+  return Array.from(set).sort((a, b) => b - a)
 })
 
 const monthOptions = [
@@ -55,22 +54,6 @@ const monthOptions = [
   { value: 12, label: 'Dec' }
 ]
 
-// Get actions
-const fetchPageData = async () => {
-  try {
-    const result = await service.getEnrichedActions()
-    data.data = result.data
-    data.errors = result.errors
-  } catch (error) {
-    console.error('Error fetching data:', error)
-  } finally {
-    requestIsOngoing.value = true
-  }
-}
-
-onMounted(fetchPageData)
-
-// Search engine filtered suppliers
 const filteredData = computed(() => {
   let items = data.data ?? []
 
@@ -96,9 +79,23 @@ const filteredData = computed(() => {
   return items
 })
 
-// Accept / Deckline function
+// ---------------- Fetch ----------------
+const fetchPageData = async () => {
+  try {
+    const result = await service.getEnrichedActions()
+    data.data = result.data
+    data.errors = result.errors
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  } finally {
+    requestIsOngoing.value = true
+  }
+}
+
+onMounted(fetchPageData)
+
+// ---------------- Status function ----------------
 const editStatus = async (id: string, newStatus: 'Accepted' | 'Declined', currentStatus: string) => {
-  // UI-level kaitse (lõplikke ei muuda)
   if (currentStatus === 'Accepted' || currentStatus === 'Declined') return
 
   try {
@@ -129,6 +126,7 @@ const acceptAll = async () => {
     sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
   ]"
   >
+    <!-- HEADER -->
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -141,7 +139,7 @@ const acceptAll = async () => {
       <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
     </section>
 
-    <!-- Kaart -->
+    <!-- Card container -->
     <section class="mx-auto w-full max-w-[100rem]">
       <div
         class="rounded-[16px] p-6 sm:p-8
@@ -149,7 +147,7 @@ const acceptAll = async () => {
                border-1 border-neutral-700
                shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]">
 
-        <!-- Toolbar: filtrid -->
+        <!-- Toolbar: filters -->
         <div class="mb-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 items-center">
           <!-- Staatus -->
           <div class="flex items-center gap-2">
@@ -170,7 +168,7 @@ const acceptAll = async () => {
             </div>
           </div>
 
-          <!-- Kasutaja -->
+          <!-- User -->
           <div class="relative">
             <label class="sr-only">User</label>
             <select
@@ -185,7 +183,7 @@ const acceptAll = async () => {
             <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
           </div>
 
-          <!-- Kuu -->
+          <!-- Month -->
           <div class="relative">
             <label class="sr-only">Month</label>
             <select
@@ -200,7 +198,7 @@ const acceptAll = async () => {
             <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
           </div>
 
-          <!-- Aasta -->
+          <!-- Year -->
           <div class="relative">
             <label class="sr-only">Year</label>
             <select
@@ -215,7 +213,6 @@ const acceptAll = async () => {
             <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
           </div>
 
-          <!-- Nupp -->
           <div class="flex xl:justify-end">
             <router-link
               to="/createaction"
@@ -235,27 +232,22 @@ const acceptAll = async () => {
          ring-1 ring-emerald-400/30 bg-emerald-500/10 text-emerald-300
          hover:bg-emerald-500/15 hover:scale-[1.05] transition"
             >
-              <!-- Tekst üleval -->
               <span class="text-[10px] font-medium leading-tight">Accept</span>
-
-              <!-- Ikoon all -->
               <i class="bi bi-check2-all text-lg"></i>
             </button>
 
           </div>
         </div>
 
-        <!-- Loading -->
         <div v-if="!requestIsOngoing" class="flex justify-center gap-2 p-12">
           <span class="w-3 h-3 bg-neutral-400 rounded-full animate-bounce [animation-delay:0s]"></span>
           <span class="w-3 h-3 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.2s]"></span>
           <span class="w-3 h-3 bg-neutral-400 rounded-full animate-bounce [animation-delay:0.4s]"></span>
         </div>
 
-        <!-- Tabel -->
+        <!-- Table -->
         <div v-else class="overflow-x-auto rounded-[12px] border border-neutral-700">
           <table class="w-full text-sm text-left table-fixed">
-            <!-- määrame samad veerulaiused thead/tbody jaoks -->
             <colgroup>
               <col class="w-[10rem]" />   <!-- Product -->
               <col class="w-[12rem]" />   <!-- Reason -->
@@ -342,7 +334,7 @@ const acceptAll = async () => {
       </div>
     </section>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -358,7 +350,7 @@ const acceptAll = async () => {
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -427,8 +419,8 @@ const acceptAll = async () => {
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: kui soovid kinnitada vaid kindla kuu/kasutaja taotlused, rakenda vastavad filtrid enne
-              <em>Accept (kõik nähtavad)</em> nupu vajutamist. Modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 
@@ -448,5 +440,3 @@ const acceptAll = async () => {
     </transition>
   </main>
 </template>
-
-

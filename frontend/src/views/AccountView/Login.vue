@@ -3,23 +3,22 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useUserDataStore } from '@/stores/userDataStore';
 import { IdentityService } from '@/services/IdentityService';
-const showHelp = ref(false);
 
-// Services
+// ---------------- Services ----------------
 const identityService = new IdentityService();
 
-// Store and Router
+// ---------------- Store and router ----------------
 const store = useUserDataStore();
 const router = useRouter();
 
-// ??
+// ---------------- Pre login credentials ----------------
 const email = ref('admin@taltech.ee');
 const password = ref('Foo.Bar.1');
 
-// Error message
+// ---------------- Error message ----------------
 const validationError = ref<string | null>(null);
 
-// Login function
+// ---------------- Login function ----------------
 const doLogin = async () => {
   validationError.value = null;
 
@@ -52,13 +51,13 @@ const doLogin = async () => {
 <template>
   <main class="flex items-center justify-center h-full px-4 sm:px-8">
 
-    <!-- Kaart -->
+    <!-- Card -->
     <div class="bg-black text-white w-full max-w-sm sm:max-w-md md:max-w-lg p-6 sm:p-8 rounded-2xl shadow-xl">
 
       <!-- Logo -->
       <img src="@/assets/apollo-logo.png" alt="Apollo logo" class="mx-auto mb-6 w-32 sm:w-40" />
 
-      <!-- Login vorm -->
+      <!-- Login form -->
       <form @submit.prevent="doLogin" class="space-y-5">
 
         <!-- Email -->
@@ -105,4 +104,3 @@ const doLogin = async () => {
     </div>
   </main>
 </template>
-

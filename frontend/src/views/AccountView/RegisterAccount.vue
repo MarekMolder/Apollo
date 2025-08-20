@@ -4,31 +4,30 @@ import { useRouter } from 'vue-router';
 import { IdentityService } from '@/services/IdentityService';
 import { useUserDataStore } from '@/stores/userDataStore';
 import { useSidebarStore } from '@/stores/sidebarStore'
-const sidebarStore = useSidebarStore()
-const showHelp = ref(false);
 
-// Services
+// ---------------- Services ----------------
 const identityService = new IdentityService();
 
-// Store and Router
+// ---------------- Store, router and empty strings ----------------
 const router = useRouter();
 const store = useUserDataStore();
-
-// ??
+const sidebarStore = useSidebarStore()
 const email = ref('');
 const password = ref('');
 const firstName = ref('');
 const lastName = ref('');
+const showHelp = ref(false);
 
-// Messages errors/success
+// ---------------- Messages errors/success ----------------
 const validationError = ref<string | null>(null);
 const successMessage = ref<string | null>(null);
 
+// ---------------- isAdmin ----------------
 const isAdmin = Array.isArray(store.roles)
   ? store.roles.some(r => r === 'admin' || r === 'manager')
   : store.roles === 'admin' || store.roles === 'manager';
 
-// Register function
+// ---------------- Register function ----------------
 const doRegister = async () => {
   validationError.value = null;
   successMessage.value = null;
@@ -65,8 +64,8 @@ const doRegister = async () => {
       sidebarStore.isOpen ? 'ml-[165px]' : 'ml-[64px]'
     ]"
   >
+    <!-- HEADER -->
     <section class="w-full max-w-[32rem]">
-      <!-- Pealkiri -->
       <section class="mb-8 text-center">
         <h1
           class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -86,7 +85,7 @@ const doRegister = async () => {
         </p>
       </section>
 
-      <!-- Kaart -->
+      <!-- Card container -->
       <div
         class="rounded-xl border border-neutral-700 bg-neutral-900/60 p-5 sm:p-6 shadow-[0_8px_24px_rgba(0,0,0,0.35)] backdrop-blur-xl"
       >
@@ -175,7 +174,7 @@ const doRegister = async () => {
       </div>
     </section>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -191,7 +190,7 @@ const doRegister = async () => {
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -239,9 +238,8 @@ const doRegister = async () => {
               <li>
                 <strong>Tulemus pärast registreerimist:</strong>
                 <ul class="list-disc pl-6 mt-1 space-y-1">
-                  <li><em>Tavakasutaja:</em> logitakse automaatselt sisse ja suunatakse avalehele.</li>
                   <li><em>Admin/Manager:</em> konto luuakse, vorm tühjendatakse ning kuvatakse kinnitus
-                    “Account successfully created”. Sisse ei logita automaatselt.</li>
+                    “Account successfully created”.</li>
                 </ul>
               </li>
               <li>
@@ -255,7 +253,8 @@ const doRegister = async () => {
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

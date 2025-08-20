@@ -2,47 +2,40 @@
 import { computed, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSidebarStore } from '@/stores/sidebarStore'
-import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
-
-// Services & types
 import { StorageRoomService } from '@/services/mvcServices/StorageRoomService'
+import { AddressService } from '@/services/mvcServices/AddressService'
 import type { IStorageRoom } from '@/domain/logic/IStorageRoom'
 import type { IStorageRoomEnriched } from '@/domain/logic/IStorageRoomEnriched'
-import { AddressService } from '@/services/mvcServices/AddressService'
 import type { IAddress } from '@/domain/logic/IAddress'
 
-// Store
-const sidebarStore = useSidebarStore()
-
-// UI State
-const showHelp = ref(false)
-const showDrawer = ref(false)
-const drawerMode = ref<'edit' | 'create'>('create')
-
-// Services
+// ---------------- Services ----------------
 const storageRoomService = new StorageRoomService()
 const addressService = new AddressService()
 
-// Data
+// ---------------- Entities ----------------
 const data = ref<IStorageRoomEnriched[]>([])
 const addresses = ref<IAddress[]>([])
 
-// Router
-const router = useRouter()
-
-// Search
-const searchQuery = ref('')
-
-// Messages
-const validationError = ref('')
-const successMessage = ref('')
-
-// Edit/Create models
+// ---------------- Drawer Mode ----------------
+const showHelp = ref(false)
+const showDrawer = ref(false)
+const drawerMode = ref<'edit' | 'create'>('create')
 const activeEditRoom = ref<IStorageRoomEnriched | null>(null)
 const activeCreateRoom = ref<IStorageRoom | null>(null)
 
-// Empty entity (adjust defaults if your backend requires different ones)
+// ---------------- Filters ----------------
+const searchQuery = ref('')
+
+// ---------------- Store && Router ----------------
+const sidebarStore = useSidebarStore()
+const router = useRouter()
+
+// ---------------- Messages errors/success ----------------
+const validationError = ref('')
+const successMessage = ref('')
+
+// ---------------- Empty Product entity ----------------
 const emptyRoom = ref<IStorageRoom>({
   id: '',
   name: '',
@@ -50,7 +43,11 @@ const emptyRoom = ref<IStorageRoom>({
   allowedRoles: []
 })
 
-// Fetch
+// ---------------- Fetch ----------------
+onMounted(async () => {
+  await Promise.all([fetchPageData(), fetchAddresses()])
+})
+
 const fetchPageData = async () => {
   try {
     const result = await storageRoomService.getEnrichedStorageRooms()
@@ -69,16 +66,12 @@ const fetchAddresses = async () => {
   }
 }
 
-onMounted(async () => {
-  await Promise.all([fetchPageData(), fetchAddresses()])
-})
-
-// Navigation
+// ---------------- Navigation ----------------
 const goToCurrentStock = (storageRoomId: string) => {
   router.push(`/monthlyStatistics/${storageRoomId}`)
 }
 
-// Filters
+// ---------------- Search engine filtered storageRooms ----------------
 const filteredStorageRooms = computed(() =>
   data.value.filter((storageRoom) =>
     storageRoom.name.toLowerCase().includes(searchQuery.value.toLowerCase())
@@ -92,7 +85,7 @@ const gridCols = computed(() => {
   return 'grid-cols-3'
 })
 
-// Drawer open helpers
+// ---------------- Drawers for storageRooms ----------------
 const openCreateDrawer = () => {
   activeCreateRoom.value = { ...emptyRoom.value }
   drawerMode.value = 'create'
@@ -102,7 +95,6 @@ const openCreateDrawer = () => {
 }
 
 const openEditDrawer = (room: IStorageRoomEnriched) => {
-  // NOTE: IStorageRoomEnriched extends IStorageRoom with extra fields like fullAddress
   const { id, name, addressId, allowedRoles } = room
   activeEditRoom.value = { id, name, addressId, allowedRoles, fullAddress: room.fullAddress } as IStorageRoomEnriched
   drawerMode.value = 'edit'
@@ -111,7 +103,6 @@ const openEditDrawer = (room: IStorageRoomEnriched) => {
   successMessage.value = ''
 }
 
-// Two-way binding for the modal form regardless of mode
 const activeRoom = computed<Partial<IStorageRoom>>({
   get() {
     return drawerMode.value === 'edit' ? (activeEditRoom.value as IStorageRoom) : (activeCreateRoom.value as IStorageRoom)
@@ -125,44 +116,7 @@ const activeRoom = computed<Partial<IStorageRoom>>({
   }
 })
 
-// CRUD
-const createRoom = async () => {
-  validationError.value = ''
-  successMessage.value = ''
-  try {
-    if (!activeCreateRoom.value) return
-
-    // basic validation
-    if (!activeCreateRoom.value.name?.trim()) {
-      validationError.value = 'Name is required.'
-      return
-    }
-    if (!activeCreateRoom.value.addressId) {
-      validationError.value = 'Address is required.'
-      return
-    }
-
-    const { id, ...payload } = activeCreateRoom.value
-    const cleaned: IStorageRoom = {
-      ...payload,
-      allowedRoles: payload.allowedRoles?.filter(r => r && r.trim().length > 0) || []
-    } as IStorageRoom
-
-    const res = await storageRoomService.addAsync(cleaned)
-    if (res.errors?.length) {
-      validationError.value = res.errors.join(', ')
-      return
-    }
-
-    successMessage.value = '✅ Storage room created!'
-    showDrawer.value = false
-    await fetchPageData()
-  } catch (e) {
-    console.error('Create room failed', e)
-    validationError.value = 'Create failed. Check console.'
-  }
-}
-
+// ---------------- StorageRoom edit function ----------------
 const updateRoom = async () => {
   validationError.value = ''
   successMessage.value = ''
@@ -188,18 +142,43 @@ const updateRoom = async () => {
   }
 }
 
-const removeRoom = async (id: string) => {
-  if (!confirm('Are you sure you want to delete this storage room?')) return
+// ---------------- StorageRoom create function ----------------
+const createRoom = async () => {
+  validationError.value = ''
+  successMessage.value = ''
   try {
-    await storageRoomService.removeAsync(id)
+    if (!activeCreateRoom.value) return
+
+    if (!activeCreateRoom.value.name?.trim()) {
+      validationError.value = 'Name is required.'
+      return
+    }
+    if (!activeCreateRoom.value.addressId) {
+      validationError.value = 'Address is required.'
+      return
+    }
+
+    const {id, ...payload} = activeCreateRoom.value
+    const cleaned: IStorageRoom = {
+      ...payload,
+      allowedRoles: payload.allowedRoles?.filter(r => r && r.trim().length > 0) || []
+    } as IStorageRoom
+
+    const res = await storageRoomService.addAsync(cleaned)
+    if (res.errors?.length) {
+      validationError.value = res.errors.join(', ')
+      return
+    }
+
+    successMessage.value = '✅ Storage room created!'
+    showDrawer.value = false
     await fetchPageData()
   } catch (e) {
-    console.error('Delete room failed', e)
-    alert('Failed to delete storage room.')
+    console.error('Create room failed', e)
+    validationError.value = 'Create failed. Check console.'
   }
 }
 
-// Allowed roles as comma-separated <-> array helpers (if you prefer a simple text field)
 const rolesInput = computed({
   get() {
     const arr = (drawerMode.value === 'edit' ? activeEditRoom.value?.allowedRoles : activeCreateRoom.value?.allowedRoles) || []
@@ -214,6 +193,18 @@ const rolesInput = computed({
     if (drawerMode.value === 'create' && activeCreateRoom.value) activeCreateRoom.value.allowedRoles = arr
   }
 })
+
+// ---------------- StorageRoom remove function ----------------
+const removeRoom = async (id: string) => {
+  if (!confirm('Are you sure you want to delete this storage room?')) return
+  try {
+    await storageRoomService.removeAsync(id)
+    await fetchPageData()
+  } catch (e) {
+    console.error('Delete room failed', e)
+    alert('Failed to delete storage room.')
+  }
+}
 </script>
 
 <template>
@@ -223,6 +214,7 @@ const rolesInput = computed({
       sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
     ]"
   >
+    <!-- HEADER -->
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -324,112 +316,7 @@ const rolesInput = computed({
       </div>
     </section>
 
-    <!-- HELP BUTTON -->
-    <button
-      @click="showHelp = true"
-      class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
-             bg-gradient-to-br from-cyan-500/20 via-cyan-400/15 to-transparent
-             border-1 border-neutral-700 text-neutral-100
-             shadow-[0_6px_24px_rgba(0,0,0,0.45)]
-             hover:from-cyan-500/30 hover:via-cyan-400/20
-             backdrop-blur-sm transition focus:outline-none
-             focus:ring-2 focus:ring-cyan-400/40"
-      aria-label="Help & guide"
-      title="Help"
-    >
-      <i class="bi bi-question-lg text-xl"></i>
-    </button>
-
-    <!-- HELP MODAL -->
-    <transition name="fade">
-      <div
-        v-if="showHelp"
-        class="fixed inset-0 z-[1200] flex items-center justify-center bg-black/60 p-4"
-        @click.self="showHelp = false"
-      >
-        <div
-          class="w-full max-w-3xl rounded-2xl border border-white/10
-                 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8
-                 shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="help-title"
-        >
-          <!-- Header -->
-          <div class="flex items-start justify-between gap-4">
-            <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
-            </h2>
-            <button
-              class="inline-flex items-center justify-center w-9 h-9 rounded-xl
-                     border border-white/10 bg-white/5 text-neutral-300
-                     hover:bg-white/10 hover:text-white focus:outline-none
-                     focus:ring-2 focus:ring-white/15"
-              @click="showHelp = false"
-              title="Sulge"
-              aria-label="Close help"
-            >
-              <i class="bi bi-x-lg"></i>
-            </button>
-          </div>
-
-          <!-- Body -->
-          <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
-            <p>
-              See leht võimaldab <strong>otsida</strong>, <strong>lisada</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> laoruume. Iga kaardi pealt pääsed ka nupu
-              <em>Write-off statistics</em> kaudu kuu statistika vaatesse.
-            </p>
-
-            <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li>
-                <strong>Otsing:</strong> tööriistariba väli <em>Search storage room…</em> filtreerib kaarte laoruumi nime järgi.
-              </li>
-              <li>
-                <strong>Uus laoruum:</strong> klõpsa <em>New Storage Room</em>, täida vorm (<em>Name</em>, <em>Address</em>,
-                vajadusel <em>Allowed Roles</em>) ja salvesta.
-              </li>
-              <li>
-                <strong>Muutmine:</strong> kaardi nupp <em>Edit</em> avab valitud laoruumi andmete muutmise vormi.
-              </li>
-              <li>
-                <strong>Kustutamine:</strong> prügikasti ikoon eemaldab laoruumi pärast kinnitust. Seda toimingut ei saa tagasi võtta.
-              </li>
-              <li>
-                <strong>Address:</strong> vali olemasolev aadress rippmenüüst. (Aadresse saad hallata Settings &rarr; Addresses vaates.)
-              </li>
-              <li>
-                <strong>Allowed Roles:</strong> sisesta rollid komadega eraldatult (nt <code>admin,mustamäe</code>).
-                Tühjaks jätmisel ei lisata ühtegi rolli; tegelik ligipääsupiirang sõltub backendi loogikast.
-              </li>
-              <li>
-                <strong>Write-off statistics:</strong> avab valitud laoruumi mahakandmiste kuuülevaate.
-              </li>
-            </ul>
-
-            <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga <em>×</em> nupust.
-              Otsing jääb avatuks ka pärast muutmisi, et saaksid kiiresti samas vaates jätkata.
-            </p>
-          </div>
-
-
-          <!-- Footer -->
-          <div class="mt-6 flex justify-end">
-            <button
-              @click="showHelp = false"
-              class="inline-flex items-center justify-center rounded-xl border border-neutral-700
-                     bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
-                     hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
-            >
-              Sain aru
-            </button>
-          </div>
-        </div>
-      </div>
-    </transition>
-
-    <!-- CREATE/EDIT MODAL -->
+    <!-- Create/Edit StorageRoom -->
     <transition name="fade">
       <div v-if="showDrawer" class="fixed inset-0 z-[1300] flex items-center justify-center bg-black/60 p-4" @click.self="showDrawer = false">
         <div
@@ -514,14 +401,113 @@ const rolesInput = computed({
         </div>
       </div>
     </transition>
+
+    <!-- HELP BUTTON -->
+    <button
+      @click="showHelp = true"
+      class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
+             bg-gradient-to-br from-cyan-500/20 via-cyan-400/15 to-transparent
+             border-1 border-neutral-700 text-neutral-100
+             shadow-[0_6px_24px_rgba(0,0,0,0.45)]
+             hover:from-cyan-500/30 hover:via-cyan-400/20
+             backdrop-blur-sm transition focus:outline-none
+             focus:ring-2 focus:ring-cyan-400/40"
+      aria-label="Help & guide"
+      title="Help"
+    >
+      <i class="bi bi-question-lg text-xl"></i>
+    </button>
+
+    <!-- HELP MODAL -->
+    <transition name="fade">
+      <div
+        v-if="showHelp"
+        class="fixed inset-0 z-[1200] flex items-center justify-center bg-black/60 p-4"
+        @click.self="showHelp = false"
+      >
+        <div
+          class="w-full max-w-3xl rounded-2xl border border-white/10
+                 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8
+                 shadow-[0_20px_60px_rgba(0,0,0,0.6)]"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="help-title"
+        >
+          <!-- Header -->
+          <div class="flex items-start justify-between gap-4">
+            <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
+              Kuidas seda lehte kasutada?
+            </h2>
+            <button
+              class="inline-flex items-center justify-center w-9 h-9 rounded-xl
+                     border border-white/10 bg-white/5 text-neutral-300
+                     hover:bg-white/10 hover:text-white focus:outline-none
+                     focus:ring-2 focus:ring-white/15"
+              @click="showHelp = false"
+              title="Sulge"
+              aria-label="Close help"
+            >
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+
+          <!-- Body -->
+          <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
+            <p>
+              See leht võimaldab <strong>otsida</strong>, <strong>lisada</strong>, <strong>muuta</strong> ja
+              <strong>kustutada</strong> laoruume. Iga laoruumi kaardi pealt pääsed ka nupu <em>Write-off statistics</em> kaudu kuu statistika vaatesse.
+            </p>
+
+            <ul class="list-disc pl-6 space-y-2 text-neutral-300">
+              <li>
+                <strong>Otsing:</strong> <em>Search storage room</em> filtreerib kaarte laoruumi nime järgi.
+              </li>
+              <li>
+                <strong>Uus laoruum:</strong> vajuta <em>New Storage Room</em>, täida vorm ja salvesta.
+              </li>
+              <li>
+                <strong>Muutmine:</strong> laoruumi kaardi nupp <em>Edit</em> avab valitud laoruumi andmete muutmise vormi.
+              </li>
+              <li>
+                <strong>Kustutamine:</strong> prügikasti ikoon eemaldab laoruumi pärast kinnitust. Seda toimingut ei saa tagasi võtta.
+              </li>
+              <li>
+                <strong>Address:</strong> vali olemasolev aadress rippmenüüst. (Aadresse saad hallata Settings &rarr; Addresses vaates.)
+              </li>
+              <li>
+                <strong>Allowed Roles:</strong> sisesta rollid komadega eraldatult (nt <code>admin,mustamäe</code>).
+                Tühjaks jätmisel ei lisata ühtegi rolli; Kasutajad, kellel on sama roll, mis laoruumil saavad teha selles laoruumis maha kandmisi.
+              </li>
+              <li>
+                <strong>Write-off statistics:</strong> avab valitud laoruumi mahakandmiste kuuülevaate.
+              </li>
+            </ul>
+
+            <p class="text-neutral-400 text-sm">
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
+            </p>
+          </div>
+
+
+          <!-- Footer -->
+          <div class="mt-6 flex justify-end">
+            <button
+              @click="showHelp = false"
+              class="inline-flex items-center justify-center rounded-xl border border-neutral-700
+                     bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
+                     hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
+            >
+              Sain aru
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </main>
 </template>
 
 <style scoped>
-/* modal fade */
-.fade-enter-active, .fade-leave-active { transition: opacity .18s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-
 /* vue-multiselect (if you later switch roles input to tagging) */
 :deep(.multiselect-dark) {
   @apply w-full rounded-xl border border-white/10 bg-neutral-900/70 text-white shadow-sm transition;
