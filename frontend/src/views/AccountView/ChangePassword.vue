@@ -4,24 +4,24 @@ import { IdentityService } from "@/services/IdentityService.ts";
 import { ref } from "vue";
 import { RouterLink } from "vue-router";
 import { useSidebarStore } from '@/stores/sidebarStore'
+
+// ---------------- Services ----------------
+const identityService = new IdentityService();
+
+// ---------------- Store and drawers ----------------
+const store = useUserDataStore();
 const sidebarStore = useSidebarStore()
 const showHelp = ref(false);
 
-// Services
-const identityService = new IdentityService();
-
-// Store
-const store = useUserDataStore();
-
-// ??
+// ---------------- Password string ----------------
 const currentPassword = ref('');
 const newPassword = ref('');
 const confirmNewPassword = ref('');
 
-// Messages errors/success
+// ---------------- Messages errors/success ----------------
 const message = ref('');
 
-// Password edit function
+// ---------------- Password edit function ----------------
 const changePassword = async () => {
   if (newPassword.value !== confirmNewPassword.value) {
     message.value = 'New password and confirmation password arent same';
@@ -49,9 +49,8 @@ const changePassword = async () => {
     'pt-16 sm:pt-20 min-h-screen'
   ]"
   >
-    <!-- Keskosa wrapper, piiratud laius -->
+    <!-- HEADER -->
     <div class="w-full max-w-lg">
-      <!-- Header väljaspool kasti, keskel -->
       <section class="mb-6 text-center">
         <h1
           class="text-3xl sm:text-4xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -67,7 +66,7 @@ const changePassword = async () => {
         </p>
       </section>
 
-      <!-- Kaart -->
+      <!-- Card container -->
       <section>
         <div
           class="rounded-xl border border-neutral-700 bg-neutral-900/60 p-5 sm:p-6
@@ -148,7 +147,7 @@ const changePassword = async () => {
       </section>
     </div>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -164,7 +163,7 @@ const changePassword = async () => {
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -231,7 +230,8 @@ const changePassword = async () => {
             </div>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga sulgemisnupust.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

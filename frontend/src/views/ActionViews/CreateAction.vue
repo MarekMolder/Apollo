@@ -13,28 +13,30 @@ import type { IActionType } from '@/domain/logic/IActionType';
 import type { IStorageRoomEnriched } from "@/domain/logic/IStorageRoomEnriched.ts";
 import Multiselect from 'vue-multiselect';
 import 'vue-multiselect/dist/vue-multiselect.min.css';
-const showHelp = ref(false);
-// Services
+import { useSidebarStore } from "@/stores/sidebarStore";
+
+// ---------------- Services ----------------
 const actionService = new ActionService();
 const actionTypeService = new ActionTypeService();
 const reasonService = new ReasonService();
 const productService = new ProductService();
 const storageRoomService = new StorageRoomService();
 
-// Entity's
+// ---------------- Entities ----------------
 const actionTypes = ref<IActionType[]>([]);
 const reasons = ref<IReason[]>([]);
 const products = ref<IProduct[]>([]);
 const storageRooms = ref<IStorageRoomEnriched[]>([]);
 
-// Store
-const store = useUserDataStore();
+  // ---------------- Store and drawer ----------------
+const sidebarStore = useSidebarStore();
+const showHelp = ref(false);
 
-// Messages errors/success
+// ---------------- Messages errors/success ----------------
 const validationError = ref('');
 const successMessage = ref('');
 
-// Empty Action entity
+// ---------------- Empty Action entity ----------------
 const action = ref<IAction>({
   id: '',
   quantity: 0,
@@ -45,12 +47,7 @@ const action = ref<IAction>({
   storageRoomId: '',
 });
 
-// admin / manager control
-const isAdmin = computed(() =>
-  store.roles.includes('admin') || store.roles.includes('manager')
-);
-
-// Get selects
+// ---------------- Fetch ----------------
 onMounted(async () => {
   const invRes = await storageRoomService.getEnrichedStorageRooms();
   storageRooms.value = invRes.data ?? [];
@@ -60,12 +57,10 @@ onMounted(async () => {
   const allProducts = (await productService.getAllAsync()).data || [];
   products.value = allProducts.filter(p => !p.isComponent);
 
-  if (!isAdmin.value) {
-    const discard = actionTypes.value.find(a => a.name.toLowerCase() === 'maha kandmine');
+  const discard = actionTypes.value.find(a => a.name.toLowerCase() === 'maha kandmine');
     if (discard) {
       action.value.actionTypeId = discard.id;
     }
-  }
 });
 
 const selectedProduct = computed({
@@ -96,7 +91,7 @@ const selectedStorageRoom = computed({
   }
 });
 
-// Action create function
+// ---------------- Action create function ----------------
 const createAction = async () => {
   validationError.value = '';
   successMessage.value = '';
@@ -125,8 +120,13 @@ const createAction = async () => {
 </script>
 
 <template>
-  <main class="p-8 text-white font-['Inter',sans-serif] bg-transparent max-w-screen-xl mx-auto">
-    <!-- Header (nagu Storage Rooms) -->
+  <main
+    :class="[
+      'transition-all duration-300 p-4 sm:p-6 lg:p-8 text-white max-w-screen-2xl',
+      sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
+    ]"
+  >
+    <!-- HEADER -->
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -141,14 +141,14 @@ const createAction = async () => {
     </span>
       </h1>
 
-      <!-- Õhuke aktsentjoon -->
       <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
     </section>
 
-    <!-- Kaart -->
+    <!-- Form -->
     <section class="mx-auto w-full max-w-xl sm:max-w-2xl">
       <div class="rounded-[16px] p-6 sm:p-8 bg-[rgba(25,25,25,0.4)] backdrop-blur-xl border-1 border-neutral-700 shadow-[inset_0_0_20px_rgba(255,165,0,0.03),_0_8px_24px_rgba(0,0,0,0.4)]">
         <form @submit.prevent="createAction" class="space-y-6">
+
           <!-- Product -->
           <div>
             <label class="mb-2 block text-medium font-medium text-neutral-300">
@@ -182,7 +182,6 @@ const createAction = async () => {
               :allow-empty="false"
               placeholder="-- Select Action Type --"
               class="multiselect-dark"
-              :disabled="!isAdmin"
             />
           </div>
 
@@ -267,7 +266,6 @@ const createAction = async () => {
               Reset
             </button>
 
-            <!-- sama palett mis Storage Rooms kaardil -->
             <button
               type="submit"
               class="w-full sm:flex-1 inline-flex items-center justify-center rounded-xl
@@ -285,7 +283,7 @@ const createAction = async () => {
       </div>
     </section>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -301,7 +299,7 @@ const createAction = async () => {
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -351,7 +349,7 @@ const createAction = async () => {
                 võib see olla eelnevalt lukus väärtusele “maha kandmine”.
               </li>
               <li>
-                <strong>Reason:</strong> vali põhjendus (nt aegunud, kahjustatud jms), et aruandlus oleks korrektne.
+                <strong>Reason:</strong> vali põhjendus (nt aegunud, kahjustatud jms).
               </li>
               <li>
                 <strong>Quantity:</strong> sisesta kogus valitud toote ühikus
@@ -359,7 +357,7 @@ const createAction = async () => {
                 Kui ühik on <code>tk</code>, sisend on täisarv; muudel juhtudel lubatakse ka komakohad.
               </li>
               <li>
-                <strong>Storage Room:</strong> vali ladu/laoruum, kust kaubad maha kantakse. See mõjutab laojääke ja kuu statistikat.
+                <strong>Storage Room:</strong> vali ladu/laoruum, kust kaubad maha kantakse.
               </li>
               <li>
                 <strong>Reset:</strong> puhastab vormi väljad.
@@ -370,8 +368,9 @@ const createAction = async () => {
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: koguse sisestamisel kasuta komakoha jaoks punkt<i>(.)</i> või koma, sõltuvalt klaviatuuri seadistusest.
-              Modaali saab sulgeda taustale klõpsates või ülanurga <em>×</em> nupust.
+              Nipp: koguse sisestamisel kasuta komakoha jaoks punkt<i>(.)</i>.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 

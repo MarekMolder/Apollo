@@ -5,8 +5,11 @@ import TopUsersByRemoveCard from "@/components/TopUsersByRemoveCard.vue";
 import UserListCard from "@/components/UserListCard.vue";
 import { useSidebarStore } from '@/stores/sidebarStore';
 import {ref} from "vue";
+
+// ---------------- Sidebar store ----------------
 const sidebarStore = useSidebarStore();
 
+// ---------------- Help Model ----------------
 const showHelp = ref(false);
 </script>
 
@@ -17,7 +20,7 @@ const showHelp = ref(false);
       sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
     ]"
   >
-    <!-- Pealkiri -->
+    <!-- HEADER -->
     <section class="mb-6 text-center">
       <h1 class="text-3xl sm:text-4xl font-[Playfair_Display] font-bold text-neutral-100">
         {{ $t('Dashboard') }}
@@ -25,10 +28,9 @@ const showHelp = ref(false);
       <div class="mx-auto mt-3 h-px w-64 max-w-full bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
     </section>
 
-    <!-- Üks kaart ühe rea peal, laius vastavalt ekraanile -->
+    <!-- Card container -->
     <section class="mx-auto w-full">
       <div class="space-y-4 sm:space-y-5 lg:space-y-6">
-        <!-- Iga ümbris keskendab kaardi ja piirab laiuse: min 22rem, eelistatult 92vw, max 72rem -->
         <div class="mx-auto w-full max-w-[clamp(22rem,92vw,72rem)]">
           <PendingActionsCard />
         </div>
@@ -47,7 +49,7 @@ const showHelp = ref(false);
       </div>
     </section>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -63,7 +65,7 @@ const showHelp = ref(false);
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -89,7 +91,7 @@ const showHelp = ref(false);
                  hover:bg-white/10 hover:text-white focus:outline-none
                  focus:ring-2 focus:ring-white/15"
               @click="showHelp = false"
-              title="Sulge"
+              title="Close"
               aria-label="Close help"
             >
               <i class="bi bi-x-lg"></i>
@@ -104,15 +106,15 @@ const showHelp = ref(false);
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
-              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib kaarte nime järgi.</li>
-              <li><strong>Uus tarnija:</strong> klõpsa “New Supplier”, täida vorm ja salvesta.</li>
-              <li><strong>Muuda:</strong> kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
+              <li><strong>Otsing:</strong> ülal vasakul “Search by name” filtreerib tarnijaid nime järgi.</li>
+              <li><strong>Uus tarnija:</strong> vajuta “New Supplier”, täida vorm ja salvesta.</li>
+              <li><strong>Muuda:</strong> tarnija kaardil <em>Edit</em> avab vormi olemasoleva tarnija muutmiseks.</li>
               <li><strong>Tooted:</strong> <em>Products</em> näitab valitud tarnija tooteid.</li>
-              <li><strong>Kustuta:</strong> prügikasti ikoon kaardi paremas ülanurgas.</li>
+              <li><strong>Kustuta:</strong> prügikasti ikoon tarnija kaardi paremas ülanurgas kustutab tarnija.</li>
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaalid saab sulgeda ka klõpsates tumedal taustal või vajutades sulgemisnupule.
+              Nipp: Vihje lehe saad sulgeda, kas klõpsates tumedale taustale või vajutades sulgemisnupule.
             </p>
           </div>
 
@@ -127,10 +129,10 @@ const showHelp = ref(false);
               Sain aru
             </button>
           </div>
+
         </div>
       </div>
     </transition>
-
   </main>
 </template>
 

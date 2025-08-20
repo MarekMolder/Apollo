@@ -11,20 +11,28 @@ import "vue-multiselect/dist/vue-multiselect.min.css";
 import type { ISupplier } from "@/domain/logic/ISupplier.ts";
 import { SupplierService } from "@/services/mvcServices/SupplierService.ts";
 import { useSidebarStore } from "@/stores/sidebarStore";
-const sidebarStore = useSidebarStore();
-const showHelp = ref(false);
 
-// Services
+// ---------------- Services ----------------
 const service = new ProductService();
 const productCategoryService = new ProductCategoryService();
 const supplierService = new SupplierService();
 
-// Entity's
+// ---------------- Entities ----------------
 const data = ref<IProductEnriched[]>([]);
 const productCategories = ref<IProductCategory[]>([]);
 const productSuppliers = ref<ISupplier[]>([]);
 
-// ---------------- Filters (ERALDI state) ----------------
+// ---------------- Store ----------------
+const sidebarStore = useSidebarStore();
+
+// ---------------- Drawer Mode ----------------
+const showDrawer = ref(false);
+const drawerMode = ref<"edit" | "create">("edit");
+const activeEditProduct = ref<IProductEnriched | null>(null);
+const activeCreateProduct = ref<IProduct | null>(null);
+const showHelp = ref(false);
+
+// ---------------- Filters ----------------
 const filterCategoryId = ref<"All" | string>("All");
 const filterSupplierId = ref<"All" | string>("All");
 const searchCode = ref("");
@@ -32,17 +40,16 @@ const searchName = ref("");
 const categories = ref<string[]>([]);
 const suppliers = ref<string[]>([]);
 
-// ---------------- Drawer / Form state ----------------
-const showDrawer = ref(false);
-const drawerMode = ref<"edit" | "create">("edit");
-const activeEditProduct = ref<IProductEnriched | null>(null);
-const activeCreateProduct = ref<IProduct | null>(null);
+// ---------------- Unit / Volume logic (create) ----------------
+const availableUnits = ["g", "kg", "mg", "ml", "l", "cl", "tk"];
+const isCreateMode = computed(() => drawerMode.value === "create");
+const cp = computed(() => activeCreateProduct.value);
 
-// Messages
+// ---------------- Messages errors/success ----------------
 const validationError = ref("");
 const successMessage = ref("");
 
-// Empty Product entity
+// ---------------- Empty Product entity ----------------
 const emptyProduct = ref<IProduct>({
   id: "",
   unit: "",
@@ -57,7 +64,7 @@ const emptyProduct = ref<IProduct>({
   supplierId: "",
 });
 
-// Init
+// ---------------- Fetch ----------------
 onMounted(async () => {
   products.value = (await service.getEnrichedProducts()).data || [];
   productCategories.value = (await productCategoryService.getAllAsync()).data || [];
@@ -77,7 +84,7 @@ const fetchPageData = async () => {
 };
 onMounted(fetchPageData);
 
-// Filtered list
+// ---------------- Search engine filtered products ----------------
 const filteredProducts = computed(() =>
   data.value.filter((product) => {
     const matchCategory =
@@ -95,17 +102,15 @@ const filteredProducts = computed(() =>
   })
 );
 
-// ---------------- Drawer actions ----------------
+// ---------------- Drawers for products ----------------
 const openProductDrawer = (product: IProductEnriched) => {
   activeEditProduct.value = { ...product };
-  // ÄRA muuda filtreid siin
   drawerMode.value = "edit";
   showDrawer.value = true;
 };
 
 const openCreateDrawer = () => {
   activeCreateProduct.value = JSON.parse(JSON.stringify(emptyProduct.value));
-  // ÄRA muuda filtreid siin
   drawerMode.value = "create";
   showDrawer.value = true;
 };
@@ -120,8 +125,20 @@ const activeProduct = computed({
   },
 });
 
-// ---------------- Create / Edit ----------------
+// ---------------- Product edit function ----------------
+const editProduct = async () => {
+  if (!activeEditProduct.value) return;
+  try {
+    await service.updateAsync(activeEditProduct.value);
+    showDrawer.value = false;
+    await fetchPageData();
+  } catch (err) {
+    validationError.value = "❌ Failed to update product.";
+    console.error("Failed to update product:", err);
+  }
+};
 
+// ---------------- Product create function ----------------
 const createProduct = async () => {
   validationError.value = "";
   successMessage.value = "";
@@ -138,9 +155,7 @@ const createProduct = async () => {
     const result = await service.addAsync(cleaned);
 
     if (result.errors?.length) {
-      // short message in UI
       validationError.value = "❌ Failed to create product. Please check the fields.";
-      // full error only in console
       console.error("Product creation validation errors:", result.errors);
     } else {
       successMessage.value = "✅ Product has been successfully created!";
@@ -153,19 +168,7 @@ const createProduct = async () => {
   }
 };
 
-const editProduct = async () => {
-  if (!activeEditProduct.value) return;
-  try {
-    await service.updateAsync(activeEditProduct.value);
-    showDrawer.value = false;
-    await fetchPageData();
-  } catch (err) {
-    validationError.value = "❌ Failed to update product.";
-    console.error("Failed to update product:", err);
-  }
-};
-
-// Remove
+// ---------------- Supplier remove function ----------------
 const removeProduct = async (id: string) => {
   if (!confirm("Are you sure you want to delete this product?")) return;
   try {
@@ -177,7 +180,7 @@ const removeProduct = async (id: string) => {
   }
 };
 
-// ---------------- FORM Multiselect computed (EI MÕJUTA filtreid) ----------------
+// ---------------- FORM Multiselect computed ----------------
 const formSupplierObj = computed<ISupplier | null>({
   get() {
     const sid =
@@ -220,12 +223,7 @@ const formCategoryObj = computed<IProductCategory | null>({
   },
 });
 
-// ---------------- Unit / Volume loogika (create) ----------------
-const availableUnits = ["g", "kg", "mg", "ml", "l", "cl", "tk"];
-const isCreateMode = computed(() => drawerMode.value === "create");
-const cp = computed(() => activeCreateProduct.value);
-
-// kui CREATE + unit != 'tk' -> volumeUnit = unit; volume = quantity
+// In Create mode - if unit != 'tk' -> volumeUnit = unit; volume = quantity
 watch(
   () => [isCreateMode.value, cp.value?.unit, cp.value?.quantity],
   () => {
@@ -239,7 +237,7 @@ watch(
   { immediate: true }
 );
 
-// kui CREATE + unit === 'tk' -> luba sisestada volume ja volumeUnit (anna mõistlikud defaultid)
+// In Create mode - if unit === 'tk' -> unit, volumeunit, volume, quantity
 watch(
   () => cp.value?.unit,
   (u) => {
@@ -259,6 +257,7 @@ watch(
       sidebarStore.isOpen ? 'ml-[160px]' : 'ml-[64px]'
     ]"
   >
+    <!-- HEADER -->
     <section class="mb-8 text-center">
       <h1
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
@@ -283,8 +282,8 @@ watch(
                max-w-[95%] mx-auto"
       >
         <div class="mb-6 flex flex-wrap gap-3 items-center justify-between overflow-x-auto px-2">
-          <!-- vasak blokk: filtrid -->
           <div class="flex flex-wrap gap-3">
+
             <!-- Category filter -->
             <div class="relative w-48">
               <label class="sr-only">Category</label>
@@ -336,7 +335,6 @@ watch(
             </div>
           </div>
 
-          <!-- parem blokk: nupp -->
           <div class="flex-shrink-0">
             <button
               @click="openCreateDrawer"
@@ -394,7 +392,7 @@ watch(
       </div>
     </section>
 
-    <!-- 🟦 CENTERED MODAL (create/edit) -->
+    <!-- Create/Edit Product -->
     <transition name="fade">
       <div
         v-if="showDrawer"
@@ -419,6 +417,7 @@ watch(
           </div>
 
           <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+
             <!-- Code -->
             <div>
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Code</label>
@@ -428,6 +427,7 @@ watch(
                 class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"
               />
             </div>
+
             <!-- Name -->
             <div>
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label>
@@ -437,6 +437,7 @@ watch(
                 class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"
               />
             </div>
+
             <!-- Price -->
             <div>
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Price</label>
@@ -446,6 +447,7 @@ watch(
                 class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"
               />
             </div>
+
             <!-- Quantity -->
             <div>
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Quantity</label>
@@ -473,7 +475,7 @@ watch(
               </p>
             </div>
 
-            <!-- Volume (näita ainult siis, kui CREATE ja unit === 'tk'; muidu täidetakse automaatselt) -->
+            <!-- Volume - if unit === 'tk' -->
             <div v-if="!(isCreateMode && activeCreateProduct?.unit !== 'tk')">
               <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Volume</label>
               <input
@@ -577,7 +579,7 @@ watch(
       </div>
     </transition>
 
-    <!-- 🟣 FLOATING HELP BUTTON -->
+    <!-- HELP BUTTON -->
     <button
       @click="showHelp = true"
       class="fixed z-[1100] bottom-6 right-6 w-12 h-12 rounded-full
@@ -593,7 +595,7 @@ watch(
       <i class="bi bi-question-lg text-xl"></i>
     </button>
 
-    <!-- 🟣 HELP MODAL -->
+    <!-- HELP MODAL -->
     <transition name="fade">
       <div
         v-if="showHelp"
@@ -630,7 +632,7 @@ watch(
           <div class="mt-5 space-y-4 text-neutral-200 leading-relaxed">
             <p>
               See leht võimaldab <strong>otsida</strong>, <strong>filtreerida</strong>, <strong>lisada</strong>, <strong>muuta</strong> ja
-              <strong>kustutada</strong> tooteid. Ülariba filtritega saad kiiresti leida vajaliku.
+              <strong>kustutada</strong> tooteid. Ülal leiad filtrid, millega saad kiiresti leida vajaliku.
             </p>
 
             <ul class="list-disc pl-6 space-y-2 text-neutral-300">
@@ -639,10 +641,10 @@ watch(
                 <em>Search by code</em> ja <em>Search by name</em>. Valik <em>All</em> näitab kõiki tulemusi.
               </li>
               <li>
-                <strong>Uus toode:</strong> klõpsa <em>New Product</em>, täida vorm (Code, Name, Price, Quantity, Unit, Category, Supplier) ja salvesta.
+                <strong>Uus toode:</strong> klõpsa <em>New Product</em>, täida vorm ja salvesta.
               </li>
               <li>
-                <strong>Vaatamine/muutmine:</strong> kaardil nupp <em>View</em> avab vormi, kus saad toote andmeid muuta.
+                <strong>Vaatamine/muutmine:</strong> product kaardil nupp <em>View</em> avab vormi, kus saad toote andmeid muuta.
               </li>
               <li>
                 <strong>Kustutamine:</strong> prügikasti ikoon eemaldab toote pärast kinnitust. Seda toimingut ei saa tagasi võtta.
@@ -658,8 +660,8 @@ watch(
             </ul>
 
             <p class="text-neutral-400 text-sm">
-              Nipp: modaali saab sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Filtrid ei muutu, kui avad/lood toote —
-              nii on mugav jätkata samas vaates.
+              Nipp: modaali saad sulgeda taustale klõpsates või ülanurga <em>×</em> nupust. Enne uute kirjete lisamist kasuta otsingut,
+              et vältida duplikaate.
             </p>
           </div>
 
@@ -682,17 +684,7 @@ watch(
 </template>
 
 <style scoped>
-/* pehme fade üleminek modaalile */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.18s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-/* --- vue-multiselect: tume, puhas --- */
+/* --- vue-multiselect --- */
 :deep(.multiselect-dark) {
   @apply w-full rounded-xl border border-white/10 bg-neutral-900/70 text-white shadow-sm transition;
 }

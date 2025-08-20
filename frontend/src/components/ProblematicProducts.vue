@@ -1,22 +1,22 @@
 ﻿<script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import axios from 'axios'
 import {ActionService} from "@/services/mvcServices/ActionService.ts";
 
-
+// ---------------- Services ----------------
 const service = new ActionService();
 
+// ---------------- Entities ----------------
 interface ProductStat {
   productId: string
   productName: string
   removeQuantity: number
   productUnit: string
-  productVolume: number
-  productVolumeUnit: string
+  productVolume: number | null
+  productVolumeUnit: string | null
 }
-
 const products = ref<ProductStat[]>([])
 
+// ---------------- Fetch ----------------
 const fetchProblematicProducts = async () => {
   try {
     products.value = await service.getTopRemovedProducts()
@@ -32,7 +32,7 @@ onMounted(fetchProblematicProducts)
   <section
     class="h-full rounded-2xl border border-white/10 bg-neutral-900/70 p-5 sm:p-6 backdrop-blur-xl flex flex-col"
   >
-    <!-- header -->
+    <!-- Header -->
     <header class="flex items-center justify-between">
       <h2 class="text-lg sm:text-xl font-semibold text-neutral-100 flex items-center gap-2">
         <span
@@ -52,7 +52,7 @@ onMounted(fetchProblematicProducts)
 
     <div class="mt-3 h-px w-full bg-gradient-to-r from-transparent via-white/10 to-transparent"></div>
 
-    <!-- content -->
+    <!-- Content -->
     <div class="mt-4 flex-1">
       <ol
         v-if="products.length"
@@ -74,13 +74,12 @@ onMounted(fetchProblematicProducts)
             {{ idx + 1 }}
           </div>
 
-          <!-- name + progress -->
+          <!-- Name + Progress -->
           <div class="min-w-0">
             <p class="truncate text-neutral-100 font-medium" :title="p.productName">
               {{ p.productName }}
             </p>
 
-            <!-- subtle progress bar based on removeQuantity/max -->
             <div class="mt-1 h-2 w-full rounded-full bg-white/5 ring-1 ring-white/10 overflow-hidden" role="progressbar"
                  :aria-valuenow="p.removeQuantity"
                  aria-valuemin="0"
@@ -99,7 +98,6 @@ onMounted(fetchProblematicProducts)
             </p>
           </div>
 
-          <!-- quantity chip: shows qty+unit OR (qty*volume)+volumeUnit when unit === 'tk' -->
           <span
             class="shrink-0 rounded-lg px-2.5 py-1 text-xs font-semibold
                    bg-rose-500/10 text-rose-300 ring-1 ring-rose-400/30"
