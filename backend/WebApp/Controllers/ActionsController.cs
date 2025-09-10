@@ -99,6 +99,10 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 _logger.LogInformation("Creating new action for user {UserId}", User.GetUserId());
+                
+                vm.ActionEntity.CreatedBy = User.GetUserId().ToString();
+                vm.ActionEntity.CreatedAt = DateTime.UtcNow; 
+                
                 _bll.ActionEntityService.Add(vm.ActionEntity, User.GetUserId());
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -182,6 +186,10 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 _logger.LogInformation("Updating action with ID {Id} for user {UserId}", id, User.GetUserId());
+                
+                vm.ActionEntity.ChangedBy = User.GetUserId().ToString();
+                vm.ActionEntity.ChangedAt = DateTime.UtcNow;
+                
                 _bll.ActionEntityService.Update(vm.ActionEntity);
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
