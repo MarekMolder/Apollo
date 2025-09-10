@@ -245,11 +245,11 @@ const exportToExcel = () => {
                relative inline-block"
       >
         <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
-          Monthly Statistics
+          {{ $t('Monthly statistics') }}
         </span>
       </h1>
       <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
-      <p class="mt-3 text-sm text-neutral-400">Removed product quantities per month</p>
+      <p class="mt-3 text-sm text-neutral-400">{{ $t('Removed product quantities per month') }}</p>
     </section>
 
     <!-- Card container -->
@@ -265,7 +265,7 @@ const exportToExcel = () => {
 
           <!-- Year -->
           <div class="relative">
-            <label class="sr-only">Year</label>
+            <label class="sr-only">{{ $t('Year') }}</label>
             <select
               v-model="selectedYear"
               class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
@@ -280,7 +280,7 @@ const exportToExcel = () => {
 
           <!-- Month -->
           <div class="relative">
-            <label class="sr-only">Month</label>
+            <label class="sr-only">{{ $t('Month') }}</label>
             <select
               v-model="selectedMonth"
               class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
@@ -295,7 +295,7 @@ const exportToExcel = () => {
 
           <!-- Day filter -->
           <div class="relative">
-            <label class="sr-only">Day</label>
+            <label class="sr-only">{{ $t('Day') }}</label>
             <select
               v-model="selectedDay"
               :disabled="dayOptions.length === 0"
@@ -304,7 +304,7 @@ const exportToExcel = () => {
                      focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9
                      disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <option value="All">All days</option>
+              <option value="All">{{ $t('All days') }}</option>
               <option v-for="d in dayOptions" :key="d" :value="d">{{ d }}</option>
             </select>
             <i class="bi bi-clock-history absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
@@ -313,7 +313,7 @@ const exportToExcel = () => {
 
           <!-- Name filter -->
           <div class="relative">
-            <label class="sr-only">Name</label>
+            <label class="sr-only">{{ $t('Name') }}</label>
             <input
               v-model="nameQuery"
               type="text"
@@ -327,7 +327,7 @@ const exportToExcel = () => {
 
           <!-- Code filter -->
           <div class="relative">
-            <label class="sr-only">Code</label>
+            <label class="sr-only">{{ $t('Code') }}</label>
             <input
               v-model="codeQuery"
               type="text"
@@ -341,7 +341,7 @@ const exportToExcel = () => {
 
           <!-- Category filter -->
           <div class="relative">
-            <label class="sr-only">Category</label>
+            <label class="sr-only">{{ $t('Category') }}</label>
             <select
               v-model="selectedCategoryId"
               :disabled="categoryOptions.length === 0"
@@ -350,7 +350,7 @@ const exportToExcel = () => {
                      focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9
                      disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <option value="All">All categories</option>
+              <option value="All">{{ $t('All categories') }}</option>
               <option v-for="cat in categoryOptions" :key="cat.id" :value="cat.id">{{ cat.name }}</option>
             </select>
             <i class="bi bi-tags absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
@@ -360,7 +360,7 @@ const exportToExcel = () => {
           <!-- Excel export -->
           <div class="col-span-1 xl:col-span-6 flex flex-wrap items-center gap-3 mt-2">
             <div class="flex flex-wrap items-center gap-2">
-              <span class="text-sm text-neutral-400">Columns:</span>
+              <span class="text-sm text-neutral-400">{{ $t('Columns') }}:</span>
               <div class="flex flex-wrap gap-2">
                 <label
                   v-for="c in exportColumns"
@@ -390,7 +390,7 @@ const exportToExcel = () => {
               title="Export visible rows to Excel"
             >
               <i class="bi bi-download"></i>
-              Export Excel
+              {{ $t('Export Excel') }}
             </button>
           </div>
 
@@ -401,12 +401,12 @@ const exportToExcel = () => {
           <table class="w-full text-base text-left">
             <thead class="sticky top-0 z-10 bg-neutral-900/80 backdrop-blur text-neutral-300">
             <tr>
-              <th class="px-4 py-3">Product</th>
-              <th class="px-4 py-3 hidden md:table-cell">Code</th>
-              <th class="px-4 py-3">Category</th>
-              <th class="px-4 py-3">Unit</th>
-              <th class="px-4 py-3">Removed Quantity</th>
-              <th class="px-4 py-3">Removed Volume</th>
+              <th class="px-4 py-3">{{ $t('Product') }}</th>
+              <th class="px-4 py-3 hidden md:table-cell">{{ $t('Code') }}</th>
+              <th class="px-4 py-3">{{ $t('Category') }}</th>
+              <th class="px-4 py-3">{{ $t('Unit') }}</th>
+              <th class="px-4 py-3">{{ $t('Removed quantity') }}</th>
+              <th class="px-4 py-3">{{ $t('Removed volume') }}</th>
             </tr>
             </thead>
             <tbody>
@@ -493,7 +493,7 @@ const exportToExcel = () => {
 
             <tr v-if="filteredData.length === 0">
               <td colspan="5" class="px-4 py-10 text-center text-neutral-400">
-                No data to display
+                {{ $t('No data to display') }}
               </td>
             </tr>
             </tbody>
@@ -536,7 +536,7 @@ const exportToExcel = () => {
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
+              {{ $t('How to use this page?') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -598,7 +598,7 @@ const exportToExcel = () => {
                  bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
                  hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Sain aru
+              {{ $t('Got it') }}
             </button>
           </div>
         </div>

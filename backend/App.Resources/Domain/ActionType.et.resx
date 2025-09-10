@@ -11,226 +11,538 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Name" xml:space="preserve">
-        <value>Nimetus</value>
+    <data name="Account info" xml:space="preserve">
+        <value>Konto andmed
+</value>
     </data>
-    <data name="Quantity" xml:space="preserve">
-        <value>Kogus</value>
+    <data name="Accepted" xml:space="preserve">
+        <value>Aktsepteeritud</value>
     </data>
-    <data name="Action Type" xml:space="preserve">
+    <data name="Action type" xml:space="preserve">
         <value>Tegevuse liik</value>
-    </data>
-    <data name="Reason" xml:space="preserve">
-        <value>Põhjus</value>
-    </data>
-    <data name="Supplier" xml:space="preserve">
-        <value>Tarnija</value>
-    </data>
-    <data name="Product" xml:space="preserve">
-        <value>Toode</value>
-    </data>
-    <data name="StorageRoom" xml:space="preserve">
-        <value>Lao ruum</value>
     </data>
     <data name="Actions" xml:space="preserve">
         <value>Tegevused</value>
     </data>
-    <data name="Products" xml:space="preserve">
-        <value>Produktid</value>
+    <data name="Address" xml:space="preserve">
+        <value>Aadress</value>
     </data>
-    <data name="Stock" xml:space="preserve">
-        <value>Varu</value>
+    <data name="All" xml:space="preserve">
+        <value>Kõik</value>
     </data>
-    <data name="Most Active Removers" xml:space="preserve">
-        <value>Kõige aktiiivsemad mahakandjad</value>
+    <data name="All categories" xml:space="preserve">
+        <value>Kõik kategooriad</value>
     </data>
-    <data name="Low Stock Alert" xml:space="preserve">
-        <value>Vähese varu teadeanne</value>
+    <data name="All days" xml:space="preserve">
+        <value>Kõik päevad</value>
     </data>
-    <data name="Most Removed Products" xml:space="preserve">
-        <value>Kõige rohkem eemaldatud tooted</value>
+    <data name="All months" xml:space="preserve">
+        <value>Kõik kuud</value>
     </data>
-    <data name="Search by name or code" xml:space="preserve">
-        <value>Otsi nime või koodi järgi</value>
+    <data name="All suppliers" xml:space="preserve">
+        <value>Kõik tarnijad</value>
     </data>
-    <data name="Select an inventory to see total worth" xml:space="preserve">
-        <value>Vali ladu, et näha lao kogu väärtust</value>
+    <data name="All users" xml:space="preserve">
+        <value>Kõik kasutajad</value>
     </data>
-    <data name="Choose" xml:space="preserve">
-        <value>Vali</value>
+    <data name="All years" xml:space="preserve">
+        <value>Kõik aastad</value>
     </data>
-    <data name="View All" xml:space="preserve">
-        <value>Vaata kõiki</value>
+    <data name="Allowed roles (comma-separated)" xml:space="preserve">
+        <value>Lubatud rollid (komaga eraldatud)</value>
     </data>
-    <data name="Status" xml:space="preserve">
-        <value>Staatus</value>
+    <data name="Amount" xml:space="preserve">
+        <value>Kogus</value>
     </data>
-    <data name="Inventories" xml:space="preserve">
-        <value>Laod</value>
+    <data name="Assign" xml:space="preserve">
+        <value>Määra
+</value>
     </data>
-    <data name="View Storage Rooms" xml:space="preserve">
-        <value>Vaata laoruume</value>
+    <data name="Assign role to user" xml:space="preserve">
+        <value>Määra roll kasutajale
+</value>
     </data>
-    <data name="Storage Rooms" xml:space="preserve">
-        <value>Lao ruumid</value>
+    <data name="Back" xml:space="preserve">
+        <value>Tagasi
+</value>
     </data>
-    <data name="View Current Stock" xml:space="preserve">
-        <value>Vaata hetkest laoseisu</value>
+    <data name="Browse and manage all available products" xml:space="preserve">
+        <value>Sirvi ja halda kõiki tooteid
+</value>
     </data>
-    <data name="Search by name" xml:space="preserve">
-        <value>Otsi nime järgi</value>
+    <data name="Browse and manage all available suppliers" xml:space="preserve">
+        <value>Sirvi ja halda kõiki tarnijaid
+</value>
     </data>
-    <data name="Search by code" xml:space="preserve">
-        <value>Otsi koodi järgi</value>
+    <data name="Building nr" xml:space="preserve">
+        <value>Maja nr
+</value>
     </data>
-    <data name="Current Stock" xml:space="preserve">
-        <value>Hetkene laoseis</value>
+    <data name="Cancel" xml:space="preserve">
+        <value>Loobu
+</value>
     </data>
-    <data name="Product Code" xml:space="preserve">
-        <value>Toote kood</value>
+    <data name="Category" xml:space="preserve">
+        <value>Kategooria
+</value>
     </data>
-    <data name="Telephone nr" xml:space="preserve">
-        <value>Telefoni number</value>
+    <data name="Change password" xml:space="preserve">
+        <value>Muuda parooli
+</value>
+    </data>
+    <data name="City" xml:space="preserve">
+        <value>Linn
+</value>
+    </data>
+    <data name="Close" xml:space="preserve">
+        <value>Sulge
+</value>
+    </data>
+    <data name="Code" xml:space="preserve">
+        <value>Kood</value>
+    </data>
+    <data name="Columns" xml:space="preserve">
+        <value>Veerud</value>
+    </data>
+    <data name="Component product" xml:space="preserve">
+        <value>Komponent-toode
+</value>
+    </data>
+    <data name="Confirm new password" xml:space="preserve">
+        <value>Kinnita uus parool
+</value>
+    </data>
+    <data name="Country" xml:space="preserve">
+        <value>Riik
+</value>
+    </data>
+    <data name="Count" xml:space="preserve">
+        <value>Loenda</value>
+    </data>
+    <data name="Create" xml:space="preserve">
+        <value>Loo
+</value>
+    </data>
+    <data name="Create a new account" xml:space="preserve">
+        <value>Loo uus konto
+</value>
+    </data>
+    <data name="Create new address" xml:space="preserve">
+        <value>Loo aadress
+</value>
+    </data>
+    <data name="Create new actionType" xml:space="preserve">
+        <value>Loo uus tegevuse tüüp
+</value>
+    </data>
+    <data name="Create new product" xml:space="preserve">
+        <value>Loo uus toode
+</value>
+    </data>
+    <data name="Create new productCategory" xml:space="preserve">
+        <value>Loo uus tootekategooria
+</value>
+    </data>
+    <data name="Create new reason" xml:space="preserve">
+        <value>Loo uus põhjus
+</value>
+    </data>
+    <data name="Create new storage room" xml:space="preserve">
+        <value>Loo uus hoiuruum
+</value>
+    </data>
+    <data name="Create new supplier" xml:space="preserve">
+        <value>Loo uus tarnija
+</value>
+    </data>
+    <data name="Dashboard" xml:space="preserve">
+        <value>Töölauavaade
+</value>
+    </data>
+    <data name="Day" xml:space="preserve">
+        <value>Päev
+</value>
+    </data>
+    <data name="Declined" xml:space="preserve">
+        <value>Tagasi lükatud
+</value>
+    </data>
+    <data name="Description" xml:space="preserve">
+        <value>Kirjeldus</value>
+    </data>
+    <data name="Discard items" xml:space="preserve">
+        <value>Kaupade mahakandmine
+</value>
+    </data>
+    <data name="Discarded most often" xml:space="preserve">
+        <value>Kõige rohkem mahakantud</value>
+    </data>
+    <data name="Dispose item" xml:space="preserve">
+        <value>Kanna maha</value>
+    </data>
+    <data name="Edit" xml:space="preserve">
+        <value>Muuda
+</value>
+    </data>
+    <data name="Edit actionType" xml:space="preserve">
+        <value>Muuda tegevuse tüüpi
+</value>
+    </data>
+    <data name="Edit address" xml:space="preserve">
+        <value>Muuda aadressi
+</value>
+    </data>
+    <data name="Edit product" xml:space="preserve">
+        <value>Muuda toodet
+</value>
+    </data>
+    <data name="Edit productCategory" xml:space="preserve">
+        <value>Muuda tootekategooriat
+</value>
+    </data>
+    <data name="Edit reason" xml:space="preserve">
+        <value>Muuda põhjust
+</value>
+    </data>
+    <data name="Edit supplier" xml:space="preserve">
+        <value>Muuda tarnijat
+</value>
+    </data>
+    <data name="Edits storage room" xml:space="preserve">
+        <value>Muuda hoiuruumi
+</value>
     </data>
     <data name="Email" xml:space="preserve">
         <value>Email</value>
     </data>
-    <data name="Address" xml:space="preserve">
-        <value>Aadress</value>
-    </data>
-    <data name="Edit Profile" xml:space="preserve">
-        <value>Uuenda kontot</value>
-    </data>
-    <data name="Firsname" xml:space="preserve">
-        <value>Eesnimi</value>
-    </data>
-    <data name="Lastname" xml:space="preserve">
-        <value>perenimi</value>
-    </data>
-    <data name="Username" xml:space="preserve">
-        <value>Kasutaja nimi</value>
-    </data>
-    <data name="Save data" xml:space="preserve">
-        <value>Salvesta info</value>
-    </data>
-    <data name="Change password" xml:space="preserve">
-        <value>Uuenda passwordi</value>
-    </data>
-    <data name="My account" xml:space="preserve">
-        <value>Minu konto</value>
-    </data>
-    <data name="Current password" xml:space="preserve">
-        <value>Praegune password</value>
-    </data>
-    <data name="New password" xml:space="preserve">
-        <value>Uus password</value>
-    </data>
-    <data name="Confirm new password" xml:space="preserve">
-        <value>Kinnita uus parool</value>
-    </data>
-    <data name="Back" xml:space="preserve">
-        <value>Tagasi</value>
-    </data>
-    <data name="Filter By Status" xml:space="preserve">
-        <value>Filtreeri staatuse järgi</value>
-    </data>
-    <data name="Requests" xml:space="preserve">
-        <value>Taotlused</value>
-    </data>
-    <data name="New Action" xml:space="preserve">
-        <value>Uus tegevus</value>
-    </data>
-    <data name="Contacts" xml:space="preserve">
-        <value>Kontaktid</value>
-    </data>
-    <data name="Pending Actions" xml:space="preserve">
-        <value>Ootel taotlused</value>
-    </data>
-    <data name="No problematic products found" xml:space="preserve">
-        <value>Probleemseid produkte ei leitud</value>
-    </data>
-    <data name="Stock data not available" xml:space="preserve">
-        <value>Laoseisu varude andmed puuduvad</value>
-    </data>
-    <data name="Quick Product Search" xml:space="preserve">
-        <value>Kiire toote otsing</value>
-    </data>
-    <data name="No match" xml:space="preserve">
-        <value>Vasted puuduvad</value>
-    </data>
-    <data name="Select Inventory" xml:space="preserve">
-        <value>Vali ladu</value>
-    </data>
-    <data name="All Users" xml:space="preserve">
-        <value>Kõik kasutajad</value>
-    </data>
-    <data name="Update" xml:space="preserve">
-        <value>Uuenda</value>
-    </data>
-    <data name="Create new current stock" xml:space="preserve">
-        <value>Loo uus laoseisu kirje</value>
-    </data>
-    <data name="Enter your email" xml:space="preserve">
-        <value>Sisesta enda email</value>
-    </data>
     <data name="Enter current password" xml:space="preserve">
-        <value>Sisesta praegune parool</value>
+        <value>Sisesta praegune parool
+</value>
     </data>
     <data name="Enter new password" xml:space="preserve">
-        <value>Sisesta uus parool</value>
+        <value>Sisesta uus parool
+</value>
     </data>
-    <data name="Password" xml:space="preserve">
-        <value>Parool</value>
+    <data name="Export Excel" xml:space="preserve">
+        <value>Ekspordi Exceli
+</value>
     </data>
     <data name="Firstname" xml:space="preserve">
-        <value>Eesnimi</value>
+        <value>Eesnimi
+</value>
     </data>
-    <data name="Assign role to user" xml:space="preserve">
-        <value>Määra roll kasutajale</value>
+    <data name="Full name" xml:space="preserve">
+        <value>Täisnimi
+</value>
+    </data>
+    <data name="Got it" xml:space="preserve">
+        <value>Sain aru
+</value>
+    </data>
+    <data name="How to use this page?" xml:space="preserve">
+        <value>Kuidas seda lehte kasutada?
+</value>
+    </data>
+    <data name="In create mode: volume = quantity, volume unit = unit" xml:space="preserve">
+        <value>Loomise režiimis: maht = kogus, mahuühik = ühik
+</value>
+    </data>
+    <data name="Is component (used in recipes)" xml:space="preserve">
+        <value>On komponent (kasutatakse retseptides)
+</value>
+    </data>
+    <data name="Lastname" xml:space="preserve">
+        <value>Perekonnanimi
+</value>
+    </data>
+    <data name="Loading" xml:space="preserve">
+        <value>Laadimine
+</value>
+    </data>
+    <data name="Login" xml:space="preserve">
+        <value>Logi sisse
+</value>
+    </data>
+    <data name="Manage access roles for your system" xml:space="preserve">
+        <value>Halda süsteemi ligipääsurolle
+</value>
+    </data>
+    <data name="Manage reference data &amp; components - all in one place" xml:space="preserve">
+        <value>Halda alusandmeid ja komponente – kõik ühes kohas
+</value>
+    </data>
+    <data name="Month" xml:space="preserve">
+        <value>Kuu</value>
+    </data>
+    <data name="Monthly statistics" xml:space="preserve">
+        <value>Kuu põhine statistika</value>
+    </data>
+    <data name="Most active removers" xml:space="preserve">
+        <value>Kõige aktiivsemad mahakandjad
+</value>
+    </data>
+    <data name="Most removed products" xml:space="preserve">
+        <value>Kõige enam maha kantud tooted
+</value>
+    </data>
+    <data name="My account" xml:space="preserve">
+        <value>Minu konto
+</value>
+    </data>
+    <data name="Name" xml:space="preserve">
+        <value>Nimi
+</value>
+    </data>
+    <data name="New" xml:space="preserve">
+        <value>Uus</value>
+    </data>
+    <data name="New component" xml:space="preserve">
+        <value>Uus komponent
+</value>
+    </data>
+    <data name="New product" xml:space="preserve">
+        <value>Uus toode
+
+</value>
+    </data>
+    <data name="New storage room" xml:space="preserve">
+        <value>Uus hoiuruum
+</value>
+    </data>
+    <data name="New supplier" xml:space="preserve">
+        <value>Uus tarnija
+</value>
+    </data>
+    <data name="No data found" xml:space="preserve">
+        <value>Andmeid ei leitud
+</value>
+    </data>
+    <data name="No data to display" xml:space="preserve">
+        <value>Pole andmeid kuvada
+</value>
+    </data>
+    <data name="No pending actions" xml:space="preserve">
+        <value>Pole ootel toiminguid
+</value>
+    </data>
+    <data name="No problematic products found" xml:space="preserve">
+        <value>Probleemseid tooteid ei leitud
+</value>
+    </data>
+    <data name="No products found" xml:space="preserve">
+        <value>Tooteid ei leitud
+</value>
+    </data>
+    <data name="No products found for this supplier" xml:space="preserve">
+        <value>Sellel tarnijal pole tooteid
+</value>
+    </data>
+    <data name="No storage rooms found" xml:space="preserve">
+        <value>Hoiuruume ei leitud
+</value>
+    </data>
+    <data name="No suppliers found" xml:space="preserve">
+        <value>Tarnijaid ei leitud
+</value>
+    </data>
+    <data name="No users found" xml:space="preserve">
+        <value>Kasutajaid ei leitud
+</value>
+    </data>
+    <data name="Password" xml:space="preserve">
+        <value>Parool
+</value>
+    </data>
+    <data name="Pending" xml:space="preserve">
+        <value>Ootel
+</value>
+    </data>
+    <data name="Pending discards" xml:space="preserve">
+        <value>Ootel mahakandmised
+</value>
+    </data>
+    <data name="Phone" xml:space="preserve">
+        <value>Telefon
+</value>
+    </data>
+    <data name="Postal code" xml:space="preserve">
+        <value>Postiindeks
+</value>
+    </data>
+    <data name="Price" xml:space="preserve">
+        <value>Hind
+</value>
+    </data>
+    <data name="Product" xml:space="preserve">
+        <value>Toode
+</value>
+    </data>
+    <data name="Products" xml:space="preserve">
+        <value>Tooted
+</value>
+    </data>
+    <data name="Products by" xml:space="preserve">
+        <value>Tooted tarnijalt
+</value>
+    </data>
+    <data name="Province" xml:space="preserve">
+        <value>Maakond</value>
+    </data>
+    <data name="Quantity" xml:space="preserve">
+        <value>Kogus
+</value>
+    </data>
+    <data name="Reason" xml:space="preserve">
+        <value>Põhjus
+</value>
+    </data>
+    <data name="Recipe product" xml:space="preserve">
+        <value>Retseptitoode
+</value>
+    </data>
+    <data name="Register" xml:space="preserve">
+        <value>Registreeri</value>
+    </data>
+    <data name="Removed product quantities per month" xml:space="preserve">
+        <value>Kuus eemaldatud kogused
+</value>
+    </data>
+    <data name="Removed quantity" xml:space="preserve">
+        <value>Eemaldatud kogus
+</value>
+    </data>
+    <data name="Removed volume" xml:space="preserve">
+        <value>Eemaldatud maht
+</value>
+    </data>
+    <data name="Requests" xml:space="preserve">
+        <value>Taotlused
+</value>
+    </data>
+    <data name="Requested at" xml:space="preserve">
+        <value>Taotlus tehtud mis ajal</value>
+    </data>
+    <data name="Requested by" xml:space="preserve">
+        <value>Taotlus tehtud kelle poolt</value>
+    </data>
+    <data name="Reset" xml:space="preserve">
+        <value>Lähtesta</value>
+    </data>
+    <data name="Role name" xml:space="preserve">
+        <value>Rolli nimi
+</value>
+    </data>
+    <data name="Roles" xml:space="preserve">
+        <value>Rollid
+</value>
+    </data>
+    <data name="Save data" xml:space="preserve">
+        <value>Salvesta andmed
+</value>
+    </data>
+    <data name="Select a user and assign a role" xml:space="preserve">
+        <value>Vali kasutaja ja määra talle roll
+</value>
+    </data>
+    <data name="Settings" xml:space="preserve">
+        <value>Seaded
+</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>Olek
+</value>
+    </data>
+    <data name="Select address" xml:space="preserve">
+        <value>Vali aadress</value>
     </data>
     <data name="Select role" xml:space="preserve">
         <value>Vali roll</value>
     </data>
-    <data name="Assign" xml:space="preserve">
-        <value>Määra</value>
+    <data name="Select user" xml:space="preserve">
+        <value>Vali kasutaja</value>
     </data>
-    <data name="All roles" xml:space="preserve">
-        <value>Kõik rollid</value>
+    <data name="Storage room" xml:space="preserve">
+        <value>Hoiuruum
+</value>
     </data>
-    <data name="Create role" xml:space="preserve">
-        <value>Loo roll</value>
+    <data name="Storage rooms" xml:space="preserve">
+        <value>Hoiuruumid
+</value>
+    </data>
+    <data name="Street" xml:space="preserve">
+        <value>Tänav</value>
+    </data>
+    <data name="Suppliers" xml:space="preserve">
+        <value>Tarnijad
+</value>
+    </data>
+    <data name="Supplier" xml:space="preserve">
+        <value>Tarnija</value>
+    </data>
+    <data name="Tip: leave empty to allow no roles (or handle at backend as needed)" xml:space="preserve">
+        <value>Vihje: jäta tühjaks, kui ei soovi ühtegi rolli lubada (või halda seda backendis)
+</value>
+    </data>
+    <data name="Unit" xml:space="preserve">
+        <value>Ühik</value>
+    </data>
+    <data name="Unit nr" xml:space="preserve">
+        <value>Üksuse nr
+</value>
+    </data>
+    <data name="Update" xml:space="preserve">
+        <value>Uuenda</value>
+    </data>
+    <data name="Update your password securely" xml:space="preserve">
+        <value>Uuenda oma parooli turvaliselt
+</value>
+    </data>
+    <data name="User" xml:space="preserve">
+        <value>Kasutaja
+</value>
+    </data>
+    <data name="User details" xml:space="preserve">
+        <value>Kasutaja andmed
+</value>
+    </data>
+    <data name="Username" xml:space="preserve">
+        <value>Kasutajanimi</value>
     </data>
     <data name="Users and roles" xml:space="preserve">
-        <value>Kasutajad ja rollid</value>
+        <value>Kasutajad ja rollid
+</value>
     </data>
-    <data name="Full name" xml:space="preserve">
-        <value>Täisnimi</value>
+    <data name="View" xml:space="preserve">
+        <value>Vaata</value>
     </data>
-    <data name="Roles" xml:space="preserve">
-        <value>Rollid</value>
+    <data name="View all" xml:space="preserve">
+        <value>Vaata kõiki
+</value>
     </data>
-    <data name="Assign role" xml:space="preserve">
-        <value>Määra roll</value>
+    <data name="View and update your profile" xml:space="preserve">
+        <value>Vaata ja uuenda oma profiili
+</value>
     </data>
-    <data name="Get role" xml:space="preserve">
-        <value>Näe rolle</value>
+    <data name="View selected user profile" xml:space="preserve">
+        <value>Vaata valitud kasutaja profiili
+</value>
     </data>
-    <data name="Inventory" xml:space="preserve">
-        <value>Ladu</value>
+    <data name="View users and manage their roles" xml:space="preserve">
+        <value>Vaata kasutajaid ja halda nende rolle
+</value>
     </data>
-    <data name="Location" xml:space="preserve">
-        <value>Asukoht</value>
+    <data name="Volume" xml:space="preserve">
+        <value>Maht
+</value>
     </data>
-    <data name="Category" xml:space="preserve">
-        <value>Kategooria</value>
+    <data name="Volume unit" xml:space="preserve">
+        <value>Mahuühik</value>
     </data>
-    <data name="No users found" xml:space="preserve">
-        <value>Kasutajaid ei leitud</value>
+    <data name="Write-off statistics" xml:space="preserve">
+        <value>Mahakandmise statistika
+</value>
     </data>
-    <data name="No data found" xml:space="preserve">
-        <value>Andmeid ei leitud</value>
-    </data>
-    <data name="No pending actions" xml:space="preserve">
-        <value>Ootel taotlused puuduvad</value>
+    <data name="Year" xml:space="preserve">
+        <value>Aasta</value>
     </data>
 </root>

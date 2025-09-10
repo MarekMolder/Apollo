@@ -137,7 +137,7 @@ public class AccountController : ControllerBase
     /// <returns>JWT response with tokens and user information.</returns>
     [HttpPost]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "admin,manager")]
+    [Authorize(Roles = "admin,juhataja")]
     public async Task<ActionResult<JwtResponse>> Register(Register registerModel, int? jwtExpiresInSeconds, int? refreshTokenExpiresInSeconds)
     {
         var existingUser = await _userManager.FindByEmailAsync(registerModel.Email);
@@ -450,7 +450,7 @@ public class AccountController : ControllerBase
     /// <returns>List of users with role information.</returns>
     [HttpGet]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "admin,manager")]
+    [Authorize(Roles = "admin,juhataja")]
     public async Task<ActionResult<IEnumerable<UserWithRolesDto>>> GetAllUsersWithRoles()
     {
         _logger.LogInformation("Fetching all users with their roles");
@@ -481,7 +481,7 @@ public class AccountController : ControllerBase
     /// <returns>Confirmation message on success.</returns>
     [HttpDelete]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "admin,manager")]
+    [Authorize(Roles = "admin,juhataja")]
     public async Task<IActionResult> RemoveRoleFromUser(Guid userId, Guid roleId)
     {
         var userRole = await _context.UserRoles

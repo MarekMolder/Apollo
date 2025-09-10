@@ -28,7 +28,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Fetching all addresses for user {UserId}", User.GetUserId());
-            var res = await _bll.AddressService.AllAsync(User.GetUserId());
+            var res = await _bll.AddressService.AllAsync();
             return View(res);
         }
 

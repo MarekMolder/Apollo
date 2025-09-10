@@ -109,4 +109,5 @@ public class ActionEntityRepository : BaseRepository<DAL.DTO.ActionEntity, Domai
             .Select(x => (x.CreatedBy, x.TotalRemovals))
             .ToList();
     }
+    
 }

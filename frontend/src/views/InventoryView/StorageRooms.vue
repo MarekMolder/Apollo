@@ -221,7 +221,7 @@ const removeRoom = async (id: string) => {
                drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)]
                relative inline-block">
         <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
-          Storage Rooms
+          {{ $t('Storage rooms') }}
         </span>
       </h1>
       <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
@@ -257,7 +257,7 @@ const removeRoom = async (id: string) => {
                    hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
                    focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition">
             <i class="bi bi-plus-lg opacity-90 group-hover:opacity-100"></i>
-            <span>New Storage Room</span>
+            <span>{{ $t('New storage room') }}</span>
           </button>
         </div>
 
@@ -292,7 +292,7 @@ const removeRoom = async (id: string) => {
                        hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
                        focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition">
                 <i class="bi bi-pencil"></i>
-                Edit
+                {{ $t('Edit') }}
               </button>
               <button
                 @click="goToCurrentStock(room.id)"
@@ -303,7 +303,7 @@ const removeRoom = async (id: string) => {
                        focus:outline-none focus:ring-2 focus:ring-cyan-400/40 transition no-underline"
               >
                 <i class="bi bi-box-seam text-base"></i>
-                Write-off statistics
+                {{ $t('Write-off statistics') }}
               </button>
             </div>
           </div>
@@ -311,7 +311,7 @@ const removeRoom = async (id: string) => {
 
         <!-- No results -->
         <div v-if="filteredStorageRooms.length === 0" class="text-center text-neutral-400 mt-8">
-          No storage rooms found.
+          {{ $t('No storage rooms found') }}.
         </div>
       </div>
     </section>
@@ -325,7 +325,9 @@ const removeRoom = async (id: string) => {
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
-              {{ drawerMode === 'edit' ? (activeEditRoom?.name || 'Edit Storage Room') : 'Create New Storage Room' }}
+              {{ drawerMode === 'edit'
+              ? (activeEditRoom?.name || $t('Edit storage room'))
+              : $t('Create new storage room') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -340,7 +342,7 @@ const removeRoom = async (id: string) => {
           <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <!-- Name -->
             <div class="sm:col-span-2">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Name') }}</label>
               <input v-model="(activeRoom as any).name" type="text"
                      class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white
                             placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"/>
@@ -348,24 +350,24 @@ const removeRoom = async (id: string) => {
 
             <!-- Address -->
             <div class="sm:col-span-2">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Address</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Address') }}</label>
               <select v-model="(activeRoom as any).addressId"
                       class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
                              px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30
                              focus:border-neutral-500 transition shadow-inner shadow-black/30">
-                <option disabled value="">Select address</option>
+                <option disabled value="">{{ $t('Select address') }}</option>
                 <option v-for="a in addresses" :key="a.id" :value="a.id">{{ a.name }}</option>
               </select>
             </div>
 
             <!-- Allowed roles (as comma list OR switch to tag multiselect if you prefer) -->
             <div class="sm:col-span-2">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Allowed Roles (comma-separated)</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Allowed roles (comma-separated)') }}</label>
               <input v-model="rolesInput" type="text"
                      placeholder="e.g. admin,mustamäe"
                      class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-medium text-white
                             placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"/>
-              <p class="mt-2 text-xs text-neutral-400">Tip: leave empty to allow no roles (or handle at backend as needed).</p>
+              <p class="mt-2 text-xs text-neutral-400">{{ $t('Tip: leave empty to allow no roles (or handle at backend as needed)') }}.</p>
             </div>
           </div>
 
@@ -382,20 +384,20 @@ const removeRoom = async (id: string) => {
               @click="updateRoom"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
                      text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
-              Update
+              {{ $t('Update') }}
             </button>
             <button
               v-else
               @click="createRoom"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
                      text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
-              Create
+              {{ $t('Create') }}
             </button>
             <button
               @click="showDrawer = false"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
                      text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
-              Cancel
+              {{ $t('Cancel') }}
             </button>
           </div>
         </div>
@@ -436,7 +438,7 @@ const removeRoom = async (id: string) => {
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
+              {{ $t('How to use this page?') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -498,7 +500,7 @@ const removeRoom = async (id: string) => {
                      bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
                      hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Sain aru
+              {{ $t('Got it') }}
             </button>
           </div>
         </div>

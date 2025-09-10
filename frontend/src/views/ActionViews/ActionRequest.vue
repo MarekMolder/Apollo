@@ -21,6 +21,7 @@ const selectedStatus = ref<'All' | 'Accepted' | 'Declined' | 'Pending'>('All')
 const selectedUser = ref<'All' | string>('All')
 const selectedMonth = ref<'All' | number>('All')
 const selectedYear = ref<'All' | number>('All')
+const selectedStorageRoom = ref<'All' | string>('All')
 
 const userOptions = computed<string[]>(() => {
   const set = new Set<string>()
@@ -37,6 +38,14 @@ const yearOptions = computed<number[]>(() => {
     if (d && !isNaN(d.getTime())) set.add(d.getFullYear())
   }
   return Array.from(set).sort((a, b) => b - a)
+})
+
+const storageRoomOptions = computed<string[]>(() => {
+  const set = new Set<string>()
+  for (const it of data.data ?? []) {
+    if (it?.storageRoomName) set.add(it.storageRoomName)
+  }
+  return Array.from(set).sort((a, b) => a.localeCompare(b))
 })
 
 const monthOptions = [
@@ -75,8 +84,15 @@ const filteredData = computed(() => {
       return d && d.getMonth() + 1 === selectedMonth.value
     })
   }
+  if (selectedStorageRoom.value !== 'All') {
+    items = items.filter((i) => i.storageRoomName === selectedStorageRoom.value)
+  }
 
-  return items
+  return items.sort((a, b) => {
+    const da = a?.createdAt ? new Date(a.createdAt).getTime() : 0
+    const db = b?.createdAt ? new Date(b.createdAt).getTime() : 0
+    return db - da
+  })
 })
 
 // ---------------- Fetch ----------------
@@ -133,7 +149,7 @@ const acceptAll = async () => {
                drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)]
                relative inline-block">
         <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
-          Requests
+          {{ $t('Requests') }}
         </span>
       </h1>
       <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
@@ -148,11 +164,11 @@ const acceptAll = async () => {
                shadow-[inset_0_0_20px_rgba(255,255,255,0.03),_0_8px_24px_rgba(0,0,0,0.35)]">
 
         <!-- Toolbar: filters -->
-        <div class="mb-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-3 items-center">
+        <div class="mb-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3 items-center">
           <!-- Staatus -->
           <div class="flex items-center gap-2">
             <i class="bi bi-funnel text-neutral-400 hidden sm:inline"></i>
-            <label class="sr-only">Status</label>
+            <label class="sr-only">{{ $t('Status') }}</label>
             <div class="relative w-full">
               <select
                 v-model="selectedStatus"
@@ -170,7 +186,7 @@ const acceptAll = async () => {
 
           <!-- User -->
           <div class="relative">
-            <label class="sr-only">User</label>
+            <label class="sr-only">{{ $t('User') }}</label>
             <select
               v-model="selectedUser"
               class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
@@ -185,7 +201,7 @@ const acceptAll = async () => {
 
           <!-- Month -->
           <div class="relative">
-            <label class="sr-only">Month</label>
+            <label class="sr-only">{{ $t('Month') }}</label>
             <select
               v-model="selectedMonth"
               class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
@@ -200,7 +216,7 @@ const acceptAll = async () => {
 
           <!-- Year -->
           <div class="relative">
-            <label class="sr-only">Year</label>
+            <label class="sr-only">{{ $t('Year') }}</label>
             <select
               v-model="selectedYear"
               class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
@@ -210,6 +226,20 @@ const acceptAll = async () => {
               <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
             </select>
             <i class="bi bi-calendar-event absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
+          </div>
+
+          <div class="relative">
+            <label class="sr-only">{{ $t('Storage room') }}</label>
+            <select
+              v-model="selectedStorageRoom"
+              class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white
+           px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400/30
+           focus:border-neutral-500 transition shadow-inner shadow-black/30">
+              <option value="All">{{ $t('All storage rooms') }}</option>
+              <option v-for="r in storageRoomOptions" :key="r" :value="r">{{ r }}</option>
+            </select>
+            <i class="bi bi-building absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
             <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-neutral-400"></i>
           </div>
 
@@ -232,7 +262,7 @@ const acceptAll = async () => {
          ring-1 ring-emerald-400/30 bg-emerald-500/10 text-emerald-300
          hover:bg-emerald-500/15 hover:scale-[1.05] transition"
             >
-              <span class="text-[10px] font-medium leading-tight">Accept</span>
+              <span class="text-[10px] font-medium leading-tight">{{ $t('Accept') }}</span>
               <i class="bi bi-check2-all text-lg"></i>
             </button>
 
@@ -267,7 +297,7 @@ const acceptAll = async () => {
               <th class="px-4 py-3 font-semibold">{{ $t('Quantity') }}</th>
               <th class="px-4 py-3 font-semibold hidden lg:table-cell">{{ $t('Requested by') }}</th>
               <th class="px-4 py-3 font-semibold hidden lg:table-cell">{{ $t('Requested at') }}</th>
-              <th class="px-4 py-3 font-semibold hidden sm:table-cell">{{ $t('StorageRoom') }}</th>
+              <th class="px-4 py-3 font-semibold hidden sm:table-cell">{{ $t('Storage room') }}</th>
               <th class="px-4 py-3 font-semibold">{{ $t('Status') }}</th>
               <th class="px-4 py-3 font-semibold text-center" colspan="2">{{ $t('Actions') }}</th>
             </tr>
@@ -368,7 +398,7 @@ const acceptAll = async () => {
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
+              {{ $t('How to use this page?') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -432,7 +462,7 @@ const acceptAll = async () => {
                  bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
                  hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Sain aru
+              {{ $t('Got it') }}
             </button>
           </div>
         </div>

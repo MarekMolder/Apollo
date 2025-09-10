@@ -12,7 +12,7 @@ namespace WebApp.Controllers
     /// <summary>
     /// Controller for managing monthly statistics.
     /// </summary>
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public class MonthlyStatisticsController : Controller
     {
         private readonly IAppBll _bll;
@@ -31,7 +31,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Fetching all monthly statistics for user {UserId}", User.GetUserId());
-            var res = await _bll.MonthlyStatisticsService.AllAsync(User.GetUserId());
+            var res = await _bll.MonthlyStatisticsService.AllAsync();
             return View(res);
         }
 

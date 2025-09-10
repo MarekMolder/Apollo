@@ -181,7 +181,7 @@ const changePassword = async () => {
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
+              {{ $t('How to use this page?') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -243,7 +243,7 @@ const changePassword = async () => {
                  bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
                  hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Sain aru
+              {{ $t('Got it') }}
             </button>
           </div>
         </div>

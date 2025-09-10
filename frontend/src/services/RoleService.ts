@@ -27,8 +27,10 @@ export class RoleService extends BaseService {
 
   async assignRoleToUser(dto: AssignRoleDto): Promise<IResultObject<string>> {
     try {
-      const res = await this.axiosInstance.post("/roles/assignroletouser", dto);
-      return { data: res.data.message, errors: [] };
+      const res = await this.axiosInstance.post("/roles/assignroletouser", dto, {
+        headers: { "Content-Type": "application/json" }
+      });
+      return { data: res.data.message ?? res.data.Message, errors: [] };
     } catch (e: any) {
       return { errors: [e.response?.data || e.message] };
     }

@@ -30,7 +30,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Fetching all storage rooms for user {UserId}", User.GetUserId());
-            var res = await _bll.StorageRoomService.AllAsync(User.GetUserId());
+            var res = await _bll.StorageRoomService.AllAsync();
             return View(res);
         }
 

@@ -30,7 +30,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("User {User} accessing ActionType list", User.Identity?.Name);
-            var res = await _bll.ActionTypeEntityService.AllAsync(User.GetUserId());
+            var res = await _bll.ActionTypeEntityService.AllAsync();
             return View(res);
         }
 

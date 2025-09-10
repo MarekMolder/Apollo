@@ -30,7 +30,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Fetching all suppliers for user {UserId}", User.GetUserId());
-            var res = await _bll.SupplierService.AllAsync(User.GetUserId());
+            var res = await _bll.SupplierService.AllAsync();
             return View(res);
         }
 

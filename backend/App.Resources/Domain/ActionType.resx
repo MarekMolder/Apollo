@@ -18,226 +18,552 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="Name" xml:space="preserve">
-        <value>Name</value>
+    <data name="Dashboard" xml:space="preserve">
+        <value>Dashboard
+</value>
     </data>
-    <data name="Quantity" xml:space="preserve">
-        <value>Quantity</value>
+    <data name="How to use this page?" xml:space="preserve">
+        <value>How to use this page?
+</value>
     </data>
-    <data name="Action Type" xml:space="preserve">
-        <value>Action type</value>
+    <data name="Got it" xml:space="preserve">
+        <value>Got it
+</value>
     </data>
-    <data name="Reason" xml:space="preserve">
-        <value>Reason</value>
+    <data name="Suppliers" xml:space="preserve">
+        <value>Suppliers</value>
     </data>
-    <data name="Supplier" xml:space="preserve">
-        <value>Supplier</value>
+    <data name="Browse and manage all available suppliers" xml:space="preserve">
+        <value>Browse and manage all available suppliers
+</value>
     </data>
-    <data name="Product" xml:space="preserve">
-        <value>Product</value>
+    <data name="New supplier" xml:space="preserve">
+        <value>New supplier
+</value>
     </data>
-    <data name="StorageRoom" xml:space="preserve">
-        <value>Storage room</value>
-    </data>
-    <data name="Actions" xml:space="preserve">
-        <value>Actions</value>
-    </data>
-    <data name="Products" xml:space="preserve">
-        <value>Products</value>
-    </data>
-    <data name="Stock" xml:space="preserve">
-        <value>Stock</value>
-    </data>
-    <data name="Most Active Removers" xml:space="preserve">
-        <value>Most active removers</value>
-    </data>
-    <data name="Low Stock Alert" xml:space="preserve">
-        <value>Low stock alert</value>
-    </data>
-    <data name="Most Removed Products" xml:space="preserve">
-        <value>Most removed products</value>
-    </data>
-    <data name="Search by name or code" xml:space="preserve">
-        <value>Search by name or code</value>
-    </data>
-    <data name="Select an inventory to see total worth" xml:space="preserve">
-        <value>Select an inventory to see total worth</value>
-    </data>
-    <data name="Choose" xml:space="preserve">
-        <value>Choose</value>
-    </data>
-    <data name="View All" xml:space="preserve">
-        <value>View all</value>
-    </data>
-    <data name="Status" xml:space="preserve">
-        <value>Status</value>
-    </data>
-    <data name="View Storage Rooms" xml:space="preserve">
-        <value>View Storage Rooms</value>
-    </data>
-    <data name="Inventories" xml:space="preserve">
-        <value>Inventories</value>
-    </data>
-    <data name="Storage Rooms" xml:space="preserve">
-        <value>Storage rooms</value>
-    </data>
-    <data name="View Current Stock" xml:space="preserve">
-        <value>View current stock</value>
-    </data>
-    <data name="Search by name" xml:space="preserve">
-        <value>Search by name</value>
-    </data>
-    <data name="Search by code" xml:space="preserve">
-        <value>Search by code</value>
-    </data>
-    <data name="Current Stock" xml:space="preserve">
-        <value>Current stock</value>
-    </data>
-    <data name="Product Code" xml:space="preserve">
-        <value>Product code</value>
-    </data>
-    <data name="Telephone nr" xml:space="preserve">
-        <value>Telephone number</value>
+    <data name="Phone" xml:space="preserve">
+        <value>Phone
+</value>
     </data>
     <data name="Email" xml:space="preserve">
-        <value>Email</value>
+        <value>Email
+</value>
     </data>
     <data name="Address" xml:space="preserve">
         <value>Address</value>
     </data>
-    <data name="Edit Profile" xml:space="preserve">
-        <value>Edit profile</value>
+    <data name="Edit" xml:space="preserve">
+        <value>Edit
+</value>
     </data>
-    <data name="Firsname" xml:space="preserve">
-        <value>firstname</value>
+    <data name="No suppliers found " xml:space="preserve">
+        <value>No suppliers found
+</value>
     </data>
-    <data name="Lastname" xml:space="preserve">
-        <value>Lastname</value>
+    <data name="Edit supplier" xml:space="preserve">
+        <value>Edit supplier
+</value>
     </data>
-    <data name="Username" xml:space="preserve">
-        <value>Username</value>
+    <data name="Create new supplier" xml:space="preserve">
+        <value>Create new supplier
+</value>
     </data>
-    <data name="Save data" xml:space="preserve">
-        <value>Save data</value>
+    <data name="Name" xml:space="preserve">
+        <value>Name
+</value>
     </data>
-    <data name="Change password" xml:space="preserve">
-        <value>Change password</value>
+    <data name="Update" xml:space="preserve">
+        <value>Update
+</value>
     </data>
-    <data name="My account" xml:space="preserve">
-        <value>My account</value>
+    <data name="Create" xml:space="preserve">
+        <value>Create
+</value>
     </data>
-    <data name="Current password" xml:space="preserve">
-        <value>Current password</value>
+    <data name="Cancel" xml:space="preserve">
+        <value>Cancel
+</value>
     </data>
-    <data name="New password" xml:space="preserve">
-        <value>New password</value>
+    <data name="Products by" xml:space="preserve">
+        <value>Products by
+</value>
     </data>
-    <data name="Confirm new password" xml:space="preserve">
-        <value>Confirm new password</value>
+    <data name="No products found for this supplier" xml:space="preserve">
+        <value>No products found for this supplier
+</value>
+    </data>
+    <data name="Products" xml:space="preserve">
+        <value>Products
+</value>
+    </data>
+    <data name="Code" xml:space="preserve">
+        <value>Code
+</value>
+    </data>
+    <data name="Price" xml:space="preserve">
+        <value>Price</value>
+    </data>
+    <data name="Quantity" xml:space="preserve">
+        <value>Quantity
+</value>
+    </data>
+    <data name="Close" xml:space="preserve">
+        <value>Close
+</value>
+    </data>
+    <data name="Browse and manage all available products" xml:space="preserve">
+        <value>Browse and manage all available products
+</value>
+    </data>
+    <data name="Category" xml:space="preserve">
+        <value>Category
+</value>
+    </data>
+    <data name="All categories" xml:space="preserve">
+        <value>All categories
+</value>
+    </data>
+    <data name="Supplier" xml:space="preserve">
+        <value>Supplier</value>
+    </data>
+    <data name="All suppliers" xml:space="preserve">
+        <value>All suppliers
+</value>
+    </data>
+    <data name="New product" xml:space="preserve">
+        <value>New product
+</value>
+    </data>
+    <data name="View" xml:space="preserve">
+        <value>View</value>
+    </data>
+    <data name="No products found" xml:space="preserve">
+        <value>No products found
+</value>
+    </data>
+    <data name="Unit" xml:space="preserve">
+        <value>Unit
+</value>
+    </data>
+    <data name="Volume" xml:space="preserve">
+        <value>Volume</value>
+    </data>
+    <data name="Volume unit" xml:space="preserve">
+        <value>Volume unit
+</value>
+    </data>
+    <data name="Edit product" xml:space="preserve">
+        <value>Edit product
+</value>
+    </data>
+    <data name="Create new product" xml:space="preserve">
+        <value>Create new product
+</value>
+    </data>
+    <data name="In create mode: volume = quantity, volume unit = unit" xml:space="preserve">
+        <value>In create mode: volume = quantity, volume unit = unit
+</value>
+    </data>
+    <data name="Is component (used in recipes)" xml:space="preserve">
+        <value>Is component (used in recipes)
+</value>
+    </data>
+    <data name="Storage rooms" xml:space="preserve">
+        <value>Storage rooms
+</value>
+    </data>
+    <data name="New storage room" xml:space="preserve">
+        <value>New storage room
+</value>
+    </data>
+    <data name="Write-off statistics" xml:space="preserve">
+        <value>Write-off statistics
+</value>
+    </data>
+    <data name="No storage rooms found" xml:space="preserve">
+        <value>No storage rooms found
+</value>
+    </data>
+    <data name="Edits storage room" xml:space="preserve">
+        <value>Edits storage room
+</value>
+    </data>
+    <data name="Create new storage room" xml:space="preserve">
+        <value>Create new storage room
+</value>
+    </data>
+    <data name="Select address" xml:space="preserve">
+        <value>Select address
+</value>
+    </data>
+    <data name="Allowed roles (comma-separated)" xml:space="preserve">
+        <value>Allowed roles (comma-separated)
+</value>
+    </data>
+    <data name="Tip: leave empty to allow no roles (or handle at backend as needed)" xml:space="preserve">
+        <value>Tip: leave empty to allow no roles (or handle at backend as needed)
+</value>
+    </data>
+    <data name="Monthly statistics" xml:space="preserve">
+        <value>Monthly statistics
+</value>
+    </data>
+    <data name="Removed product quantities per month" xml:space="preserve">
+        <value>Remove product quantities per month
+</value>
+    </data>
+    <data name="Year" xml:space="preserve">
+        <value>Year</value>
+    </data>
+    <data name="Month" xml:space="preserve">
+        <value>Month</value>
+    </data>
+    <data name="Day" xml:space="preserve">
+        <value>Day
+</value>
+    </data>
+    <data name="All days" xml:space="preserve">
+        <value>All days
+</value>
+    </data>
+    <data name="Columns" xml:space="preserve">
+        <value>Columns
+</value>
+    </data>
+    <data name="Export Excel" xml:space="preserve">
+        <value>Export Excel
+</value>
+    </data>
+    <data name="Removed quantity" xml:space="preserve">
+        <value>Removed quantity
+</value>
+    </data>
+    <data name="Removed volume" xml:space="preserve">
+        <value>Removed volume
+</value>
+    </data>
+    <data name="No data to display" xml:space="preserve">
+        <value>No data to display
+</value>
+    </data>
+    <data name="Settings" xml:space="preserve">
+        <value>Settings
+</value>
+    </data>
+    <data name="Manage reference data &amp; components - all in one place" xml:space="preserve">
+        <value>Manage reference data &amp; components - all in one place
+</value>
+    </data>
+    <data name="New" xml:space="preserve">
+        <value>New
+</value>
+    </data>
+    <data name="New component" xml:space="preserve">
+        <value>New component
+</value>
+    </data>
+    <data name="Edit actionType" xml:space="preserve">
+        <value>Edit action type
+</value>
+    </data>
+    <data name="Create new actionType" xml:space="preserve">
+        <value>Create new action type
+</value>
+    </data>
+    <data name="Edit reason" xml:space="preserve">
+        <value>Edit reason
+</value>
+    </data>
+    <data name="Create new reason" xml:space="preserve">
+        <value>Create new reason
+</value>
+    </data>
+    <data name="Description" xml:space="preserve">
+        <value>Description
+</value>
+    </data>
+    <data name="Edit productCategory" xml:space="preserve">
+        <value>Edit product category
+</value>
+    </data>
+    <data name="Create new productCategory" xml:space="preserve">
+        <value>Create new product category
+</value>
+    </data>
+    <data name="Edit address" xml:space="preserve">
+        <value>Edit address
+</value>
+    </data>
+    <data name="Create new address" xml:space="preserve">
+        <value>Create address
+</value>
+    </data>
+    <data name="Street" xml:space="preserve">
+        <value>Street</value>
+    </data>
+    <data name="Building nr" xml:space="preserve">
+        <value>Building nr
+</value>
+    </data>
+    <data name="Unit nr" xml:space="preserve">
+        <value>Unit nr
+</value>
+    </data>
+    <data name="Postal code" xml:space="preserve">
+        <value>Postal code
+</value>
+    </data>
+    <data name="City" xml:space="preserve">
+        <value>City
+</value>
+    </data>
+    <data name="Province" xml:space="preserve">
+        <value>Province
+</value>
+    </data>
+    <data name="Country" xml:space="preserve">
+        <value>Country
+</value>
+    </data>
+    <data name="Recipe product" xml:space="preserve">
+        <value>Recipe product
+</value>
+    </data>
+    <data name="Component product" xml:space="preserve">
+        <value>Component product
+</value>
+    </data>
+    <data name="Amount" xml:space="preserve">
+        <value>Amount
+</value>
+    </data>
+    <data name="Discard items" xml:space="preserve">
+        <value>Discard items
+</value>
+    </data>
+    <data name="Product" xml:space="preserve">
+        <value>Product
+</value>
+    </data>
+    <data name="Action type" xml:space="preserve">
+        <value>Action type</value>
+    </data>
+    <data name="Reason" xml:space="preserve">
+        <value>Reason
+</value>
+    </data>
+    <data name="Storage room" xml:space="preserve">
+        <value>Storage room
+</value>
+    </data>
+    <data name="Reset" xml:space="preserve">
+        <value>Reset
+</value>
+    </data>
+    <data name="Requests" xml:space="preserve">
+        <value>Requests
+</value>
+    </data>
+    <data name="Status" xml:space="preserve">
+        <value>Status
+</value>
+    </data>
+    <data name="All" xml:space="preserve">
+        <value>All</value>
+    </data>
+    <data name="Accepted" xml:space="preserve">
+        <value>Accepted</value>
+    </data>
+    <data name="Declined" xml:space="preserve">
+        <value>Declined
+</value>
+    </data>
+    <data name="Pending" xml:space="preserve">
+        <value>Pending</value>
+    </data>
+    <data name="User" xml:space="preserve">
+        <value>User</value>
+    </data>
+    <data name="All users" xml:space="preserve">
+        <value>All users
+</value>
+    </data>
+    <data name="All months" xml:space="preserve">
+        <value>All months
+</value>
+    </data>
+    <data name="All years" xml:space="preserve">
+        <value>All years
+</value>
+    </data>
+    <data name="Dispose item" xml:space="preserve">
+        <value>Dispose item
+</value>
+    </data>
+    <data name="Requested by" xml:space="preserve">
+        <value>Requested by</value>
+    </data>
+    <data name="Requested at" xml:space="preserve">
+        <value>Requested at</value>
+    </data>
+    <data name="Actions" xml:space="preserve">
+        <value>Actions</value>
+    </data>
+    <data name="Users and roles" xml:space="preserve">
+        <value>Users and roles
+</value>
+    </data>
+    <data name="View users and manage their roles" xml:space="preserve">
+        <value>View users and manage their roles
+</value>
+    </data>
+    <data name="Full name" xml:space="preserve">
+        <value>Full name
+</value>
+    </data>
+    <data name="Roles" xml:space="preserve">
+        <value>Roles
+</value>
     </data>
     <data name="Back" xml:space="preserve">
         <value>Back</value>
     </data>
-    <data name="Requests" xml:space="preserve">
-        <value>Requests</value>
+    <data name="Username" xml:space="preserve">
+        <value>Username
+</value>
     </data>
-    <data name="Filter By Status" xml:space="preserve">
-        <value>Filter by status</value>
-    </data>
-    <data name="New Action" xml:space="preserve">
-        <value>New action</value>
-    </data>
-    <data name="Contacts" xml:space="preserve">
-        <value>Contacts</value>
-    </data>
-    <data name="Pending Actions" xml:space="preserve">
-        <value>Pending actions</value>
-    </data>
-    <data name="No problematic products found" xml:space="preserve">
-        <value>No problematic products found</value>
-    </data>
-    <data name="Stock data not available" xml:space="preserve">
-        <value>Stock data not available</value>
-    </data>
-    <data name="Quick Product Search" xml:space="preserve">
-        <value>Quick product search</value>
-    </data>
-    <data name="No match" xml:space="preserve">
-        <value>No match</value>
-    </data>
-    <data name="Select Inventory" xml:space="preserve">
-        <value>Select inventory</value>
-    </data>
-    <data name="All Users" xml:space="preserve">
-        <value>All users</value>
-    </data>
-    <data name="Update" xml:space="preserve">
-        <value>Update</value>
-    </data>
-    <data name="Create new current stock" xml:space="preserve">
-        <value>Create new current stock</value>
-    </data>
-    <data name="Enter your email" xml:space="preserve">
-        <value>Enter your email</value>
-    </data>
-    <data name="Enter current password" xml:space="preserve">
-        <value>Enter current password</value>
-    </data>
-    <data name="Enter new password" xml:space="preserve">
-        <value>Enter new password</value>
-    </data>
-    <data name="Password" xml:space="preserve">
-        <value>Password</value>
+    <data name="Lastname" xml:space="preserve">
+        <value>Lastname
+</value>
     </data>
     <data name="Firstname" xml:space="preserve">
         <value>Firstname</value>
     </data>
-    <data name="Assign role to user" xml:space="preserve">
-        <value>Assign role to user</value>
+    <data name="Loading" xml:space="preserve">
+        <value>Loading</value>
     </data>
-    <data name="Select role" xml:space="preserve">
-        <value>Select role</value>
+    <data name="Account info" xml:space="preserve">
+        <value>Account info
+</value>
+    </data>
+    <data name="View selected user profile" xml:space="preserve">
+        <value>View selected user profile
+</value>
+    </data>
+    <data name="User details" xml:space="preserve">
+        <value>User details
+</value>
+    </data>
+    <data name="Register" xml:space="preserve">
+        <value>Register
+</value>
+    </data>
+    <data name="Password" xml:space="preserve">
+        <value>Password</value>
+    </data>
+    <data name="Create a new account" xml:space="preserve">
+        <value>Create a new account
+</value>
+    </data>
+    <data name="Login" xml:space="preserve">
+        <value>Login</value>
+    </data>
+    <data name="Role name" xml:space="preserve">
+        <value>Role name
+</value>
+    </data>
+    <data name="Manage access roles for your system" xml:space="preserve">
+        <value>Manage access roles for your system
+</value>
+    </data>
+    <data name="Change password" xml:space="preserve">
+        <value>Change password
+</value>
+    </data>
+    <data name="Confirm new password" xml:space="preserve">
+        <value>Confirm new password
+</value>
+    </data>
+    <data name="Enter new password" xml:space="preserve">
+        <value>Enter new password
+</value>
+    </data>
+    <data name="Enter current password" xml:space="preserve">
+        <value>Enter current password
+</value>
+    </data>
+    <data name="Update your password securely" xml:space="preserve">
+        <value>Update your password securely
+</value>
     </data>
     <data name="Assign" xml:space="preserve">
-        <value>Assign</value>
+        <value>Assign
+</value>
     </data>
-    <data name="All roles" xml:space="preserve">
-        <value>All roles</value>
+    <data name="Select role" xml:space="preserve">
+        <value>Select role
+</value>
     </data>
-    <data name="Create role" xml:space="preserve">
-        <value>Create role</value>
+    <data name="Select user" xml:space="preserve">
+        <value>Select user
+</value>
     </data>
-    <data name="Users and roles" xml:space="preserve">
-        <value>User and roles</value>
+    <data name="Select a user and assign a role" xml:space="preserve">
+        <value>Select a user and assign a role
+</value>
     </data>
-    <data name="Full name" xml:space="preserve">
-        <value>Full name</value>
+    <data name="Assign role to user" xml:space="preserve">
+        <value>Assign role to user
+</value>
     </data>
-    <data name="Roles" xml:space="preserve">
-        <value>Roles</value>
+    <data name="Save data" xml:space="preserve">
+        <value>Save data
+</value>
     </data>
-    <data name="Assign role" xml:space="preserve">
-        <value>Assign role</value>
+    <data name="View and update your profile" xml:space="preserve">
+        <value>View and update your profile
+</value>
     </data>
-    <data name="Get role" xml:space="preserve">
-        <value>Get role</value>
-    </data>
-    <data name="Inventory" xml:space="preserve">
-        <value>Inventory</value>
-    </data>
-    <data name="Location" xml:space="preserve">
-        <value>Location</value>
-    </data>
-    <data name="Category" xml:space="preserve">
-        <value>Category</value>
+    <data name="My account" xml:space="preserve">
+        <value>My account
+</value>
     </data>
     <data name="No users found" xml:space="preserve">
-        <value>No users found</value>
+        <value>No users found
+</value>
     </data>
     <data name="No data found" xml:space="preserve">
-        <value>No data found</value>
+        <value>No data found
+</value>
+    </data>
+    <data name="Most active removers " xml:space="preserve">
+        <value>Most active removers
+</value>
+    </data>
+    <data name="Most removed products" xml:space="preserve">
+        <value>Most removed products
+</value>
+    </data>
+    <data name="Count" xml:space="preserve">
+        <value>Count</value>
+    </data>
+    <data name="Discarded most often" xml:space="preserve">
+        <value>Discarded most often</value>
+    </data>
+    <data name="No problematic products found" xml:space="preserve">
+        <value>No problematic products found
+</value>
+    </data>
+    <data name="Pending discards" xml:space="preserve">
+        <value>Pending discards
+</value>
     </data>
     <data name="No pending actions" xml:space="preserve">
-        <value>No pending actions</value>
+        <value>No pending actions
+</value>
+    </data>
+    <data name="View all" xml:space="preserve">
+        <value>View all
+</value>
     </data>
 </root>

@@ -39,7 +39,7 @@ const validationError = ref('');
 const successMessage = ref('');
 
 // ---------------- Empty Supplier entity ----------------
-const emptySupplier = ref<ISupplier>({
+const makeEmptySupplier = (): ISupplier => ({
   id: "",
   name: "",
   telephoneNr: "",
@@ -91,7 +91,9 @@ const openSupplierEditDrawer = (supplier: ISupplierEnriched) => {
 };
 
 const openSupplierCreateDrawer = () => {
-  activeCreateSupplier.value = emptySupplier.value;
+  validationError.value = "";
+  successMessage.value = "";
+  activeCreateSupplier.value = makeEmptySupplier();
   drawerMode.value = "create";
   showDrawer.value = true;
 };
@@ -144,6 +146,7 @@ const createSupplier = async () => {
     } else {
       successMessage.value = "✅ Supplier has been successfully created!";
       showDrawer.value = false;
+      activeCreateSupplier.value = makeEmptySupplier();
       await fetchPageData();
     }
   } catch (error) {
@@ -181,11 +184,11 @@ const removeSupplier = async (id: string) => {
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
                drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)] relative inline-block">
         <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
-          Suppliers
+          {{ $t('Suppliers') }}
         </span>
       </h1>
       <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
-      <p class="mt-3 text-sm text-neutral-400">Browse and manage all supplier data</p>
+      <p class="mt-3 text-sm text-neutral-400">{{ $t('Browse and manage all available suppliers') }}</p>
     </section>
 
     <!-- Card container -->
@@ -219,7 +222,7 @@ const removeSupplier = async (id: string) => {
                      hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
                      focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition">
               <i class="bi bi-plus-lg opacity-90 group-hover:opacity-100"></i>
-              <span>New Supplier</span>
+              <span>{{ $t('New supplier') }}</span>
             </button>
           </div>
         </div>
@@ -244,9 +247,9 @@ const removeSupplier = async (id: string) => {
             </button>
 
             <h3 class="text-lg font-semibold text-neutral-100 pr-10">{{ item.name }}</h3>
-            <p class="text-sm text-neutral-400 mt-1"><span class="text-neutral-300 font-medium">Phone:</span> {{ item.telephoneNr }}</p>
-            <p class="text-sm text-neutral-400"><span class="text-neutral-300 font-medium">Email:</span> {{ item.email }}</p>
-            <p class="text-sm text-neutral-400"><span class="text-neutral-300 font-medium">Address:</span> {{ item.fullAddress }}</p>
+            <p class="text-sm text-neutral-400 mt-1"><span class="text-neutral-300 font-medium">{{ $t('Phone') }}:</span> {{ item.telephoneNr }}</p>
+            <p class="text-sm text-neutral-400"><span class="text-neutral-300 font-medium">{{ $t('Email') }}:</span> {{ item.email }}</p>
+            <p class="text-sm text-neutral-400"><span class="text-neutral-300 font-medium">{{ $t('Address') }}:</span> {{ item.fullAddress }}</p>
 
             <div class="mt-4 flex items-center justify-end gap-2">
               <button
@@ -255,7 +258,7 @@ const removeSupplier = async (id: string) => {
                        hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                 @click="fetchProductsBySupplier(item.id, item.name)">
                 <i class="bi bi-bag-check"></i>
-                Products
+                {{ $t('Products') }}
               </button>
               <button
                 class="inline-flex items-center gap-2 rounded-lg px-3 py-1.5 text-sm font-medium
@@ -265,7 +268,7 @@ const removeSupplier = async (id: string) => {
                        focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition"
                 @click="openSupplierEditDrawer(item)">
                 <i class="bi bi-pencil"></i>
-                Edit
+                {{ $t('Edit') }}
               </button>
             </div>
           </div>
@@ -273,7 +276,7 @@ const removeSupplier = async (id: string) => {
 
         <!-- Empty state -->
         <div v-if="filteredSuppliers.length === 0" class="text-center text-neutral-400 mt-8">
-          No suppliers found.
+          {{ $t('No suppliers found') }}.
         </div>
       </div>
     </section>
@@ -287,7 +290,9 @@ const removeSupplier = async (id: string) => {
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
-              {{ drawerMode === 'edit' ? (activeEditSupplier?.name || 'Edit Supplier') : 'Create New Supplier' }}
+              {{ drawerMode === 'edit'
+              ? (activeEditSupplier?.name || $t('Edit supplier'))
+              : $t('Create new supplier') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -301,25 +306,25 @@ const removeSupplier = async (id: string) => {
           <!-- Form -->
           <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Name') }}</label>
               <input v-model="activeSupplier!.name" type="text"
                      class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white
                             placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"/>
             </div>
             <div>
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Phone</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Phone') }}</label>
               <input v-model="activeSupplier!.telephoneNr" type="text"
                      class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white
                             placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"/>
             </div>
             <div class="sm:col-span-2">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Email</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Email') }}</label>
               <input v-model="activeSupplier!.email" type="email"
                      class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white
                             placeholder-neutral-500 outline-none transition focus:border-cyan-400/40 focus:ring-2 focus:ring-cyan-400/20"/>
             </div>
             <div class="sm:col-span-2">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Address</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Address') }}</label>
               <div class="relative">
                 <Multiselect
                   v-model="selectedAddress"
@@ -350,20 +355,20 @@ const removeSupplier = async (id: string) => {
               @click="editSupplier"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
                      text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
-              Update
+              {{ $t('Update') }}
             </button>
             <button
               v-else
               @click="createSupplier"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
                      text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
-              Create
+              {{ $t('Create') }}
             </button>
             <button
               @click="showDrawer = false"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
                      text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
-              Cancel
+              {{ $t('Cancel') }}
             </button>
           </div>
         </div>
@@ -378,7 +383,7 @@ const removeSupplier = async (id: string) => {
                  shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
-              Products by {{ selectedSupplierName }}
+              {{ $t('Products by') + ' ' + selectedSupplierName }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -391,13 +396,15 @@ const removeSupplier = async (id: string) => {
 
           <div class="mt-4 max-h-[420px] overflow-y-auto space-y-3 pr-1">
             <div v-if="productsForSupplier.length === 0" class="text-neutral-400">
-              No products found for this supplier.
+              {{ $t('No products found for this supplier') }}.
             </div>
             <div v-for="product in productsForSupplier" :key="product.id"
                  class="rounded-lg border border-white/10 bg-white/5 p-4">
               <div class="font-medium text-neutral-100">{{ product.name }}</div>
               <div class="text-sm text-neutral-400 mt-1">
-                Code: {{ product.code }} • Price: {{ product.price }} • Qty: {{ product.quantity }} {{ product.unit }}
+                {{ $t('Code') }}: {{ product.code }} •
+                {{ $t('Price') }}: {{ product.price }} •
+                {{ $t('Quantity') }}: {{ product.quantity }} {{ product.unit }}
               </div>
             </div>
           </div>
@@ -407,7 +414,7 @@ const removeSupplier = async (id: string) => {
               @click="showProductsDrawer = false"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium
                      text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10">
-              Close
+              {{ $t('Close') }}
             </button>
           </div>
         </div>
@@ -448,7 +455,7 @@ const removeSupplier = async (id: string) => {
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
+              {{ $t('How to use this page?') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -502,7 +509,7 @@ const removeSupplier = async (id: string) => {
                  bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
                  hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Sain aru
+              {{ $t('Got it') }}
             </button>
           </div>
 

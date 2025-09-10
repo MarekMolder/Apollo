@@ -500,11 +500,11 @@ const placeholderByTab: Record<TabKey, string> = {
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
                drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)] relative inline-block">
         <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
-          Settings
+          {{ $t('Settings') }}
         </span>
       </h1>
       <div class="mt-4 mx-auto h-px w-128 max-w-full bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
-      <p class="mt-3 text-sm text-neutral-400">Manage reference data & components — all in one place</p>
+      <p class="mt-3 text-sm text-neutral-400">{{ $t('Manage reference data & components — all in one place') }}</p>
     </section>
 
     <!-- Tabs -->
@@ -558,7 +558,7 @@ const placeholderByTab: Record<TabKey, string> = {
                  hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
                  focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition">
           <i class="bi bi-plus-lg opacity-90 group-hover:opacity-100"></i>
-          <span>New</span>
+          <span>{{ $t('New') }}</span>
         </button>
 
         <button
@@ -570,7 +570,7 @@ const placeholderByTab: Record<TabKey, string> = {
                  hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white
                  focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition">
           <i class="bi bi-plus-lg opacity-90 group-hover:opacity-100"></i>
-          <span>New Component</span>
+          <span>{{ $t('New component') }}</span>
         </button>
       </div>
 
@@ -593,7 +593,7 @@ const placeholderByTab: Record<TabKey, string> = {
                            border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="at_openEdit(row)">
-              <i class="bi bi-pencil"></i> Edit
+              <i class="bi bi-pencil"></i>{{ $t('Edit') }}
             </button>
           </div>
         </div>
@@ -616,7 +616,7 @@ const placeholderByTab: Record<TabKey, string> = {
                            border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="rs_openEdit(row)">
-              <i class="bi bi-pencil"></i> Edit
+              <i class="bi bi-pencil"></i>{{ $t('Edit') }}
             </button>
           </div>
         </div>
@@ -639,7 +639,7 @@ const placeholderByTab: Record<TabKey, string> = {
                            border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="pc_openEdit(row)">
-              <i class="bi bi-pencil"></i> Edit
+              <i class="bi bi-pencil"></i>{{ $t('Edit') }}
             </button>
           </div>
         </div>
@@ -663,7 +663,7 @@ const placeholderByTab: Record<TabKey, string> = {
                            border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="addr_openEdit(row)">
-              <i class="bi bi-pencil"></i> Edit
+              <i class="bi bi-pencil"></i>{{ $t('Edit') }}
             </button>
           </div>
         </div>
@@ -704,7 +704,7 @@ const placeholderByTab: Record<TabKey, string> = {
                            border-1 border-neutral-700 bg-white/5 text-neutral-200
                            hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/10 transition"
                     @click="rc_openEdit(g.items[0])">
-              <i class="bi bi-pencil"></i> Edit
+              <i class="bi bi-pencil"></i>{{ $t('Edit') }}
             </button>
           </div>
         </div>
@@ -718,7 +718,9 @@ const placeholderByTab: Record<TabKey, string> = {
         <div class="w-full max-w-xl rounded-2xl border-1 border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
-              {{ at_mode === 'edit' ? (at_edit?.name || 'Edit Action Type') : 'Create Action Type' }}
+              {{ at_mode === 'edit'
+              ? (at_edit?.name || $t('Edit actionType'))
+              : $t('Create new actionType') }}
             </h2>
             <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="at_show=false">
               <i class="bi bi-x-lg"></i>
@@ -727,7 +729,7 @@ const placeholderByTab: Record<TabKey, string> = {
 
           <div class="mt-6">
             <div>
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Name') }}</label>
               <input v-model="at_active!.name" type="text" class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
             </div>
           </div>
@@ -747,7 +749,9 @@ const placeholderByTab: Record<TabKey, string> = {
         <div class="w-full max-w-xl rounded-2xl border-1 border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
-              {{ rs_mode === 'edit' ? (rs_edit?.description || 'Edit Reason') : 'Create Reason' }}
+              {{ rs_mode === 'edit'
+              ? (rs_edit?.description || $t('Edit reason'))
+              : $t('Create new reason') }}
             </h2>
             <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="rs_show=false">
               <i class="bi bi-x-lg"></i>
@@ -755,7 +759,7 @@ const placeholderByTab: Record<TabKey, string> = {
           </div>
 
           <div class="mt-6">
-            <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Description</label>
+            <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Description') }}</label>
             <input v-model="rs_active!.description" type="text" class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
           </div>
 
@@ -774,7 +778,9 @@ const placeholderByTab: Record<TabKey, string> = {
         <div class="w-full max-w-xl rounded-2xl border-1 border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
-              {{ pc_mode === 'edit' ? (pc_edit?.name || 'Edit Product Category') : 'Create Product Category' }}
+              {{ pc_mode === 'edit'
+              ? (pc_edit?.name || $t('Edit productCategory'))
+              : $t('Create new productCategory') }}
             </h2>
             <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="pc_show=false">
               <i class="bi bi-x-lg"></i>
@@ -782,7 +788,7 @@ const placeholderByTab: Record<TabKey, string> = {
           </div>
 
           <div class="mt-6">
-            <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label>
+            <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Name') }}</label>
             <input v-model="pc_active!.name" type="text" class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
           </div>
 
@@ -801,7 +807,9 @@ const placeholderByTab: Record<TabKey, string> = {
         <div class="w-full max-w-xl rounded-2xl border-1 border-white/10 bg-neutral-950/90 backdrop-blur-xl p-6 sm:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
-              {{ addr_mode === 'edit' ? (addr_edit?.name || 'Edit Address') : 'Create Address' }}
+              {{ addr_mode === 'edit'
+              ? (addr_edit?.name || $t('Edit address'))
+              : $t('Create new address') }}
             </h2>
             <button class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-white/10 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white" @click="addr_show=false">
               <i class="bi bi-x-lg"></i>
@@ -809,20 +817,20 @@ const placeholderByTab: Record<TabKey, string> = {
           </div>
 
           <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label><input v-model="addr_active!.name" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
-            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Street</label><input v-model="addr_active!.streetName" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
-            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Building Nr</label><input v-model.number="addr_active!.buildingNr" type="number" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
-            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Unit Nr</label><input v-model.number="addr_active!.unitNr" type="number" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
-            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Postal Code</label><input v-model="addr_active!.postalCode" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
-            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">City</label><input v-model="addr_active!.city" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
-            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Province</label><input v-model="addr_active!.province" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
-            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Country</label><input v-model="addr_active!.country" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
+            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Name') }}</label><input v-model="addr_active!.name" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
+            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Street') }}</label><input v-model="addr_active!.streetName" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
+            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Building nr') }}</label><input v-model.number="addr_active!.buildingNr" type="number" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
+            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Unit nr') }}</label><input v-model.number="addr_active!.unitNr" type="number" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
+            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Postal code') }}</label><input v-model="addr_active!.postalCode" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
+            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('City') }}</label><input v-model="addr_active!.city" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
+            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Province') }}</label><input v-model="addr_active!.province" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
+            <div><label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Country') }}</label><input v-model="addr_active!.country" type="text" class="w-full rounded-xl border border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/></div>
           </div>
 
           <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <button v-if="addr_mode==='edit'" @click="addr_update" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
-            <button v-else @click="addr_createFn" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
-            <button @click="addr_show=false" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
+            <button v-if="addr_mode==='edit'" @click="addr_update" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">{{ $t('Update') }}</button>
+            <button v-else @click="addr_createFn" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">{{ $t('Create') }}</button>
+            <button @click="addr_show=false" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">{{ $t('Cancel') }}</button>
           </div>
         </div>
       </div>
@@ -843,7 +851,7 @@ const placeholderByTab: Record<TabKey, string> = {
 
           <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div class="sm:col-span-2">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Recipe Product</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Recipe product') }}</label>
               <Multiselect
                 v-model="rc_selectedRecipe"
                 :options="rc_recipeOptions"
@@ -857,7 +865,7 @@ const placeholderByTab: Record<TabKey, string> = {
               />
             </div>
             <div class="sm:col-span-2">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Component Product</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Component product') }}</label>
               <Multiselect
                 v-model="rc_selectedComponent"
                 :options="rc_componentOptions"
@@ -871,16 +879,16 @@ const placeholderByTab: Record<TabKey, string> = {
               />
             </div>
             <div class="sm:col-span-2">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Amount</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Amount') }}</label>
               <input v-model.number="rc_active!.amount" type="number" min="0" step="0.01"
                      class="w-full rounded-xl border-1 border-neutral-700 bg-neutral-900/70 px-4 h-11 text-sm text-white focus:ring-2 focus:ring-cyan-400/20 focus:border-cyan-400/40"/>
             </div>
           </div>
 
           <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-end">
-            <button v-if="rc_mode==='edit'" @click="rc_update" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Update</button>
-            <button v-else @click="rc_createFn" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Create</button>
-            <button @click="rc_show=false" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">Cancel</button>
+            <button v-if="rc_mode==='edit'" @click="rc_update" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">{{ $t('Update') }}</button>
+            <button v-else @click="rc_createFn" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">{{ $t('Create') }}</button>
+            <button @click="rc_show=false" class="rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10">{{ $t('Cancel') }}</button>
           </div>
 
           <p v-if="rc_validation" class="mt-3 text-rose-400 text-center font-medium">{{ rc_validation }}</p>
@@ -923,7 +931,7 @@ const placeholderByTab: Record<TabKey, string> = {
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
+              {{ $t('How to use this page?') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -978,7 +986,7 @@ const placeholderByTab: Record<TabKey, string> = {
                  bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
                  hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Sain aru
+              {{ $t('Got it') }}
             </button>
           </div>
         </div>

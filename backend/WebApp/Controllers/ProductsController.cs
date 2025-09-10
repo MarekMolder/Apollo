@@ -30,7 +30,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Fetching all products for user {UserId}", User.GetUserId());
-            var res = await _bll.ProductService.AllAsync(User.GetUserId());
+            var res = await _bll.ProductService.AllAsync();
             return View(res);
         }
 

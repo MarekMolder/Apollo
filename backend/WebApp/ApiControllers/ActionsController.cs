@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using App.BLL.Contracts;
 using App.DTO.v1;
 using App.DTO.v1.ApiEntities;
@@ -8,6 +9,8 @@ using Base.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+using System.Linq;
 
 namespace WebApp.ApiControllers
 {
@@ -18,7 +21,7 @@ namespace WebApp.ApiControllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "admin,manager,tootaja")]
+    [Authorize(Roles = "admin,juhataja,töötaja")]
     public class ActionsController : ControllerBase
     {
         private readonly IAppBll _bll;
@@ -44,7 +47,7 @@ namespace WebApp.ApiControllers
         [ProducesResponseType( 404 )]
         public async Task<ActionResult<IEnumerable<ActionEntity>>> GetActions()
         {
-            var isAdmin = User.IsInRole("admin") || User.IsInRole("manager");
+            var isAdmin = User.IsInRole("admin") || User.IsInRole("juhataja");
             _logger.LogInformation("Fetching actions for user {UserId} (isAdmin: {IsAdmin})", User.GetUserId(), isAdmin);
             
             var actions = isAdmin
@@ -218,5 +221,6 @@ namespace WebApp.ApiControllers
 
             return Ok(response);
         }
+        
     }
 }

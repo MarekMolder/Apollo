@@ -17,7 +17,7 @@ namespace WebApp.ApiControllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "admin,manager")]
+    [Authorize(Roles = "admin,juhataja")]
     public class AddressesController : ControllerBase
     {
         private readonly IAppBll _bll;

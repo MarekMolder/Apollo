@@ -11,7 +11,7 @@ namespace WebApp.Controllers
     /// <summary>
     /// Controller for managing recipe components in the system.
     /// </summary>
-    [Authorize(Roles = "admin")]
+    [Authorize]
     public class RecipeComponentsController : Controller
     {
         private readonly IAppBll _bll;
@@ -30,7 +30,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Fetching all recipe components for user {UserId}", User.GetUserId());
-            var res = await _bll.RecipeComponentService.AllAsync(User.GetUserId());
+            var res = await _bll.RecipeComponentService.AllAsync();
             return View(res);
         }
 

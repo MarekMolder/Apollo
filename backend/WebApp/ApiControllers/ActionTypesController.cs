@@ -15,7 +15,7 @@ namespace WebApp.ApiControllers
     [Route("api/v{version:apiVersion}/[controller]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "admin,manager,tootaja")]
+    [Authorize(Roles = "admin,juhataja,töötaja")]
     
     public class ActionTypesController : ControllerBase
     {

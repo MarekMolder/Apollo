@@ -16,7 +16,7 @@ namespace WebApp.ApiControllers.Identity
     [Route("api/v{version:apiVersion}/[controller]/[action]")]
     [ApiController]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-    [Authorize(Roles = "admin,manager")]
+    [Authorize(Roles = "admin,juhataja")]
     public class RolesController : ControllerBase
     {
         private readonly AppDbContext _context;

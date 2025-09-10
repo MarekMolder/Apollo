@@ -265,11 +265,11 @@ watch(
                relative inline-block"
       >
         <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
-          Products
+          {{ $t('Products') }}
         </span>
       </h1>
       <div class="mt-4 mx-auto h-px w-128 bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
-      <p class="mt-3 text-sm text-neutral-400">Browse and manage all available items</p>
+      <p class="mt-3 text-sm text-neutral-400">{{ $t('Browse and manage all available products') }}</p>
     </section>
 
     <!-- Filter bar / toolbar -->
@@ -286,12 +286,12 @@ watch(
 
             <!-- Category filter -->
             <div class="relative w-48">
-              <label class="sr-only">Category</label>
+              <label class="sr-only">{{ $t('Category') }}</label>
               <select
                 v-model="filterCategoryId"
                 class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30 focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9"
               >
-                <option value="All">All Categories</option>
+                <option value="All">{{ $t('All categories') }}</option>
                 <option v-for="c in productCategories" :key="c.id" :value="c.id">{{ c.name }}</option>
               </select>
               <i class="bi bi-list-ul absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
@@ -300,12 +300,12 @@ watch(
 
             <!-- Supplier filter -->
             <div class="relative w-56">
-              <label class="sr-only">Supplier</label>
+              <label class="sr-only">{{ $t('Supplier') }}</label>
               <select
                 v-model="filterSupplierId"
                 class="w-full appearance-none rounded-xl border-1 border-neutral-700 bg-neutral-900/70 text-white px-3 h-11 text-medium focus:outline-none focus:ring-2 focus:ring-cyan-400/30 focus:border-neutral-500 transition shadow-inner shadow-black/30 pr-9"
               >
-                <option value="All">All Suppliers</option>
+                <option value="All">{{ $t('All suppliers') }}</option>
                 <option v-for="s in productSuppliers" :key="s.id" :value="s.id">{{ s.name }}</option>
               </select>
               <i class="bi bi-truck absolute right-8 top-1/2 -translate-y-1/2 text-neutral-400"></i>
@@ -341,7 +341,7 @@ watch(
               class="group inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200 shadow-[0_0_0_1px_rgba(34,211,238,0.25),_0_8px_24px_rgba(0,0,0,0.35)] hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition"
             >
               <i class="bi bi-plus-lg opacity-90 group-hover:opacity-100"></i>
-              <span>New Product</span>
+              <span>{{ $t('New product') }}</span>
             </button>
           </div>
         </div>
@@ -364,13 +364,13 @@ watch(
 
             <h3 class="text-xl font-semibold text-neutral-100 pr-10">{{ item.name }}</h3>
             <p class="text-sm text-neutral-400 mt-1">
-              <span class="text-neutral-300 font-medium">Code:</span> {{ item.code }}
+              <span class="text-neutral-300 font-medium">{{ $t('Code') }}:</span> {{ item.code }}
             </p>
             <p class="text-sm text-neutral-400">
-              <span class="text-neutral-300 font-medium">Category:</span> {{ item.productCategoryName }}
+              <span class="text-neutral-300 font-medium">{{ $t('Category') }}:</span> {{ item.productCategoryName }}
             </p>
             <p class="text-sm text-neutral-400">
-              <span class="text-neutral-300 font-medium">Supplier:</span> {{ item.supplierName }}
+              <span class="text-neutral-300 font-medium">{{ $t('Supplier') }}:</span> {{ item.supplierName }}
             </p>
 
             <div class="mt-5 flex justify-end">
@@ -379,7 +379,7 @@ watch(
                 class="inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium border-1 border-neutral-700 bg-gradient-to-br from-cyan-500/15 via-cyan-400/10 to-transparent text-cyan-200 shadow-[0_0_0_1px_rgba(34,211,238,0.25),0_3px_10px_rgba(0,0,0,0.35)] hover:from-cyan-400/25 hover:via-cyan-300/15 hover:text-white focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition"
               >
                 <i class="bi bi-eye"></i>
-                View
+                {{ $t('View') }}
               </button>
             </div>
           </div>
@@ -387,7 +387,7 @@ watch(
 
         <!-- Empty state -->
         <div v-if="filteredProducts.length === 0" class="text-center text-neutral-400 mt-8">
-          No products found.
+          {{ $t('No products found') }}.
         </div>
       </div>
     </section>
@@ -405,7 +405,9 @@ watch(
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 class="text-2xl font-bold tracking-tight text-neutral-100">
-              {{ drawerMode === "edit" ? (activeEditProduct?.name || "Edit Product") : "Create New Product" }}
+              {{ drawerMode === 'edit'
+              ? (activeEditProduct?.name || $t('Edit product'))
+              : $t('Create new product') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl border-1 border-neutral-700 bg-white/5 text-neutral-300 hover:bg-white/10 hover:text-white focus:outline-none focus:ring-2 focus:ring-white/15"
@@ -420,7 +422,7 @@ watch(
 
             <!-- Code -->
             <div>
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Code</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Code') }}</label>
               <input
                 v-model="activeProduct!.code"
                 type="text"
@@ -430,7 +432,7 @@ watch(
 
             <!-- Name -->
             <div>
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Name</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Name') }}</label>
               <input
                 v-model="activeProduct!.name"
                 type="text"
@@ -440,7 +442,7 @@ watch(
 
             <!-- Price -->
             <div>
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Price</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Price') }}</label>
               <input
                 v-model.number="activeProduct!.price"
                 type="number"
@@ -450,7 +452,7 @@ watch(
 
             <!-- Quantity -->
             <div>
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Quantity</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Quantity') }}</label>
               <input
                 v-model.number="activeProduct!.quantity"
                 type="number"
@@ -460,7 +462,7 @@ watch(
 
             <!-- Unit (SELECT) -->
             <div class="relative shrink-0">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Unit</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Unit') }}</label>
               <Multiselect
                 v-model="(activeProduct as any).unit"
                 :options="availableUnits"
@@ -471,13 +473,13 @@ watch(
                 class="multiselect-dark w-[270px]"
               />
               <p v-if="isCreateMode && activeCreateProduct?.unit !== 'tk'" class="mt-1 text-xs text-neutral-400">
-                In create mode: volume = quantity, volume unit = unit.
+                {{ $t('In create mode: volume = quantity, volume unit = unit') }}.
               </p>
             </div>
 
             <!-- Volume - if unit === 'tk' -->
             <div v-if="!(isCreateMode && activeCreateProduct?.unit !== 'tk')">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Volume</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Volume') }}</label>
               <input
                 v-model.number="activeProduct!.volume"
                 type="number"
@@ -489,10 +491,10 @@ watch(
 
             <!-- Volume unit (FORM, multiselect) -->
             <div v-if="!(isCreateMode && activeCreateProduct?.unit !== 'tk')" class="relative shrink-0">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Volume unit</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Volume unit') }}</label>
               <Multiselect
                 v-model="(activeProduct as any).volumeUnit"
-                :options="availableUnits.filter(u => u !== 'tk')"
+                :options="availableUnits"
                 :searchable="true"
                 :close-on-select="true"
                 :allow-empty="true"
@@ -503,7 +505,7 @@ watch(
 
             <!-- Category (FORM) -->
             <div class="relative shrink-0">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Category</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Category') }}</label>
               <Multiselect
                 v-model="formCategoryObj"
                 :options="productCategories"
@@ -519,7 +521,7 @@ watch(
 
             <!-- Supplier (FORM) -->
             <div class="relative shrink-0">
-              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">Supplier</label>
+              <label class="mb-2 block text-xs uppercase tracking-wide text-neutral-400">{{ $t('Supplier') }}</label>
               <Multiselect
                 v-model="formSupplierObj"
                 :options="productSuppliers"
@@ -541,7 +543,7 @@ watch(
                   v-model="activeProduct!.isComponent"
                   class="h-4 w-4 rounded border-neutral-700 bg-neutral-900/70 text-cyan-400 focus:ring-cyan-400/30"
                 />
-                Is Component (used in recipes)
+                {{ $t('Is component (used in recipes)') }}
               </label>
             </div>
           </div>
@@ -559,20 +561,20 @@ watch(
               @click="editProduct"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Update
+              {{ $t('Update') }}
             </button>
             <button
               v-else
               @click="createProduct"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Create
+              {{ $t('Create') }}
             </button>
             <button
               @click="showDrawer = false"
               class="inline-flex items-center justify-center rounded-xl border-1 border-neutral-700 bg-white/5 px-6 h-11 text-base font-medium text-neutral-200 hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Cancel
+              {{ $t('Cancel') }}
             </button>
           </div>
         </div>
@@ -613,7 +615,7 @@ watch(
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
+              {{ $t('How to use this page?') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -673,7 +675,7 @@ watch(
                  bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
                  hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Sain aru
+              {{ $t('Got it') }}
             </button>
           </div>
         </div>

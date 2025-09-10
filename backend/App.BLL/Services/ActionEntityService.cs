@@ -86,19 +86,6 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
             if (componentProduct == null) continue;
             
             var rawComponentQuantity = bllAction.Quantity * component.Amount;
-            
-            decimal convertedQuantity = rawComponentQuantity;
-            if (!string.Equals(baseProduct.Unit, componentProduct.Unit, StringComparison.OrdinalIgnoreCase))
-            {
-                try
-                {
-                    convertedQuantity = UnitConverter.Convert(rawComponentQuantity, baseProduct.Unit, componentProduct.Unit);
-                }
-                catch
-                {
-                    continue;
-                }
-            }
 
             var compStat = await _uow.MonthlyStatisticsRepository
                 .FindByProductAndStorageAsync(component.ComponentProductId, bllAction.StorageRoomId);
@@ -106,7 +93,7 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
             if (compStat != null)
             {
                 var mappedCompStat = _domainDalMapperMonthlyStatistics.Map(compStat)!;
-                mappedCompStat.TotalRemovedQuantity += convertedQuantity;
+                mappedCompStat.TotalRemovedQuantity += rawComponentQuantity;
                 
                 if (mappedCompStat.ProductCategoryId == Guid.Empty)
                     mappedCompStat.ProductCategoryId = componentProduct.ProductCategoryId;
@@ -121,7 +108,7 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
                     ProductId = component.ComponentProductId,
                     ProductCategoryId = componentProduct.ProductCategoryId,
                     StorageRoomId = bllAction.StorageRoomId,
-                    TotalRemovedQuantity = convertedQuantity,
+                    TotalRemovedQuantity = rawComponentQuantity,
                     Year = DateTime.Today.Year,
                     Month = DateTime.Today.Month,
                     Day = DateTime.Today.Day,

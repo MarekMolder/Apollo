@@ -28,7 +28,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             _logger.LogInformation("Fetching all reasons for user {UserId}", User.GetUserId());
-            var res = await _bll.ReasonService.AllAsync(User.GetUserId());
+            var res = await _bll.ReasonService.AllAsync();
             return View(res);
         }
 

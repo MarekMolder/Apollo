@@ -53,7 +53,7 @@ onMounted(async () => {
         class="text-4xl sm:text-5xl font-[Playfair_Display] font-bold tracking-[0.02em]
                drop-shadow-[0_2px_12px_rgba(255,255,255,0.06)] relative inline-block">
         <span class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200 bg-clip-text text-transparent">
-          {{ $t('User Details') }}
+          {{ $t('User details') }}
         </span>
       </h1>
       <div class="mt-4 mx-auto h-px w-128 max-w-full bg-gradient-to-r from-transparent via-neutral-500/40 to-transparent"></div>
@@ -76,7 +76,7 @@ onMounted(async () => {
           </div>
 
           <div v-if="loading" class="py-6 text-center italic text-neutral-400">
-            {{ $t('Loading...') }}
+            {{ $t('Loading') }}...
           </div>
           <p v-if="error" class="py-3 text-center text-rose-400">
             {{ error }}
@@ -147,7 +147,7 @@ onMounted(async () => {
         >
           <div class="flex items-start justify-between gap-4">
             <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
+              {{ $t('How to use this page?') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -195,7 +195,7 @@ onMounted(async () => {
                      bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
                      hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Sain aru
+              {{ $t('Got it') }}
             </button>
           </div>
         </div>

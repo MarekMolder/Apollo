@@ -10,8 +10,8 @@ const isAdmin = computed(() => {
   const roles = store.roles;
 
   return Array.isArray(roles)
-    ? roles.includes("admin") || roles.includes("manager")
-    : roles === "admin" || roles === "manager";
+    ? roles.includes("admin") || roles.includes("juhataja")
+    : roles === "admin" || roles === "juhataja";
 });
 
 // kontrollime hoverit

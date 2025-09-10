@@ -114,7 +114,7 @@ const filteredData = computed(() => {
         @click="goToPendingPage"
         class="inline-flex items-center rounded-xl border border-cyan-400/30 bg-cyan-400/10 px-4 py-2 text-sm font-medium text-cyan-200 hover:bg-cyan-400/15 focus:outline-none focus:ring-2 focus:ring-cyan-400/30 transition-colors"
       >
-        {{ $t('View All') }}
+        {{ $t('View all') }}
       </button>
     </div>
   </div>

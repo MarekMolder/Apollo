@@ -29,8 +29,8 @@ namespace WebApp.Controllers
         /// </summary>
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("Fetching all actions for user {UserId}", User.GetUserId());
-            var res = await _bll.ActionEntityService.AllAsync(User.GetUserId());
+            _logger.LogInformation("Fetching all actions");
+            var res = await _bll.ActionEntityService.AllAsync();
             return View(res);
         }
 
@@ -45,7 +45,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.ActionEntityService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.ActionEntityService.FindAsync(id.Value);
             
             if (entity == null)
             {
@@ -65,22 +65,22 @@ namespace WebApp.Controllers
             
             var vm = new ActionEntityCreateEditViewModel
             {
-                ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(User.GetUserId()),
+                ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(),
                     nameof(ActionTypeEntity.Id),
                     nameof(ActionTypeEntity.Name)
                 ),
 
-                ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+                ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                     nameof(Product.Id),
                     nameof(Product.Name)
                 ),
 
-                ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(User.GetUserId()),
+                ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(),
                     nameof(Reason.Id),
                     nameof(Reason.Description)
                 ),
                 
-                StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
+                StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(),
                 nameof(StorageRoom.Id),
                 nameof(StorageRoom.Name)
                 ),
@@ -106,13 +106,13 @@ namespace WebApp.Controllers
             
             _logger.LogWarning("Invalid model state while creating action for user {UserId}", User.GetUserId());
 
-            vm.ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(User.GetUserId()),
+            vm.ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(),
                 nameof(ActionTypeEntity.Id), nameof(ActionTypeEntity.Name), vm.ActionEntity.ActionTypeId);
-            vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+            vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                 nameof(Product.Id), nameof(Product.Name), vm.ActionEntity.ProductId);
-            vm.ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(User.GetUserId()),
+            vm.ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(),
                 nameof(Reason.Id), nameof(Reason.Description), vm.ActionEntity.ReasonId);
-            vm.StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
+            vm.StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(),
                 nameof(StorageRoom.Id), nameof(StorageRoom.Name), vm.ActionEntity.StorageRoomId);
 
             return View(vm);
@@ -129,7 +129,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var actionEntity = await _bll.ActionEntityService.FindAsync(id.Value, User.GetUserId());
+            var actionEntity = await _bll.ActionEntityService.FindAsync(id.Value);
             if (actionEntity == null)
             {
                 _logger.LogWarning("Action with ID {Id} not found for edit", id);
@@ -138,25 +138,25 @@ namespace WebApp.Controllers
             
             var vm = new ActionEntityCreateEditViewModel
             {
-                ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(User.GetUserId()),
+                ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(),
                     nameof(ActionTypeEntity.Id),
                     nameof(ActionTypeEntity.Name),
                     actionEntity.ActionTypeId
                 ),
 
-                ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+                ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                     nameof(Product.Id),
                     nameof(Product.Name),
                     actionEntity.ProductId
                 ),
 
-                ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(User.GetUserId()),
+                ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(),
                     nameof(Reason.Id),
                     nameof(Reason.Description),
                     actionEntity.ReasonId
                 ),
                 
-                StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
+                StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(),
                     nameof(StorageRoom.Id),
                     nameof(StorageRoom.Name),
                     actionEntity.StorageRoomId
@@ -189,13 +189,13 @@ namespace WebApp.Controllers
             
             _logger.LogWarning("Invalid model state while editing action {Id}", id);
 
-            vm.ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(User.GetUserId()),
+            vm.ActionTypeSelectList = new SelectList(await _bll.ActionTypeEntityService.AllAsync(),
                 nameof(ActionTypeEntity.Id), nameof(ActionTypeEntity.Name), vm.ActionEntity.ActionTypeId);
-            vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+            vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                 nameof(Product.Id), nameof(Product.Name), vm.ActionEntity.ProductId);
-            vm.ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(User.GetUserId()),
+            vm.ReasonSelectList = new SelectList(await _bll.ReasonService.AllAsync(),
                 nameof(Reason.Id), nameof(Reason.Description), vm.ActionEntity.ReasonId);
-            vm.StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
+            vm.StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(),
                 nameof(StorageRoom.Id), nameof(StorageRoom.Name), vm.ActionEntity.StorageRoomId);
 
             return View(vm);
@@ -212,7 +212,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var action = await _bll.ActionEntityService.FindAsync(id.Value, User.GetUserId());
+            var action = await _bll.ActionEntityService.FindAsync(id.Value);
 
             if (action == null)
             {
@@ -231,7 +231,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             _logger.LogInformation("Deleting action with ID {Id} for user {UserId}", id, User.GetUserId());
-            await _bll.ActionEntityService.RemoveAsync(id, User.GetUserId());
+            await _bll.ActionEntityService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

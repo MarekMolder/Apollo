@@ -68,7 +68,7 @@ router.beforeEach((to, from, next) => {
   });
 
   const userRoles = store.roles ?? [];        // eeldame arrayʼd
-  const allowed   = ["admin", "manager"];
+  const allowed   = ["admin", "juhataja"];
 
   console.log(userRoles)
 

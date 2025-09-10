@@ -5,7 +5,6 @@ import { ActionTypeService } from '@/services/mvcServices/ActionTypeService';
 import { ReasonService } from '@/services/mvcServices/ReasonService';
 import { ProductService } from '@/services/mvcServices/ProductServices';
 import { StorageRoomService } from '@/services/mvcServices/StorageRoomService.ts';
-import { useUserDataStore } from '@/stores/userDataStore';
 import type { IAction } from '@/domain/logic/IAction';
 import type { IReason } from '@/domain/logic/IReason';
 import type { IProduct } from '@/domain/logic/IProduct';
@@ -55,7 +54,7 @@ onMounted(async () => {
   actionTypes.value = (await actionTypeService.getAllAsync()).data || [];
   reasons.value = (await reasonService.getAllAsync()).data || [];
   const allProducts = (await productService.getAllAsync()).data || [];
-  products.value = allProducts.filter(p => !p.isComponent);
+  products.value = allProducts;
 
   const discard = actionTypes.value.find(a => a.name.toLowerCase() === 'maha kandmine');
     if (discard) {
@@ -137,7 +136,7 @@ const createAction = async () => {
       class="bg-gradient-to-b from-neutral-50 via-neutral-300 to-neutral-200
              bg-clip-text text-transparent"
     >
-      Discard Items
+      {{ $t('Discard items') }}
     </span>
       </h1>
 
@@ -170,7 +169,7 @@ const createAction = async () => {
           <!-- Action type -->
           <div>
             <label class="mb-2 block text-medium font-medium text-neutral-300">
-              {{ $t('Action Type') }}
+              {{ $t('Action type') }}
             </label>
             <Multiselect
               v-model="selectedActionType"
@@ -225,7 +224,7 @@ const createAction = async () => {
           <!-- Storage room -->
           <div>
             <label class="mb-2 block text-medium font-medium text-neutral-300">
-              {{ $t('StorageRoom') }}
+              {{ $t('Storage room') }}
             </label>
             <Multiselect
               v-model="selectedStorageRoom"
@@ -263,7 +262,7 @@ const createAction = async () => {
                 }
               "
             >
-              Reset
+              {{ $t('Reset') }}
             </button>
 
             <button
@@ -317,7 +316,7 @@ const createAction = async () => {
           <!-- Header -->
           <div class="flex items-start justify-between gap-4">
             <h2 id="help-title" class="text-2xl font-bold tracking-tight text-neutral-100">
-              Kuidas seda lehte kasutada?
+              {{ $t('How to use this page?') }}
             </h2>
             <button
               class="inline-flex items-center justify-center w-9 h-9 rounded-xl
@@ -382,7 +381,7 @@ const createAction = async () => {
                  bg-white/5 px-6 h-11 text-base font-medium text-neutral-200
                  hover:bg-white/10 focus:outline-none focus:ring-4 focus:ring-white/10"
             >
-              Sain aru
+              {{ $t('Got it') }}
             </button>
           </div>
         </div>
