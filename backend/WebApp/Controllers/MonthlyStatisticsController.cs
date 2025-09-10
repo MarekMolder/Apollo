@@ -46,7 +46,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.MonthlyStatisticsService.FindAsync(id.Value,User.GetUserId());
+            var entity = await _bll.MonthlyStatisticsService.FindAsync(id.Value);
             
             if (entity == null)
             {
@@ -66,17 +66,17 @@ namespace WebApp.Controllers
 
             var vm = new MonthlyStatisticsCreateEditViewModel()
             {
-                ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+                ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                     nameof(Product.Id),
                     nameof(Product.Name)
                 ),
                 
-                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(),
                     nameof(ProductCategory.Id),
                     nameof(ProductCategory.Name)
                 ),
 
-                StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(User.GetUserId()),
+                StorageRoomSelectList = new SelectList(await _bll.StorageRoomService.AllAsync(),
                     nameof(StorageRoom.Id),
                     nameof(StorageRoom.Name)
                 ),
@@ -95,17 +95,17 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 _logger.LogInformation("Creating new monthly statistics record for user {UserId}", User.GetUserId());
-                _bll.MonthlyStatisticsService.Add(vm.MonthlyStatistics, User.GetUserId());
+                _bll.MonthlyStatisticsService.Add(vm.MonthlyStatistics);
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             
             _logger.LogWarning("Invalid model state while creating monthly statistics");
-            vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+            vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                 nameof(Product.Id), nameof(Product.Name), vm.MonthlyStatistics.ProductId);
-            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(),
                 nameof(ProductCategory.Id), nameof(ProductCategory.Name), vm.MonthlyStatistics.ProductCategoryId);
-            vm.StorageRoomSelectList = new SelectList(await _bll.MonthlyStatisticsService.AllAsync(User.GetUserId()),
+            vm.StorageRoomSelectList = new SelectList(await _bll.MonthlyStatisticsService.AllAsync(),
                 nameof(StorageRoom.Id), nameof(StorageRoom.Name), vm.MonthlyStatistics.StorageRoomId);
             
             return View(vm);
@@ -122,7 +122,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var monthlyStatistics = await _bll.MonthlyStatisticsService.FindAsync(id.Value, User.GetUserId());
+            var monthlyStatistics = await _bll.MonthlyStatisticsService.FindAsync(id.Value);
             if (monthlyStatistics == null)
             {
                 _logger.LogWarning("MonthlyStatistics with ID {Id} not found for edit", id);
@@ -131,19 +131,19 @@ namespace WebApp.Controllers
             
             var vm = new MonthlyStatisticsCreateEditViewModel()
             {
-                ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+                ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                     nameof(Product.Id),
                     nameof(Product.Name),
                     monthlyStatistics.ProductId
                 ),
                 
-                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(),
                     nameof(ProductCategory.Id),
                     nameof(ProductCategory.Name),
                     monthlyStatistics.ProductCategoryId
                 ),
                 
-                StorageRoomSelectList = new SelectList(await _bll.MonthlyStatisticsService.AllAsync(User.GetUserId()),
+                StorageRoomSelectList = new SelectList(await _bll.MonthlyStatisticsService.AllAsync(),
                     nameof(StorageRoom.Id),
                     nameof(StorageRoom.Name),
                     monthlyStatistics.StorageRoomId
@@ -177,11 +177,11 @@ namespace WebApp.Controllers
             
             _logger.LogWarning("Invalid model state while editing monthly statistics");
 
-            vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+            vm.ProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                 nameof(Product.Id), nameof(Product.Name), vm.MonthlyStatistics.ProductId);
-            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(),
                 nameof(ProductCategory.Id), nameof(ProductCategory.Name), vm.MonthlyStatistics.ProductCategoryId);
-            vm.StorageRoomSelectList = new SelectList(await _bll.RecipeComponentService.AllAsync(User.GetUserId()),
+            vm.StorageRoomSelectList = new SelectList(await _bll.RecipeComponentService.AllAsync(),
                 nameof(StorageRoom.Id), nameof(StorageRoom.Name), vm.MonthlyStatistics.StorageRoomId);
 
             return View(vm);
@@ -198,7 +198,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var monthlyStatistics = await _bll.MonthlyStatisticsService.FindAsync(id.Value, User.GetUserId());
+            var monthlyStatistics = await _bll.MonthlyStatisticsService.FindAsync(id.Value);
 
             if (monthlyStatistics == null)
             {
@@ -217,7 +217,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             _logger.LogInformation("Deleting monthly statistics ID {Id}", id);
-            await _bll.MonthlyStatisticsService.RemoveAsync(id, User.GetUserId());
+            await _bll.MonthlyStatisticsService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

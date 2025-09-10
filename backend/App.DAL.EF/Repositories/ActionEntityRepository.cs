@@ -23,6 +23,7 @@ public class ActionEntityRepository : BaseRepository<DAL.DTO.ActionEntity, Domai
     {
         return await RepositoryDbSet
             .Include(a => a.ActionType)
+            .Include(a => a.StorageRoom)
             .FirstOrDefaultAsync(a => a.Id == id);
     }
     
@@ -43,71 +44,84 @@ public class ActionEntityRepository : BaseRepository<DAL.DTO.ActionEntity, Domai
 
     /// <summary>
     /// Returns the top 5 products with the highest total removed quantity.
-    /// Filters only "Accepted" Remove-type actions.
+    /// Filters only "Accepted" actions. 
+    /// Optionally restricts to StorageRooms matching the given roles.
     /// </summary>
-    public async Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> GetTopRemovedProductsAsync()
+    public async Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>>
+        GetTopRemovedProductsAsync(IEnumerable<string>? restrictToStorageRoles = null)
     {
-        var results = await RepositoryDbSet
-            .Include(a => a.Product) // et Product.Unit, Volume, VolumeUnit oleks olemas
-            .Where(a =>
-                a.Status == "Accepted" &&
-                a.Product != null)
-            .GroupBy(a => new 
-            { 
-                a.ProductId, 
-                a.Product!.Name, 
-                a.Product!.Unit, 
-                ProductVolume = (decimal?)a.Product!.Volume, 
-                ProductVolumeUnit = (string?)a.Product!.VolumeUnit 
-            })
-            .Select(g => new
+        var query = RepositoryDbSet
+            .Include(a => a.Product)
+            .Include(a => a.StorageRoom)
+            .Where(a => a.Status == "Accepted" && a.Product != null);
+        
+        var all = await query.ToListAsync();
+        
+        if (restrictToStorageRoles != null && restrictToStorageRoles.Any())
+        {
+            all = all
+                .Where(a => a.StorageRoom?.AllowedRoles != null &&
+                            a.StorageRoom.AllowedRoles.Intersect(restrictToStorageRoles, StringComparer.OrdinalIgnoreCase).Any())
+                .ToList();
+        }
+
+        var results = all
+            .GroupBy(a => new
             {
-                g.Key.ProductId,
-                ProductName = g.Key.Name,
-                RemoveQuantity = g.Sum(x => x.Quantity),
-                ProductUnit = g.Key.Unit,
-                ProductVolume = g.Key.ProductVolume,
-                ProductVolumeUnit = g.Key.ProductVolumeUnit
+                a.ProductId,
+                a.Product!.Name,
+                a.Product!.Unit,
+                ProductVolume = (decimal?)a.Product!.Volume,
+                ProductVolumeUnit = (string?)a.Product!.VolumeUnit
             })
+            .Select(g => (
+                g.Key.ProductId,
+                ProductName: g.Key.Name,
+                RemoveQuantity: g.Sum(x => x.Quantity),
+                ProductUnit: g.Key.Unit,
+                ProductVolume: g.Key.ProductVolume,
+                ProductVolumeUnit: g.Key.ProductVolumeUnit
+            ))
             .OrderByDescending(x => x.RemoveQuantity)
             .Take(5)
-            .ToListAsync();
-
-        return results
-            .Select(x => (
-                x.ProductId, 
-                x.ProductName, 
-                x.RemoveQuantity, 
-                x.ProductUnit, 
-                x.ProductVolume, 
-                x.ProductVolumeUnit
-            ))
             .ToList();
-    }
 
+        return results;
+    }
     
     /// <summary>
-    /// Returns the top 5 users who have removed the most product quantity.
-    /// Based on Remove-type actions with non-null CreatedBy.
+    /// Returns the top 5 users who have removed the most products (count of actions).
+    /// Optionally restricts to StorageRooms matching the given roles.
     /// </summary>
-    public async Task<List<(string CreatedBy, int TotalRemovals)>> GetTopUsersByRemovedQuantityAsync()
+    public async Task<List<(string CreatedBy, int TotalRemovals)>> 
+        GetTopUsersByRemovedQuantityAsync(IEnumerable<string>? restrictToStorageRoles = null)
     {
-        var result = await RepositoryDbSet
-            .Include(a => a.ActionType)
-            .Where(a => a.CreatedBy != null)
-            .GroupBy(a => a.CreatedBy)
-            .Select(g => new
-            {
-                CreatedBy = g.Key!,
-                TotalRemovals = g.Count() // loendab kirjed, mitte kogust
-            })
+        var query = RepositoryDbSet
+            .Include(a => a.StorageRoom)
+            .Where(a => a.Status == "Accepted" && a.CreatedBy != null);
+
+        var all = await query.ToListAsync();
+
+        if (restrictToStorageRoles != null && restrictToStorageRoles.Any())
+        {
+            all = all
+                .Where(a => a.StorageRoom?.AllowedRoles != null &&
+                            a.StorageRoom.AllowedRoles
+                                .Intersect(restrictToStorageRoles, StringComparer.OrdinalIgnoreCase)
+                                .Any())
+                .ToList();
+        }
+
+        var result = all
+            .GroupBy(a => a.CreatedBy!)
+            .Select(g => (
+                CreatedBy: g.Key,
+                TotalRemovals: g.Sum(x => (int)x.Quantity)
+            ))
             .OrderByDescending(x => x.TotalRemovals)
             .Take(5)
-            .ToListAsync();
-
-        return result
-            .Select(x => (x.CreatedBy, x.TotalRemovals))
             .ToList();
+        
+        return result;
     }
-    
 }

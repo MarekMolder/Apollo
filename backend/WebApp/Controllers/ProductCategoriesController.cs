@@ -43,7 +43,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.ProductCategoryService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.ProductCategoryService.FindAsync(id.Value);
             
             if (entity == null)
             {
@@ -93,7 +93,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             
-            var entity = await _bll.ProductCategoryService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.ProductCategoryService.FindAsync(id.Value);
             if (entity == null)
             {
                 _logger.LogWarning("ProductCategory with ID {Id} not found for edit", id);
@@ -140,7 +140,7 @@ namespace WebApp.Controllers
             }
 
 
-            var entity = await _bll.ProductCategoryService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.ProductCategoryService.FindAsync(id.Value);
             if (entity == null)
             {
                 _logger.LogWarning("ProductCategory with ID {Id} not found for delete", id);
@@ -157,7 +157,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             _logger.LogInformation("Deleting product category ID {Id}", id);
-            await _bll.ProductCategoryService.RemoveAsync(id, User.GetUserId());
+            await _bll.ProductCategoryService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

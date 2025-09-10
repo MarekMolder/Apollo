@@ -192,16 +192,18 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
     /// <summary>
     /// Returns top products by removed quantity.
     /// </summary>
-    public async Task<IEnumerable<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> GetTopRemovedProductsAsync()
+    public async Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> 
+        GetTopRemovedProductsAsync(IEnumerable<string>? restrictToStorageRoles = null)
     {
-        return await _uow.ActionEntityRepository.GetTopRemovedProductsAsync();
+        return await _uow.ActionEntityRepository.GetTopRemovedProductsAsync(restrictToStorageRoles);
     }
     
     /// <summary>
     /// Returns users who have removed the most quantity across all actions.
     /// </summary>
-    public async Task<IEnumerable<(string CreatedBy, int TotalRemovals)>> GetTopUsersByRemovedQuantityAsync()
+    public async Task<List<(string CreatedBy, int TotalRemovals)>> 
+        GetTopUsersByRemovedQuantityAsync(IEnumerable<string>? restrictToStorageRoles = null)
     {
-        return await _uow.ActionEntityRepository.GetTopUsersByRemovedQuantityAsync();
+        return await _uow.ActionEntityRepository.GetTopUsersByRemovedQuantityAsync(restrictToStorageRoles);
     }
 }

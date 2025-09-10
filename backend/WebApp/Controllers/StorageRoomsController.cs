@@ -45,7 +45,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.StorageRoomService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.StorageRoomService.FindAsync(id.Value);
             
             if (entity == null)
             {
@@ -65,7 +65,7 @@ namespace WebApp.Controllers
 
             var vm = new StorageRoomCreateEditViewModel
             {
-                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(),
                     nameof(Address.Id),
                     nameof(Address.Name)
                 ),
@@ -98,7 +98,7 @@ namespace WebApp.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(),
                 nameof(Address.Id), nameof(Address.Name), vm.StorageRoom.AddressId);
 
             return View(vm);
@@ -115,7 +115,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var storageRoom = await _bll.StorageRoomService.FindAsync(id.Value, User.GetUserId());
+            var storageRoom = await _bll.StorageRoomService.FindAsync(id.Value);
             if (storageRoom == null)
             {
                 _logger.LogWarning("Storage room with ID {Id} not found", id);
@@ -124,7 +124,7 @@ namespace WebApp.Controllers
             
             var vm = new StorageRoomCreateEditViewModel
             {
-                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(),
                     nameof(Address.Id),
                     nameof(Address.Name),
                     storageRoom.AddressId
@@ -171,7 +171,7 @@ namespace WebApp.Controllers
             }
 
             _logger.LogWarning("Invalid model state while editing storage room {Id}", id);
-            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(),
                 nameof(Address.Id), nameof(Address.Name), vm.StorageRoom.AddressId);
 
             return View(vm);
@@ -188,7 +188,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             
-            var entity = await _bll.StorageRoomService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.StorageRoomService.FindAsync(id.Value);
             if (entity == null)
             {
                 _logger.LogWarning("Storage room with ID {Id} not found", id);
@@ -206,7 +206,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             _logger.LogInformation("Deleting storage room with ID {Id}", id);
-            await _bll.StorageRoomService.RemoveAsync(id, User.GetUserId());
+            await _bll.StorageRoomService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

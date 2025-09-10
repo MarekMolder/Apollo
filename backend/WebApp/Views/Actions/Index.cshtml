@@ -43,16 +43,16 @@
                 @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ActionType!.Name)
+                @Html.DisplayFor(modelItem => item.ActionTypeId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Reason!.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Product!.Code)
+                @Html.DisplayFor(modelItem => item.ProductId)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StorageRoom!.Id)
+                @Html.DisplayFor(modelItem => item.StorageRoomId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

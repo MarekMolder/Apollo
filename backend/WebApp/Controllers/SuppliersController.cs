@@ -45,7 +45,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.SupplierService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.SupplierService.FindAsync(id.Value);
             
             if (entity == null)
             {
@@ -65,7 +65,7 @@ namespace WebApp.Controllers
 
             var vm = new SupplierCreateEditViewModel
             {
-                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(),
                     nameof(Address.Id),
                     nameof(Address.Name)
                 )
@@ -90,7 +90,7 @@ namespace WebApp.Controllers
             }
 
             _logger.LogWarning("Invalid model state while creating supplier");
-            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(),
                 nameof(Address.Id), nameof(Address.Name), vm.Supplier.AddressId);
             
             return View(vm);
@@ -107,7 +107,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var supplier = await _bll.SupplierService.FindAsync(id.Value, User.GetUserId());
+            var supplier = await _bll.SupplierService.FindAsync(id.Value);
             if (supplier == null)
             {
                 _logger.LogWarning("Supplier with ID {Id} not found", id);
@@ -116,7 +116,7 @@ namespace WebApp.Controllers
             
             var vm = new SupplierCreateEditViewModel
             {
-                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+                AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(),
                     nameof(Address.Id),
                     nameof(Address.Name),
                     supplier.AddressId
@@ -148,7 +148,7 @@ namespace WebApp.Controllers
             }
 
             _logger.LogWarning("Invalid model state while editing supplier {Id}", id);
-            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(User.GetUserId()),
+            vm.AddressSelectList = new SelectList(await _bll.AddressService.AllAsync(),
                 nameof(Address.Id), nameof(Address.Name), vm.Supplier.AddressId);
 
             return View(vm);
@@ -165,7 +165,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var supplier = await _bll.SupplierService.FindAsync(id.Value, User.GetUserId());
+            var supplier = await _bll.SupplierService.FindAsync(id.Value);
 
             if (supplier == null)
             {
@@ -184,7 +184,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             _logger.LogInformation("Deleting supplier with ID {Id} for user {UserId}", id, User.GetUserId());
-            await _bll.SupplierService.RemoveAsync(id, User.GetUserId());
+            await _bll.SupplierService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

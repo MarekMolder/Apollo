@@ -45,7 +45,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.ActionTypeEntityService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.ActionTypeEntityService.FindAsync(id.Value);
             
             if (entity == null)
             {
@@ -96,7 +96,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             
-            var entity = await _bll.ActionTypeEntityService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.ActionTypeEntityService.FindAsync(id.Value);
             if (entity == null)
             {
                 _logger.LogWarning("Edit ActionType failed: id {Id} not found", id);
@@ -144,7 +144,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
             
-            var entity = await _bll.ActionTypeEntityService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.ActionTypeEntityService.FindAsync(id.Value);
             if (entity == null)
             {
                 _logger.LogWarning("Delete view failed: ActionType with id {Id} not found", id);
@@ -162,7 +162,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             _logger.LogInformation("Deleting ActionType with id {Id}", id);
-            await _bll.ActionTypeEntityService.RemoveAsync(id, User.GetUserId());
+            await _bll.ActionTypeEntityService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

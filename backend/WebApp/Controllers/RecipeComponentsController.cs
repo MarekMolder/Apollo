@@ -45,7 +45,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.RecipeComponentService.FindAsync(id.Value,User.GetUserId());
+            var entity = await _bll.RecipeComponentService.FindAsync(id.Value);
             
             if (entity == null)
             {
@@ -66,14 +66,14 @@ namespace WebApp.Controllers
             var vm = new RecipeComponentsCreateEditViewModel()
             {
                 ProductRecipeSelectList = new SelectList(
-                    (await _bll.ProductService.AllAsync(User.GetUserId()))
+                    (await _bll.ProductService.AllAsync())
                     .Where(p => !p.IsComponent),
                     nameof(Product.Id),
                     nameof(Product.Name)
                 ),
 
                 ComponentProductSelectList = new SelectList(
-                    (await _bll.ProductService.AllAsync(User.GetUserId()))
+                    (await _bll.ProductService.AllAsync())
                     .Where(p => p.IsComponent),
                     nameof(Product.Id),
                     nameof(Product.Name)
@@ -93,16 +93,16 @@ namespace WebApp.Controllers
             if (ModelState.IsValid)
             {
                 _logger.LogInformation("Creating recipe component for user {UserId}", User.GetUserId());
-                _bll.RecipeComponentService.Add(vm.RecipeComponent, User.GetUserId());
+                _bll.RecipeComponentService.Add(vm.RecipeComponent);
                 await _bll.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             
             _logger.LogWarning("Invalid model state while creating recipe component");
             
-            vm.ProductRecipeSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+            vm.ProductRecipeSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                 nameof(Product.Id), nameof(Product.Name), vm.RecipeComponent.ProductRecipeId);
-            vm.ComponentProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+            vm.ComponentProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                 nameof(Product.Id), nameof(Product.Name), vm.RecipeComponent.ComponentProductId);
             
             return View(vm);
@@ -119,14 +119,14 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var recipeComponent = await _bll.RecipeComponentService.FindAsync(id.Value, User.GetUserId());
+            var recipeComponent = await _bll.RecipeComponentService.FindAsync(id.Value);
             if (recipeComponent == null)
             {
                 _logger.LogWarning("Edit called with null ID");
                 return NotFound();
             }
             
-            var allProducts = await _bll.ProductService.AllAsync(User.GetUserId());
+            var allProducts = await _bll.ProductService.AllAsync();
             
             var vm = new RecipeComponentsCreateEditViewModel()
             {
@@ -171,9 +171,9 @@ namespace WebApp.Controllers
             }
             
             _logger.LogWarning("Invalid model state while editing recipe component {Id}", id);
-            vm.ProductRecipeSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+            vm.ProductRecipeSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                 nameof(Product.Id), nameof(Product.Name), vm.RecipeComponent.ProductRecipeId);
-            vm.ComponentProductSelectList = new SelectList(await _bll.ProductService.AllAsync(User.GetUserId()),
+            vm.ComponentProductSelectList = new SelectList(await _bll.ProductService.AllAsync(),
                 nameof(Product.Id), nameof(Product.Name), vm.RecipeComponent.ComponentProductId);
 
             return View(vm);
@@ -190,7 +190,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var recipeComponent = await _bll.RecipeComponentService.FindAsync(id.Value, User.GetUserId());
+            var recipeComponent = await _bll.RecipeComponentService.FindAsync(id.Value);
 
             if (recipeComponent == null)
             {
@@ -209,7 +209,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             _logger.LogInformation("Deleting recipe component with ID {Id}", id);
-            await _bll.RecipeComponentService.RemoveAsync(id, User.GetUserId());
+            await _bll.RecipeComponentService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -45,7 +45,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.ProductService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.ProductService.FindAsync(id.Value);
             
             if (entity == null)
             {
@@ -64,12 +64,12 @@ namespace WebApp.Controllers
             _logger.LogInformation("Opening create form for product");
             var vm = new ProductCreateEditViewModel
             {
-                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(),
                     nameof(ProductCategory.Id),
                     nameof(ProductCategory.Name)
                 ),
                 
-                SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
+                SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(),
                     nameof(Supplier.Id),
                     nameof(Supplier.Name)
                 ),
@@ -94,9 +94,9 @@ namespace WebApp.Controllers
             }
             
             _logger.LogWarning("Invalid model state on product creation");
-            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(),
                 nameof(ProductCategory.Id), nameof(ProductCategory.Name), vm.Product.ProductCategoryId);
-            vm.SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
+            vm.SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(),
                 nameof(Supplier.Id), nameof(Supplier.Name), vm.Product.SupplierId);
 
             return View(vm);
@@ -113,7 +113,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var product = await _bll.ProductService.FindAsync(id.Value, User.GetUserId());
+            var product = await _bll.ProductService.FindAsync(id.Value);
             if (product == null)
             {
                 _logger.LogWarning("Product with ID {Id} not found for edit", id);
@@ -122,13 +122,13 @@ namespace WebApp.Controllers
             
             var vm = new ProductCreateEditViewModel
             {
-                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+                ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(),
                     nameof(ProductCategory.Id),
                     nameof(ProductCategory.Name),
                     product.ProductCategoryId
                 ),
                 
-                SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(User.GetUserId()),
+                SupplierSelectList = new SelectList(await _bll.SupplierService.AllAsync(),
                     nameof(Supplier.Id),
                     nameof(Supplier.Name),
                     product.ProductCategoryId
@@ -160,9 +160,9 @@ namespace WebApp.Controllers
             }
 
             _logger.LogWarning("Invalid model state while editing product {Id}", id);
-            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+            vm.ProductCategorySelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(),
                 nameof(ProductCategory.Id), nameof(ProductCategory.Name), vm.Product.ProductCategory);
-            vm.SupplierSelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(User.GetUserId()),
+            vm.SupplierSelectList = new SelectList(await _bll.ProductCategoryService.AllAsync(),
                 nameof(Supplier.Id), nameof(Supplier.Name), vm.Product.Supplier);
 
             return View(vm);
@@ -179,7 +179,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var action = await _bll.ProductService.FindAsync(id.Value, User.GetUserId());
+            var action = await _bll.ProductService.FindAsync(id.Value);
 
             if (action == null)
             {
@@ -198,7 +198,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             _logger.LogInformation("Deleting product {Id}", id);
-            await _bll.ProductService.RemoveAsync(id, User.GetUserId());
+            await _bll.ProductService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

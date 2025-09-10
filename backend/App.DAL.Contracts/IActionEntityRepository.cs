@@ -19,11 +19,17 @@ public interface IActionEntityRepository : IBaseRepository<DAL.DTO.ActionEntity>
     
     /// <summary>
     /// Returns top products by removed quantity.
+    /// If <paramref name="restrictToStorageRoles"/> is provided, 
+    /// results will only include actions from StorageRooms whose AllowedRoles match.
     /// </summary>
-    Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> GetTopRemovedProductsAsync();
+    Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> 
+        GetTopRemovedProductsAsync(IEnumerable<string>? restrictToStorageRoles = null);
 
     /// <summary>
-    /// Returns users who have removed the most quantity across all actions.
+    /// Returns top users by number of remove-actions.
+    /// If <paramref name="restrictToStorageRoles"/> is provided,
+    /// results will only include actions from StorageRooms whose AllowedRoles match.
     /// </summary>
-    Task<List<(string CreatedBy, int TotalRemovals)>> GetTopUsersByRemovedQuantityAsync();
+    Task<List<(string CreatedBy, int TotalRemovals)>> 
+        GetTopUsersByRemovedQuantityAsync(IEnumerable<string>? restrictToStorageRoles = null);
 }

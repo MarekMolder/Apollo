@@ -43,7 +43,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.AddressService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.AddressService.FindAsync(id.Value);
             
             if (entity == null)
             {
@@ -93,7 +93,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.AddressService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.AddressService.FindAsync(id.Value);
             if (entity == null)
             {
                 _logger.LogWarning("Address with ID {Id} not found for edit", id);
@@ -139,7 +139,7 @@ namespace WebApp.Controllers
                 return NotFound();
             }
 
-            var entity = await _bll.AddressService.FindAsync(id.Value, User.GetUserId());
+            var entity = await _bll.AddressService.FindAsync(id.Value);
             if (entity == null)
             {
                 _logger.LogWarning("Address with ID {Id} not found for delete", id);
@@ -157,7 +157,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             _logger.LogInformation("Deleting address with ID {Id} for user {UserId}", id, User.GetUserId());
-            await _bll.AddressService.RemoveAsync(id, User.GetUserId());
+            await _bll.AddressService.RemoveAsync(id);
             await _bll.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

@@ -26,10 +26,12 @@ public interface IActionEntityService : IBaseService<BLL.DTO.ActionEntity>
     /// <summary>
     /// Returns a list of products that have had the highest total quantity removed.
     /// </summary>
-    Task<IEnumerable<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> GetTopRemovedProductsAsync();
+    Task<List<(Guid ProductId, string ProductName, decimal RemoveQuantity, string ProductUnit, decimal? ProductVolume, string? ProductVolumeUnit)>> 
+        GetTopRemovedProductsAsync(IEnumerable<string>? restrictToStorageRoles = null);
     
     /// <summary>
     /// Returns a list of users who have removed the highest total quantity of products.
     /// </summary>
-    Task<IEnumerable<(string CreatedBy, int TotalRemovals)>> GetTopUsersByRemovedQuantityAsync();
+    Task<List<(string CreatedBy, int TotalRemovals)>> 
+        GetTopUsersByRemovedQuantityAsync(IEnumerable<string>? restrictToStorageRoles = null);
 }

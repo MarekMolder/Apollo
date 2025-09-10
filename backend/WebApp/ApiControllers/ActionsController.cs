@@ -47,14 +47,22 @@ namespace WebApp.ApiControllers
         [ProducesResponseType( 404 )]
         public async Task<ActionResult<IEnumerable<ActionEntity>>> GetActions()
         {
-            var isAdmin = User.IsInRole("admin") || User.IsInRole("juhataja");
-            _logger.LogInformation("Fetching actions for user {UserId} (isAdmin: {IsAdmin})", User.GetUserId(), isAdmin);
-            
-            var actions = isAdmin
-                ? await _bll.ActionEntityService.AllAsync()
-                : await _bll.ActionEntityService.AllAsync(User.GetUserId());
+            var roles = GetCurrentUserRoles();
+            var isAdmin = roles.Any(r =>
+                r.Equals("admin", StringComparison.OrdinalIgnoreCase));
 
-            return actions.Select(x => _mapper.Map(x)!).ToList();
+            _logger.LogInformation("Fetching actions for user {UserId} (isAdmin: {IsAdmin})", User.GetUserId(), isAdmin);
+
+            var data = await _bll.ActionEntityService.GetEnrichedActionEntities();
+
+            if (!isAdmin)
+            {
+                data = data.Where(a =>
+                    a?.StorageRoom?.AllowedRoles != null &&
+                    a.StorageRoom.AllowedRoles.Intersect(roles, StringComparer.OrdinalIgnoreCase).Any());
+            }
+            
+            return Ok(data.Select(x => _mapper.Map(x)!).ToList());
         }
 
         /// <summary>
@@ -70,6 +78,22 @@ namespace WebApp.ApiControllers
             {
                 _logger.LogWarning("Action with ID {Id} not found", id);
                 return NotFound();
+            }
+
+            var roles = GetCurrentUserRoles();
+            var isAdmin = roles.Any(r =>
+                r.Equals("admin", StringComparison.OrdinalIgnoreCase));
+
+            if (!isAdmin)
+            {
+                var allowed = actionEntity.StorageRoom?.AllowedRoles != null &&
+                              actionEntity.StorageRoom.AllowedRoles.Intersect(roles, StringComparer.OrdinalIgnoreCase).Any();
+
+                if (!allowed)
+                {
+                    _logger.LogWarning("Access denied to action {Id} for user {User}", id, User.Identity?.Name);
+                    return Forbid();
+                }
             }
 
             return _mapper.Map(actionEntity)!;
@@ -171,10 +195,22 @@ namespace WebApp.ApiControllers
             [FromQuery] string? status
         )
         {
+            var roles = GetCurrentUserRoles();
+            var isAdmin = roles.Any(r =>
+                r.Equals("admin", StringComparison.OrdinalIgnoreCase));
+
             _logger.LogInformation("Fetching enriched action data with filters user={User} month={Month} year={Year} status={Status}",
                 userEmail, month, year, status);
 
             var data = await _bll.ActionEntityService.GetEnrichedActionEntitiesFiltered(userEmail, month, year, status);
+            
+            if (!isAdmin)
+            {
+                data = data.Where(a =>
+                    a?.StorageRoom?.AllowedRoles != null &&
+                    a.StorageRoom.AllowedRoles.Intersect(roles, StringComparer.OrdinalIgnoreCase).Any());
+            }
+
             var res = data.Select(u => _enrichedActionEntityApiMapper.Map(u)!).ToList();
             return Ok(res);
         }
@@ -188,7 +224,11 @@ namespace WebApp.ApiControllers
         {
             _logger.LogInformation("Fetching top removed products");
 
-            var result = await _bll.ActionEntityService.GetTopRemovedProductsAsync();
+            var roles = GetCurrentUserRoles();
+            var isAdmin = roles.Contains("admin", StringComparer.OrdinalIgnoreCase);
+
+            var result = await _bll.ActionEntityService
+                .GetTopRemovedProductsAsync(isAdmin ? null : roles);
 
             var response = result.Select(r => new
             {
@@ -212,15 +252,39 @@ namespace WebApp.ApiControllers
         {
             _logger.LogInformation("Fetching top users by removed product quantity");
 
-            var result = await _bll.ActionEntityService.GetTopUsersByRemovedQuantityAsync();
+            var roles = GetCurrentUserRoles();
+            var isAdmin = roles.Contains("admin", StringComparer.OrdinalIgnoreCase);
+
+            var result = await _bll.ActionEntityService
+                .GetTopUsersByRemovedQuantityAsync(isAdmin ? null : roles);
+
+            _logger.LogInformation("▶ Got {Count} top users", result.Count);
 
             var response = result.Select(r => new
             {
-                r.CreatedBy, r.TotalRemovals
+                r.CreatedBy,
+                r.TotalRemovals
             });
 
             return Ok(response);
         }
         
+        /// <summary>
+        /// Helper function to get current user roles.
+        /// </summary>
+        private List<string> GetCurrentUserRoles()
+        {
+            var roles = User.Claims
+                .Where(c => c.Type == ClaimTypes.Role || c.Type == "role")
+                .Select(c => c.Value)
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            _logger.LogInformation("▶ JWT roles for user {User}: {Roles}",
+                User.Identity?.Name ?? "anonymous",
+                roles.Count == 0 ? "(none)" : string.Join(", ", roles));
+
+            return roles;
+        }
     }
 }

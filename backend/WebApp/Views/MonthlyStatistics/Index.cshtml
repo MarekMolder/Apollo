@@ -40,16 +40,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Product!.Name)
+            @Html.DisplayFor(modelItem => item.ProductId)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ProductCategory!.Name)
+            @Html.DisplayFor(modelItem => item.ProductCategoryId)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.TotalRemovedQuantity)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.StorageRoom!.Name)
+            @Html.DisplayFor(modelItem => item.StorageRoomId)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Year)
