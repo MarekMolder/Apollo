@@ -162,8 +162,11 @@ namespace WebApp.ApiControllers
         {
             try
             {
-                _logger.LogInformation("Updating status of action {Id} to {Status}", id, dto.Status);
-                var updated = await _bll.ActionEntityService.UpdateStatusAsync(id, dto.Status);
+                var currentUser = User.GetUserEmail();
+                var roles = GetCurrentUserRoles();
+                
+                _logger.LogInformation("Updating status of action {Id} to {Status}", id, dto.Status, currentUser);
+                var updated = await _bll.ActionEntityService.UpdateStatusAsync(id, dto.Status, currentUser!, roles);
                 if (!updated)
                 {
                     _logger.LogWarning("Action with ID {Id} not found for status update", id);
@@ -196,15 +199,21 @@ namespace WebApp.ApiControllers
         )
         {
             var roles = GetCurrentUserRoles();
-            var isAdmin = roles.Any(r =>
-                r.Equals("admin", StringComparison.OrdinalIgnoreCase));
+            var isAdmin = roles.Any(r => r.Equals("admin", StringComparison.OrdinalIgnoreCase));
+            var isWorker = roles.Any(r => r.Equals("töötaja", StringComparison.OrdinalIgnoreCase));
 
             _logger.LogInformation("Fetching enriched action data with filters user={User} month={Month} year={Year} status={Status}",
                 userEmail, month, year, status);
 
             var data = await _bll.ActionEntityService.GetEnrichedActionEntitiesFiltered(userEmail, month, year, status);
             
-            if (!isAdmin)
+            
+            if (isWorker)
+            {
+                var currentUser = User.GetUserEmail(); // tee util, mis võtab emaili claimist
+                data = data.Where(a => a!.CreatedBy == currentUser);
+            }
+            else if (!isAdmin)
             {
                 data = data.Where(a =>
                     a?.StorageRoom?.AllowedRoles != null &&

@@ -19,6 +19,21 @@ public static class IdentityExtensions
         var userId = Guid.Parse(userIdStr);
         return userId;
     }
+    
+    /// <summary>
+    /// Extracts the user's Email from the given <see cref="ClaimsPrincipal"/>.
+    /// </summary>
+    public static string? GetUserEmail(this ClaimsPrincipal claimsPrincipal)
+    {
+        var email = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+        
+        if (string.IsNullOrEmpty(email))
+        {
+            email = claimsPrincipal.Claims.FirstOrDefault(c => c.Type == "email")?.Value;
+        }
+
+        return email;
+    }
 
     private static readonly JwtSecurityTokenHandler JwtSecurityTokenHandler = new();
 

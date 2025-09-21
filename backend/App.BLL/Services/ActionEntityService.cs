@@ -47,7 +47,7 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
     /// 
     /// Returns false if the entity is not found. Throws an exception if the status is invalid.
     /// </summary>
-    public virtual async Task<bool> UpdateStatusAsync(Guid id, string newStatus)
+    public virtual async Task<bool> UpdateStatusAsync(Guid id, string newStatus, string currentUser, IEnumerable<string> roles)
 {
     var action = await _uow.ActionEntityRepository.FindAsync(id);
     if (action == null) return false;
@@ -57,10 +57,24 @@ public class ActionEntityService : BaseService<BLL.DTO.ActionEntity, DAL.DTO.Act
     {
         throw new InvalidOperationException("Status is already finalized and cannot be changed.");
     }
+    
+    var isWorker = roles.Any(r => r.Equals("töötaja", StringComparison.OrdinalIgnoreCase));
+    var isManagerOrAdmin = roles.Any(r => r.Equals("juhataja", StringComparison.OrdinalIgnoreCase) || r.Equals("admin", StringComparison.OrdinalIgnoreCase));
 
-    var allowedStatuses = new[] { "Accepted", "Declined" };
-    if (!allowedStatuses.Contains(newStatus))
-        throw new ArgumentException("Invalid status");
+    if (isWorker)
+    {
+        if (action.CreatedBy != currentUser)
+            throw new UnauthorizedAccessException("You can only decline your own requests.");
+
+        if (newStatus != "Declined")
+            throw new ArgumentException("Workers can only decline their own requests.");
+    }
+
+    if (isManagerOrAdmin)
+    {
+        if (newStatus != "Accepted" && newStatus != "Declined")
+            throw new ArgumentException("Invalid status for managers/admins.");
+    }
 
     action.Status = newStatus;
 

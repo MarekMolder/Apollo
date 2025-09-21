@@ -10,7 +10,7 @@ public interface IActionEntityService : IBaseService<BLL.DTO.ActionEntity>
     /// <summary>
     /// Updates the status of an ActionEntity (e.g. to "Accepted" or "Declined").
     /// </summary>
-    Task<bool> UpdateStatusAsync(Guid id, string newStatus);
+    Task<bool> UpdateStatusAsync(Guid id, string newStatus, string currentUser, IEnumerable<string> roles);
     
     /// <summary>
     /// Retrieves ActionEntities enriched with related data.

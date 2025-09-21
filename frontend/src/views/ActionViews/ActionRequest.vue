@@ -15,6 +15,7 @@ const data = reactive<IResultObject<IActionEnriched[]>>({ data: [], errors: [] }
 const requestIsOngoing = ref(false)
 const sidebarStore = useSidebarStore();
 const showHelp = ref(false);
+const roles = ref<string[]>([])
 
 // ---------------- Filters ----------------
 const selectedStatus = ref<'All' | 'Accepted' | 'Declined' | 'Pending'>('All')
@@ -132,6 +133,18 @@ const acceptAll = async () => {
       console.error('Failed to accept', item.id, e)
     }
   }
+}
+
+
+const canAccept = (item: IActionEnriched) => {
+  return roles.value.includes('juhataja') || roles.value.includes('admin')
+}
+
+const canDecline = (item: IActionEnriched) => {
+  if (roles.value.includes('töötaja')) {
+    return item.createdBy === currentUserEmail && item.status === 'Pending'
+  }
+  return (roles.value.includes('juhataja') || roles.value.includes('admin')) && item.status === 'Pending'
 }
 </script>
 
@@ -331,6 +344,7 @@ const acceptAll = async () => {
 
               <td class="px-2 py-3 align-middle text-center">
                 <button
+                  v-if="canAccept(item)"
                   :disabled="item.status !== 'Pending'"
                   @click="editStatus(item.id, 'Accepted', item.status)"
                   class="w-9 h-9 rounded-xl inline-flex items-center justify-center
@@ -342,6 +356,7 @@ const acceptAll = async () => {
               </td>
               <td class="px-2 py-3 align-middle text-center">
                 <button
+                  v-if="canDecline(item)"
                   :disabled="item.status !== 'Pending'"
                   @click="editStatus(item.id, 'Declined', item.status)"
                   class="w-9 h-9 rounded-xl inline-flex items-center justify-center
